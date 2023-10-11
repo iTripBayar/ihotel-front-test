@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 
 interface iProps {
   open: boolean;
@@ -35,7 +35,7 @@ const BurgerMenu = ({ open, close, logIn, signUp }: iProps) => {
         <div className="h-[50px] w-[50px] bg-white"></div>
       </div> */}
       <div
-        className={`animate-slide-left relative flex h-full w-[210px] flex-col justify-between bg-[#181818] p-[20px] text-[16px] text-white ${
+        className={`relative flex h-full w-[210px] animate-slide-left flex-col justify-between bg-[#181818] p-[20px] text-[16px] text-white ${
           closeAnimation == true ? 'animate-slide-right' : null
         }`}
       >

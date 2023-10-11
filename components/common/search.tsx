@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
 import { Switch } from '@headlessui/react';
-import { Combobox } from '@headlessui/react';
 import searchData from '../../test/data';
 
 const Search = () => {

@@ -5,7 +5,7 @@ import Image from 'next/image';
 // import 'swiper/css';
 // import 'swiper/css/pagination';
 // import 'swiper/css/navigation';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -92,13 +92,13 @@ const CommonLocation = () => {
   const sliderRef = React.useRef<Slider>(null);
 
   function SampleNextArrow(props: any) {
-    const { className, style, onClick } = props;
+    const { onClick } = props;
 
     return <NextBtn onClick={onClick} />;
   }
 
   function SamplePrevArrow(props: any) {
-    const { className, style, onClick } = props;
+    const { onClick } = props;
     return <PrevBtn onClick={onClick} />;
   }
 
@@ -147,7 +147,7 @@ const CommonLocation = () => {
       <Slider {...settings} ref={sliderRef}>
         {categories.map((data) => (
           <div
-            className="xs:h-[200px] relative h-[150px] w-full overflow-hidden rounded-[10px] text-center text-white md:h-[275px] lg:h-[350px] lg:rounded-[20px]"
+            className="relative h-[150px] w-full overflow-hidden rounded-[10px] text-center text-white xs:h-[200px] md:h-[275px] lg:h-[350px] lg:rounded-[20px]"
             key={data.key}
           >
             <Image

@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { Switch } from '@headlessui/react';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import searchData from '../../test/data';
 
 interface iProps {
