@@ -9,6 +9,37 @@ import Footer from '@/components/common/footer';
 import LogIn from '@/components/common/logIn';
 import BurgerMenu from '@/components/common/burgermenu';
 import { useState, useRef, useEffect } from 'react';
+import { useRequest } from 'ahooks';
+
+const apiUrl = 'http://sandbox.api.myhotel.mn:8000/'; // Replace with your API URL
+
+async function getData() {
+  try {
+    const res = await fetch(apiUrl);
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch data');
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error; // Rethrow the error for proper error handling
+  }
+}
+// async function getData() {
+//   const res = await fetch(apiUrl);
+//   // The return value is *not* serialized
+//   // You can return Date, Map, Set, etc.
+
+//   if (!res.ok) {
+//     // This will activate the closest `error.js` Error Boundary
+//     throw new Error('Failed to fetch data');
+//   }
+
+//   return await res.json();
+// }
 
 export default function Home() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -17,6 +48,24 @@ export default function Home() {
   const [headerVer, setHeaderVer] = useState('default');
 
   const searchBoxRef = useRef(null);
+
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getData();
+        setData(data);
+      } catch (error) {
+        // Handle errors, e.g., show an error message
+        console.error('Error:', error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  console.log(data);
 
   useEffect(() => {
     const options = {

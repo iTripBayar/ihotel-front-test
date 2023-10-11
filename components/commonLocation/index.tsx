@@ -115,21 +115,33 @@ const CommonLocation = () => {
     prevArrow: <SamplePrevArrow />,
     responsive: [
       {
+        breakpoint: 1536,
+        settings: {
+          centerPadding: '160px',
+        },
+      },
+      {
+        breakpoint: 1280,
+        settings: {
+          centerPadding: '106px',
+        },
+      },
+      {
         breakpoint: 1024,
         settings: {
-          centerPadding: '116px',
+          centerPadding: '106px',
         },
       },
       {
         breakpoint: 768,
         settings: {
-          centerPadding: '64px',
+          centerPadding: '58px',
         },
       },
       {
         breakpoint: 576,
         settings: {
-          centerPadding: '32px',
+          centerPadding: '5%',
         },
       },
       {
@@ -168,7 +180,7 @@ const CommonLocation = () => {
           </div>
         ))}
       </Slider>
-      <div className=" grid w-full gap-[20px] px-[24px] text-white sm:px-[68px] md:px-[120px] lg:grid-cols-4 lg:px-[140px]">
+      <div className=" grid w-full gap-[20px] px-[24px] text-white sm:px-[68px] md:px-[120px] lg:grid-cols-4 lg:px-[140px] xl:px-[150px] 2xl:px-[200px]">
         {activeIndex == 0
           ? locations.map((data) => (
               <div

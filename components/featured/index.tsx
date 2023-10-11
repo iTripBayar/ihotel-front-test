@@ -67,32 +67,34 @@ const Featured = ({ cap, title }: iProps) => {
     adjustedList.push(hotels[i]);
   }
   return (
-    <div className="w-full px-[16px] pt-[32px] sm:px-[72px] md:px-[120px] lg:px-[150px] lg:py-[0]">
+    <div className="w-full px-[16px] pt-[32px] sm:px-[72px] md:px-[120px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]">
       <div
         className="flex w-full flex-col gap-[24px] border-t-2 border-dashed border-black/[.15] pt-[32px] lg:gap-[32px]"
         // style={{ borderTop: 'dashed 2px rgb(0 0 0 /15%)' }}
       >
-        <h3 className="text-main-text text-[20px] font-bold">{title}</h3>
+        <h3 className="text-[20px] font-bold text-main-text">{title}</h3>
         {/* cardContainer */}
         <div
-          className={`grid grid-rows-${cap} gap-[32px] lg:grid-cols-2 lg:grid-rows-2 xl:grid-cols-3 xl:grid-rows-1 xl:gap-[24px]`}
+          className={`grid grid-rows-${cap} gap-[32px] lg:grid-cols-2 lg:grid-rows-2 xl:grid-cols-3 xl:grid-rows-1 xl:gap-[24px] 2xl:gap-[48px]`}
         >
           {adjustedList.map((data) => (
             <div
               key={data.key}
               className={` mb-0 flex w-full flex-col gap-[16px] overflow-hidden rounded-[20px] pb-0 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] xl:gap-[24px] ${
-                data.stat === 'data' ? 'max-h-[350px] ' : null
+                data.stat === 'data'
+                  ? 'max-h-[350px] xl:max-h-[380px] 2xl:max-h-[410px]'
+                  : null
               }`}
             >
               {/* image */}
-              <div className="xs:h-[225px] relative h-[200px] w-full overflow-hidden rounded-[20px] shadow-[0_3px_10px_rgb(0,0,0,0.2)] sm:h-[250px] md:h-[300px] lg:h-[225px]">
+              <div className="relative h-[200px] w-full overflow-hidden rounded-[20px] shadow-[0_3px_10px_rgb(0,0,0,0.2)] xs:h-[225px] sm:h-[250px] md:h-[300px] lg:h-[225px] xl:h-[250px] 2xl:h-[275px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="rgb(255 255 255/50%)"
                   viewBox="0 0 24 24"
                   strokeWidth={2.2}
                   stroke="currentColor"
-                  className="text-primary-blue absolute right-[16px] top-[16px] z-50 h-[24px] w-[24px]"
+                  className="absolute right-[16px] top-[16px] z-50 h-[24px] w-[24px] text-primary-blue"
                 >
                   <path
                     strokeLinecap="round"
@@ -119,10 +121,10 @@ const Featured = ({ cap, title }: iProps) => {
               >
                 {/* name & location */}
                 <div className="flex w-full flex-col gap-[12px] pr-[14px]">
-                  <h3 className="text-main-text  text-[18px] font-medium leading-[18px]">
+                  <h3 className="text-[18px]  font-medium leading-[18px] text-main-text">
                     {data.name}
                   </h3>
-                  <p className="text-sub-text/60 text-[14px] leading-[12px]">
+                  <p className="text-[14px] leading-[12px] text-sub-text/60">
                     {data.location}
                   </p>
                 </div>
@@ -135,7 +137,7 @@ const Featured = ({ cap, title }: iProps) => {
                   }`}
                 >
                   {/* review */}
-                  <div className="bg-primary-blue flex h-[31px] min-w-[50px] items-center justify-center gap-[2px] rounded-[8px] text-[14px]">
+                  <div className="flex h-[31px] min-w-[50px] items-center justify-center gap-[2px] rounded-[8px] bg-primary-blue text-[14px]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="white"
@@ -159,8 +161,8 @@ const Featured = ({ cap, title }: iProps) => {
                         data.stat === 'online'
                           ? 'bg-main-online px-[16px] text-[14px]'
                           : data.stat === 'pending'
-                          ? 'bg-main-pending text-main-text xs:text-[12px] xs:leading-[12px] xs:px-[8px] px-[6px] text-[11px] leading-[11px]'
-                          : 'bg-main-offline xs:text-[12px] xs:px-[12px] px-[6px] text-[11px] leading-[11px]'
+                          ? 'bg-main-pending px-[6px] text-[11px] leading-[11px] text-main-text xs:px-[8px] xs:text-[12px] xs:leading-[12px]'
+                          : 'bg-main-offline px-[6px] text-[11px] leading-[11px] xs:px-[12px] xs:text-[12px]'
                       }`}
                     >
                       <p>
@@ -178,9 +180,9 @@ const Featured = ({ cap, title }: iProps) => {
                     </div>
                   ) : (
                     <div className="self-end">
-                      <p className="text-main-text text-[22px] font-bold">
+                      <p className="text-[22px] font-bold text-main-text">
                         {data.price} MNT
-                        <span className="text-sub-text/75 text-[14px]">
+                        <span className="text-[14px] text-sub-text/75">
                           {' '}
                           / хоног
                         </span>
@@ -195,17 +197,17 @@ const Featured = ({ cap, title }: iProps) => {
                       data.stat === 'data' ? 'h-0' : null
                     }`}
                   >
-                    <p className="text-main-text xs:text-[18px] text-[16px] font-bold sm:text-[20px] lg:text-[20px]">
+                    <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[20px] lg:text-[20px]">
                       {data.price} MNT
-                      <span className="text-sub-text/75 xs:text-[14px] text-[12px]">
+                      <span className="text-[12px] text-sub-text/75 xs:text-[14px]">
                         / хоног
                       </span>
                     </p>
                     <div
-                      className={`bg-primary-blue xs:text-[14px] m-0 flex items-center justify-center gap-[4px] self-end rounded-tl-[20px] py-[10px] text-[12px] font-medium text-white lg:py-[8px] ${
+                      className={`m-0 flex items-center justify-center gap-[4px] self-end rounded-tl-[20px] bg-primary-blue py-[10px] text-[12px] font-medium text-white xs:text-[14px] lg:py-[8px] ${
                         data.stat === 'offline'
-                          ? 'xs:px-[24px] px-[18px] lg:px-[16px]'
-                          : 'xs:px-[16px] px-[12px] lg:px-[12px]'
+                          ? 'px-[18px] xs:px-[24px] lg:px-[16px]'
+                          : 'px-[12px] xs:px-[16px] lg:px-[12px]'
                       }`}
                     >
                       <p>{data.stat === 'offline' ? 'Харах' : 'Захиалах'}</p>
@@ -231,7 +233,7 @@ const Featured = ({ cap, title }: iProps) => {
           ))}
         </div>
         {cap !== 3 ? (
-          <div className="bg-primary-blue flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full px-[16px] py-[8px] text-[16px] text-white">
+          <div className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
             <p className="flex gap-[4px]">
               Цааш үзэх <span>(100+)</span>
             </p>

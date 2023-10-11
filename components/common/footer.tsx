@@ -6,7 +6,7 @@ const Footer = () => {
   const [open, setOpen] = useState('');
 
   return (
-    <div className="bg-footer flex w-full flex-col px-[32px] pt-[32px] text-[14px] text-white md:px-[100px] lg:px-[125px] xl:px-[150px] ">
+    <div className="flex w-full flex-col bg-footer px-[32px] pt-[32px] text-[14px] text-white md:px-[100px] lg:px-[125px] xl:px-[150px] 2xl:px-[200px]">
       <div className=" lg:flex lg:flex-row-reverse lg:justify-between lg:gap-[32px]">
         {/* <div className="lg:grid lg:grid-cols-2"> */}
         <div className="lg:grid lg:w-[70%] lg:grid-cols-2 lg:justify-between lg:pl-[32px]">
@@ -300,7 +300,7 @@ const Footer = () => {
       </div>
       {/* copyRight */}
       <div
-        className="xs:text-[14px] flex h-[45px] w-full items-center justify-center gap-[4px] text-[12px]"
+        className="flex h-[45px] w-full items-center justify-center gap-[4px] text-[12px] xs:text-[14px]"
         style={{ borderTop: 'dashed 2px rgb(255 255 255 /25%)' }}
       >
         <p className="flex items-center gap-[4px]">

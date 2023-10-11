@@ -6,9 +6,6 @@ module.exports = {
   compress: true,
   reactStrictMode: false,
   trailingSlash: true,
-  // experimental: {
-  //   nextScriptWorkers: true,
-  // },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.optimization.minimize = true;
@@ -18,7 +15,7 @@ module.exports = {
 
   images: {
     remotePatterns: [],
-    domains: ["localhost"],
+    domains: ['localhost'],
     // These are the default device/image sizes provided by Next.js.  Leaving them here for easier experimentation.
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

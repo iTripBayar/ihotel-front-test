@@ -134,9 +134,9 @@ const Header = ({ menu, ver, logIn, signUp }: iProps) => {
       </div>
       {/* ver === 'fixed' searchSection */}
       <div
-        className={`relative hidden ${
+        className={`relative hidden justify-self-center   ${
           ver === 'fixed'
-            ? 'lg:flex lg:w-[90%] lg:gap-[32px]  lg:px-[50px] lg:text-[14px]'
+            ? 'justify-center lg:flex lg:w-[90%]  lg:gap-[32px] lg:px-[50px] lg:text-[14px]'
             : 'hidden'
         }`}
       >
