@@ -1,0 +1,32 @@
+const searchData = [
+  { type: 'location', data: 'Khuvsgul lake' },
+  { type: 'location', data: 'Ulaanbaatar city' },
+  { type: 'location', data: 'Ulaanba' },
+  { type: 'location', data: 'Terelj goy gazar' },
+  { type: 'location', data: 'Bogdkhan Mountain' },
+  { type: 'location', data: 'Jargalantiin am' },
+  { type: 'location', data: 'Sugnuguriin river' },
+  { type: 'location', data: 'Ugii lake' },
+  { type: 'location', data: 'aaaa aa' },
+  { type: 'location', data: 'bbbb bb' },
+  { type: 'location', data: 'ccc cc' },
+  { type: 'location', data: 'ddd dd' },
+  { type: 'location', data: 'eeee ee' },
+  { type: 'location', data: 'fff fff' },
+  { type: 'location', data: 'ggg gggg' },
+  { type: 'location', data: 'hhh hhhh' },
+  { type: 'location', data: 'iii iiiiii' },
+  { type: 'location', data: 'jjj jjjjjjj' },
+  { type: 'location', data: 'kkk kkkkkkk' },
+
+  { type: 'hotel', data: 'Best Hotel' },
+  { type: 'hotel', data: 'City Hotel' },
+  { type: 'hotel', data: 'Continental Hotel' },
+  { type: 'hotel', data: 'Nomado Hotel' },
+  { type: 'hotel', data: 'Puma Hotel' },
+  { type: 'something else', data: 'Different type' },
+  { type: 'something else', data: 'Sukhbaatar district' },
+  { type: 'something else', data: '19-p xopooлол' },
+];
+
+export default searchData;
