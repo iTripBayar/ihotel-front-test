@@ -28,11 +28,20 @@ const config: Config = {
         'slide-right':
           'slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940)   both',
         'slide-bottom':
-          'slide-bottom 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940)   both',
+          'slide-bottom 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940)   both',
         'slide-top':
-          'slide-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940)   both',
+          'slide-top 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940)   both',
+        fade: 'fadeIn 0.3s ease-in-out',
       },
       keyframes: {
+        fadeIn: {
+          '0%': {
+            opacity: '0%',
+          },
+          to: {
+            opacity: '100%',
+          },
+        },
         'slide-left': {
           '0%': {
             transform: 'translateX(100px)',

@@ -1,3 +1,5 @@
+import { useAppCtx } from '@/utils/app';
+
 interface iProps {
   open: boolean;
   close: () => void;
@@ -7,17 +9,36 @@ interface iProps {
 }
 
 const LogIn = ({ open, close, sign, signUp, log }: iProps) => {
+  const { appState } = useAppCtx();
+
+  const handleClick = (event: React.MouseEvent) => {
+    const target = event.target as HTMLElement; // Cast event.target to HTMLElement
+    // Check if the click target is not the white div
+    if (target.classList.contains('bg-black/[.35]')) {
+      close();
+    }
+  };
+
   return (
     <div
       className={`fixed z-[999] flex h-screen w-full items-center justify-center bg-black/[.35] ${
         open === false ? 'hidden' : null
       }`}
+      onClick={handleClick}
     >
       <div className="flex h-auto w-[90%] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:w-[80%] md:w-[60%] lg:w-[45%] xl:w-[35%] 2xl:w-[25%]">
-        <div className="text-main-text flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px]">
+        <div className="flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px] text-main-text">
           <p className="font-medium">
-            {open == true && sign == false ? 'Нэвтрэх' : null}
-            {sign == true ? 'Бүртгүүлэх' : null}
+            {open == true && sign == false
+              ? appState.lang === 'mn'
+                ? 'Нэвтрэх'
+                : 'Log In'
+              : null}
+            {sign == true
+              ? appState.lang === 'mn'
+                ? 'Бүртгүүлэх'
+                : 'Sign Up'
+              : null}
           </p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -39,16 +60,29 @@ const LogIn = ({ open, close, sign, signUp, log }: iProps) => {
           <div className="flex w-full flex-col gap-[16px]">
             <input
               type="email"
-              placeholder="И-мэйл хаяг"
+              placeholder={appState.lang === 'mn' ? 'И-мэйл хаяг' : 'E-mail'}
               className="h-[34px] w-full rounded-[4px] border-black/[.15]"
             />
             <input
               type="password"
-              placeholder="Нууц үг"
+              placeholder={appState.lang === 'mn' ? 'Нууц үг' : 'Password'}
               className="h-[34px] w-full rounded-[4px] border-black/[.15]"
             />
-            <p className="text-primary-blue text-[14px] font-bold">
-              Нууц үгээ мартсан?
+            {sign == true ? (
+              <input
+                type="password"
+                placeholder={
+                  appState.lang === 'mn'
+                    ? 'Нууц үг дахин оруулна уу'
+                    : 'Confirm password'
+                }
+                className="h-[34px] w-full rounded-[4px] border-black/[.15]"
+              />
+            ) : null}
+            <p className="text-[14px] font-bold text-primary-blue">
+              {appState.lang === 'mn'
+                ? 'Нууц үгээ мартсан?'
+                : 'Forgot password?'}
             </p>
           </div>
         </div>
@@ -92,13 +126,21 @@ const LogIn = ({ open, close, sign, signUp, log }: iProps) => {
         </div>
         <div className="mt-[16px] grid w-full grid-cols-3 items-center  gap-[24px] font-medium">
           <div></div>
-          <div className="bg-primary-blue flex h-[35px] w-auto items-center justify-center justify-self-center rounded-[4px] px-[14px] uppercase text-white">
+          <div className="flex h-[40px] w-auto items-center justify-center justify-self-center rounded-[4px] bg-primary-blue px-[20px] uppercase text-white">
             {/* {open == true ? 'Нэвтрэх' : 'Бүртгүүлэх'} */}
-            {open == true && sign == false ? 'Нэвтрэх' : null}
-            {sign == true ? 'Бүртгүүлэх' : null}
+            {open == true && sign == false
+              ? appState.lang === 'mn'
+                ? 'Нэвтрэх'
+                : 'Log In'
+              : null}
+            {sign == true
+              ? appState.lang === 'mn'
+                ? 'Бүртгүүлэх'
+                : 'Sign Up'
+              : null}
           </div>
           <p
-            className="text-primary-blue justify-self-end"
+            className="justify-self-end text-primary-blue"
             onClick={() => {
               if (sign == false) {
                 signUp();
@@ -108,8 +150,16 @@ const LogIn = ({ open, close, sign, signUp, log }: iProps) => {
             }}
           >
             {/* {open == true ? 'Бүртгүүлэх' : 'Нэвтрэх'} */}
-            {open == true && sign == false ? 'Бүртгүүлэх' : null}
-            {sign == true ? 'Нэвтрэх' : null}
+            {open == true && sign == false
+              ? appState.lang === 'mn'
+                ? 'Бүртгүүлэх'
+                : 'Sign Up'
+              : null}
+            {sign == true
+              ? appState.lang === 'mn'
+                ? 'Нэвтрэх'
+                : 'Log In'
+              : null}
           </p>
         </div>
       </div>

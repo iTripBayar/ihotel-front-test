@@ -1,35 +1,25 @@
 'use client';
-import { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
 import { Switch } from '@headlessui/react';
+import { useState, useRef } from 'react';
 import searchData from '../../test/data';
 import { useAppCtx } from '@/utils/app';
 
-const Search = () => {
-  const { appState } = useAppCtx();
+interface iProps {
+  menu: () => void;
+  ver: string;
+  logIn: () => void;
+  signUp: () => void;
+}
 
-  const suggestion = [
-    {
-      id: 'Тэрэлж',
-      mn: 'Тэрэлж',
-      en: 'Terelj',
-    },
-    {
-      id: 'Улаанбаатар',
-      mn: 'Улаанбаатар',
-      en: 'Ulaanbaatar',
-    },
-    {
-      id: 'Хөвсгөл',
-      mn: 'Хөвсгөл',
-      en: 'Khuvsgul',
-    },
-  ];
+const HeaderVariants = ({ menu, ver, logIn, signUp }: iProps) => {
   const [enabled, setEnabled] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [query, setQuery] = useState('');
+  const { appState } = useAppCtx();
 
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
 
   const filteredDataValue =
     query === ''
@@ -37,92 +27,90 @@ const Search = () => {
       : searchData.filter((searchData) => {
           return searchData.data.toLowerCase().includes(query.toLowerCase());
         });
-  // const inputRef = useRef(null);
-
-  // const handleInputChange = (e: any) => {
-  //   const inputValue = e.target.value;
-  //   setSearchValue(inputValue);
-  // };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % suggestion.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
-    <div className="  px-[16px] sm:px-[50px] md:px-[100px] lg:my-[32px] xl:px-[150px] 2xl:px-[200px]">
-      <div className="flex w-full flex-col gap-[10px] rounded-[8px] bg-main-gray p-[10px] text-[12px] lg:flex-row lg:text-[14px]">
+    <header
+      id="targetElement"
+      ref={headerRef}
+      className={`fixed z-[500] flex h-[50px] w-full items-center justify-between bg-primary-blue px-[16px] text-[16px] text-white sm:px-[50px] md:px-[100px] lg:static xl:px-[150px] 2xl:px-[200px] ${
+        ver == 'fixed' ? 'hidden lg:fixed lg:flex lg:animate-slide-bottom' : ''
+      }`}
+    >
+      <Image
+        src="/favicon-white.png"
+        alt="/logo"
+        width={33}
+        height={33}
+        priority
+        quality={100}
+        sizes="20vw"
+        className={`object-fit hidden h-auto max-w-[33px] cursor-pointer ${
+          ver === 'fixed' ? 'lg:block' : ''
+        }`}
+        onClick={() => {
+          window.location.reload();
+        }}
+      />
+      {/* otherBtns */}
+      {/* ver === 'fixed' searchSection */}
+      <div
+        className={`relative hidden justify-center justify-self-center lg:flex lg:w-[90%]  lg:gap-[32px] lg:px-[50px] lg:text-[14px]`}
+      >
         {/* search */}
         <div
-          className={`relative grid w-full grid-rows-1 `}
+          className="relative flex h-[36px] max-w-[500px] items-center justify-start gap-[10px] rounded-full border border-black/20 bg-white px-[12px] lg:min-w-[300px] xl:min-w-[400px]"
+          ref={searchRef}
           onClick={() => inputRef.current?.focus()}
         >
-          <div className="relative flex h-[46px] w-full items-center justify-start gap-[10px] rounded-[8px] border border-black/20 bg-white px-[12px]">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="h-[22px] w-[22px] text-primary-blue"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              />
-            </svg>
-            <div
-              className="relative flex w-full items-center justify-start gap-[4px]"
-              ref={searchRef}
-            >
-              <input
-                className={`h-[20px] w-[144px] border-transparent px-0 text-[14px] text-sub-text/75 placeholder-sub-text/75 outline-none focus:border-transparent focus:ring-0 ${
-                  query !== '' ? 'w-full' : null
-                }`}
-                placeholder={
-                  appState.lang === 'mn'
-                    ? 'Хайх газар оруулах'
-                    : 'Search destinations'
-                }
-                type="text"
-                onChange={(event) => setQuery(event.target.value)}
-                value={query}
-                ref={inputRef}
-              />
-              {query === '' ? (
-                <p className="text-[14px] text-main-text">
-                  &ldquo;
-                  {appState.lang === 'mn'
-                    ? suggestion[currentIndex].mn
-                    : suggestion[currentIndex].en}
-                  &rdquo;
-                </p>
-              ) : null}
-            </div>
-          </div>
-          {/* search Options (ComboBox)*/}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="h-[22px] w-[22px] text-primary-blue"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            />
+          </svg>
+          <input
+            className="h-[20px] w-full border-transparent text-[14px] text-sub-text/75 placeholder-sub-text/75 outline-none focus:border-transparent focus:ring-0 "
+            placeholder={
+              appState.lang === 'mn'
+                ? 'Хайх газар оруулах'
+                : 'Search destinations'
+            }
+            type="text"
+            // className={`h-[20px] w-[144px] border-transparent px-0 text-[14px] text-sub-text/75 placeholder-sub-text/75 outline-none focus:border-transparent focus:ring-0 ${
+            //   query !== '' ? 'w-full' : null
+            // }`}
+            // placeholder="Хайх газар оруулах"
+            // type="text"
+            onChange={(event) => setQuery(event.target.value)}
+            value={query}
+            ref={inputRef}
+          />
           {query !== '' ? (
             <div
-              className={`flex h-[150px] w-full flex-col justify-start gap-[12px] overflow-scroll rounded-[8px] border border-black/20 bg-white px-[12px] text-[14px] text-main-text md:grid md:grid-cols-2 md:grid-rows-[auto] md:gap-[24px] md:px-[20px] lg:absolute lg:top-[60px] lg:z-50 lg:grid-rows-[auto] lg:max-w-[${searchRef.current?.clientWidth}px]`}
+              className={`flex h-[200px] w-full flex-col justify-start gap-[12px] overflow-scroll rounded-[8px] border border-black/20 bg-white text-[14px] leading-[16px] text-main-text md:grid md:grid-cols-2 md:grid-rows-[auto] md:gap-[24px] md:px-[12px] lg:absolute lg:left-0 lg:top-[48px] lg:z-50 lg:grid-rows-[auto] xl:px-[20px] lg:max-w-[${searchRef.current?.clientWidth}px]`}
             >
               {filteredDataValue.map((data) => (
                 <div
                   key={data.data}
                   onClick={() => setQuery(data.data)}
-                  className="flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-2 border-dashed border-black/[.15]"
+                  className="xl-[24px] flex  max-h-[50px] min-h-[49px] cursor-pointer items-center justify-start gap-[16px] border-b-2 border-dashed border-black/[.15]"
                 >
                   {data.type === 'location' ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
-                      viewBox="0 0 24 24"
+                      viewBox="0 0 22 22"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="h-[22px] w-[22px] text-primary-blue"
+                      className="max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] text-primary-blue"
                     >
                       <path
                         strokeLinecap="round"
@@ -142,7 +130,7 @@ const Search = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="h-[22px] w-[22px] text-primary-blue"
+                      className="max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] text-primary-blue"
                     >
                       <path
                         strokeLinecap="round"
@@ -157,7 +145,7 @@ const Search = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="h-[22px] w-[22px] text-primary-blue"
+                      className="max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] text-primary-blue"
                     >
                       <path
                         strokeLinecap="round"
@@ -173,7 +161,7 @@ const Search = () => {
           ) : null}
         </div>
         {/* online */}
-        <div className="flex h-[46px] w-full items-center justify-start gap-[10px] rounded-[8px] border border-black/20 bg-white px-[12px] text-[14px] lg:w-[600px]">
+        <div className="flex h-[36px] min-w-[320px] items-center justify-start gap-[10px] rounded-full border border-black/20 bg-white px-[12px]">
           <svg
             fill="none"
             viewBox="0 0 24 24"
@@ -223,9 +211,9 @@ const Search = () => {
             </Switch>
           </div>
         </div>
-        {/* search btn */}
-        <div className="border-black/25px-[12px] flex h-[46px] w-full items-center justify-center gap-[0px] rounded-[8px] border bg-primary-blue text-white lg:w-[250px]">
-          <p className="text-[16px] font-normal uppercase">
+        {/* searchBtn */}
+        <div className="border-black/25px-[12px] flex h-[36px] min-w-[110px] max-w-[150px] items-center justify-center gap-[0px] rounded-full border bg-white pl-[2px] pt-[2px] text-center text-primary-blue">
+          <p className="text-[16px]  font-medium uppercase leading-[14px]">
             {appState.lang === 'mn' ? 'Хайх' : 'Search'}
           </p>
           <svg
@@ -244,8 +232,25 @@ const Search = () => {
           </svg>
         </div>
       </div>
-    </div>
+      {/* burgerMenu */}
+      <div className={`block`} onClick={menu}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+          stroke="currentColor"
+          className="h-[24px] w-[24px]"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+          />
+        </svg>
+      </div>
+    </header>
   );
 };
 
-export default Search;
+export default HeaderVariants;

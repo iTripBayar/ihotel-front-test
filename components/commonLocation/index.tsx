@@ -11,38 +11,51 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import NextBtn from './nextBtn';
 import PrevBtn from './prevBtn';
+import { useAppCtx } from '@/utils/app';
 
 const CommonLocation = () => {
+  const { appState } = useAppCtx();
+
   const categories = [
     {
       key: 'ub',
       img: '/samples/ub_city.png',
       title: 'Хотод ойр',
+      titleEn: 'Near Ub',
       desc: 'Улаанбаатар',
+      descEn: 'Ulaanbaatar',
     },
     {
       key: 'lakes',
       img: '/samples/lakes.png',
       title: 'Нуурууд',
+      titleEn: 'Lakes',
       desc: 'Үзэсгэлэнт нуурууд',
+      descEn: 'Beautiful lakes',
     },
     {
       key: 'gobi',
       img: '/samples/gobi.png',
       title: 'Говь',
+      titleEn: 'Gobi desert',
       desc: 'Говийн үзэсгэлэнт газрууд',
+      descEn: 'Astonishing places in desert',
     },
     {
       key: 'talHangai',
       img: '/samples/tal_hangai.png',
       title: 'Тал, Хангай',
+      titleEn: 'Steppe',
       desc: 'Тал, хангайн үзэсгэлэнт газрууд',
+      descEn: 'Stunning places in steppe',
     },
     {
       key: 'rashaan',
       img: '/samples/rashaan.png',
       title: 'Рашаан, сувилал',
+      titleEn: 'Spa resorts',
       desc: 'Рашаан сувлилууд',
+      descEn: 'Rejuvenating spa resorts',
     },
   ];
   const locations = [
@@ -173,9 +186,11 @@ const CommonLocation = () => {
             />
             <div className="absolute bottom-0 z-[1] flex h-[50px] w-full flex-col items-center justify-center gap-[2px] bg-black/50 md:h-[75px] md:gap-[4px]">
               <h3 className="text-[16px] font-medium leading-[14px] md:text-[18px] md:leading-[18px]">
-                {data.title}
+                {appState.lang === 'mn' ? data.title : data.titleEn}
               </h3>
-              <p className="text-[12px] md:text-[14px]">{data.desc}</p>
+              <p className="text-[12px] md:text-[14px]">
+                {appState.lang === 'mn' ? data.desc : data.descEn}
+              </p>
             </div>
           </div>
         ))}

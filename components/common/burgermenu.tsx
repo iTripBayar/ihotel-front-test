@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
 import React, { useState } from 'react';
+import { Lang, useAppCtx } from '@/utils/app';
 
 interface iProps {
   open: boolean;
@@ -11,6 +12,17 @@ interface iProps {
 
 const BurgerMenu = ({ open, close, logIn, signUp }: iProps) => {
   const [closeAnimation, setCloseAnimation] = useState(false);
+  const { dispatch, appState } = useAppCtx();
+  // const [language, setLanguage] = useState<appState.Lang | undefined>('mn');
+
+  const handleDay = (type: Lang) => {
+    dispatch({
+      type: 'CHANGE_APP_STATE',
+      payload: {
+        lang: type,
+      },
+    });
+  };
 
   const handleClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement; // Cast event.target to HTMLElement
@@ -65,16 +77,16 @@ const BurgerMenu = ({ open, close, logIn, signUp }: iProps) => {
             className="flex h-[50px] w-full items-center justify-start border-b-2 border-dashed border-white/[.15]"
             onClick={logIn}
           >
-            Нэвтрэх
+            {appState.lang === 'mn' ? 'Нэвтрэх' : 'Log In'}
           </div>
           <div
             className="flex h-[50px] w-full items-center justify-start border-b-2 border-dashed border-white/[.15]"
             onClick={signUp}
           >
-            Бүртгүүлэх
+            {appState.lang === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'}
           </div>
           <div className="flex h-[50px] w-full items-center justify-start border-b-2 border-dashed border-white/[.15]">
-            Буудал нэмэх
+            {appState.lang === 'mn' ? 'Буудал нэмэх' : 'Add hotel'}
           </div>
           {/* <div className="flex h-[50px] w-full items-center justify-start border-b-2 border-dashed border-white/[.15]"></div> */}
         </div>
@@ -96,9 +108,23 @@ const BurgerMenu = ({ open, close, logIn, signUp }: iProps) => {
             </svg>
             <span>7727 9090</span>
           </div>
-          <div className="flex h-[50px] w-full items-center justify-end gap-[8px] border-b-2 border-dashed border-white/[.15]">
+          <div
+            className="flex h-[50px] w-full items-center justify-end gap-[8px] border-b-2 border-dashed border-white/[.15]"
+            onClick={() => {
+              if (appState.lang === 'mn') {
+                handleDay('en');
+              } else {
+                handleDay('mn');
+              }
+              console.log(appState);
+            }}
+          >
             <Image
-              src="/images/uk-flag.png"
+              src={
+                appState.lang === 'mn'
+                  ? '/images/uk-flag.png'
+                  : '/images/mongolian-flag.png'
+              }
               alt="/lang"
               width={22}
               height={22}
@@ -107,7 +133,7 @@ const BurgerMenu = ({ open, close, logIn, signUp }: iProps) => {
               className="rounded-full object-cover"
               style={{ maxWidth: '22px', maxHeight: '22px' }}
             />
-            EN
+            {appState.lang === 'mn' ? 'EN' : 'MN'}
           </div>
         </div>
       </div>

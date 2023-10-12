@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useAppCtx } from '@/utils/app';
 
 interface iProps {
   cap: number;
@@ -6,6 +7,8 @@ interface iProps {
 }
 
 const Featured = ({ cap, title }: iProps) => {
+  const { appState } = useAppCtx();
+
   const hotels = [
     {
       key: 1,
@@ -206,8 +209,8 @@ const Featured = ({ cap, title }: iProps) => {
                     <div
                       className={`m-0 flex items-center justify-center gap-[4px] self-end rounded-tl-[20px] bg-primary-blue py-[10px] text-[12px] font-medium text-white xs:text-[14px] lg:py-[8px] ${
                         data.stat === 'offline'
-                          ? 'px-[18px] xs:px-[24px] lg:px-[16px]'
-                          : 'px-[12px] xs:px-[16px] lg:px-[12px]'
+                          ? 'px-[18px] xs:px-[24px] sm:text-[16px] lg:px-[20px] lg:py-[12px]'
+                          : 'px-[12px] xs:px-[16px] sm:text-[16px] lg:px-[16px] lg:py-[12px]'
                       }`}
                     >
                       <p>{data.stat === 'offline' ? 'Харах' : 'Захиалах'}</p>
@@ -235,7 +238,8 @@ const Featured = ({ cap, title }: iProps) => {
         {cap !== 3 ? (
           <div className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
             <p className="flex gap-[4px]">
-              Цааш үзэх <span>(100+)</span>
+              {appState.lang === 'mn' ? 'Цааш үзэх' : 'More'}{' '}
+              <span>(100+)</span>
             </p>
           </div>
         ) : null}

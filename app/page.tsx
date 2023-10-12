@@ -10,60 +10,24 @@ import LogIn from '@/components/common/logIn';
 import BurgerMenu from '@/components/common/burgermenu';
 import { useState, useRef, useEffect } from 'react';
 import { useRequest } from 'ahooks';
-
-const apiUrl = 'http://sandbox.api.myhotel.mn:8000/'; // Replace with your API URL
-
-async function getData() {
-  try {
-    const res = await fetch(apiUrl);
-
-    if (!res.ok) {
-      throw new Error('Failed to fetch data');
-    }
-
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error; // Rethrow the error for proper error handling
-  }
-}
-// async function getData() {
-//   const res = await fetch(apiUrl);
-//   // The return value is *not* serialized
-//   // You can return Date, Map, Set, etc.
-
-//   if (!res.ok) {
-//     // This will activate the closest `error.js` Error Boundary
-//     throw new Error('Failed to fetch data');
-//   }
-
-//   return await res.json();
-// }
+import HeaderVariants from '@/components/common/headerVariants';
+import ScrollUpBtn from '@/components/common/scrollUpBtn';
+import { fetchData } from '@/utils';
+import { useAppCtx } from '@/utils/app';
+import { AppCtxProvider } from '@/utils/app';
 
 export default function Home() {
   const [openMenu, setOpenMenu] = useState(false);
   const [openLogIn, setOpenLogIn] = useState(false);
   const [openSignUp, setOpenSignUp] = useState(false);
   const [headerVer, setHeaderVer] = useState('default');
+  const { appState } = useAppCtx();
 
   const searchBoxRef = useRef(null);
 
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getData();
-        setData(data);
-      } catch (error) {
-        // Handle errors, e.g., show an error message
-        console.error('Error:', error);
-      }
-    }
-
-    fetchData();
-  }, []);
+  const { data } = useRequest(() => {
+    return fetchData();
+  });
 
   console.log(data);
 
@@ -120,38 +84,67 @@ export default function Home() {
   }
 
   return (
-    <main className="flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
-      <Header
-        menu={sideMenuFunction}
-        ver={headerVer}
-        logIn={logInFunction}
-        signUp={signUpFunction}
-      />
+    <AppCtxProvider>
+      <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
+        <Header
+          menu={sideMenuFunction}
+          logIn={logInFunction}
+          signUp={signUpFunction}
+        />
+        {headerVer === 'fixed' ? (
+          <HeaderVariants
+            menu={sideMenuFunction}
+            ver={headerVer}
+            logIn={logInFunction}
+            signUp={signUpFunction}
+          />
+        ) : null}
+        <ScrollUpBtn ver={headerVer} />
 
-      <LogIn
-        open={openLogIn}
-        close={closeSignUp}
-        sign={openSignUp}
-        log={reverseSignUp}
-        signUp={signUpFunction}
-      />
-      <BurgerMenu
-        open={openMenu}
-        close={closeMenuFunction}
-        logIn={logInFunction}
-        signUp={signUpFunction}
-      />
-      <HeroCategory title="aaa" />
-      <div ref={searchBoxRef}>
-        <Search />
-      </div>
+        <LogIn
+          open={openLogIn}
+          close={closeSignUp}
+          sign={openSignUp}
+          log={reverseSignUp}
+          signUp={signUpFunction}
+        />
+        <BurgerMenu
+          open={openMenu}
+          close={closeMenuFunction}
+          logIn={logInFunction}
+          signUp={signUpFunction}
+        />
+        <HeroCategory />
+        <div ref={searchBoxRef}>
+          <Search />
+        </div>
 
-      <CommonLocation />
-      <Featured cap={3} title={'Тохилог & Хямд буудлууд'} />
-      <Featured cap={6} title={'Онцлох зочид буудлууд'} />
-      <Featured cap={6} title={'Онцлох амралтын газрууд'} />
-      <News />
-      <Footer />
-    </main>
+        <CommonLocation />
+        <Featured
+          cap={3}
+          title={
+            appState.lang === 'mn'
+              ? 'Тохилог & Хямд буудлууд'
+              : 'Comfortable & Cheap hotels'
+          }
+        />
+        <Featured
+          cap={6}
+          title={
+            appState.lang === 'mn' ? 'Онцлох зочид буудлууд' : 'Featured hotels'
+          }
+        />
+        <Featured
+          cap={6}
+          title={
+            appState.lang === 'mn'
+              ? 'Онцлох амралтын газрууд'
+              : 'Featured camps'
+          }
+        />
+        <News />
+        <Footer />
+      </main>
+    </AppCtxProvider>
   );
 }

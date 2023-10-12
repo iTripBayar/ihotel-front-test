@@ -1,9 +1,11 @@
 'use client';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useAppCtx } from '@/utils/app';
 
 const Footer = () => {
   const [open, setOpen] = useState('');
+  const { appState } = useAppCtx();
 
   return (
     <div className="flex w-full flex-col bg-footer px-[32px] pt-[32px] text-[14px] text-white md:px-[100px] lg:px-[125px] xl:px-[150px] 2xl:px-[200px]">
@@ -36,7 +38,9 @@ const Footer = () => {
                 }
               }}
             >
-              <h3 className="text-[18px]">Тухай</h3>
+              <h3 className="text-[18px]">
+                {appState.lang === 'mn' ? 'Тухай' : 'About'}
+              </h3>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -56,13 +60,15 @@ const Footer = () => {
             </div>
             <div className="mb-[12px] flex flex-col justify-start gap-[16px] ">
               <a href="/" className="underline-0 text-white">
-                Бидний тухай
+                {appState.lang === 'mn' ? 'Бидний тухай' : 'About us'}
               </a>
               <a href="/" className="underline-0 text-white">
-                Түгээмэл асуулт хариулт
+                {appState.lang === 'mn' ? 'Түгээмэл асуулт хариулт' : 'Q&A'}
               </a>
               <a href="/" className="underline-0 text-white">
-                Үйлчилгээний нөхцөл
+                {appState.lang === 'mn'
+                  ? 'Үйлчилгээний нөхцөл'
+                  : 'Term of service'}
               </a>
             </div>
           </div>
@@ -92,7 +98,9 @@ const Footer = () => {
                 }
               }}
             >
-              <h3 className="text-[18px]">Мэдээлэл</h3>
+              <h3 className="text-[18px]">
+                {appState.lang === 'mn' ? 'Мэдээлэл' : 'News'}
+              </h3>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -112,16 +120,22 @@ const Footer = () => {
             </div>
             <div className="mb-[12px] flex flex-col justify-start gap-[16px] ">
               <a href="/" className="underline-0 text-white">
-                Мэдээ мэдээлэл
+                {appState.lang === 'mn' ? 'Мэдээ мэдээлэл' : 'Articles'}
               </a>
               <a href="/" className="underline-0 text-white">
-                Буудалд зориулсан зөвлөмж
+                {appState.lang === 'mn'
+                  ? 'Буудалд зориулсан зөвлөмж'
+                  : 'Tips for hotels'}
               </a>
               <a href="/" className="underline-0 text-white">
-                Аялагчдад зориулсан зөвлөмж
+                {appState.lang === 'mn'
+                  ? 'Аялагчдад зориулсан зөвлөмж'
+                  : 'Tips for travelers'}
               </a>
               <a href="/" className="underline-0 text-white">
-                iHotel амжилтын түүх
+                {appState.lang === 'mn'
+                  ? 'iHotel амжилтын түүх'
+                  : "iHotel's success history"}
               </a>
             </div>
           </div>
@@ -153,7 +167,9 @@ const Footer = () => {
                 }
               }}
             >
-              <h3 className="text-[18px]">Үйлчилгээ</h3>
+              <h3 className="text-[18px]">
+                {appState.lang === 'mn' ? 'Үйлчилгээ' : 'Services'}
+              </h3>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -173,13 +189,15 @@ const Footer = () => {
             </div>
             <div className="mb-[12px] flex flex-col justify-start gap-[16px] ">
               <a href="/" className="underline-0 text-white">
-                Өөрийн удирдлагын систем
+                {appState.lang === 'mn'
+                  ? 'Өрөөний удирдлагын систем'
+                  : 'Room management system'}
               </a>
               <a href="/" className="underline-0 text-white">
-                Веб сайт бүтээх
+                {appState.lang === 'mn' ? 'Веб сайт бүтээх' : 'Web service'}
               </a>
               <a href="/" className="underline-0 text-white">
-                Тусламж
+                {appState.lang === 'mn' ? 'Тусламж' : 'Support'}
               </a>
             </div>
           </div>
