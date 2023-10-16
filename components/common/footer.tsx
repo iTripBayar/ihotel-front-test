@@ -318,7 +318,7 @@ const Footer = () => {
       </div>
       {/* copyRight */}
       <div
-        className="flex h-[45px] w-full items-center justify-center gap-[4px] text-[12px] xs:text-[14px]"
+        className="flex h-[45px] w-full items-center justify-center gap-[4px] text-[12px] 2xs:text-[14px]"
         style={{ borderTop: 'dashed 2px rgb(255 255 255 /25%)' }}
       >
         <p className="flex items-center gap-[4px]">

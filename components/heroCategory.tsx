@@ -48,11 +48,9 @@ const HeroCategory = ({ data }: iProps) => {
               // src={`https://ihotel.mn/${data.image}`}
               alt="/heroCategory"
               fill={true}
-              //   layout="fill"
-              //   width={114}
-              //   height={36}
-              //   objectFit="cover"
               priority
+              placeholder="blur"
+              blurDataURL={`"_next/image/?url=${data.img}"`}
               quality={75}
               sizes="25vw"
               className="h-auto w-full object-cover duration-500 hover:scale-110"

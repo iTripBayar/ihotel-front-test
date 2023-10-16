@@ -139,6 +139,7 @@ const BurgerMenu = ({ open, close, logIn, phone }: iProps) => {
               sizes="20vw"
               className="object-fit max-h-[22px] max-w-[22px] cursor-pointer"
             />
+
             {appState.lang === 'mn' ? 'EN' : 'MN'}
           </div>
         </div>

@@ -178,36 +178,49 @@ const CommonLocation = ({ data, destinations }: iProps) => {
     afterChange: (current: number) => setActive({ current }),
   };
 
+  sliderRef.current?.slickGoTo(0);
+
+  // console.log(data);
+  // console.log(activeIndex);
+  // console.log(sliderRef);
+
   return (
     <div className="flex w-full flex-col gap-[20px]">
+      <h3 className="mb-[-10px] self-center text-[16px] font-medium md:text-[18px] lg:text-[22px]">
+        {appState.lang === 'mn' ? 'Түгээмэл байршилууд' : 'Common destinations'}
+      </h3>
       <Slider {...settings} ref={sliderRef}>
-        {data.map((data) => (
+        {data.map((index) => (
           <div
             className="relative h-[150px] w-full overflow-hidden rounded-[10px] text-center text-white xs:h-[200px] md:h-[275px] lg:h-[350px] lg:rounded-[20px]"
-            key={data.id}
+            key={index.id}
           >
             <Image
-              src={`https://ihotel.mn/${data.coverPhoto}`}
+              src={`https://ihotel.mn/${index.coverPhoto}`}
               alt="/commonLocs"
               fill={true}
-              priority
+              // priority
               quality={75}
+              // sizes="100vw"
+              loading="lazy"
               sizes="100vw"
-              className=" h-auto w-full object-cover"
+              placeholder="blur"
+              blurDataURL={`"_next/image/?url=${index.coverPhoto}"`}
+              className="h-auto w-full object-cover"
             />
             <div className="absolute bottom-0 z-[1] flex h-[50px] w-full flex-col items-center justify-center gap-[2px] bg-black/50 md:h-[75px] md:gap-[4px]">
               <h3 className="text-[16px] font-medium leading-[14px] md:text-[18px] md:leading-[18px]">
                 {/* {appState.lang === 'mn' ? data.title : data.titleEn} */}
-                {appState.lang === 'mn' ? data.name : ''}
+                {appState.lang === 'mn' ? index.name : ''}
               </h3>
               <p className="text-[12px] md:text-[14px]">
                 {/* {appState.lang === 'mn' ? data.desc : data.descEn} */}
-                {appState.lang === 'mn' ? data.subtitle : ''}
+                {appState.lang === 'mn' ? index.subtitle : ''}
               </p>
-              {data.author !== null && data.author !== '' ? (
-                <div className="z-100 absolute bottom-[4px] right-[24px] flex items-center justify-center gap-[4px] text-[12px] font-medium text-white">
+              {index.author !== null && index.author !== '' ? (
+                <div className="z-100 absolute bottom-[4px] right-[8px] flex items-center justify-center gap-[4px] text-[8px] font-medium text-white sm:right-[24px] sm:text-[12px]">
                   <svg
-                    className="h-[12px] w-[12px]"
+                    className="h-[8px] w-[8px] sm:h-[12px] sm:w-[12px]"
                     viewBox="0 0 11 11"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +230,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
                       fill="white"
                     />
                   </svg>
-                  <p>{data.author}</p>
+                  <p>{index.author}</p>
                 </div>
               ) : null}
             </div>
@@ -225,7 +238,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
         ))}
       </Slider>
       <div className=" grid w-full gap-[20px] px-[24px] text-white sm:px-[68px] md:px-[120px] lg:grid-cols-4 lg:px-[140px] xl:px-[150px] 2xl:px-[200px]">
-        {activeIndex == 0
+        {/* {activeIndex == 0
           ? destinations.map((data) => (
               <div
                 key={data.id}
@@ -239,7 +252,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
                   priority
                   quality={75}
                   sizes="50vw"
-                  className=" h-auto w-full object-cover duration-500 group-hover:scale-110"
+                  className="object-cover w-full h-auto duration-500 group-hover:scale-110"
                 />
                 <div className="absolute z-10 flex h-full w-full flex-col items-start justify-end gap-[4px] bg-gradient-to-t from-black/60 to-transparent px-[16px] py-[12px] lg:gap-[6px]">
                   <h3 className="text-[18px] font-medium leading-[18px] md:text-[20px] lg:text-[18px]">
@@ -251,7 +264,32 @@ const CommonLocation = ({ data, destinations }: iProps) => {
                 </div>
               </div>
             ))
-          : null}
+          : null} */}
+        {destinations.map((data) => (
+          <div
+            key={data.id}
+            className="group relative h-[150px] w-full cursor-pointer overflow-hidden rounded-[10px]  md:h-[200px] md:rounded-[16px] lg:rounded-[16px]"
+          >
+            <Image
+              // src={data.img}
+              src={`https://ihotel.mn/${data.image}`}
+              alt="/commonLocs"
+              fill={true}
+              priority
+              quality={75}
+              sizes="50vw"
+              className="h-auto w-full object-cover duration-500 group-hover:scale-110"
+            />
+            <div className="absolute z-10 flex h-full w-full flex-col items-start justify-end gap-[4px] bg-gradient-to-t from-black/60 to-transparent px-[16px] py-[12px] lg:gap-[6px]">
+              <h3 className="text-[18px] font-medium leading-[18px] md:text-[20px] lg:text-[18px]">
+                {appState.lang === 'mn' ? data.name : data.nameEn}
+              </h3>
+              <p className="text-[14px] leading-[14px] md:text-[16px] lg:w-[80%] lg:text-[14px] lg:leading-[16px]">
+                {data.description}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

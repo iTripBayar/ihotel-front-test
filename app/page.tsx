@@ -33,7 +33,7 @@ export default function Home() {
     return fetchData();
   });
 
-  console.log(data);
+  // console.log(data);
 
   // console.log(data);
 
@@ -126,7 +126,7 @@ export default function Home() {
     setLogIn(e);
   }
 
-  console.log(logIn);
+  // console.log(logIn);
   return (
     <AppCtxProvider>
       <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">

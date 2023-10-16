@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useAppCtx } from '@/utils/app';
 
 interface iProps {
   cap: number;
@@ -6,6 +7,7 @@ interface iProps {
 }
 
 const FeaturedSample = ({ cap, title }: iProps) => {
+  const { appState } = useAppCtx();
   const hotels = [
     {
       key: 1,
@@ -77,6 +79,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
         <div
           className={`grid grid-rows-${cap} gap-[32px] lg:grid-cols-2 lg:grid-rows-2 xl:grid-cols-3 xl:grid-rows-1 xl:gap-[24px]`}
         >
+          {/* cards */}
           {adjustedList.map((data) => (
             <div
               key={data.key}
@@ -100,12 +103,14 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                     d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
                   />
                 </svg>
-
                 <Image
                   src={data.img}
                   alt="/hotel"
                   fill={true}
-                  priority
+                  // priority
+                  loading="lazy"
+                  placeholder="blur"
+                  blurDataURL={`"_next/image/?url=${data.img}"`}
                   quality={75}
                   sizes="50vw"
                   className="h-auto w-full object-cover duration-500 hover:scale-110"
@@ -163,18 +168,39 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                           : 'bg-main-offline px-[6px] text-[11px] leading-[11px] xs:px-[12px] xs:text-[12px]'
                       }`}
                     >
-                      <p>
-                        {data.stat === 'online'
-                          ? 'Шууд баталгаажна'
-                          : data.stat === 'pending'
-                          ? 'Баталгаажих хугацаа:'
-                          : data.stat === 'offline'
-                          ? 'Онлайн захиалга боломжгүй'
-                          : ''}
-                        {data.stat === 'pending' ? (
-                          <span className="text-[14px] font-bold"> 1-3цаг</span>
-                        ) : null}
-                      </p>
+                      {appState.lang === 'mn' ? (
+                        <p>
+                          {data.stat === 'online'
+                            ? 'Шууд баталгаажна'
+                            : data.stat === 'pending'
+                            ? 'Баталгаажих хугацаа:'
+                            : data.stat === 'offline'
+                            ? 'Онлайн захиалга боломжгүй'
+                            : ''}
+                          {data.stat === 'pending' ? (
+                            <span className="text-[14px] font-bold">
+                              {' '}
+                              1-3цаг
+                            </span>
+                          ) : null}
+                        </p>
+                      ) : (
+                        <p>
+                          {data.stat === 'online'
+                            ? 'Instant confirmation'
+                            : data.stat === 'pending'
+                            ? 'Confirmation delay:'
+                            : data.stat === 'offline'
+                            ? 'Booking unavailable'
+                            : ''}
+                          {data.stat === 'pending' ? (
+                            <span className="text-[14px] font-bold">
+                              {' '}
+                              1-3hours
+                            </span>
+                          ) : null}
+                        </p>
+                      )}
                     </div>
                   ) : (
                     <div className="self-end">

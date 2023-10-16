@@ -14,7 +14,7 @@ const ScrollUpBtn = ({ ver }: iProps) => {
   };
   return (
     <div
-      className={`animate-fade fixed bottom-[4%] right-[4%] z-[999] flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue text-white md:h-[45px] md:w-[45px]
+      className={`animate-fade fixed bottom-[4%] right-[4%] z-[899] flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue text-white md:h-[45px] md:w-[45px]
          ${ver !== 'fixed' ? 'hidden' : ''}`}
       onClick={handleScrollToTop}
     >
