@@ -1,40 +1,35 @@
 import { useAppCtx } from '@/utils/app';
 
 interface iProps {
-  open: boolean;
-  close: () => void;
-  sign: boolean;
-  log: () => void;
-  signUp: () => void;
+  ver: string;
+  changeVer: (e: string) => void;
 }
 
-const LogIn = ({ open, close, sign, signUp, log }: iProps) => {
+const LogIn = ({ ver, changeVer }: iProps) => {
   const { appState } = useAppCtx();
 
   const handleClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement; // Cast event.target to HTMLElement
     // Check if the click target is not the white div
     if (target.classList.contains('bg-black/[.35]')) {
-      close();
+      changeVer('');
     }
   };
 
   return (
     <div
-      className={`fixed z-[999] flex h-screen w-full items-center justify-center bg-black/[.35] ${
-        open === false ? 'hidden' : null
-      }`}
+      className={`animate-fade fixed z-[999] flex h-screen w-full items-center justify-center bg-black/[.35]`}
       onClick={handleClick}
     >
       <div className="flex h-auto w-[90%] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:w-[80%] md:w-[60%] lg:w-[45%] xl:w-[35%] 2xl:w-[25%]">
         <div className="flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px] text-main-text">
           <p className="font-medium">
-            {open == true && sign == false
+            {ver === 'logIn'
               ? appState.lang === 'mn'
                 ? 'Нэвтрэх'
                 : 'Log In'
               : null}
-            {sign == true
+            {ver === 'signUp'
               ? appState.lang === 'mn'
                 ? 'Бүртгүүлэх'
                 : 'Sign Up'
@@ -47,7 +42,7 @@ const LogIn = ({ open, close, sign, signUp, log }: iProps) => {
             strokeWidth={2}
             stroke="currentColor"
             className="h-[22px] w-[22px]"
-            onClick={close}
+            onClick={() => changeVer('')}
           >
             <path
               strokeLinecap="round"
@@ -68,7 +63,7 @@ const LogIn = ({ open, close, sign, signUp, log }: iProps) => {
               placeholder={appState.lang === 'mn' ? 'Нууц үг' : 'Password'}
               className="h-[34px] w-full rounded-[4px] border-black/[.15]"
             />
-            {sign == true ? (
+            {ver == 'signUp' ? (
               <input
                 type="password"
                 placeholder={
@@ -128,7 +123,8 @@ const LogIn = ({ open, close, sign, signUp, log }: iProps) => {
           <div></div>
           <div className="flex h-[40px] w-auto items-center justify-center justify-self-center rounded-[4px] bg-primary-blue px-[20px] uppercase text-white">
             {/* {open == true ? 'Нэвтрэх' : 'Бүртгүүлэх'} */}
-            {open == true && sign == false
+
+            {/* {open == true && sign == false
               ? appState.lang === 'mn'
                 ? 'Нэвтрэх'
                 : 'Log In'
@@ -137,25 +133,35 @@ const LogIn = ({ open, close, sign, signUp, log }: iProps) => {
               ? appState.lang === 'mn'
                 ? 'Бүртгүүлэх'
                 : 'Sign Up'
+              : null} */}
+            {ver === 'logIn'
+              ? appState.lang === 'mn'
+                ? 'Нэвтрэх'
+                : 'Log In'
+              : null}
+            {ver === 'signUp'
+              ? appState.lang === 'mn'
+                ? 'Бүртгүүлэх'
+                : 'Sign Up'
               : null}
           </div>
           <p
             className="justify-self-end text-primary-blue"
             onClick={() => {
-              if (sign == false) {
-                signUp();
-              } else {
-                log();
-              }
+              // if (sign == false) {
+              //   signUp();
+              // } else {
+              //   log();
+              // }
+              ver === 'logIn' ? changeVer('signUp') : changeVer('logIn');
             }}
           >
-            {/* {open == true ? 'Бүртгүүлэх' : 'Нэвтрэх'} */}
-            {open == true && sign == false
+            {ver === 'logIn'
               ? appState.lang === 'mn'
                 ? 'Бүртгүүлэх'
                 : 'Sign Up'
               : null}
-            {sign == true
+            {ver === 'signUp'
               ? appState.lang === 'mn'
                 ? 'Нэвтрэх'
                 : 'Log In'

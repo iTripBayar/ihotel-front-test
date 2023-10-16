@@ -215,7 +215,7 @@ const Footer = () => {
               className="object-fit h-auto w-full"
             />
           </div>
-          <div className="flex flex-col justify-start gap-[16px] text-[13px] lg:justify-self-end lg:pl-[32px]">
+          <div className="flex flex-col justify-start gap-[16px] text-[13px] lg:justify-self-end lg:pl-[32px] lg:text-[14px] xl:text-[16px]">
             <p>(+976)-7727 9090</p>
             <p>reservations@ihotel.mn</p>
             <p>info@ihotel.mn</p>

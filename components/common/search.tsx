@@ -4,7 +4,23 @@ import { Switch } from '@headlessui/react';
 import searchData from '../../test/data';
 import { useAppCtx } from '@/utils/app';
 
-const Search = () => {
+interface iProps {
+  bg: boolean;
+  hotelData: any[];
+  placesData: any[];
+  campsData: any[];
+  destData: any[];
+  data: any[];
+}
+
+const SearchComponent1 = ({
+  bg,
+  hotelData,
+  placesData,
+  campsData,
+  destData,
+  data,
+}: iProps) => {
   const { appState } = useAppCtx();
 
   const suggestion = [
@@ -30,19 +46,59 @@ const Search = () => {
 
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const sample = [];
+
+  for (let i = 0; i < hotelData.length; i++) {
+    sample.push({
+      key: hotelData[i].id,
+      name: hotelData[i].name,
+      nameEn: hotelData[i].nameEn ? hotelData[i].nameEn : '',
+      type: 'hotel',
+    });
+  }
+
+  for (let i = 0; i < placesData.length; i++) {
+    sample.push({
+      key: placesData[i].id,
+      name: placesData[i].name,
+      nameEn: placesData[i].nameEn ? placesData[i].nameEn : '',
+
+      type: 'location',
+    });
+  }
+
+  for (let i = 0; i < destData.length; i++) {
+    sample.push({
+      key: destData[i].id,
+      name: destData[i].name,
+      nameEn: destData[i].nameEn ? destData[i].nameEn : '',
+
+      type: 'location',
+    });
+  }
+
+  for (let i = 0; i < campsData.length; i++) {
+    sample.push({
+      key: campsData[i].id,
+      name: campsData[i].name,
+      nameEn: campsData[i].nameEn ? campsData[i].nameEn : '',
+      type: 'smth',
+    });
+  }
 
   const filteredDataValue =
     query === ''
-      ? searchData
-      : searchData.filter((searchData) => {
-          return searchData.data.toLowerCase().includes(query.toLowerCase());
+      ? sample
+      : sample.filter((searchData) => {
+          return searchData.name.toLowerCase().includes(query);
         });
-  // const inputRef = useRef(null);
 
-  // const handleInputChange = (e: any) => {
-  //   const inputValue = e.target.value;
-  //   setSearchValue(inputValue);
-  // };
+  const uniqueData = filteredDataValue.filter(
+    (obj, index, self) => index === self.findIndex((o) => o.key === obj.key),
+  );
+
+  // console.log(uniqueData);
+  // console.log(data);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -53,21 +109,33 @@ const Search = () => {
   }, []);
 
   return (
-    <div className="  px-[16px] sm:px-[50px] md:px-[100px] lg:my-[32px] xl:px-[150px] 2xl:px-[200px]">
-      <div className="flex w-full flex-col gap-[10px] rounded-[8px] bg-main-gray p-[10px] text-[12px] lg:flex-row lg:text-[14px]">
+    <div className=" px-[16px] sm:px-[50px] md:px-[100px] lg:my-[32px] xl:px-[150px] 2xl:px-[200px]">
+      <div
+        className={`flex w-full flex-col gap-[10px] rounded-[8px] bg-main-gray p-[10px] text-[12px] lg:flex-row lg:text-[14px] ${
+          bg == false ? 'bg-white px-0' : ''
+        }`}
+      >
         {/* search */}
         <div
-          className={`relative grid w-full grid-rows-1 `}
+          className={`relative grid w-full grid-rows-1 ${
+            bg == false
+              ? 'flex justify-between rounded-full border-black/20'
+              : ''
+          }`}
           onClick={() => inputRef.current?.focus()}
         >
-          <div className="relative flex h-[46px] w-full items-center justify-start gap-[10px] rounded-[8px] border border-black/20 bg-white px-[12px]">
+          <div
+            className={` relative flex h-[46px] w-full items-center justify-start gap-[10px] rounded-[8px] border border-black/20 bg-white px-[12px] ${
+              bg == false ? 'rounded-full border-none' : ''
+            }`}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={2}
               stroke="currentColor"
-              className="h-[22px] w-[22px] text-primary-blue"
+              className="max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] text-primary-blue"
             >
               <path
                 strokeLinecap="round"
@@ -76,13 +144,15 @@ const Search = () => {
               />
             </svg>
             <div
-              className="relative flex w-full items-center justify-start gap-[4px]"
+              className={`relative flex w-full items-center justify-start gap-[4px] ${
+                bg == false ? 'max-w-[195px] justify-between' : ''
+              }`}
               ref={searchRef}
             >
               <input
                 className={`h-[20px] w-[144px] border-transparent px-0 text-[14px] text-sub-text/75 placeholder-sub-text/75 outline-none focus:border-transparent focus:ring-0 ${
                   query !== '' ? 'w-full' : null
-                }`}
+                } `}
                 placeholder={
                   appState.lang === 'mn'
                     ? 'Хайх газар оруулах'
@@ -94,26 +164,48 @@ const Search = () => {
                 ref={inputRef}
               />
               {query === '' ? (
-                <p className="text-[14px] text-main-text">
-                  &ldquo;
-                  {appState.lang === 'mn'
-                    ? suggestion[currentIndex].mn
-                    : suggestion[currentIndex].en}
-                  &rdquo;
-                </p>
+                bg == true ? (
+                  <p className="text-[14px] text-main-text">
+                    &ldquo;
+                    {appState.lang === 'mn'
+                      ? suggestion[currentIndex].mn
+                      : suggestion[currentIndex].en}
+                    &rdquo;
+                  </p>
+                ) : null
               ) : null}
             </div>
           </div>
+          {bg == false ? (
+            <div className="flex h-full max-w-[160px] items-center justify-center gap-[12px] rounded-full bg-primary-blue px-[22px] py-[15px] text-[14px] font-medium uppercase text-white">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 2 20 20"
+                strokeWidth={1.25}
+                stroke="currentColor"
+                className="h-[24px] w-[22px]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
+                />
+              </svg>
+              <p>Шүүлтүүр</p>
+            </div>
+          ) : null}
+
           {/* search Options (ComboBox)*/}
           {query !== '' ? (
             <div
               className={`flex h-[150px] w-full flex-col justify-start gap-[12px] overflow-scroll rounded-[8px] border border-black/20 bg-white px-[12px] text-[14px] text-main-text md:grid md:grid-cols-2 md:grid-rows-[auto] md:gap-[24px] md:px-[20px] lg:absolute lg:top-[60px] lg:z-50 lg:grid-rows-[auto] lg:max-w-[${searchRef.current?.clientWidth}px]`}
             >
-              {filteredDataValue.map((data) => (
+              {uniqueData.map((data) => (
                 <div
-                  key={data.data}
-                  onClick={() => setQuery(data.data)}
-                  className="flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-2 border-dashed border-black/[.15]"
+                  key={data.key}
+                  onClick={() => setQuery(data.name)}
+                  className="flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-2 border-dashed border-black/[.15] leading-[14px]"
                 >
                   {data.type === 'location' ? (
                     <svg
@@ -122,7 +214,7 @@ const Search = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="h-[22px] w-[22px] text-primary-blue"
+                      className="max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] text-primary-blue"
                     >
                       <path
                         strokeLinecap="round"
@@ -142,7 +234,7 @@ const Search = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="h-[22px] w-[22px] text-primary-blue"
+                      className="max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] text-primary-blue"
                     >
                       <path
                         strokeLinecap="round"
@@ -157,7 +249,7 @@ const Search = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="h-[22px] w-[22px] text-primary-blue"
+                      className="max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] text-primary-blue"
                     >
                       <path
                         strokeLinecap="round"
@@ -166,7 +258,7 @@ const Search = () => {
                       />
                     </svg>
                   )}
-                  {data.data}
+                  {appState.lang === 'mn' ? data.name : data.nameEn}
                 </div>
               ))}
             </div>
@@ -248,4 +340,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default SearchComponent1;

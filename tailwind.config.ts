@@ -32,6 +32,8 @@ const config: Config = {
         'slide-top':
           'slide-top 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940)   both',
         fade: 'fadeIn 0.3s ease-in-out',
+        'spin-slow': 'spin 5s linear infinite',
+        'to-left': 'to-left 5s linear',
       },
       keyframes: {
         fadeIn: {
@@ -40,6 +42,14 @@ const config: Config = {
           },
           to: {
             opacity: '100%',
+          },
+        },
+        'to-left': {
+          '50%': {
+            transform: 'translateX(0)',
+          },
+          to: {
+            transform: 'translateX(-100px)',
           },
         },
         'slide-left': {

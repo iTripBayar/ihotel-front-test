@@ -1,13 +1,18 @@
 import Image from 'next/image';
 import { useAppCtx } from '@/utils/app';
 
-const News = () => {
+interface iProps {
+  data: any[];
+}
+
+const News = ({ data }: iProps) => {
   const { appState } = useAppCtx();
 
   const articles = [
     {
       key: 1,
       img: '/samples/hotel1.png',
+      // img: 'https://sandbox.api.myhotel.mn/ihotel/hotels/11/OP9hbxbaRwSdqRd0rpocxSQx3chOlYXoz3ZaAmH1.jpeg',
       name: 'Дотоодын аялагчид хаана байрлаж хоноглож байна вэ?',
       nameEn: 'Where do the local travelers are staying?',
     },
@@ -43,6 +48,8 @@ const News = () => {
     },
   ];
 
+  // console.log(data);
+
   return (
     <div className="w-full px-[16px] pt-[32px] sm:px-[72px] md:px-[120px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]">
       <div
@@ -54,15 +61,16 @@ const News = () => {
         </h3>
         {/* cardContainer */}
         <div className="grid grid-cols-1 grid-rows-6 gap-[18px] 2xs:grid-cols-2 2xs:grid-rows-3 md:gap-[24px] lg:grid-cols-3 lg:grid-rows-2 2xl:gap-[48px]">
-          {articles.map((data) => (
+          {data.map((data) => (
             <div
-              key={data.key}
+              key={data.id}
               className="flex w-full flex-col gap-[8px] overflow-hidden rounded-[20px] pb-[8px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]"
             >
               {/* image */}
               <div className="relative h-[175px] w-full overflow-hidden md:h-[175px] lg:h-[225px] xl:h-[250px]">
                 <Image
-                  src={data.img}
+                  // src={data.img}
+                  src={`https://ihotel.mn/${data.photos.match(/"([^"]+)"/)[1]}`}
                   alt="/hotel"
                   fill={true}
                   priority
@@ -73,7 +81,17 @@ const News = () => {
               </div>
               {/* bottom section */}
               <div className="flex w-full items-center justify-center px-[8px] text-[14px] text-main-text lg:px-[16px] lg:text-[16px]">
-                <p>{appState.lang === 'mn' ? data.name : data.nameEn}</p>
+                {/* <p>{appState.lang === 'mn' ? data.name : data.nameEn}</p> */}
+                {/* <p className=''>{appState.lang === 'mn' ? data.excerpt : ''}</p> */}
+                <p className=" max-w-[50ch] overflow-hidden text-ellipsis whitespace-normal ">
+                  {appState.lang === 'mn'
+                    ? data.excerpt.length > 50
+                      ? data.excerpt.slice(0, 50) + '...'
+                      : data.excerpt
+                    : ''}
+                </p>
+                {/* white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+                max-width: 15ch; */}
               </div>
             </div>
           ))}
