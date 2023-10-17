@@ -34,7 +34,7 @@ const OnlineToggle = ({ ver }: iProps) => {
           strokeWidth="1.5"
         />
       </svg>
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-full items-center justify-between gap-[4px]">
         <p className="text-main-text">
           {appState.lang === 'mn'
             ? 'Шууд баталгаажих газрууд'

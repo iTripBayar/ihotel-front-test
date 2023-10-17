@@ -47,7 +47,9 @@ const HotelCard = ({ data }: iProps) => {
           viewBox="0 0 24 24"
           strokeWidth={2.2}
           stroke="currentColor"
-          className="absolute right-[16px] top-[16px] z-50 h-[24px] w-[24px] text-primary-blue"
+          className={`absolute right-[16px] top-[16px] z-50 h-[24px] w-[24px] text-primary-blue ${
+            fav === true ? ' scale-125 duration-500' : ''
+          }`}
           onClick={() => {
             setFav(!fav);
           }}

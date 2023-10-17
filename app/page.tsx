@@ -17,6 +17,7 @@ import HeaderTest from '@/components/common/header';
 import SearchSection from '@/components/searchSection';
 import Header from '@/components/common/header';
 import FeaturedSample from '@/components/featured/sample';
+import useWindowSize from '@/hooks/windowSize';
 
 export default function Home() {
   // const [openMenu, setOpenMenu] = useState(false);
@@ -27,6 +28,7 @@ export default function Home() {
   const [sideMenu, setSideMenu] = useState(false);
   const [logIn, setLogIn] = useState('');
   const searchBoxRef = useRef(null);
+  const size = useWindowSize();
 
   const { data } = useRequest(() => {
     return fetchData();
@@ -171,11 +173,18 @@ export default function Home() {
           data={data ? data.destCategories : []}
           destinations={data ? data.topDestinations : []}
         />
-        <Featured cap={3} title={'cheap'} data={data ? data.cheapHotels : []} />
+        {/* <Featured
+          cap={size.width && size.width <= 1280 && size.width >= 576 ? 2 : 3}
+          title={'cheap'}
+          data={data ? data.cheapHotels : []}
+        /> */}
         <Featured cap={6} title={'hotels'} data={data ? data.hotels : []} />
         <Featured cap={6} title={'camps'} data={data ? data.camps : []} />
         <FeaturedSample cap={6} title={'sample'} />
-        <News data={data ? data.posts : []} />
+        <News
+          cap={size.width && size.width >= 1024 ? 6 : 4}
+          data={data ? data.posts : []}
+        />
         <Footer />
         {/* <Header
           menu={sideMenuFunction}

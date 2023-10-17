@@ -95,7 +95,7 @@ const Featured = ({ cap, title, data }: iProps) => {
   return (
     <div className="w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]">
       <div
-        className={`flex w-full flex-col gap-[24px] border-t-2 border-dashed border-black/[.15] pt-[32px] lg:gap-[32px] ${
+        className={`flex w-full flex-col gap-[24px] border-t-[1px]  border-black/[.15] pt-[32px] lg:gap-[32px] ${
           title === '' ? 'mt-[-64px] border-none' : ''
         }`}
         // style={{ borderTop: 'dashed 2px rgb(0 0 0 /15%)' }}
@@ -120,8 +120,21 @@ const Featured = ({ cap, title, data }: iProps) => {
           </h3>
         ) : null}
         {/* cardContainer */}
+        {/* <div
+          className={`grid grid-rows-${cap} gap-[32px] sm:grid-cols-2 md:grid-rows-${
+            cap / 2
+          } xl:grid-cols-3 xl:grid-rows-1 xl:gap-[24px] 2xl:gap-[48px]`}
+        >
+          {data.map((data, i: number) => (
+            <HotelCard data={data} key={i} />
+          ))}
+        </div> */}
         <div
-          className={`grid grid-rows-${cap} gap-[32px] sm:grid-cols-2 md:grid-rows-2 xl:grid-cols-3 xl:grid-rows-1 xl:gap-[24px] 2xl:gap-[48px]`}
+          className={`grid xs:grid-rows-${cap} gap-[32px] sm:grid-cols-2 sm:grid-rows-${
+            cap / 2
+          } xl:grid-cols-3 xl:grid-rows-${
+            cap / 3
+          } xl:gap-[24px] 2xl:gap-[48px]`}
         >
           {data.map((data, i: number) => (
             <HotelCard data={data} key={i} />

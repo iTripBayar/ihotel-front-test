@@ -134,6 +134,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
   const settings = {
     className: 'center',
     centerMode: true,
+    // lazyLoad: 'progressive',
     infinite: true,
     centerPadding:
       size?.width && size?.width > 1536

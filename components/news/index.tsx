@@ -3,9 +3,10 @@ import { useAppCtx } from '@/utils/app';
 
 interface iProps {
   data: any[];
+  cap: number;
 }
 
-const News = ({ data }: iProps) => {
+const News = ({ data, cap }: iProps) => {
   const { appState } = useAppCtx();
 
   const articles = [
@@ -48,23 +49,30 @@ const News = ({ data }: iProps) => {
     },
   ];
 
-  console.log(data);
+  // console.log(data);
+  if (cap != 0) {
+    data = data.slice(0, cap);
+  }
 
   return (
     <div className="w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]">
       <div
-        className="flex w-full flex-col gap-[18px] border-t-2 border-dashed border-black/[.15] pt-[32px] lg:gap-[32px]"
+        className="flex w-full flex-col gap-[18px] border-t-[1px] border-black/[.15] pt-[32px] lg:gap-[32px]"
         // style={{ borderTop: 'dashed 2px rgb(0 0 0 /15%)' }}
       >
         <h3 className="text-[20px] font-bold text-main-text">
           {appState.lang === 'mn' ? 'Нийтлэлүүд' : 'Articles'}
         </h3>
         {/* cardContainer */}
-        <div className="grid grid-cols-1 grid-rows-6 gap-[18px] 2xs:grid-cols-2 2xs:grid-rows-3 md:gap-[24px] lg:grid-cols-3 lg:grid-rows-2 2xl:gap-[48px]">
+        <div
+          className={`grid grid-cols-1 grid-rows-${cap} gap-[18px] 2xs:grid-rows-${
+            cap / 2
+          } 2xs:grid-cols-2  md:gap-[24px] lg:grid-cols-3 lg:grid-rows-2 2xl:gap-[48px]`}
+        >
           {data.map((data) => (
             <div
               key={data.id}
-              className="flex w-full flex-col justify-between gap-[8px] overflow-hidden rounded-[20px] pb-[8px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]"
+              className="flex w-full flex-col justify-start gap-[8px] overflow-hidden rounded-[20px] pb-[8px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]"
             >
               {/* image */}
               <div className="relative h-[175px] w-full overflow-hidden md:h-[175px] lg:h-[225px] xl:h-[250px]">

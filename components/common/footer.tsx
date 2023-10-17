@@ -14,8 +14,10 @@ const Footer = () => {
         <div className="md:grid md:w-[70%] md:grid-cols-2 md:justify-between md:pl-[32px]">
           {/* about */}
           <div
-            className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden border-b-2 border-dashed border-white/25 md:w-[94%] md:border-none ${
-              open === 'about' ? 'h-auto duration-500' : 'h-[45px] md:h-auto'
+            className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden border-b-[1px] border-white/25 md:w-[94%] md:border-none ${
+              open === 'about'
+                ? 'animate-open'
+                : 'animate-close h-[45px] md:h-auto md:animate-none'
             }`}
             style={
               {
@@ -59,23 +61,28 @@ const Footer = () => {
               </svg>
             </div>
             <div className="mb-[12px] flex flex-col justify-start gap-[16px] ">
-              <a href="/" className="underline-0 text-white">
+              <a href="/" className="underline-0 group relative text-white">
                 {appState.lang === 'mn' ? 'Бидний тухай' : 'About us'}
+                <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
-              <a href="/" className="underline-0 text-white">
+              <a href="/" className="underline-0 group relative text-white">
                 {appState.lang === 'mn' ? 'Түгээмэл асуулт хариулт' : 'Q&A'}
+                <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
-              <a href="/" className="underline-0 text-white">
+              <a href="/" className="underline-0 group relative text-white">
                 {appState.lang === 'mn'
                   ? 'Үйлчилгээний нөхцөл'
                   : 'Terms of service'}
+                <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
             </div>
           </div>
           {/* info */}
           <div
-            className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden border-b-2 border-dashed border-white/25 md:w-[94%] md:justify-self-end md:border-none ${
-              open === 'info' ? 'h-auto duration-500' : 'h-[45px] md:h-auto'
+            className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden border-b-[1px] border-white/25 md:w-[94%] md:justify-self-end md:border-none ${
+              open === 'info'
+                ? 'animate-open'
+                : 'animate-close h-[45px] md:h-auto md:animate-none'
             }`}
             style={
               {
@@ -119,32 +126,36 @@ const Footer = () => {
               </svg>
             </div>
             <div className="mb-[12px] flex flex-col justify-start gap-[16px] ">
-              <a href="/" className="underline-0 text-white">
+              <a href="/" className="underline-0 group relative text-white">
                 {appState.lang === 'mn' ? 'Мэдээ мэдээлэл' : 'Articles'}
+                <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
-              <a href="/" className="underline-0 text-white">
+              <a href="/" className="underline-0 group relative text-white">
                 {appState.lang === 'mn'
                   ? 'Буудалд зориулсан зөвлөмж'
                   : 'Tips for hotels'}
+                <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
-              <a href="/" className="underline-0 text-white">
+              <a href="/" className="underline-0 group relative text-white">
                 {appState.lang === 'mn'
                   ? 'Аялагчдад зориулсан зөвлөмж'
                   : 'Tips for travelers'}
+                <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
-              <a href="/" className="underline-0 text-white">
+              <a href="/" className="underline-0 group relative text-white">
                 {appState.lang === 'mn'
                   ? 'iHotel амжилтын түүх'
                   : "iHotel's success history"}
+                <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
             </div>
           </div>
           {/* service */}
           <div
-            className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden  border-b-2 border-dashed border-white/25 md:border-none ${
+            className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden  border-b-[1px] border-white/25 md:border-none ${
               open === 'service'
-                ? 'h-auto duration-500'
-                : 'h-[45px] md:h-auto md:border-none'
+                ? 'animate-open'
+                : 'animate-close h-[45px] md:h-auto md:animate-none'
             }`}
             style={
               {
@@ -188,22 +199,25 @@ const Footer = () => {
               </svg>
             </div>
             <div className="mb-[12px] flex flex-col justify-start gap-[16px] ">
-              <a href="/" className="underline-0 text-white">
+              <a href="/" className="underline-0 group relative text-white">
                 {appState.lang === 'mn'
                   ? 'Өрөөний удирдлагын систем'
                   : 'Room management system'}
+                <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
-              <a href="/" className="underline-0 text-white">
+              <a href="/" className="underline-0 group relative text-white">
                 {appState.lang === 'mn' ? 'Веб сайт бүтээх' : 'Web service'}
+                <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
-              <a href="/" className="underline-0 text-white">
+              <a href="/" className="underline-0 group relative text-white">
                 {appState.lang === 'mn' ? 'Тусламж' : 'Support'}
+                <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
             </div>
           </div>
         </div>
         {/* contact */}
-        <div className="mb-[32px] flex w-full gap-[16px] md:w-[30%] md:flex-col md:items-start md:justify-start md:gap-[32px] md:border-r-2 md:border-dashed md:border-white/25 md:pb-[16px] lg:justify-between lg:gap-[24px]">
+        <div className="mb-[32px] flex w-full gap-[16px] md:w-[30%] md:flex-col md:items-start md:justify-start md:gap-[32px] md:border-r-[1px] md:border-white/25 md:pb-[16px] lg:justify-between lg:gap-[24px]">
           <div className="relative h-[97px] w-[88px] overflow-hidden md:h-[125px] md:w-[125px] lg:h-[165px] lg:w-[165px]">
             <Image
               src="/favicon-white.png"
@@ -221,7 +235,11 @@ const Footer = () => {
             <p>info@ihotel.mn</p>
             <div className="flex w-full justify-between gap-[8px]">
               {/* facebook */}
-              <a href="https://www.facebook.com/ihotel.mn/" target="blank">
+              <a
+                href="https://www.facebook.com/ihotel.mn/"
+                target="blank"
+                className="group relative"
+              >
                 <svg
                   className="h-[16px] w-[16px]"
                   viewBox="0 0 10 16"
@@ -233,11 +251,13 @@ const Footer = () => {
                     fill="white"
                   />
                 </svg>
+                <span className="ease absolute bottom-[-8px] left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
               </a>
               {/* instagram */}
               <a
                 href="https://www.instagram.com/ihotel.mn/?hl=en"
                 target="blank"
+                className="group relative"
               >
                 <svg
                   className="h-[16px] w-[16px]"
@@ -263,11 +283,13 @@ const Footer = () => {
                     </clipPath>
                   </defs>
                 </svg>
+                <span className="ease absolute bottom-[-8px] left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
               </a>
               {/* youtube */}
               <a
                 href="https://www.youtube.com/channel/UCSCwq_vU3Xsj9h2e_qH1Pkg"
                 target="blank"
+                className="group relative"
               >
                 <svg
                   className="h-[16px] w-[20px]"
@@ -280,11 +302,13 @@ const Footer = () => {
                     fill="white"
                   />
                 </svg>
+                <span className="ease absolute bottom-[-8px] left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
               </a>
               {/* linkedIn */}
               <a
                 href="https://www.linkedin.com/company/ihotelmn/"
                 target="blank"
+                className="group relative"
               >
                 <svg
                   className="h-[16px] w-[16px]"
@@ -297,9 +321,14 @@ const Footer = () => {
                     fill="white"
                   />
                 </svg>
+                <span className="ease absolute bottom-[-8px] left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
               </a>
               {/* medium */}
-              <a href="https://medium.com/@ihotel.mn" target="blank">
+              <a
+                href="https://medium.com/@ihotel.mn"
+                target="blank"
+                className="group relative"
+              >
                 <svg
                   className="h-[16px] w-[16px]"
                   viewBox="0 0 18 16"
@@ -311,6 +340,7 @@ const Footer = () => {
                     fill="white"
                   />
                 </svg>
+                <span className="ease absolute bottom-[-8px] left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
               </a>
             </div>
           </div>
@@ -319,7 +349,7 @@ const Footer = () => {
       {/* copyRight */}
       <div
         className="flex h-[45px] w-full items-center justify-center gap-[4px] text-[12px] 2xs:text-[14px]"
-        style={{ borderTop: 'dashed 2px rgb(255 255 255 /25%)' }}
+        style={{ borderTop: 'solid 1px rgb(255 255 255 /25%)' }}
       >
         <p className="flex items-center gap-[4px]">
           <svg

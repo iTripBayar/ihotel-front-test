@@ -34,8 +34,65 @@ const config: Config = {
         fade: 'fadeIn 0.3s ease-in-out',
         'spin-slow': 'spin 5s linear infinite',
         'to-left': 'to-left 5s linear',
+        open: 'open 0.5s ease-in-out',
+        close: 'close 0.5s ease-in-out',
+        'burger-top':
+          'burger-top 8s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite',
+        'burger-top1':
+          'burger-top1 8s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite',
+        'burger-top2':
+          'burger-top2 8s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite',
       },
       keyframes: {
+        'burger-top': {
+          '75%': {
+            transform: 'translateY(-50%)',
+          },
+          '90%': {
+            transform: 'translateY(-6px)',
+          },
+          to: {
+            transform: 'translateY(-50%)',
+          },
+        },
+        'burger-top1': {
+          '70%': {
+            transform: 'translateY(0px)',
+          },
+          '90%': {
+            transform: 'translateY(-5px)',
+          },
+          to: {
+            transform: 'translateY(0px)',
+          },
+        },
+        'burger-top2': {
+          '80%': {
+            transform: 'translateY(0px)',
+          },
+          '90%': {
+            transform: 'translateY(-5px)',
+          },
+          to: {
+            transform: 'translateY(0px)',
+          },
+        },
+        open: {
+          '0%': {
+            height: '45px',
+          },
+          to: {
+            height: '159px',
+          },
+        },
+        close: {
+          '0%': {
+            height: '159px',
+          },
+          to: {
+            height: '45px',
+          },
+        },
         fadeIn: {
           '0%': {
             opacity: '0%',
