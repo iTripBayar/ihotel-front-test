@@ -8,14 +8,14 @@ const Footer = () => {
   const { appState } = useAppCtx();
 
   return (
-    <div className="flex w-full flex-col bg-footer px-[32px] pt-[32px] text-[14px] text-white md:px-[100px] lg:px-[125px] xl:px-[150px] 2xl:px-[200px]">
-      <div className=" lg:flex lg:flex-row-reverse lg:justify-between lg:gap-[32px]">
+    <div className="flex w-full flex-col bg-footer px-[32px] pt-[32px] text-[14px] text-white md:px-[50px] lg:px-[125px] xl:px-[150px] 2xl:px-[200px]">
+      <div className=" md:flex md:flex-row-reverse md:justify-between md:gap-[32px]">
         {/* <div className="lg:grid lg:grid-cols-2"> */}
-        <div className="lg:grid lg:w-[70%] lg:grid-cols-2 lg:justify-between lg:pl-[32px]">
+        <div className="md:grid md:w-[70%] md:grid-cols-2 md:justify-between md:pl-[32px]">
           {/* about */}
           <div
-            className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden border-b-2 border-dashed border-white/25 lg:w-[90%] lg:border-none ${
-              open === 'about' ? 'h-auto duration-500' : 'h-[45px] lg:h-auto'
+            className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden border-b-2 border-dashed border-white/25 md:w-[94%] md:border-none ${
+              open === 'about' ? 'h-auto duration-500' : 'h-[45px] md:h-auto'
             }`}
             style={
               {
@@ -47,7 +47,7 @@ const Footer = () => {
                 viewBox="2 0 20 20"
                 strokeWidth={3}
                 stroke="currentColor"
-                className={`h-[16px] w-[16px] lg:hidden ${
+                className={`h-[16px] w-[16px] md:hidden ${
                   open === 'about' ? 'rotate-180' : null
                 }`}
               >
@@ -68,14 +68,14 @@ const Footer = () => {
               <a href="/" className="underline-0 text-white">
                 {appState.lang === 'mn'
                   ? 'Үйлчилгээний нөхцөл'
-                  : 'Term of service'}
+                  : 'Terms of service'}
               </a>
             </div>
           </div>
           {/* info */}
           <div
-            className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden border-b-2 border-dashed border-white/25 lg:w-[90%] lg:justify-self-end lg:border-none ${
-              open === 'info' ? 'h-auto duration-500' : 'h-[45px] lg:h-auto'
+            className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden border-b-2 border-dashed border-white/25 md:w-[94%] md:justify-self-end md:border-none ${
+              open === 'info' ? 'h-auto duration-500' : 'h-[45px] md:h-auto'
             }`}
             style={
               {
@@ -107,7 +107,7 @@ const Footer = () => {
                 viewBox="2 0 20 20"
                 strokeWidth={3}
                 stroke="currentColor"
-                className={`h-[16px] w-[16px] lg:hidden ${
+                className={`h-[16px] w-[16px] md:hidden ${
                   open === 'info' ? 'rotate-180' : null
                 }`}
               >
@@ -141,10 +141,10 @@ const Footer = () => {
           </div>
           {/* service */}
           <div
-            className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden  border-b-2 border-dashed border-white/25 lg:border-none ${
+            className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden  border-b-2 border-dashed border-white/25 md:border-none ${
               open === 'service'
                 ? 'h-auto duration-500'
-                : 'h-[45px] lg:h-auto lg:border-none'
+                : 'h-[45px] md:h-auto md:border-none'
             }`}
             style={
               {
@@ -176,7 +176,7 @@ const Footer = () => {
                 viewBox="2 0 20 20"
                 strokeWidth={3}
                 stroke="currentColor"
-                className={`h-[16px] w-[16px] lg:hidden ${
+                className={`h-[16px] w-[16px] md:hidden ${
                   open === 'service' ? 'rotate-180' : null
                 }`}
               >
@@ -203,8 +203,8 @@ const Footer = () => {
           </div>
         </div>
         {/* contact */}
-        <div className="mb-[32px] flex w-full gap-[16px] lg:w-[30%] lg:flex-col lg:items-start lg:justify-between lg:gap-[24px] lg:border-r-2 lg:border-dashed lg:border-white/25 lg:pb-[16px]">
-          <div className="relative h-[97px] w-[88px] overflow-hidden lg:h-[200px] lg:w-[200px]">
+        <div className="mb-[32px] flex w-full gap-[16px] md:w-[30%] md:flex-col md:items-start md:justify-start md:gap-[32px] md:border-r-2 md:border-dashed md:border-white/25 md:pb-[16px] lg:justify-between lg:gap-[24px]">
+          <div className="relative h-[97px] w-[88px] overflow-hidden md:h-[125px] md:w-[125px] lg:h-[165px] lg:w-[165px]">
             <Image
               src="/favicon-white.png"
               alt="/logo"
@@ -215,7 +215,7 @@ const Footer = () => {
               className="object-fit h-auto w-full"
             />
           </div>
-          <div className="flex flex-col justify-start gap-[16px] text-[13px] lg:justify-self-end lg:pl-[32px] lg:text-[14px] xl:text-[16px]">
+          <div className="flex flex-col justify-start gap-[16px] text-[13px] md:justify-self-start lg:justify-self-end lg:pl-[28px] lg:text-[14px] xl:text-[16px]">
             <p>(+976)-7727 9090</p>
             <p>reservations@ihotel.mn</p>
             <p>info@ihotel.mn</p>

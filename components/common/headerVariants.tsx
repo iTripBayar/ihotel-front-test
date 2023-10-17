@@ -2,8 +2,8 @@
 import { useAppCtx } from '@/utils/app';
 import Image from 'next/image';
 import { Lang } from '@/utils/app';
-import SearchBox from '../test/searchSection/searchBox';
-import OnlineToggle from '../test/searchSection/onlineToggle';
+import SearchBox from '../searchSection/searchBox';
+import OnlineToggle from '../searchSection/onlineToggle';
 
 interface iProps {
   ver: string;
@@ -39,38 +39,41 @@ const HeaderVariants = ({
 
   return (
     <header
-      className={`fixed z-[500] flex h-[52px] w-full animate-slide-bottom items-center justify-between gap-[20px] bg-primary-blue px-[16px] text-white 2xs:px-[24px] sm:px-[50px] md:px-[100px] lg:px-[150px]`}
+      className={`fixed z-[500] flex h-[52px] w-full animate-slide-bottom items-center justify-between gap-[20px] bg-primary-blue px-[16px] text-white 2xs:px-[24px] sm:px-[50px] lg:px-[150px]`}
     >
       {/* use ? : to only load one of the images */}
-      {ver !== 'default' ? (
-        <Image
-          src="/favicon-white.png"
-          alt="/logo"
-          width={34}
-          height={34}
-          priority
-          quality={100}
-          sizes="20vw"
-          className="object-fit max-h-[34px] max-w-[34px] cursor-pointer"
-          onClick={() => {
-            window.location.reload();
-          }}
-        />
+      {/* {ver !== 'default' ? (
+       
       ) : (
-        <Image
-          src="/images/logo-white.png"
-          alt="/logo"
-          width={114}
-          height={34}
-          priority
-          quality={100}
-          sizes="20vw"
-          className="object-fit max-h-[34px] max-w-[114px] cursor-pointer"
-          onClick={() => {
-            window.location.reload();
-          }}
-        />
-      )}
+
+       
+      )} */}
+      <Image
+        src="/favicon-white.png"
+        alt="/logo"
+        width={34}
+        height={34}
+        priority
+        quality={100}
+        sizes="20vw"
+        className="object-fit hidden max-h-[34px] max-w-[34px] cursor-pointer lg:flex"
+        onClick={() => {
+          window.location.reload();
+        }}
+      />
+      <Image
+        src="/images/logo-white.png"
+        alt="/logo"
+        width={114}
+        height={34}
+        priority
+        quality={100}
+        sizes="20vw"
+        className="object-fit max-h-[34px] max-w-[114px] cursor-pointer lg:hidden"
+        onClick={() => {
+          window.location.reload();
+        }}
+      />
       <div className="hidden items-center justify-center gap-[16px] text-[16px] font-medium leading-[16px] lg:flex xl:gap-[24px]">
         {/* search */}
         <SearchBox
@@ -83,24 +86,10 @@ const HeaderVariants = ({
         {/* online toggle */}
         <OnlineToggle ver="round" />
         {/* search Btn */}
-        <div className="border-black/25px-[12px] flex h-[36px] w-full items-center justify-center gap-[0px] rounded-full border bg-white pl-[2px] pt-[2px] text-primary-blue lg:w-[175px] xl:w-[225px]">
-          <p className="text-[16px] font-medium uppercase">
+        <div className="border-black/25px-[12px] flex h-[36px] w-full items-center justify-center gap-[0px] rounded-full border bg-white pl-[2px] text-primary-blue lg:w-[175px] xl:w-[225px]">
+          <p className="text-[13px] font-medium uppercase leading-[13px] xl:text-[14px]">
             {appState.lang === 'mn' ? 'Хайх' : 'Search'}
           </p>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 1 24 24"
-            strokeWidth={3}
-            stroke="currentColor"
-            className="h-[14px] w-[14px]"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.25 4.5l7.5 7.5-7.5 7.5"
-            />
-          </svg>
         </div>
       </div>
       <div className="flex items-center justify-center">

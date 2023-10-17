@@ -93,7 +93,7 @@ const Featured = ({ cap, title, data }: iProps) => {
     data = data.slice(0, cap);
   }
   return (
-    <div className="w-full px-[16px] pt-[32px] sm:px-[72px] md:px-[120px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]">
+    <div className="w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]">
       <div
         className={`flex w-full flex-col gap-[24px] border-t-2 border-dashed border-black/[.15] pt-[32px] lg:gap-[32px] ${
           title === '' ? 'mt-[-64px] border-none' : ''
@@ -121,20 +121,25 @@ const Featured = ({ cap, title, data }: iProps) => {
         ) : null}
         {/* cardContainer */}
         <div
-          className={`grid grid-rows-${cap} gap-[32px] lg:grid-cols-2 lg:grid-rows-2 xl:grid-cols-3 xl:grid-rows-1 xl:gap-[24px] 2xl:gap-[48px]`}
+          className={`grid grid-rows-${cap} gap-[32px] sm:grid-cols-2 md:grid-rows-2 xl:grid-cols-3 xl:grid-rows-1 xl:gap-[24px] 2xl:gap-[48px]`}
         >
           {data.map((data, i: number) => (
             <HotelCard data={data} key={i} />
           ))}
         </div>
-        {cap !== 3 ? (
+        {/* {cap !== 3 ? (
           <div className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
             <p className="flex gap-[4px]">
               {appState.lang === 'mn' ? 'Цааш үзэх' : 'More'}{' '}
               <span>(100+)</span>
             </p>
           </div>
-        ) : null}
+        ) : null} */}
+        <div className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
+          <p className="flex gap-[4px]">
+            {appState.lang === 'mn' ? 'Цааш үзэх' : 'More'} <span>(100+)</span>
+          </p>
+        </div>
       </div>
     </div>
   );

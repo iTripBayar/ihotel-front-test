@@ -1,5 +1,4 @@
 'use client';
-import SearchComponent from '@/components/common/search';
 import HeroCategory from '@/components/heroCategory';
 import CommonLocation from '@/components/commonLocation';
 import Featured from '@/components/featured';
@@ -14,9 +13,9 @@ import ScrollUpBtn from '@/components/common/scrollUpBtn';
 import { fetchData } from '@/utils';
 import { useAppCtx } from '@/utils/app';
 import { AppCtxProvider } from '@/utils/app';
-import HeaderTest from '@/components/test/header';
-import SearchSection from '@/components/test/searchSection';
-import Header from '@/components/test/header';
+import HeaderTest from '@/components/common/header';
+import SearchSection from '@/components/searchSection';
+import Header from '@/components/common/header';
 import FeaturedSample from '@/components/featured/sample';
 
 export default function Home() {

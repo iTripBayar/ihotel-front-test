@@ -18,7 +18,7 @@ const SearchSection = ({
 }: iProps) => {
   const { appState } = useAppCtx();
   return (
-    <div className="  px-[16px] 2xs:px-[24px] sm:px-[50px] md:px-[100px] lg:px-[150px] xl:px-[200px]">
+    <div className="  px-[16px] 2xs:px-[24px] sm:px-[50px] lg:px-[150px] xl:px-[200px]">
       <div className="  flex w-full flex-col justify-between gap-[12px] rounded-[8px] bg-black/[.05] p-[10px] text-[12px] lg:flex-row lg:text-[14px]">
         {/* search */}
         <SearchBox
@@ -35,20 +35,6 @@ const SearchSection = ({
           <p className="text-[16px] font-normal uppercase">
             {appState.lang === 'mn' ? 'Хайх' : 'Search'}
           </p>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 1 24 24"
-            strokeWidth={3}
-            stroke="currentColor"
-            className="h-[14px] w-[14px]"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.25 4.5l7.5 7.5-7.5 7.5"
-            />
-          </svg>
         </div>
       </div>
     </div>

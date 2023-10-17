@@ -24,40 +24,24 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
 
   return (
     <header
-      className={`flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white 2xs:px-[24px] sm:px-[50px] md:px-[100px] lg:px-[150px] xl:px-[200px]`}
+      className={`flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white 2xs:px-[24px] sm:px-[50px] lg:px-[150px] xl:px-[200px]`}
     >
       {/* use ? : to only load one of the images */}
-      {ver !== 'default' ? (
-        <Image
-          src="/favicon-white.png"
-          alt="/logo"
-          width={34}
-          height={34}
-          priority
-          quality={100}
-          sizes="20vw"
-          className="object-fit max-h-[34px] max-w-[34px] cursor-pointer"
-          onClick={() => {
-            window.location.reload();
-          }}
-        />
-      ) : (
-        <Image
-          src="/images/logo-white.png"
-          alt="/logo"
-          width={114}
-          height={34}
-          priority
-          quality={100}
-          sizes="20vw"
-          className="object-fit max-h-[34px] max-w-[114px] cursor-pointer"
-          onClick={() => {
-            window.location.reload();
-          }}
-        />
-      )}
+      <Image
+        src="/images/logo-white.png"
+        alt="/logo"
+        width={114}
+        height={34}
+        priority
+        quality={100}
+        sizes="20vw"
+        className="object-fit max-h-[34px] max-w-[114px] cursor-pointer"
+        onClick={() => {
+          window.location.reload();
+        }}
+      />
       <div className="flex items-center justify-end">
-        <div className="hidden justify-end gap-[20px] text-[16px] font-medium leading-[16px] lg:flex xl:gap-[32px]">
+        <div className="hidden justify-end gap-[20px] text-[14px] font-medium leading-[14px] lg:flex xl:gap-[32px] xl:text-[15px] xl:leading-[15px]">
           {/* log in */}
           <div
             className="group relative flex h-[32px] cursor-pointer items-center"

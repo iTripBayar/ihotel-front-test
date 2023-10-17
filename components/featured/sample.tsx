@@ -180,7 +180,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                           {data.stat === 'pending' ? (
                             <span className="text-[14px] font-bold">
                               {' '}
-                              1-3цаг
+                              1-3 цаг
                             </span>
                           ) : null}
                         </p>
@@ -196,7 +196,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                           {data.stat === 'pending' ? (
                             <span className="text-[14px] font-bold">
                               {' '}
-                              1-3hours
+                              1-3 hours
                             </span>
                           ) : null}
                         </p>

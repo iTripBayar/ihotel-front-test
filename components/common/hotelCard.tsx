@@ -31,6 +31,8 @@ const HotelCard = ({ data }: iProps) => {
     stat = 'data';
   }
 
+  // console.log(data);
+
   return (
     <div
       className={`flex w-full flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] xl:gap-[24px] ${
@@ -38,7 +40,7 @@ const HotelCard = ({ data }: iProps) => {
       }`}
     >
       {/* image */}
-      <div className="relative h-[200px] w-full overflow-hidden rounded-[16px] shadow-[0_3px_10px_rgb(0,0,0,0.2)] xs:h-[225px] sm:h-[250px] md:h-[300px] lg:h-[225px]">
+      <div className="relative h-[200px] w-full overflow-hidden rounded-[16px] shadow-[0_3px_10px_rgb(0,0,0,0.2)] xs:h-[225px] sm:h-[175px] md:h-[225px] lg:h-[225px]">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill={fav === false ? 'rgb(255 255 255/50%)' : '#3C76FE'}
@@ -68,7 +70,8 @@ const HotelCard = ({ data }: iProps) => {
           sizes="50vw"
           placeholder="blur"
           blurDataURL={`"_next/image/?url=${data.image}"`}
-          className="h-auto w-full object-cover duration-500 hover:scale-110"
+          className="h-auto w-full select-none object-cover duration-700 hover:scale-110"
+          draggable={false}
         />
         {/* 
        
@@ -91,11 +94,18 @@ const HotelCard = ({ data }: iProps) => {
             {appState.lang === 'mn' ? data.name : data.nameEn}
           </p>
           <p className="text-[12px] leading-[12px] text-sub-text/60 2xs:text-[14px] 2xs:leading-[14px]">
-            {data.address
+            {data.shortAdress
+              ? data.shortAdress
+              : data.address
+              ? data.address.length > 30
+                ? data.address.slice(0, 30) + '...'
+                : data.address
+              : 'Lorem ipsum dolor sit amet consectetur.'}
+            {/* {data.address
               ? data.address.length > 60
                 ? data.address.slice(0, 60) + '...'
                 : data.address
-              : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, eligendi.'}
+              : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, eligendi.'} */}
           </p>
         </div>
         {/* review & stat */}
@@ -145,7 +155,7 @@ const HotelCard = ({ data }: iProps) => {
                     ? 'Онлайн захиалга боломжгүй'
                     : ''}
                   {stat === 'pending' ? (
-                    <span className="text-[14px] font-bold">1-3цаг</span>
+                    <span className="text-[14px] font-bold">1-3 цаг</span>
                   ) : null}
                 </p>
               ) : (
@@ -158,7 +168,7 @@ const HotelCard = ({ data }: iProps) => {
                     ? 'Booking unavailable'
                     : ''}
                   {stat === 'pending' ? (
-                    <span className="text-[14px] font-bold">1-3hours</span>
+                    <span className="text-[14px] font-bold">1-3 hours</span>
                   ) : null}
                 </p>
               )}
@@ -166,8 +176,12 @@ const HotelCard = ({ data }: iProps) => {
           ) : (
             <div className="self-end">
               <p className="text-[22px] font-bold text-main-text">
-                {data.includedPrice ? data.includedPrice : 70000} MNT
-                <span className="text-[14px] text-sub-text/75"> / хоног</span>
+                {data.includedPrice ? data.includedPrice : 70000}{' '}
+                {appState.lang === 'mn' ? '₮' : '$'}
+                <span className="text-[14px] text-sub-text/75">
+                  {' '}
+                  / {appState.lang === 'mn' ? 'хоног' : 'day'}
+                </span>
               </p>
             </div>
           )}
@@ -180,9 +194,13 @@ const HotelCard = ({ data }: iProps) => {
             }`}
           >
             <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[20px] lg:text-[20px]">
-              {data.includedPrice ? data.includedPrice : 70000} MNT
+              {/* {data.includedPrice ? data.includedPrice : 70000} */}
+              {data.includedPrice
+                ? data.includedPrice.toLocaleString()
+                : (70000).toLocaleString()}
+              {appState.lang === 'mn' ? ' ₮' : ' $'}
               <span className="text-[12px] text-sub-text/75 xs:text-[14px]">
-                / хоног
+                / {appState.lang === 'mn' ? 'хоног' : 'day'}
               </span>
             </p>
             <div

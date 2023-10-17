@@ -46,7 +46,7 @@ const BurgerMenu = ({ open, close, logIn, phone }: iProps) => {
       onClick={handleClick}
     >
       <div
-        className={`relative flex h-full w-[210px] animate-slide-left flex-col justify-between bg-[#181818] px-[20px] pb-[32px] pt-[48px] text-[16px] font-medium text-white duration-500 lg:w-[250px] lg:px-[24px] ${
+        className={`relative flex h-full w-[210px] animate-slide-left flex-col justify-between bg-[#181818] px-[20px] pb-[32px] pt-[48px] text-[14px] font-medium text-white duration-500 lg:w-[250px] lg:px-[24px] ${
           closeAnimation == true ? ' animate-slide-right' : ''
         }`}
       >

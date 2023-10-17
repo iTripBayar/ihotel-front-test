@@ -48,10 +48,10 @@ const News = ({ data }: iProps) => {
     },
   ];
 
-  // console.log(data);
+  console.log(data);
 
   return (
-    <div className="w-full px-[16px] pt-[32px] sm:px-[72px] md:px-[120px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]">
+    <div className="w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]">
       <div
         className="flex w-full flex-col gap-[18px] border-t-2 border-dashed border-black/[.15] pt-[32px] lg:gap-[32px]"
         // style={{ borderTop: 'dashed 2px rgb(0 0 0 /15%)' }}
@@ -64,7 +64,7 @@ const News = ({ data }: iProps) => {
           {data.map((data) => (
             <div
               key={data.id}
-              className="flex w-full flex-col gap-[8px] overflow-hidden rounded-[20px] pb-[8px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]"
+              className="flex w-full flex-col justify-between gap-[8px] overflow-hidden rounded-[20px] pb-[8px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]"
             >
               {/* image */}
               <div className="relative h-[175px] w-full overflow-hidden md:h-[175px] lg:h-[225px] xl:h-[250px]">
@@ -84,11 +84,7 @@ const News = ({ data }: iProps) => {
                 {/* <p>{appState.lang === 'mn' ? data.name : data.nameEn}</p> */}
                 {/* <p className=''>{appState.lang === 'mn' ? data.excerpt : ''}</p> */}
                 <p className=" max-w-[50ch] overflow-hidden text-ellipsis whitespace-normal ">
-                  {appState.lang === 'mn'
-                    ? data.excerpt.length > 50
-                      ? data.excerpt.slice(0, 50) + '...'
-                      : data.excerpt
-                    : ''}
+                  {appState.lang === 'mn' ? data.title : ''}
                 </p>
                 {/* white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
                 max-width: 15ch; */}

@@ -108,6 +108,9 @@ const SearchBox = ({
           ver === 'round' ? 'max-h-[36px] overflow-hidden rounded-full' : ''
         }`}
         ref={searchRef}
+        onClick={() => {
+          inputRef.current?.focus();
+        }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -124,8 +127,8 @@ const SearchBox = ({
           />
         </svg>
         <input
-          className={`border-transparent px-0 text-[12px] text-sub-text/75 placeholder-sub-text/75 focus:border-transparent focus:ring-0 2xs:text-[14px] ${
-            query !== '' ? 'w-full' : 'w-[124px] 2xs:w-[144px]'
+          className={`border-transparent px-0 text-[12px] text-sub-text/75 placeholder-sub-text/75 focus:border-transparent focus:ring-0 2xs:text-[13px] sm:text-[14px] ${
+            query !== '' ? 'w-full' : 'sm::w-[144px] w-[124px] 2xs:w-[134px]'
           }`}
           type="text"
           placeholder={
@@ -136,9 +139,10 @@ const SearchBox = ({
           onChange={(event) => setQuery(event.target.value)}
           value={query}
           ref={inputRef}
+          onFocus={(e) => e.preventDefault()}
         />
         {query === '' ? (
-          <p className="text-[12px] text-main-text 2xs:text-[14px] ">
+          <p className="text-[12px] text-main-text 2xs:text-[13px] sm:text-[14px] ">
             &ldquo;
             {appState.lang === 'mn'
               ? suggestion[currentIndex].mn
@@ -149,13 +153,13 @@ const SearchBox = ({
       </div>
       {query !== '' ? (
         <div
-          className={` flex h-[150px] w-full flex-col justify-start gap-[12px] overflow-scroll rounded-[8px] border border-black/20 bg-white px-[12px] text-[13px] text-main-text md:grid md:grid-cols-2 md:grid-rows-[auto] md:gap-[24px] md:px-[20px] lg:absolute lg:top-[60px] lg:grid-rows-[auto] xl:text-[14px] lg:max-w-[${searchRef.current?.clientWidth}px] lg:z-50`}
+          className={` flex h-[150px] w-full flex-col justify-start gap-[12px] overflow-scroll overflow-y-scroll rounded-[8px] border border-black/20 bg-white px-[12px] text-main-text md:grid md:grid-cols-2 md:grid-rows-[auto] md:gap-[24px] md:px-[20px] lg:absolute lg:top-[50px] lg:h-[200px] lg:min-w-[400px] lg:grid-rows-[auto] lg:gap-[16px] lg:px-[10px] xl:gap-[24px] xl:px-[20px] lg:max-w-[${searchRef.current?.clientWidth}px] lg:z-50`}
         >
           {uniqueData.map((data) => (
             <div
               key={data.key}
               onClick={() => setQuery(data.name)}
-              className="flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-2 border-dashed border-black/[.15] leading-[14px]"
+              className=" flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
             >
               {data.type === 'location' ? (
                 <svg

@@ -12,6 +12,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import NextBtn from './nextBtn';
 import PrevBtn from './prevBtn';
 import { useAppCtx } from '@/utils/app';
+import useWindowSize from '@/hooks/windowSize';
 
 interface iProps {
   data: any[];
@@ -20,7 +21,9 @@ interface iProps {
 
 const CommonLocation = ({ data, destinations }: iProps) => {
   const { appState } = useAppCtx();
+  const size = useWindowSize();
 
+  console.log(size);
   // console.log(data);
 
   // console.log(data[0].coverPhoto);
@@ -129,56 +132,54 @@ const CommonLocation = ({ data, destinations }: iProps) => {
   const [activeIndex, setActive] = useState<any>(0);
 
   const settings = {
-    className: 'center relative',
+    className: 'center',
     centerMode: true,
     infinite: true,
-    centerPadding: '134px',
+    centerPadding:
+      size?.width && size?.width > 1536
+        ? '190px'
+        : size?.width && size?.width > 1280
+        ? '190px'
+        : size?.width && size?.width > 1024
+        ? '150px'
+        : size?.width && size?.width > 576
+        ? '50px'
+        : '24px',
     slidesToShow: 1,
+    initialSlide: 0,
     speed: 500,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
-    responsive: [
-      {
-        breakpoint: 1536,
-        settings: {
-          centerPadding: '160px',
-        },
-      },
-      {
-        breakpoint: 1280,
-        settings: {
-          centerPadding: '106px',
-        },
-      },
-      {
-        breakpoint: 1024,
-        settings: {
-          centerPadding: '106px',
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          centerPadding: '58px',
-        },
-      },
-      {
-        breakpoint: 576,
-        settings: {
-          centerPadding: '5%',
-        },
-      },
-      {
-        breakpoint: 320,
-        settings: {
-          centerPadding: '6%',
-        },
-      },
-    ],
+    // responsive: [
+    //   {
+    //     breakpoint: 1024,
+    //     settings: {
+    //       centerPadding: '58px',
+    //     },
+    //   },
+    //   {
+    //     breakpoint: 768,
+    //     settings: {
+    //       centerPadding: '5%',
+    //     },
+    //   },
+    //   {
+    //     breakpoint: 576,
+    //     settings: {
+    //       centerPadding: '5%',
+    //     },
+    //   },
+    //   {
+    //     breakpoint: 320,
+    //     settings: {
+    //       centerPadding: '6%',
+    //     },
+    //   },
+    // ],
     afterChange: (current: number) => setActive({ current }),
   };
 
-  sliderRef.current?.slickGoTo(0);
+  // sliderRef.current?.slickGoTo(0);
 
   // console.log(data);
   // console.log(activeIndex);
@@ -187,7 +188,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
   return (
     <div className="flex w-full flex-col gap-[20px]">
       <h3 className="mb-[-10px] self-center text-[16px] font-medium md:text-[18px] lg:text-[22px]">
-        {appState.lang === 'mn' ? 'Түгээмэл байршилууд' : 'Common destinations'}
+        {appState.lang === 'mn' ? 'Түгээмэл байршлууд' : 'Common destinations'}
       </h3>
       <Slider {...settings} ref={sliderRef}>
         {data.map((index) => (
@@ -200,13 +201,13 @@ const CommonLocation = ({ data, destinations }: iProps) => {
               alt="/commonLocs"
               fill={true}
               // priority
-              quality={75}
+              quality={100}
               // sizes="100vw"
               loading="lazy"
               sizes="100vw"
               placeholder="blur"
               blurDataURL={`"_next/image/?url=${index.coverPhoto}"`}
-              className="h-auto w-full object-cover"
+              className="h-auto w-full object-cover duration-1000 hover:scale-110"
             />
             <div className="absolute bottom-0 z-[1] flex h-[50px] w-full flex-col items-center justify-center gap-[2px] bg-black/50 md:h-[75px] md:gap-[4px]">
               <h3 className="text-[16px] font-medium leading-[14px] md:text-[18px] md:leading-[18px]">
@@ -237,7 +238,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
           </div>
         ))}
       </Slider>
-      <div className=" grid w-full gap-[20px] px-[24px] text-white sm:px-[68px] md:px-[120px] lg:grid-cols-4 lg:px-[140px] xl:px-[150px] 2xl:px-[200px]">
+      <div className=" grid w-full gap-[20px] px-[24px] text-white sm:grid-cols-2 sm:px-[38px] md:px-[68px] lg:grid-cols-4 lg:px-[140px] xl:px-[150px] 2xl:px-[200px]">
         {/* {activeIndex == 0
           ? destinations.map((data) => (
               <div

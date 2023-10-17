@@ -36,13 +36,13 @@ const HeroCategory = ({ data }: iProps) => {
   ];
   // md:gap-[32px] lg:gap-[48px] xl:gap-[64px]
   return (
-    <div className=" flex w-full items-start justify-between px-[10px] text-main-text sm:px-[50px]  md:px-[100px] lg:px-[150px]">
+    <div className=" flex w-full items-start justify-between px-[10px] text-main-text sm:px-[50px] lg:px-[150px]">
       {categoryData.map((data) => (
         <div
           className="flex w-1/4 cursor-pointer  flex-col items-center justify-center gap-[10px] font-medium md:gap-[16px]"
           key={data.id}
         >
-          <div className="relative h-[50px] w-[50px] overflow-hidden rounded-full xs:h-[65px] xs:w-[65px] sm:h-[80px] sm:w-[80px] md:h-[100px] md:w-[100px] lg:h-[140px] lg:w-[140px] xl:h-[180px] xl:w-[180px] 2xl:h-[200px] 2xl:w-[200px]">
+          <div className="relative h-[50px] w-[50px] overflow-hidden rounded-full xs:h-[65px] xs:w-[65px] sm:h-[100px] sm:w-[100px] md:h-[120px] md:w-[120px] lg:h-[140px] lg:w-[140px] xl:h-[180px] xl:w-[180px] 2xl:h-[200px] 2xl:w-[200px]">
             <Image
               src={data.img}
               // src={`https://ihotel.mn/${data.image}`}
