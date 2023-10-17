@@ -150,7 +150,7 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
           />
         </svg> */}
         <div
-          className="relative flex h-[16px] w-[24px] flex-col items-center "
+          className="relative flex h-[16px] w-[24px] flex-col items-center lg:hidden"
           onClick={openMenu}
         >
           <div className="animate-burger-top absolute top-[50%] h-[2px] w-[24px] translate-y-[-50%] rounded-full bg-white"></div>
