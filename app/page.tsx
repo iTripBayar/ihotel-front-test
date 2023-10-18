@@ -128,6 +128,7 @@ export default function Home() {
   }
 
   // console.log(logIn);
+  console.log('test');
   return (
     <AppCtxProvider>
       <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
