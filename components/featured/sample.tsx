@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import { useAppCtx } from '@/utils/app';
+import HotelCard from '../common/hotelCard';
+import { useState } from 'react';
 
 interface iProps {
   cap: number;
@@ -8,12 +10,15 @@ interface iProps {
 
 const FeaturedSample = ({ cap, title }: iProps) => {
   const { appState } = useAppCtx();
+  const [fav, setFav] = useState(false);
+
   const hotels = [
     {
       key: 1,
       img: '/samples/hotel1.png',
       name: 'Lorem ipsum dolor sit amet. 1',
-      location: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. 1',
+      location: 'Lorem 1',
+      dist: 'Dorem',
       stat: 'online',
       review: 9.6,
       price: 70000,
@@ -22,7 +27,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
       key: 2,
       img: '/samples/hotel2.png',
       name: 'Lorem ipsum dolor sit amet. 2',
-      location: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. 2',
+      location: 'Lorem 2',
       stat: 'pending',
       review: 9.6,
       price: 70000,
@@ -31,7 +36,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
       key: 3,
       img: '/samples/hotel3.png',
       name: 'Lorem ipsum dolor sit amet. 3',
-      location: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. 3',
+      location: 'Lorem 3',
       stat: 'offline',
       review: 9.6,
       price: 70000,
@@ -40,7 +45,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
       key: 4,
       img: '/samples/hotel4.png',
       name: 'Lorem ipsum dolor sit amet. 4',
-      location: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. 4',
+      location: 'Lorem 4',
       stat: 'data',
       review: 9.6,
       price: 70000,
@@ -49,7 +54,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
       key: 5,
       img: '/samples/hotel1.png',
       name: 'Lorem ipsum dolor sit amet. 1',
-      location: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. 1',
+      location: 'Lorem 1',
       stat: 'online',
       review: 9.6,
       price: 70000,
@@ -58,7 +63,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
       key: 6,
       img: '/samples/hotel2.png',
       name: 'Lorem ipsum dolor sit amet. 2',
-      location: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. 2',
+      location: 'Lorem 2',
       stat: 'pending',
       review: 9.6,
       price: 70000,
@@ -69,7 +74,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
     adjustedList.push(hotels[i]);
   }
   return (
-    <div className="w-full px-[16px] pt-[32px] sm:px-[72px] md:px-[120px] lg:px-[150px] lg:py-[0]">
+    <div className="w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]">
       <div
         className="flex w-full flex-col gap-[24px] border-t-2 border-dashed border-black/[.15] pt-[32px] lg:gap-[32px]"
         // style={{ borderTop: 'dashed 2px rgb(0 0 0 /15%)' }}
@@ -77,25 +82,32 @@ const FeaturedSample = ({ cap, title }: iProps) => {
         <h3 className="text-[20px] font-bold text-main-text">{title}</h3>
         {/* cardContainer */}
         <div
-          className={`grid grid-rows-${cap} gap-[32px] lg:grid-cols-2 lg:grid-rows-2 xl:grid-cols-3 xl:grid-rows-1 xl:gap-[24px]`}
+          className={`grid xs:grid-rows-${cap} gap-[32px] sm:grid-cols-2 sm:grid-rows-${
+            cap / 2
+          } xl:grid-cols-3 xl:grid-rows-${
+            cap / 3
+          } xl:gap-[24px] 2xl:gap-[48px]`}
         >
-          {/* cards */}
-          {adjustedList.map((data) => (
+          {hotels.map((data, i: number) => (
             <div
-              key={data.key}
-              className={` mb-0 flex w-full flex-col gap-[16px] overflow-hidden rounded-[20px] pb-0 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] xl:gap-[24px] ${
-                data.stat === 'data' ? 'max-h-[350px] ' : null
+              className={`flex w-full flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] xl:gap-[24px] ${
+                data.stat === 'data' ? 'max-h-[350px]' : ''
               }`}
             >
               {/* image */}
-              <div className="relative h-[200px] w-full overflow-hidden rounded-[20px] shadow-[0_3px_10px_rgb(0,0,0,0.2)] xs:h-[225px] sm:h-[250px] md:h-[300px] lg:h-[225px]">
+              <div className="relative h-[200px] w-full overflow-hidden rounded-[16px] shadow-[0_3px_10px_rgb(0,0,0,0.2)] xs:h-[225px] sm:h-[175px] md:h-[225px] lg:h-[250px] xl:h-[225px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="rgb(255 255 255/50%)"
+                  fill={fav === false ? 'rgb(255 255 255/50%)' : '#3C76FE'}
                   viewBox="0 0 24 24"
                   strokeWidth={2.2}
                   stroke="currentColor"
-                  className="absolute right-[16px] top-[16px] z-50 h-[24px] w-[24px] text-primary-blue"
+                  className={`absolute right-[16px] top-[16px] z-50 h-[24px] w-[24px] text-primary-blue ${
+                    fav === true ? ' scale-125 duration-500' : ''
+                  }`}
+                  onClick={() => {
+                    setFav(!fav);
+                  }}
                 >
                   <path
                     strokeLinecap="round"
@@ -105,46 +117,70 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                 </svg>
                 <Image
                   src={data.img}
+                  // src={`https://ihotel.mn/${data.coverPhoto}`}
                   alt="/hotel"
                   fill={true}
-                  // priority
-                  loading="lazy"
-                  placeholder="blur"
-                  blurDataURL={`"_next/image/?url=${data.img}"`}
+                  //   priority
                   quality={75}
+                  loading="lazy"
                   sizes="50vw"
-                  className="h-auto w-full object-cover duration-500 hover:scale-110"
+                  placeholder="blur"
+                  blurDataURL={data.img}
+                  className="h-auto w-full select-none object-cover duration-700 hover:scale-110"
+                  draggable={false}
                 />
+                {/* 
+       
+        // priority loading="lazy" placeholder="blur" blurDataURL=
+        {`"_next/image/?url=${roomBigImg}"`} */}
               </div>
               {/* bottom section */}
               <div
-                className={`flex h-auto w-full flex-col gap-[12px] pl-[14px] ${
-                  data.stat === 'data' ? ' opacity-50' : null
+                className={`flex w-full flex-col gap-[12px] pl-[14px] ${
+                  data.stat === 'data' ? 'opacity-50' : ''
                 }`}
               >
                 {/* name & location */}
                 <div className="flex w-full flex-col gap-[12px] pr-[14px]">
-                  <h3 className="text-[18px]  font-medium leading-[18px] text-main-text">
-                    {data.name}
-                  </h3>
-                  <p className="text-[14px] leading-[12px] text-sub-text/60">
-                    {data.location}
+                  <p
+                    className={`text-[16px] font-medium leading-[16px] text-main-text 2xs:text-[18px] 2xs:leading-[18px] ${
+                      data.name.length > 27 ? 'xl:text-[14px]' : ''
+                    }`}
+                  >
+                    {appState.lang === 'mn' ? data.name : data.name}
+                  </p>
+                  <p className="text-[12px] leading-[12px] text-sub-text/60 2xs:text-[14px] 2xs:leading-[14px]">
+                    {appState.lang === 'mn' ? data.dist : data.dist}
+                    ,&nbsp;
+                    {appState.lang === 'mn' ? data.location : data.location}
+                    {/* {data.shortAdress
+              ? data.shortAdress
+              : data.address
+              ? data.address.length > 30
+                ? data.address.slice(0, 30) + '...'
+                : data.address
+              : 'Lorem ipsum dolor sit amet consectetur.'} */}
+                    {/* {data.address
+              ? data.address.length > 60
+                ? data.address.slice(0, 60) + '...'
+                : data.address
+              : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, eligendi.'} */}
                   </p>
                 </div>
                 {/* review & stat */}
                 <div
-                  className={`relative mb-0 flex w-full gap-[12px] pr-[8px] text-white ${
+                  className={`relative flex w-full gap-[12px] pr-[8px] font-medium text-white sm:gap-[8px] ${
                     data.stat === 'data'
-                      ? 'mb-0 justify-between pb-0 pr-[24px] md:mb-[8px] md:pr-[32px]'
-                      : 'mb-0 justify-start pb-0'
+                      ? 'justify-between pr-[24px] md:mb-[8px] md:pr-[32px]'
+                      : 'justify-start'
                   }`}
                 >
                   {/* review */}
-                  <div className="flex h-[31px] min-w-[50px] items-center justify-center gap-[2px] rounded-[8px] bg-primary-blue text-[14px]">
+                  <div className="flex h-[31px] min-w-[40px] items-center justify-center gap-[4px] rounded-[8px] bg-primary-blue text-[12px] 2xs:min-w-[50px] 2xs:text-[14px] sm:min-w-[38px] sm:gap-[2px] sm:text-[12px] md:min-w-[40px] md:text-[14px]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="white"
-                      viewBox="0 2 24 24"
+                      viewBox="0 1 24 24"
                       strokeWidth={1}
                       stroke="white"
                       className="h-[12px] w-[12px]"
@@ -160,12 +196,12 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                   {/* stat */}
                   {data.stat !== 'data' ? (
                     <div
-                      className={`flex h-[31px] items-center justify-center gap-[4px] rounded-[8px]  text-center font-medium ${
+                      className={`flex h-[31px] items-center justify-center gap-[4px] rounded-[8px] text-center ${
                         data.stat === 'online'
-                          ? 'bg-main-online px-[16px] text-[14px]'
+                          ? 'bg-main-online px-[16px] text-[14px] sm:text-[11px] sm:leading-[12px] md:text-[14px] md:leading-[14px]'
                           : data.stat === 'pending'
-                          ? 'bg-main-pending px-[6px] text-[11px] leading-[11px] text-main-text xs:px-[8px] xs:text-[12px] xs:leading-[12px]'
-                          : 'bg-main-offline px-[6px] text-[11px] leading-[11px] xs:px-[12px] xs:text-[12px]'
+                          ? 'bg-main-pending px-[6px] text-[11px] leading-[11px] text-main-text 2xs:px-[8px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[4px] sm:text-[10px] sm:leading-[10px] md:px-[8px] md:text-[14px] md:leading-[14px]'
+                          : 'bg-main-offline px-[6px] text-[11px] leading-[11px] 2xs:px-[12px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[4px] sm:text-[10px] sm:leading-[10px] md:px-[4px] md:text-[14px] md:leading-[14px]'
                       }`}
                     >
                       {appState.lang === 'mn' ? (
@@ -173,13 +209,12 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                           {data.stat === 'online'
                             ? 'Шууд баталгаажна'
                             : data.stat === 'pending'
-                            ? 'Баталгаажих хугацаа:'
+                            ? 'Баталгаажих хугацаа: '
                             : data.stat === 'offline'
                             ? 'Онлайн захиалга боломжгүй'
                             : ''}
                           {data.stat === 'pending' ? (
-                            <span className="text-[14px] font-bold">
-                              {' '}
+                            <span className="text-[14px] font-bold sm:text-[11px] md:text-[14px]">
                               1-3 цаг
                             </span>
                           ) : null}
@@ -189,13 +224,12 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                           {data.stat === 'online'
                             ? 'Instant confirmation'
                             : data.stat === 'pending'
-                            ? 'Confirmation delay:'
+                            ? 'Confirmation delay: '
                             : data.stat === 'offline'
                             ? 'Booking unavailable'
                             : ''}
                           {data.stat === 'pending' ? (
-                            <span className="text-[14px] font-bold">
-                              {' '}
+                            <span className="text-[14px] font-bold sm:text-[11px] md:text-[14px]">
                               1-3 hours
                             </span>
                           ) : null}
@@ -204,11 +238,14 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                     </div>
                   ) : (
                     <div className="self-end">
-                      <p className="text-[22px] font-bold text-main-text">
-                        {data.price} MNT
+                      <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]">
+                        {data.price
+                          ? data.price.toLocaleString()
+                          : (70000).toLocaleString()}
+                        {appState.lang === 'mn' ? '₮' : '$'}
                         <span className="text-[14px] text-sub-text/75">
                           {' '}
-                          / хоног
+                          / {appState.lang === 'mn' ? 'хоног' : 'day'}
                         </span>
                       </p>
                     </div>
@@ -218,23 +255,31 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                 {data.stat !== 'data' ? (
                   <div
                     className={`flex items-center justify-between ${
-                      data.stat === 'data' ? 'h-0' : null
+                      data.stat === 'data' ? 'h-0' : ''
                     }`}
                   >
-                    <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[20px] lg:text-[20px]">
-                      {data.price} MNT
-                      <span className="text-[12px] text-sub-text/75 xs:text-[14px]">
-                        / хоног
+                    <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]">
+                      {/* {data.includedPrice ? data.includedPrice : 70000} */}
+                      {data.price
+                        ? data.price.toLocaleString()
+                        : (70000).toLocaleString()}
+                      {appState.lang === 'mn' ? ' ₮' : ' $'}
+                      <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
+                        / {appState.lang === 'mn' ? 'хоног' : 'day'}
                       </span>
                     </p>
                     <div
-                      className={`m-0 flex items-center justify-center gap-[4px] self-end rounded-tl-[20px] bg-primary-blue py-[10px] text-[12px] font-medium text-white xs:text-[14px] lg:py-[8px] ${
+                      className={`m-0 flex items-center justify-center gap-[4px] self-end rounded-tl-[20px] bg-primary-blue py-[10px] text-[12px] font-medium text-white xs:text-[14px] sm:text-[13px] md:text-[14px] lg:py-[8px] ${
                         data.stat === 'offline'
-                          ? 'px-[18px] xs:px-[24px] lg:px-[16px]'
-                          : 'px-[12px] xs:px-[16px] lg:px-[12px]'
+                          ? 'px-[18px] 2xs:px-[24px] lg:px-[16px]'
+                          : 'px-[12px] 2xs:px-[16px] sm:px-[10px] md:px-[20px]'
                       }`}
                     >
-                      <p>{data.stat === 'offline' ? 'Харах' : 'Захиалах'}</p>
+                      {appState.lang === 'mn' ? (
+                        <p>{data.stat === 'offline' ? 'Харах' : 'Захиалах'}</p>
+                      ) : (
+                        <p>{data.stat === 'offline' ? 'View' : 'Order'}</p>
+                      )}
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"

@@ -127,8 +127,9 @@ export default function Home() {
     setLogIn(e);
   }
 
+  console.log(data);
   // console.log(logIn);
-  console.log('test');
+  // console.log('test');
   return (
     <AppCtxProvider>
       <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
@@ -174,11 +175,11 @@ export default function Home() {
           data={data ? data.destCategories : []}
           destinations={data ? data.topDestinations : []}
         />
-        {/* <Featured
+        <Featured
           cap={size.width && size.width <= 1280 && size.width >= 576 ? 2 : 3}
           title={'cheap'}
           data={data ? data.cheapHotels : []}
-        /> */}
+        />
         <Featured cap={6} title={'hotels'} data={data ? data.hotels : []} />
         <Featured cap={6} title={'camps'} data={data ? data.camps : []} />
         <FeaturedSample cap={6} title={'sample'} />

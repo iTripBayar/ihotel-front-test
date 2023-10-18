@@ -34,17 +34,23 @@ const HeroCategory = ({ data }: iProps) => {
       titleEn: 'Spa resorts',
     },
   ];
+  // console.log(data);
   // md:gap-[32px] lg:gap-[48px] xl:gap-[64px]
   return (
     <div className=" flex w-full items-start justify-between px-[10px] text-main-text sm:px-[50px] lg:px-[150px]">
-      {categoryData.map((data) => (
+      {data.map((data) => (
         <div
           className="flex w-1/4 cursor-pointer  flex-col items-center justify-center gap-[10px] font-medium md:gap-[16px]"
           key={data.id}
         >
           <div className="relative h-[50px] w-[50px] overflow-hidden rounded-full xs:h-[65px] xs:w-[65px] sm:h-[100px] sm:w-[100px] md:h-[120px] md:w-[120px] lg:h-[140px] lg:w-[140px] xl:h-[180px] xl:w-[180px] 2xl:h-[200px] 2xl:w-[200px]">
             <Image
-              src={data.img}
+              src={
+                data.image
+                  ? `https://ihotel.mn/${data.image}`
+                  : '/samples/camp.png'
+              }
+              // src={`https://ihotel.mn/${index.coverPhoto}`}
               // src={`https://ihotel.mn/${data.image}`}
               alt="/heroCategory"
               fill={true}
@@ -58,7 +64,7 @@ const HeroCategory = ({ data }: iProps) => {
           </div>
           <p className="lg:text-[16px]] text-center text-[11px] xs:text-[12px] sm:text-[13px] md:text-[14px] xl:text-[18px]">
             {/* {appState.lang === 'mn' ? data.name : data.nameEn} */}
-            {appState.lang === 'mn' ? data.title : data.titleEn}
+            {appState.lang === 'mn' ? data.name : data.nameEn}
           </p>
           {/* <div className="relative h-[65px] w-[65px] overflow-hidden  rounded-full bg-black sm:h-[100px] sm:w-[100px]  md:h-[140px] md:w-[140px] lg:h-[190px] lg:w-[190px]">
             <Image

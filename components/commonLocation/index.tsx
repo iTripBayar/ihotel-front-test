@@ -23,7 +23,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
   const { appState } = useAppCtx();
   const size = useWindowSize();
 
-  console.log(size);
+  // console.log(size);
   // console.log(data);
 
   // console.log(data[0].coverPhoto);

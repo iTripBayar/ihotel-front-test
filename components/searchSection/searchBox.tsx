@@ -18,6 +18,7 @@ const SearchBox = ({
 }: iProps) => {
   const [query, setQuery] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [selected, setSelected] = useState(false);
   //   let currentIndex = 0;
 
   const { appState } = useAppCtx();
@@ -136,7 +137,10 @@ const SearchBox = ({
               ? 'Хайх газар оруулах'
               : 'Search destinations'
           }
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(event) => {
+            setQuery(event.target.value);
+            setSelected(false);
+          }}
           value={query}
           ref={inputRef}
           onFocus={(e) => e.preventDefault()}
@@ -151,14 +155,17 @@ const SearchBox = ({
           </p>
         ) : null}
       </div>
-      {query !== '' ? (
+      {query !== '' && selected == false ? (
         <div
           className={` flex h-[150px] w-full flex-col justify-start gap-[12px] overflow-scroll overflow-y-scroll rounded-[8px] border border-black/20 bg-white px-[12px] text-main-text md:grid md:grid-cols-2 md:grid-rows-[auto] md:gap-[24px] md:px-[20px] lg:absolute lg:top-[50px] lg:h-[200px] lg:min-w-[400px] lg:grid-rows-[auto] lg:gap-[16px] lg:px-[10px] xl:gap-[24px] xl:px-[20px] lg:max-w-[${searchRef.current?.clientWidth}px] lg:z-50`}
         >
           {uniqueData.map((data) => (
             <div
               key={data.key}
-              onClick={() => setQuery(data.name)}
+              onClick={() => {
+                setQuery(data.name);
+                setSelected(true);
+              }}
               className=" flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
             >
               {data.type === 'location' ? (
