@@ -13,10 +13,16 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
+  /* overscroll-behavior: contain; */
 }
 /* .slick-list {
   margin: 0 8px;
 } */
 .slick-slide > div {
   padding: 0 6px;
+}
+.mapboxgl-compact,
+.mapboxgl-ctrl-bottom-left,
+.mapboxgl-ctrl-attrib-inner {
+  display: none !important;
 }

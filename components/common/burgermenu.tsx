@@ -8,11 +8,12 @@ interface iProps {
   close: () => void;
   logIn: (e: string) => void;
   phone: string;
+  ver: string;
   // logIn: () => void;
   // signUp: () => void;
 }
 
-const BurgerMenu = ({ open, close, logIn, phone }: iProps) => {
+const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
   const [closeAnimation, setCloseAnimation] = useState(false);
   const { dispatch, appState } = useAppCtx();
   // const [language, setLanguage] = useState<appState.Lang | undefined>('mn');

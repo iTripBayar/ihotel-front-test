@@ -1,7 +1,6 @@
 'use client';
 import HeroCategory from '@/components/heroCategory';
 import CommonLocation from '@/components/commonLocation';
-import Featured from '@/components/featured';
 import News from '@/components/news';
 import Footer from '@/components/common/footer';
 import LogIn from '@/components/common/logIn';
@@ -9,15 +8,16 @@ import BurgerMenu from '@/components/common/burgermenu';
 import { useState, useRef, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import HeaderVariants from '@/components/common/headerVariants';
-import ScrollUpBtn from '@/components/common/scrollUpBtn';
 import { fetchData } from '@/utils';
 import { useAppCtx } from '@/utils/app';
 import { AppCtxProvider } from '@/utils/app';
 import HeaderTest from '@/components/common/header';
 import SearchSection from '@/components/searchSection';
 import Header from '@/components/common/header';
-import FeaturedSample from '@/components/featured/sample';
+import FeaturedSample from '@/components/cardContainer/sample';
 import useWindowSize from '@/hooks/windowSize';
+import BottomSection from '@/components/common/bottomSection';
+import CardsContainer from '@/components/cardContainer';
 
 export default function Home() {
   // const [openMenu, setOpenMenu] = useState(false);
@@ -127,7 +127,7 @@ export default function Home() {
     setLogIn(e);
   }
 
-  console.log(data);
+  // console.log(data);
   // console.log(logIn);
   // console.log('test');
   return (
@@ -152,8 +152,16 @@ export default function Home() {
           close={closeMenu}
           logIn={openLogIn}
           phone={data ? data.phoneNumber : ''}
+          ver={'normal'}
         />
-        <ScrollUpBtn ver={headerVer} />
+        <BottomSection
+          ver={headerVer}
+          map={''}
+          openMap={() => {
+            ('');
+          }}
+        />
+        {/* <BottomSection ver={headerVer} /> */}
         {/* end of fixed components */}
         {/* static */}
         <Header
@@ -169,19 +177,41 @@ export default function Home() {
             placesData={data ? data.places : []}
             campsData={data ? data.camps : []}
             destData={data ? data.destCategories : []}
+            ver={'normal'}
+            map=""
           />
         </div>
         <CommonLocation
           data={data ? data.destCategories : []}
           destinations={data ? data.topDestinations : []}
         />
-        <Featured
+        <CardsContainer
           cap={size.width && size.width <= 1280 && size.width >= 576 ? 2 : 3}
           title={'cheap'}
           data={data ? data.cheapHotels : []}
+          ver={'home'}
+          hotelData={[]}
+          campsData={[]}
+          map={''}
         />
-        <Featured cap={6} title={'hotels'} data={data ? data.hotels : []} />
-        <Featured cap={6} title={'camps'} data={data ? data.camps : []} />
+        <CardsContainer
+          cap={6}
+          title={'hotels'}
+          data={data ? data.hotels : []}
+          ver={'home'}
+          hotelData={[]}
+          campsData={[]}
+          map={''}
+        />
+        <CardsContainer
+          cap={6}
+          title={'camps'}
+          data={data ? data.camps : []}
+          ver={'home'}
+          hotelData={[]}
+          campsData={[]}
+          map={''}
+        />
         <FeaturedSample cap={6} title={'sample'} />
         <News
           cap={size.width && size.width >= 1024 ? 6 : 4}

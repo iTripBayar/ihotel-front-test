@@ -31,7 +31,7 @@ const LogIn = ({ ver, changeVer }: iProps) => {
       className={`animate-fade fixed z-[999] flex h-screen w-full items-center justify-center bg-black/[.35]`}
       onClick={handleClick}
     >
-      <div className="flex h-auto w-[95%] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:w-[80%] md:w-[60%] lg:w-[45%] xl:w-[35%] 2xl:w-[25%]">
+      <div className="flex h-auto w-[95%] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] 2xs:w-[85%] sm:w-[55%] md:w-[40%] lg:w-[35%] xl:w-[30%] 2xl:w-[25%]">
         <div className="flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px] text-main-text">
           <p className="font-medium">
             {ver === 'logIn'
@@ -91,7 +91,7 @@ const LogIn = ({ ver, changeVer }: iProps) => {
                 required
                 pattern={
                   ver === 'signUp'
-                    ? '^(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,}$'
+                    ? '^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'
                     : undefined
                 }
               />
@@ -103,13 +103,19 @@ const LogIn = ({ ver, changeVer }: iProps) => {
                 </p>
               ) : null} */}
               {ver === 'signUp' &&
-              passwordRef?.current?.validity.patternMismatch ? (
-                <p className=" absolute left-2 text-[11px] text-red-600 2xs:text-[12px]">
+              passwordRef?.current?.validity.patternMismatch == true ? (
+                <p
+                  className={`absolute left-2 text-[11px] text-red-600 2xs:text-[12px] ${
+                    !passwordRef?.current?.validity.patternMismatch ?? 'hidden'
+                  }`}
+                >
                   {appState.lang === 'mn'
                     ? '* Чанаргүй нууц үг *'
                     : '* Week password *'}
                 </p>
-              ) : null}
+              ) : (
+                <></>
+              )}
               {password !== '' ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -146,7 +152,8 @@ const LogIn = ({ ver, changeVer }: iProps) => {
                   required
                 />
                 {ver === 'signUp' &&
-                passwordConfirmRef.current?.value !== '' &&
+                passwordConfirmRef.current?.value.length &&
+                passwordConfirmRef.current?.value.length > 0 &&
                 passwordRef?.current?.value !==
                   passwordConfirmRef.current?.value ? (
                   <p className=" absolute left-2 text-[11px] text-red-600 2xs:text-[12px]">
@@ -185,8 +192,8 @@ const LogIn = ({ ver, changeVer }: iProps) => {
             passwordRef?.current?.validity.patternMismatch ? (
               <p className="mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]">
                 {appState.lang === 'mn'
-                  ? '* Нууц үг багадаа 1 том үсэг, 1 тоо, 1 тусгай тэмдэгт агуулах хэрэгтэй*'
-                  : '* Password must have: an uppercase letter, a number, and a symbol *'}
+                  ? '* Нууц үг дор хаяж 1 том үсэг, 1 тоо, 1 тусгай тэмдэгт агуулсан хамгийн багадаа 8 тэмдэгт байх хэрэгтэй *'
+                  : '* Password must have: an uppercase letter, a number, a symbol, and be at least 8 characters long *'}
               </p>
             ) : null}
           </div>
@@ -199,7 +206,7 @@ const LogIn = ({ ver, changeVer }: iProps) => {
           <div className="h-[1px] w-[33%] bg-black/[.15]"></div>
         </div>
         <div className="mb-[-10px] flex w-full items-center justify-center gap-[20px] text-[16px] text-white">
-          <div className="relative flex h-[50px] w-[50px] cursor-pointer items-center justify-center gap-[4px] rounded-[8px] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.25)]">
+          <div className="group relative flex h-[50px] w-[100px] cursor-pointer items-center justify-center gap-[4px] rounded-[8px] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.25)]">
             {/* <svg
               className="h-[16px] w-[16px]"
               viewBox="0 0 8 15"
@@ -222,12 +229,12 @@ const LogIn = ({ ver, changeVer }: iProps) => {
               quality={75}
               loading="lazy"
               sizes="50vw"
-              className="h-auto w-[70%] select-none object-cover duration-500 hover:scale-110"
+              className="h-[70%] w-auto select-none object-cover duration-500 group-hover:scale-110"
               draggable={false}
             />
             {/* <p>Facebook</p> */}
           </div>
-          <div className="relative flex h-[50px] w-[50px] cursor-pointer items-center justify-center gap-[4px] rounded-[8px] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.25)]">
+          <div className="group relative flex h-[50px] w-[100px] cursor-pointer items-center justify-center gap-[4px] rounded-[8px] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.25)]">
             <Image
               // src={data.img}
               // src="/images/googleLogo.png"
@@ -240,10 +247,11 @@ const LogIn = ({ ver, changeVer }: iProps) => {
               quality={75}
               loading="lazy"
               sizes="50vw"
-              className="h-auto w-[70%] select-none object-cover duration-500 hover:scale-110"
+              className="h-[70%] w-auto select-none object-cover duration-500 group-hover:scale-110"
               draggable={false}
             />
           </div>
+
           {/* <div className="relative flex h-[35px] w-full items-center justify-center gap-[4px] rounded-[4px] bg-[#DE3549] ">
             <svg
               className="h-[16px] w-[16px]"

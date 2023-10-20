@@ -20,7 +20,7 @@ export default async function RootLayout({
           content="width=device-width, initial-scale=1, maximum-scale=1"
         ></meta>
       </head>
-      <body className="relative">{children}</body>
+      <body className="relative overscroll-contain">{children}</body>
     </html>
   );
 }

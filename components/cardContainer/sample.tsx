@@ -93,6 +93,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
               className={`flex w-full flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] xl:gap-[24px] ${
                 data.stat === 'data' ? 'max-h-[350px]' : ''
               }`}
+              key={i}
             >
               {/* image */}
               <div className="relative h-[200px] w-full overflow-hidden rounded-[16px] shadow-[0_3px_10px_rgb(0,0,0,0.2)] xs:h-[225px] sm:h-[175px] md:h-[225px] lg:h-[250px] xl:h-[225px]">

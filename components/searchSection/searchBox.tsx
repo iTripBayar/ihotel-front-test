@@ -95,7 +95,7 @@ const SearchBox = ({
     query === ''
       ? sample
       : sample.filter((searchData) => {
-          return searchData.name.toLowerCase().includes(query);
+          return searchData.name.toLowerCase().includes(query.toLowerCase());
         });
 
   const uniqueData = filteredDataValue.filter(
@@ -105,48 +105,62 @@ const SearchBox = ({
   return (
     <div className="relative flex w-full flex-col gap-[10px] overflow-visible">
       <div
-        className={`flex h-[46px] w-full items-center justify-start gap-[2px] rounded-[8px] border border-black/20 bg-white px-[8px] 2xs:gap-[6px] 2xs:px-[12px] lg:min-w-[316px] xl:min-w-[356px] ${
-          ver === 'round' ? 'max-h-[36px] overflow-hidden rounded-full' : ''
+        className={`flex h-[46px] w-full items-center justify-start gap-[2px] rounded-[8px] bg-white px-[8px] 2xs:gap-[6px] 2xs:px-[12px] lg:min-w-[280px] xl:min-w-[306px] ${
+          ver === 'round'
+            ? 'max-h-[36px] overflow-hidden rounded-full'
+            : ver === 'search'
+            ? 'h-[46px] justify-between rounded-full pr-0 shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] 2xs:pr-0'
+            : ''
         }`}
         ref={searchRef}
         onClick={() => {
           inputRef.current?.focus();
         }}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-          className="mr-[4px] max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] text-primary-blue"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+        <div className="flex items-center justify-center gap-[8px] lg:gap-[4px] xl:gap-[8px]">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="mr-[4px] max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] text-primary-blue"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            />
+          </svg>
+          <input
+            className={`border-transparent px-0 text-[12px] text-sub-text/75 placeholder-sub-text/75 focus:border-transparent focus:ring-0 2xs:text-[13px] sm:text-[14px] ${
+              ver === 'round' ? 'lg:text-[14px] xl:text-[14px]' : ''
+            } xl:text-[13px] 2xl:text-[14px] ${
+              query !== ''
+                ? 'w-full'
+                : 'sm::w-[144px] w-[124px] 2xs:w-[134px] lg:w-[144px] xl:w-[144px]'
+            }`}
+            type="text"
+            placeholder={
+              appState.lang === 'mn'
+                ? 'Хайх газар оруулах'
+                : 'Search destinations'
+            }
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setSelected(false);
+            }}
+            value={query}
+            ref={inputRef}
+            onFocus={(e) => e.preventDefault()}
           />
-        </svg>
-        <input
-          className={`border-transparent px-0 text-[12px] text-sub-text/75 placeholder-sub-text/75 focus:border-transparent focus:ring-0 2xs:text-[13px] sm:text-[14px] ${
-            query !== '' ? 'w-full' : 'sm::w-[144px] w-[124px] 2xs:w-[134px]'
-          }`}
-          type="text"
-          placeholder={
-            appState.lang === 'mn'
-              ? 'Хайх газар оруулах'
-              : 'Search destinations'
-          }
-          onChange={(event) => {
-            setQuery(event.target.value);
-            setSelected(false);
-          }}
-          value={query}
-          ref={inputRef}
-          onFocus={(e) => e.preventDefault()}
-        />
-        {query === '' ? (
-          <p className="text-[12px] text-main-text 2xs:text-[13px] sm:text-[14px] ">
+        </div>
+        {query === '' && ver !== 'search' ? (
+          <p
+            className={`text-[12px] text-main-text 2xs:text-[13px] sm:text-[14px] ${
+              ver === 'round' ? ' lg:text-[12px]' : ''
+            } xl:text-[13px] 2xl:text-[14px]`}
+          >
             &ldquo;
             {appState.lang === 'mn'
               ? suggestion[currentIndex].mn
@@ -154,10 +168,41 @@ const SearchBox = ({
             &rdquo;
           </p>
         ) : null}
+        {ver === 'search' ? (
+          <div
+            className={`relative flex h-full cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue px-[12px] text-[11px] font-medium uppercase text-white  2xs:gap-[6px] 2xs:text-[13px] ${
+              query !== ''
+                ? 'w-[46px] min-w-[46px] '
+                : ' min-w-[120px] 2xs:min-w-[150px]'
+            }`}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className={
+                query !== ''
+                  ? 'absolute left-[50%] top-[50%] h-[24px] w-[24px] translate-x-[-50%] translate-y-[-50%]'
+                  : ' max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] 2xs:max-h-[24px] 2xs:max-w-[24px]'
+              }
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
+              />
+            </svg>
+            {query === '' ? (
+              <p>{appState.lang === 'mn' ? 'шүүлтүүр' : 'filter'}</p>
+            ) : null}
+          </div>
+        ) : null}
       </div>
       {query !== '' && selected == false ? (
         <div
-          className={` flex h-[150px] w-full flex-col justify-start gap-[12px] overflow-scroll overflow-y-scroll rounded-[8px] border border-black/20 bg-white px-[12px] text-main-text md:grid md:grid-cols-2 md:grid-rows-[auto] md:gap-[24px] md:px-[20px] lg:absolute lg:top-[50px] lg:h-[200px] lg:min-w-[400px] lg:grid-rows-[auto] lg:gap-[16px] lg:px-[10px] xl:gap-[24px] xl:px-[20px] lg:max-w-[${searchRef.current?.clientWidth}px] lg:z-50`}
+          className={` flex h-[150px] w-full flex-col justify-start gap-[12px] overflow-scroll overflow-y-scroll rounded-[8px] border border-black/20 bg-white px-[12px] text-main-text md:grid md:grid-cols-2 md:grid-rows-[auto] md:gap-[24px] md:px-[20px] lg:absolute lg:top-[50px] lg:h-[250px] lg:min-w-[400px] lg:grid-rows-[auto] lg:gap-[16px] lg:px-[10px] xl:gap-[24px] xl:px-[20px] lg:max-w-[${searchRef.current?.clientWidth}px] lg:z-50`}
         >
           {uniqueData.map((data) => (
             <div
@@ -219,7 +264,8 @@ const SearchBox = ({
                   />
                 </svg>
               )}
-              {appState.lang === 'mn' ? data.name : data.nameEn}
+              {/* {appState.lang === 'mn' ? data.name : data.nameEn} */}
+              {data.name}
             </div>
           ))}
         </div>

@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { useAppCtx } from '@/utils/app';
 import HotelCard from '../common/hotelCard';
 
@@ -6,9 +5,21 @@ interface iProps {
   cap: number;
   title: string;
   data: any[];
+  ver: string;
+  hotelData: any[];
+  campsData: any[];
+  map: string;
 }
 
-const Featured = ({ cap, title, data }: iProps) => {
+const CardsContainer = ({
+  cap,
+  title,
+  data,
+  ver,
+  hotelData,
+  campsData,
+  map,
+}: iProps) => {
   const { appState } = useAppCtx();
 
   const hotels = [
@@ -92,11 +103,24 @@ const Featured = ({ cap, title, data }: iProps) => {
   if (cap != 0) {
     data = data.slice(0, cap);
   }
+
+  if (ver === 'search') {
+    data = [...hotelData, ...campsData];
+    // for(let i = 0; )
+  }
+  // console.log(data);
+
   return (
-    <div className="w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]">
+    <div
+      className={`w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px] ${
+        map === 'open'
+          ? 'lg:px-0 lg:pl-[100px] lg:pt-[82px]'
+          : 'pt-0 lg:px-[100px] lg:pt-[82px]'
+      }`}
+    >
       <div
         className={`flex w-full flex-col gap-[24px] border-t-[1px]  border-black/[.15] pt-[32px] lg:gap-[32px] ${
-          title === '' ? 'mt-[-64px] border-none' : ''
+          ver === 'search' ? ' border-none pt-0' : ''
         }`}
         // style={{ borderTop: 'dashed 2px rgb(0 0 0 /15%)' }}
       >
@@ -132,9 +156,9 @@ const Featured = ({ cap, title, data }: iProps) => {
         <div
           className={`grid xs:grid-rows-${cap} gap-[32px] sm:grid-cols-2 sm:grid-rows-${
             cap / 2
-          } xl:grid-cols-3 xl:grid-rows-${
-            cap / 3
-          } xl:gap-[24px] 2xl:gap-[48px]`}
+          }  xl:grid-rows-${cap / 3} xl:gap-[24px] 2xl:gap-[48px] ${
+            map !== 'open' ? 'xl:grid-cols-3' : 'lg:grid-cols-1 xl:grid-cols-2'
+          }`}
         >
           {data.map((data, i: number) => (
             <HotelCard data={data} key={i} />
@@ -148,17 +172,20 @@ const Featured = ({ cap, title, data }: iProps) => {
             </p>
           </div>
         ) : null} */}
-        <div className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
-          <p className="flex gap-[4px]">
-            {appState.lang === 'mn' ? 'Цааш үзэх' : 'More'} <span>(100+)</span>
-          </p>
-        </div>
+        {data.length > 0 ? (
+          <div className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
+            <p className="flex gap-[4px]">
+              {appState.lang === 'mn' ? 'Цааш үзэх' : 'More'}{' '}
+              <span>({data.length}+)</span>
+            </p>
+          </div>
+        ) : null}
       </div>
     </div>
   );
 };
 
-export default Featured;
+export default CardsContainer;
 
 // {
 //   data.map((data) => (

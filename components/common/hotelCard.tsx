@@ -33,16 +33,16 @@ const HotelCard = ({ data }: iProps) => {
 
   // stat = 'data';
 
-  // console.log(data);
+  console.log(data);
 
   return (
     <div
-      className={`flex w-full flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] xl:gap-[24px] ${
+      className={`flex w-full flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] shadow-[0px_2px_12px_2px_rgb(0,0,0,0.20)] xl:gap-[20px] ${
         stat === 'data' ? 'max-h-[350px] pb-[10px]' : ''
       }`}
     >
       {/* image */}
-      <div className="relative h-[200px] w-full overflow-hidden rounded-[16px] shadow-[0_3px_10px_rgb(0,0,0,0.2)] xs:h-[225px] sm:h-[175px] md:h-[225px] lg:h-[250px] xl:h-[225px]">
+      <div className="relative h-[200px] w-full overflow-hidden rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] xs:h-[225px] sm:h-[175px] md:h-[225px] lg:h-[225px] xl:h-[225px] 2xl:h-[300px]">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill={fav === false ? 'rgb(255 255 255/50%)' : '#3C76FE'}
@@ -74,7 +74,7 @@ const HotelCard = ({ data }: iProps) => {
           sizes="50vw"
           placeholder="blur"
           blurDataURL={`"_next/image/?url=${data.image}"`}
-          className="h-auto w-full select-none object-cover duration-700 hover:scale-110"
+          className="h-auto w-auto select-none object-cover duration-700 hover:scale-110"
           draggable={false}
         />
         {/* 

@@ -3,6 +3,7 @@
 // module.exports = nextConfig
 // const path = require("path");
 module.exports = {
+  transpilePackages: ['ahooks'],
   compress: true,
   reactStrictMode: false,
   trailingSlash: true,

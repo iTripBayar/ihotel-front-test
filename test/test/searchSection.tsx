@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { useAppCtx } from '@/utils/app';
 import { Switch } from '@headlessui/react';
-import searchData from '../../test/data';
+import searchData from '../data';
 
 const SearchSection = () => {
   const { appState } = useAppCtx();
@@ -331,7 +331,7 @@ const SearchSection = () => {
         </div>
       </div>
       {/* online */}
-      {/* <div className="relative flex h-auto w-full items-center justify-center  rounded-full  bg-gradient-to-r from-main-online/50 p-1">
+      {/* <div className="relative flex items-center justify-center w-full h-auto p-1 rounded-full bg-gradient-to-r from-main-online/50">
         
       </div> */}
 

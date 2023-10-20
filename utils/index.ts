@@ -6,7 +6,9 @@ export async function fetchData() {
 }
 
 export async function fetchDataSearch() {
-  const response = await fetch('https://sandbox.api.myhotel.mn:9443/search');
+  const response = await fetch(
+    'https://sandbox.api.myhotel.mn:9443/ihotel/search',
+  );
   const result = await response.json();
 
   return result;

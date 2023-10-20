@@ -8,7 +8,7 @@ const Footer = () => {
   const { appState } = useAppCtx();
 
   return (
-    <div className="flex w-full flex-col bg-footer px-[32px] pt-[32px] text-[14px] text-white md:px-[50px] lg:px-[125px] xl:px-[150px] 2xl:px-[200px]">
+    <div className="flex w-full flex-col bg-footer px-[32px] pt-[32px] text-[14px] text-white sm:px-[42px] md:px-[50px] lg:px-[125px] xl:px-[150px] 2xl:px-[200px]">
       <div className=" md:flex md:flex-row-reverse md:justify-between md:gap-[32px]">
         {/* <div className="lg:grid lg:grid-cols-2"> */}
         <div className="md:grid md:w-[70%] md:grid-cols-2 md:justify-between md:pl-[32px]">
@@ -16,8 +16,8 @@ const Footer = () => {
           <div
             className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden border-b-[1px] border-white/25 md:w-[94%] md:border-none ${
               open === 'about'
-                ? 'animate-open'
-                : 'animate-close h-[45px] md:h-auto md:animate-none'
+                ? 'animate-open md:animate-none'
+                : 'h-[45px] animate-close md:h-auto md:animate-none'
             }`}
             style={
               {
@@ -81,8 +81,8 @@ const Footer = () => {
           <div
             className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden border-b-[1px] border-white/25 md:w-[94%] md:justify-self-end md:border-none ${
               open === 'info'
-                ? 'animate-open'
-                : 'animate-close h-[45px] md:h-auto md:animate-none'
+                ? 'animate-open md:animate-none'
+                : 'h-[45px] animate-close md:h-auto md:animate-none'
             }`}
             style={
               {
@@ -154,8 +154,8 @@ const Footer = () => {
           <div
             className={`mb-[32px] flex w-full flex-col gap-[24px] overflow-hidden  border-b-[1px] border-white/25 md:border-none ${
               open === 'service'
-                ? 'animate-open'
-                : 'animate-close h-[45px] md:h-auto md:animate-none'
+                ? 'animate-open md:animate-none'
+                : 'h-[45px] animate-close md:h-auto md:animate-none'
             }`}
             style={
               {
@@ -218,15 +218,17 @@ const Footer = () => {
         </div>
         {/* contact */}
         <div className="mb-[32px] flex w-full gap-[16px] md:w-[30%] md:flex-col md:items-start md:justify-start md:gap-[32px] md:border-r-[1px] md:border-white/25 md:pb-[16px] lg:justify-between lg:gap-[24px]">
-          <div className="relative h-[97px] w-[88px] overflow-hidden md:h-[125px] md:w-[125px] lg:h-[165px] lg:w-[165px]">
+          <div className="relative h-[97px] w-[88px] overflow-visible md:h-[125px] md:w-[125px] lg:h-[165px] lg:w-[165px]">
             <Image
               src="/favicon-white.png"
               alt="/logo"
-              fill={true}
+              // fill={true}
+              width={320}
+              height={361}
               priority
               quality={75}
               sizes="50vw"
-              className="object-fit h-auto w-full"
+              className="h-auto w-full object-contain"
             />
           </div>
           <div className="flex flex-col justify-start gap-[16px] text-[13px] md:justify-self-start lg:justify-self-end lg:pl-[28px] lg:text-[14px] xl:text-[16px]">

@@ -30,16 +30,17 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
       <Image
         src="/images/logo-white.png"
         alt="/logo"
-        width={114}
-        height={34}
+        width={128}
+        height={36.5}
         priority
         quality={100}
         sizes="20vw"
-        className="object-fit max-h-[34px] max-w-[114px] cursor-pointer"
+        className="h-auto max-w-[114px] cursor-pointer object-cover"
         onClick={() => {
           window.location.reload();
         }}
       />
+
       <div className="flex items-center justify-end">
         <div className="hidden justify-end gap-[20px] text-[14px] font-medium leading-[14px] lg:flex xl:gap-[32px] xl:text-[15px] xl:leading-[15px]">
           {/* log in */}

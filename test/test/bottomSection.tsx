@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAppCtx } from '@/utils/app';
 
-const BottomSection = () => {
+const BottomSectio = () => {
   const { appState } = useAppCtx();
   const [delay, setDelay] = useState(false);
 
@@ -33,7 +33,7 @@ const BottomSection = () => {
           <path
             d="M15 14H19L22 21H2L5 14H9M13 7C13 7.26522 12.8946 7.51957 12.7071 7.70711C12.5196 7.89464 12.2652 8 12 8C11.7348 8 11.4804 7.89464 11.2929 7.70711C11.1054 7.51957 11 7.26522 11 7C11 6.73478 11.1054 6.48043 11.2929 6.29289C11.4804 6.10536 11.7348 6 12 6C12.2652 6 12.5196 6.10536 12.7071 6.29289C12.8946 6.48043 13 6.73478 13 7ZM6 7C6 12 12 17 12 17C12 17 18 12 18 7C18 3.583 15.314 1 12 1C8.686 1 6 3.583 6 7Z"
             stroke="white"
-            stroke-width="2"
+            strokeWidth="2"
           />
         </svg>
         {delay == false ? (
@@ -73,4 +73,4 @@ const BottomSection = () => {
   );
 };
 
-export default BottomSection;
+export default BottomSectio;

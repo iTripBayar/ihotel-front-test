@@ -84,7 +84,7 @@ const News = ({ data, cap }: iProps) => {
                   priority
                   quality={75}
                   sizes="50vw"
-                  className="h-auto w-full object-cover duration-500 hover:scale-110"
+                  className="h-auto w-full object-cover duration-700 hover:scale-110"
                 />
               </div>
               {/* bottom section */}

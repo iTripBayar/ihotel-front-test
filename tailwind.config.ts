@@ -42,8 +42,19 @@ const config: Config = {
           'burger-top1 8s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite',
         'burger-top2':
           'burger-top2 8s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite',
+        brotate: 'brotate 7s linear infinite',
       },
       keyframes: {
+        // translate-x-[-50%] translate-y-[-50%]
+        brotate: {
+          '0%': {
+            transform: 'rotate(0)',
+          },
+
+          to: {
+            transform: 'rotate(360deg)',
+          },
+        },
         'burger-top': {
           '75%': {
             transform: 'translateY(-50%)',
