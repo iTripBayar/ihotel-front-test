@@ -9,47 +9,6 @@ interface iProps {
 const News = ({ data, cap }: iProps) => {
   const { appState } = useAppCtx();
 
-  const articles = [
-    {
-      key: 1,
-      img: '/samples/hotel1.png',
-      // img: 'https://sandbox.api.myhotel.mn/ihotel/hotels/11/OP9hbxbaRwSdqRd0rpocxSQx3chOlYXoz3ZaAmH1.jpeg',
-      name: 'Дотоодын аялагчид хаана байрлаж хоноглож байна вэ?',
-      nameEn: 'Where do the local travelers are staying?',
-    },
-    {
-      key: 2,
-      img: '/samples/hotel2.png',
-      name: 'Дотоодын аялагчид хаана байрлаж хоноглож байна вэ?',
-      nameEn: 'Where do the local travelers are staying?',
-    },
-    {
-      key: 3,
-      img: '/samples/hotel3.png',
-      name: 'Дотоодын аялагчид хаана байрлаж хоноглож байна вэ?',
-      nameEn: 'Where do the local travelers are staying?',
-    },
-    {
-      key: 4,
-      img: '/samples/hotel4.png',
-      name: 'Дотоодын аялагчид хаана байрлаж хоноглож байна вэ?',
-      nameEn: 'Where do the local travelers are staying?',
-    },
-    {
-      key: 5,
-      img: '/samples/hotel1.png',
-      name: 'Дотоодын аялагчид хаана байрлаж хоноглож байна вэ?',
-      nameEn: 'Where do the local travelers are staying?',
-    },
-    {
-      key: 6,
-      img: '/samples/hotel2.png',
-      name: 'Дотоодын аялагчид хаана байрлаж хоноглож байна вэ?',
-      nameEn: 'Where do the local travelers are staying?',
-    },
-  ];
-
-  // console.log(data);
   if (cap != 0) {
     data = data.slice(0, cap);
   }

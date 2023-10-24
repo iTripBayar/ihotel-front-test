@@ -7,16 +7,6 @@ type iProps = {
 };
 
 const HotelCard = ({ data }: iProps) => {
-  //   console.log(data.isOffline);
-  //   console.log(
-  //     'online->' +
-  //       data.isOnline +
-  //       ' | offline->' +
-  //       data.isOffline +
-  //       ' | phone->' +
-  //       data.phone,
-  //   );
-  //   const [stat, setStat] = useState('');
   const { appState } = useAppCtx();
   const [fav, setFav] = useState(false);
 
@@ -31,10 +21,6 @@ const HotelCard = ({ data }: iProps) => {
     stat = 'data';
   }
 
-  // stat = 'data';
-
-  console.log(data);
-
   return (
     <div
       className={`flex w-full flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] shadow-[0px_2px_12px_2px_rgb(0,0,0,0.20)] xl:gap-[20px] ${
@@ -43,13 +29,14 @@ const HotelCard = ({ data }: iProps) => {
     >
       {/* image */}
       <div className="relative h-[200px] w-full overflow-hidden rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] xs:h-[225px] sm:h-[175px] md:h-[225px] lg:h-[225px] xl:h-[225px] 2xl:h-[300px]">
+        {/* favourites icon */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill={fav === false ? 'rgb(255 255 255/50%)' : '#3C76FE'}
           viewBox="0 0 24 24"
           strokeWidth={2.2}
           stroke="currentColor"
-          className={`absolute right-[16px] top-[16px] z-50 h-[24px] w-[24px] text-primary-blue ${
+          className={`absolute right-[16px] top-[16px] z-10 h-[24px] w-[24px] text-primary-blue ${
             fav === true ? ' scale-125 duration-500' : ''
           }`}
           onClick={() => {
@@ -63,9 +50,7 @@ const HotelCard = ({ data }: iProps) => {
           />
         </svg>
         <Image
-          // src={data.img}
           src={`https://sandbox.api.myhotel.mn/image?path=${data.image}`}
-          // src={`https://ihotel.mn/${data.coverPhoto}`}
           alt="/hotel"
           fill={true}
           //   priority
@@ -77,10 +62,6 @@ const HotelCard = ({ data }: iProps) => {
           className="h-auto w-auto select-none object-cover duration-700 hover:scale-110"
           draggable={false}
         />
-        {/* 
-       
-        // priority loading="lazy" placeholder="blur" blurDataURL=
-        {`"_next/image/?url=${roomBigImg}"`} */}
       </div>
       {/* bottom section */}
       <div
@@ -105,18 +86,6 @@ const HotelCard = ({ data }: iProps) => {
             {appState.lang === 'mn'
               ? data?.province?.name
               : data?.province?.international}
-            {/* {data.shortAdress
-              ? data.shortAdress
-              : data.address
-              ? data.address.length > 30
-                ? data.address.slice(0, 30) + '...'
-                : data.address
-              : 'Lorem ipsum dolor sit amet consectetur.'} */}
-            {/* {data.address
-              ? data.address.length > 60
-                ? data.address.slice(0, 60) + '...'
-                : data.address
-              : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, eligendi.'} */}
           </p>
         </div>
         {/* review & stat */}
@@ -189,9 +158,9 @@ const HotelCard = ({ data }: iProps) => {
               )}
             </div>
           ) : (
+            // price if stat === 'data'
             <div className="self-end">
               <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]">
-                {/* {data.includedPrice ? data.includedPrice : 70000} */}
                 {data.includedPrice
                   ? data.includedPrice.toLocaleString()
                   : (70000).toLocaleString()}
@@ -211,7 +180,6 @@ const HotelCard = ({ data }: iProps) => {
             }`}
           >
             <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]">
-              {/* {data.includedPrice ? data.includedPrice : 70000} */}
               {data.includedPrice
                 ? data.includedPrice.toLocaleString()
                 : (70000).toLocaleString()}

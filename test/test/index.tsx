@@ -32,11 +32,6 @@ export default function Search() {
   const [openSignUp, setOpenSignUp] = useState(false);
   // const divRef = useRef(null);
 
-  // console.log(fetchData());
-  // const { data } = useRequest(() => {
-  //   return fetchData();
-  // });
-
   const [headerVer, setHeaderVer] = useState('default');
 
   const [sideMenu, setSideMenu] = useState(false);
@@ -61,10 +56,6 @@ export default function Search() {
   //     });
   // }, []);
 
-  // console.log(data);
-
-  // console.log(divRef);
-
   // useEffect(() => {
   //   const options = {
   //     root: null, // Use the viewport as the root
@@ -75,10 +66,8 @@ export default function Search() {
   //   const observer = new IntersectionObserver((entries) => {
   //     entries.forEach((entry) => {
   //       if (!entry.isIntersecting) {
-  //         // console.log('Over');
   //         setHeaderVer('fixed');
   //       } else {
-  //         // console.log('not Over');
   //         setHeaderVer('default');
   //       }
   //     });
@@ -104,8 +93,6 @@ export default function Search() {
   function openLogIn(e: string) {
     setLogIn(e);
   }
-
-  // console.log(data);
 
   return (
     <AppCtxProvider>

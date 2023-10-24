@@ -10,7 +10,6 @@ const Footer = () => {
   return (
     <div className="flex w-full flex-col bg-footer px-[32px] pt-[32px] text-[14px] text-white sm:px-[42px] md:px-[50px] lg:px-[125px] xl:px-[150px] 2xl:px-[200px]">
       <div className=" md:flex md:flex-row-reverse md:justify-between md:gap-[32px]">
-        {/* <div className="lg:grid lg:grid-cols-2"> */}
         <div className="md:grid md:w-[70%] md:grid-cols-2 md:justify-between md:pl-[32px]">
           {/* about */}
           <div
@@ -19,16 +18,6 @@ const Footer = () => {
                 ? 'animate-open md:animate-none'
                 : 'h-[45px] animate-close md:h-auto md:animate-none'
             }`}
-            style={
-              {
-                //   borderBottom: 'dashed 2px rgb(255 255 255 /25%)',
-                //   borderBottomWidth: '1px',
-                //   borderSpacing: '8px',
-                //   borderBottomStyle: 'dashed',
-                //   background:
-                //     'repeating-linear-gradient(to right, white 0px, white 8px, transparent 8px, transparent 16px)',
-              }
-            }
           >
             <div
               className="flex w-full items-center justify-between font-medium"
@@ -84,16 +73,6 @@ const Footer = () => {
                 ? 'animate-open md:animate-none'
                 : 'h-[45px] animate-close md:h-auto md:animate-none'
             }`}
-            style={
-              {
-                //   borderBottom: 'dashed 2px rgb(255 255 255 /25%)',
-                //   borderBottomWidth: '1px',
-                //   borderSpacing: '8px',
-                //   borderBottomStyle: 'dashed',
-                //   background:
-                //     'repeating-linear-gradient(to right, white 0px, white 8px, transparent 8px, transparent 16px)',
-              }
-            }
           >
             <div
               className="flex w-full items-center justify-between font-medium"
@@ -157,16 +136,6 @@ const Footer = () => {
                 ? 'animate-open md:animate-none'
                 : 'h-[45px] animate-close md:h-auto md:animate-none'
             }`}
-            style={
-              {
-                //   borderBottom: 'dashed 2px rgb(255 255 255 /25%)',
-                //   borderBottomWidth: '1px',
-                //   borderSpacing: '8px',
-                //   borderBottomStyle: 'dashed',
-                //   background:
-                //     'repeating-linear-gradient(to right, white 0px, white 8px, transparent 8px, transparent 16px)',
-              }
-            }
           >
             <div
               className="flex w-full items-center justify-between font-medium"

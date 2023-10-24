@@ -34,8 +34,6 @@ const HeroCategory = ({ data }: iProps) => {
       titleEn: 'Spa resorts',
     },
   ];
-  // console.log(data);
-  // md:gap-[32px] lg:gap-[48px] xl:gap-[64px]
   return (
     <div className=" flex w-full items-start justify-between px-[10px] text-main-text sm:px-[50px] lg:px-[150px]">
       {data.map((data) => (

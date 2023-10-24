@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { useAppCtx } from '@/utils/app';
-import HotelCard from '../common/hotelCard';
 import { useState } from 'react';
 
 interface iProps {
@@ -75,10 +74,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
   }
   return (
     <div className="w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]">
-      <div
-        className="flex w-full flex-col gap-[24px] border-t-2 border-dashed border-black/[.15] pt-[32px] lg:gap-[32px]"
-        // style={{ borderTop: 'dashed 2px rgb(0 0 0 /15%)' }}
-      >
+      <div className="flex w-full flex-col gap-[24px] border-t-2 border-dashed border-black/[.15] pt-[32px] lg:gap-[32px]">
         <h3 className="text-[20px] font-bold text-main-text">{title}</h3>
         {/* cardContainer */}
         <div
@@ -130,10 +126,6 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                   className="h-auto w-full select-none object-cover duration-700 hover:scale-110"
                   draggable={false}
                 />
-                {/* 
-       
-        // priority loading="lazy" placeholder="blur" blurDataURL=
-        {`"_next/image/?url=${roomBigImg}"`} */}
               </div>
               {/* bottom section */}
               <div
@@ -154,18 +146,6 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                     {appState.lang === 'mn' ? data.dist : data.dist}
                     ,&nbsp;
                     {appState.lang === 'mn' ? data.location : data.location}
-                    {/* {data.shortAdress
-              ? data.shortAdress
-              : data.address
-              ? data.address.length > 30
-                ? data.address.slice(0, 30) + '...'
-                : data.address
-              : 'Lorem ipsum dolor sit amet consectetur.'} */}
-                    {/* {data.address
-              ? data.address.length > 60
-                ? data.address.slice(0, 60) + '...'
-                : data.address
-              : 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, eligendi.'} */}
                   </p>
                 </div>
                 {/* review & stat */}

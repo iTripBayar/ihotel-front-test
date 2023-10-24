@@ -46,9 +46,10 @@ const MapContainer = ({
       },
     });
   };
+
   return (
     <div
-      className={`sticky h-full w-full flex-col items-center justify-start gap-[24px] px-[16px] pb-[24px] sm:px-[42px]  md:px-[72px] lg:h-[calc(100vh-82px)] lg:px-0 lg:pb-0 lg:pt-[8px] ${
+      className={`sticky h-full w-full flex-col items-center justify-start gap-[24px] bg-white px-[16px] pb-[24px]  sm:px-[42px] md:px-[72px] lg:h-[calc(100vh-60px)] lg:px-0 lg:pb-[24px]  lg:pt-[16px] ${
         map === '' ? 'hidden' : 'flex lg:col-span-2'
       }`}
       ref={divRef}
@@ -80,7 +81,7 @@ const MapContainer = ({
       {/* <div className="h-full w-full rounded-[20px] border border-black/[.15] bg-white">
         a
       </div> */}
-      <div className="flex w-full items-center justify-center gap-[24px] lg:justify-start ">
+      <div className="flex w-full items-center justify-center gap-[24px] lg:justify-between ">
         <div
           className="flex h-[40px] max-w-[220px] cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue px-[16px] font-medium text-white"
           onClick={() => changeMap('')}
@@ -105,14 +106,13 @@ const MapContainer = ({
         </div>
         {map === 'open' ? (
           <div
-            className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue lg:hidden"
+            className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue "
             onClick={() => {
               if (appState.lang === 'mn') {
                 handleDay('en');
               } else {
                 handleDay('mn');
               }
-              console.log(appState);
             }}
           >
             <Image

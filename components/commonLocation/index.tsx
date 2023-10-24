@@ -23,13 +23,6 @@ const CommonLocation = ({ data, destinations }: iProps) => {
   const { appState } = useAppCtx();
   const size = useWindowSize();
 
-  // console.log(size);
-  // console.log(data);
-
-  // console.log(data[0].coverPhoto);
-
-  // console.log(data);
-
   const categories = [
     {
       key: 'ub',
@@ -138,13 +131,11 @@ const CommonLocation = ({ data, destinations }: iProps) => {
     infinite: true,
     centerPadding:
       size?.width && size?.width > 1536
-        ? '190px'
+        ? '100px'
         : size?.width && size?.width > 1280
-        ? '190px'
+        ? '100px'
         : size?.width && size?.width > 1024
-        ? '150px'
-        : size?.width && size?.width > 576
-        ? '50px'
+        ? '100px'
         : '24px',
     slidesToShow: 1,
     initialSlide: 0,
@@ -179,13 +170,6 @@ const CommonLocation = ({ data, destinations }: iProps) => {
     // ],
     afterChange: (current: number) => setActive({ current }),
   };
-
-  // sliderRef.current?.slickGoTo(0);
-
-  // console.log(data);
-  // console.log(activeIndex);
-  // console.log(sliderRef);
-
   return (
     <div className="flex w-full flex-col gap-[20px]">
       <h3 className="mb-[-10px] self-center text-[16px] font-medium md:text-[18px] lg:text-[22px]">

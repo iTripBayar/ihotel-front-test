@@ -20,7 +20,7 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
     }, 1000);
     window.scrollTo({
       top: 0,
-      behavior: 'smooth', // Use smooth scroll behavior
+      behavior: 'smooth',
     });
   };
   const [delay, setDelay] = useState(false);
@@ -37,16 +37,15 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
       },
     });
   };
-  // md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]
   return (
     <div
       className={` fixed  z-[899] flex animate-fade  items-stretch gap-[16px] text-white  ${
         ver === 'search'
           ? `bottom-[24px] right-[0%] w-full flex-row justify-between px-[16px] sm:px-[42px] sm:pl-[39px] md:px-[32px] lg:bottom-[12px] ${
-              map !== '' ? 'lg:right-[50px]' : 'lg:right-[24px]'
+              map !== '' ? 'lg:right-[50px]' : ' lg:right-[24px]'
             } lg:w-auto lg:px-0`
           : ver === 'fixed'
-          ? 'right-[4%] flex-col'
+          ? 'bottom-[4%] right-[3.4%] flex-col'
           : 'hidden'
       }  `}
     >
@@ -84,16 +83,17 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
           ) : null}
         </div>
       ) : null}
-      {/* lang & scrollUpBtn */}
+      {/* right section*/}
       <div
         className={`flex flex-col gap-[16px] ${
           ver === 'search' && map === ''
             ? 'lg:items-end'
             : ver === 'search' && map === 'open'
-            ? 'hidden lg:flex'
+            ? 'hidden '
             : ''
         }`}
       >
+        {/* lang */}
         <div
           className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue"
           onClick={() => {
@@ -102,7 +102,6 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
             } else {
               handleDay('mn');
             }
-            console.log(appState);
           }}
         >
           <Image
@@ -155,6 +154,7 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
             </svg>
           </div>
         ) : null}
+        {/* scrollToTop btn */}
         {map !== 'open' ? (
           <div
             className={`relative flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue ${

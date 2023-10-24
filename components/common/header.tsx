@@ -104,17 +104,12 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
           {/* lang btn */}
           <div
             className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]"
-            // onClick={() => {
-            //   handleDay(appState.lang === 'mn' ? 'en' : 'mn');
-            //   console.log(appState);
-            // }}
             onClick={() => {
               if (appState.lang === 'mn') {
                 handleDay('en');
               } else {
                 handleDay('mn');
               }
-              console.log(appState);
             }}
           >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
@@ -135,28 +130,13 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
             {appState.lang === 'mn' ? 'EN' : 'MN'}
           </div>
         </div>
-        {/* <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="h-[28px] w-[28px] lg:hidden"
-          onClick={openMenu}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-          />
-        </svg> */}
         <div
           className="relative flex h-[16px] w-[24px] flex-col items-center lg:hidden"
           onClick={openMenu}
         >
-          <div className="animate-burger-top absolute top-[50%] h-[2px] w-[24px] translate-y-[-50%] rounded-full bg-white"></div>
-          <div className="animate-burger-top1 absolute top-0 h-[2px] w-[24px]  rounded-full bg-white"></div>
-          <div className="animate-burger-top2 absolute bottom-0 h-[2px] w-[24px]  rounded-full bg-white"></div>
+          <div className="absolute top-[50%] h-[2px] w-[24px] translate-y-[-50%] animate-burger-top rounded-full bg-white"></div>
+          <div className="absolute top-0 h-[2px] w-[24px] animate-burger-top1  rounded-full bg-white"></div>
+          <div className="absolute bottom-0 h-[2px] w-[24px] animate-burger-top2  rounded-full bg-white"></div>
         </div>
       </div>
     </header>

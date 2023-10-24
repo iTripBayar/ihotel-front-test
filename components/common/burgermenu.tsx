@@ -9,14 +9,13 @@ interface iProps {
   logIn: (e: string) => void;
   phone: string;
   ver: string;
-  // logIn: () => void;
-  // signUp: () => void;
 }
 
 const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
   const [closeAnimation, setCloseAnimation] = useState(false);
+  const [open1, setOpen1] = useState('');
+
   const { dispatch, appState } = useAppCtx();
-  // const [language, setLanguage] = useState<appState.Lang | undefined>('mn');
 
   const handleDay = (type: Lang) => {
     dispatch({
@@ -30,7 +29,7 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
   const handleClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement; // Cast event.target to HTMLElement
     // Check if the click target is not the white div
-    if (!target.classList.contains('bg-[#181818]')) {
+    if (target.classList.contains('bg-black/50')) {
       setCloseAnimation(true);
       setTimeout(() => {
         setCloseAnimation(false);
@@ -75,29 +74,218 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
 
         {/* top section */}
         <div className="flex w-full flex-col justify-start gap-[24px]">
+          {/* logIn */}
           <div
-            className="flex h-[43px] w-full items-center justify-start border-b-2 border-dashed border-white/[.15]"
+            className="flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]"
             onClick={() => {
               logIn('logIn');
+              setCloseAnimation(true);
+
+              setTimeout(() => {
+                setCloseAnimation(false);
+
+                close();
+              }, 400);
             }}
           >
             {appState.lang === 'mn' ? 'Нэвтрэх' : 'Log In'}
           </div>
+          {/* signUp */}
           <div
-            className="flex h-[43px] w-full items-center justify-start border-b-2 border-dashed border-white/[.15]"
+            className="flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]"
             onClick={() => {
               logIn('signUp');
+              setCloseAnimation(true);
+              setTimeout(() => {
+                setCloseAnimation(false);
+                close();
+              }, 400);
             }}
           >
             {appState.lang === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'}
           </div>
-          <div className="flex h-[43px] w-full items-center justify-start border-b-2 border-dashed border-white/[.15]">
+          {/* add hotel */}
+          <div className="flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]">
             {appState.lang === 'mn' ? 'Буудал нэмэх' : 'Add hotel'}
           </div>
         </div>
         {/* bottom section */}
         <div className="flex w-full flex-col justify-end gap-[24px]">
-          <div className="flex h-[43px] w-full items-center justify-end gap-[8px] border-b-2 border-dashed border-white/[.15]">
+          {/* footer */}
+          {ver === 'search' ? (
+            <div className="flex flex-col gap-[24px]">
+              {' '}
+              <div
+                className={`mb-[32px] flex h-[33px] w-full cursor-pointer flex-col gap-[24px] overflow-hidden border-b-[1px] border-white/[.15] ${
+                  open1 === 'about'
+                    ? 'animate-openSearch '
+                    : ' animate-closeSearch '
+                }`}
+              >
+                <div
+                  className="flex w-full flex-row-reverse items-center justify-between font-medium"
+                  onClick={() => {
+                    if (open1 !== 'about') {
+                      setOpen1('about');
+                    } else {
+                      setOpen1('');
+                    }
+                  }}
+                >
+                  <h3 className="text-[14px]">
+                    {appState.lang === 'mn' ? 'Тухай' : 'About'}
+                  </h3>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="2 0 20 20"
+                    strokeWidth={3}
+                    stroke="currentColor"
+                    className={`h-[12px] w-[12px] ${
+                      open1 === 'about' ? '' : 'rotate-180'
+                    }`}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </div>
+                <div className="mb-[12px] flex flex-col items-end justify-start gap-[16px] text-end ">
+                  <a href="/" className="underline-0  relative text-white">
+                    {appState.lang === 'mn' ? 'Бидний тухай' : 'About us'}
+                  </a>
+                  <a href="/" className="underline-0  relative text-white">
+                    {appState.lang === 'mn' ? 'Түгээмэл асуулт хариулт' : 'Q&A'}
+                  </a>
+                  <a href="/" className="underline-0  relative text-white">
+                    {appState.lang === 'mn'
+                      ? 'Үйлчилгээний нөхцөл'
+                      : 'Terms of service'}
+                  </a>
+                </div>
+              </div>
+              {/* info */}
+              <div
+                className={`mb-[32px] flex  w-full cursor-pointer flex-col gap-[24px] overflow-hidden border-b-[1px] border-white/[.15] ${
+                  open1 === 'info'
+                    ? 'animate-openSearch '
+                    : 'h-[33px] animate-closeSearch '
+                }`}
+              >
+                <div
+                  className="flex w-full flex-row-reverse items-center justify-between font-medium"
+                  onClick={() => {
+                    if (open1 !== 'info') {
+                      setOpen1('info');
+                    } else {
+                      setOpen1('');
+                    }
+                  }}
+                >
+                  <h3 className="text-[14px]">
+                    {appState.lang === 'mn' ? 'Мэдээлэл' : 'News'}
+                  </h3>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="2 0 20 20"
+                    strokeWidth={3}
+                    stroke="currentColor"
+                    className={`h-[12px] w-[12px] ${
+                      open1 === 'info' ? '' : 'rotate-180'
+                    }`}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </div>
+                <div className="justif-start mb-[12px] flex flex-col items-end gap-[16px] text-end ">
+                  <a href="/" className="underline-0  relative text-white">
+                    {appState.lang === 'mn' ? 'Мэдээ мэдээлэл' : 'Articles'}
+                  </a>
+                  <a href="/" className="underline-0  relative text-white">
+                    {appState.lang === 'mn'
+                      ? 'Буудалд зориулсан зөвлөмж'
+                      : 'Tips for hotels'}
+                  </a>
+                  <a href="/" className="underline-0  relative text-white">
+                    {appState.lang === 'mn'
+                      ? 'Аялагчдад зориулсан зөвлөмж'
+                      : 'Tips for travelers'}
+                  </a>
+                  <a href="/" className="underline-0  relative text-white">
+                    {appState.lang === 'mn'
+                      ? 'iHotel амжилтын түүх'
+                      : "iHotel's success history"}
+                  </a>
+                </div>
+              </div>
+              {/* service */}
+              <div
+                className={`mb-[32px] flex w-full cursor-pointer flex-col gap-[24px]  overflow-hidden border-b-[1px] border-white/[.15] ${
+                  open1 === 'service'
+                    ? 'animate-openSearch '
+                    : 'h-[33px] animate-closeSearch'
+                }`}
+              >
+                <div
+                  className="flex w-full flex-row-reverse items-center justify-between font-medium"
+                  onClick={() => {
+                    if (open1 !== 'service') {
+                      setOpen1('service');
+                    } else {
+                      setOpen1('');
+                    }
+                  }}
+                >
+                  <h3 className="text-[14px]">
+                    {appState.lang === 'mn' ? 'Үйлчилгээ' : 'Services'}
+                  </h3>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="2 0 20 20"
+                    strokeWidth={3}
+                    stroke="currentColor"
+                    className={`h-[12px] w-[12px] ${
+                      open1 === 'service' ? '' : 'rotate-180'
+                    }`}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </div>
+                <div className="mb-[12px] flex flex-col items-end justify-start gap-[16px] text-end ">
+                  <a
+                    href="/"
+                    className="underline-0  relative font-medium text-white"
+                  >
+                    {appState.lang === 'mn'
+                      ? 'Өрөөний удирдлагын систем'
+                      : 'Room management system'}
+                  </a>
+                  <a href="/" className="underline-0  relative text-white">
+                    {appState.lang === 'mn' ? 'Веб сайт бүтээх' : 'Web service'}
+                  </a>
+                  <a href="/" className="underline-0  relative text-white">
+                    {appState.lang === 'mn' ? 'Тусламж' : 'Support'}
+                  </a>
+                </div>
+              </div>
+            </div>
+          ) : (
+            ''
+          )}
+          {/* phone */}
+          <div className="flex h-[43px] w-full items-center justify-end gap-[8px]  border-b-[1px] border-white/[.15]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="white"
@@ -112,18 +300,17 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
                 d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
               />
             </svg>
-            {/* <p className="leading-[16px]">7727 9090</p> */}
             <p className="leading-[16px]">{phone ? phone : '7727 9090'}</p>
           </div>
+          {/* lang */}
           <div
-            className="flex h-[43px] w-full items-center justify-end gap-[8px] border-b-2 border-dashed border-white/[.15]"
+            className="flex h-[43px] w-full items-center justify-end gap-[8px]  border-b-[1px] border-white/[.15]"
             onClick={() => {
               if (appState.lang === 'mn') {
                 handleDay('en');
               } else {
                 handleDay('mn');
               }
-              // console.log(appState);
             }}
           >
             <Image

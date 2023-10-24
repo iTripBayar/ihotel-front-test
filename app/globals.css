@@ -3,26 +3,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* @import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import './base.css';
-@import 'tailwindcss/utilities'; */
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
-  /* overscroll-behavior: contain; */
 }
-/* .slick-list {
-  margin: 0 8px;
-} */
+
 .slick-slide > div {
   padding: 0 6px;
+}
+.slick-current {
+  max-width: 90vw;
+}
+.slick-list {
+  box-sizing: border-box;
+}
+.slide {
+  background-position: center;
 }
 .mapboxgl-compact,
 .mapboxgl-ctrl-bottom-left,
 .mapboxgl-ctrl-attrib-inner {
   display: none !important;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 0px rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 20px;
+  padding-bottom: 20px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  background-color: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 20px;
 }

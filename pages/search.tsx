@@ -17,7 +17,7 @@ import SearchCards from '@/components/cardContainer/searchCards';
 import MapContainer from '@/components/map/map';
 
 const SearchPage = () => {
-  const [headerVer, setHeaderVer] = useState('default');
+  const [headerVer, setHeaderVer] = useState('search');
   const { appState } = useAppCtx();
   const [sideMenu, setSideMenu] = useState(false);
   const [logIn, setLogIn] = useState('');
@@ -25,36 +25,6 @@ const SearchPage = () => {
 
   const searchBoxRef = useRef(null);
   const size = useWindowSize();
-
-  useEffect(() => {
-    const options = {
-      root: null, // Use the viewport as the root
-      rootMargin: '0px', // No margin
-      threshold: 0, // Trigger when any part of the element is visible
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) {
-          // console.log('Over');
-          setHeaderVer('fixed');
-        } else {
-          // console.log('not Over');
-          setHeaderVer('default');
-        }
-      });
-    }, options);
-
-    if (searchBoxRef.current) {
-      observer.observe(searchBoxRef.current);
-    }
-
-    return () => {
-      if (searchBoxRef.current) {
-        observer.unobserve(searchBoxRef.current);
-      }
-    };
-  }, []);
 
   const { data } = useRequest(() => {
     return fetchData();
@@ -72,7 +42,6 @@ const SearchPage = () => {
 
   function mapFunction(e: string) {
     setMap(e);
-    console.log('click');
   }
   function closeMap() {
     setMap('');
@@ -85,18 +54,14 @@ const SearchPage = () => {
     return;
   }, [size.width]);
 
-  // console.log(data);
-  console.log(map);
   return (
     <AppCtxProvider>
       <main
-        className={`relative flex h-screen w-full flex-col gap-[20px] overflow-y-scroll `}
+        className={`relative flex h-screen w-full flex-col gap-[20px] overflow-y-auto`}
       >
         <HeaderVariants
           ver={'search'}
           openMenu={openMenu}
-          logIn={openLogIn}
-          phone={data ? data.phoneNumber : ''}
           hotelData={data ? data.hotels : []}
           placesData={data ? data.places : []}
           campsData={data ? data.camps : []}
@@ -112,9 +77,9 @@ const SearchPage = () => {
         />
         <BottomSection ver={'search'} map={map} openMap={mapFunction} />
 
-        <div ref={searchBoxRef} className=" lg:hidden">
+        <div ref={searchBoxRef} className="lg:hidden">
           <SearchSection
-            ver={'search'}
+            ver={'headerSearch'}
             hotelData={data ? data.hotels : []}
             placesData={data ? data.places : []}
             campsData={data ? data.camps : []}
@@ -123,7 +88,7 @@ const SearchPage = () => {
           />
         </div>
         <div
-          className={`relative grid  h-full w-full grid-cols-1 gap-[24px] lg:h-screen lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[70px] xl:grid-cols-5 2xl:grid-cols-6`}
+          className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:h-screen lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
         >
           <SearchCards
             hotelData={data ? data.hotels : []}
@@ -141,6 +106,7 @@ const SearchPage = () => {
           ) : null}
         </div>
       </main>
+      {/* <Footer /> */}
     </AppCtxProvider>
   );
 };

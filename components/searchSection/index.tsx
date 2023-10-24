@@ -22,26 +22,30 @@ const SearchSection = ({
 }: iProps) => {
   const { appState } = useAppCtx();
   return (
-    //
     <div
-      className={`${
+      className={`flex w-full items-center ${
         ver === 'normal'
-          ? 'px-[16px] 2xs:px-[24px] sm:px-[50px] lg:px-[150px] xl:px-[200px]'
+          ? 'px-[16px] 2xs:px-[24px] sm:px-[50px] md:px-[55px] lg:px-[150px] xl:px-[200px]'
+          : ver === 'headerSearch'
+          ? '2xs-[24px] flex-col px-[16px] sm:px-[50px] md:px-[72px]'
           : ver === 'search'
-          ? ' 2xl:px-[200px]] px-[16px] pt-[74px] sm:px-[42px] md:px-[72px] lg:px-[150px]'
+          ? 'justify-center px-0'
           : ''
       }`}
     >
       <div
-        className={`${
+        className={`flex w-full ${
           ver === 'normal'
-            ? '  flex w-full flex-col justify-between gap-[12px] rounded-[8px] bg-black/[.05] p-[10px] text-[12px] lg:flex-row lg:text-[14px]'
-            : ver !== 'search'
-            ? 'flex h-[200px] w-full flex-col gap-[16px] px-[16px] '
-            : 'flex w-full flex-col gap-[16px] '
+            ? 'flex-col justify-between gap-[12px] rounded-[8px] bg-black/[.05] p-[10px] text-[12px] lg:flex-row lg:text-[14px]'
+            : ver === 'fixed'
+            ? 'flex-row gap-[12px] xl:gap-[24px]'
+            : ver === 'headerSearch'
+            ? 'mt-[74px] flex-col items-center gap-[16px] bg-white'
+            : ver === 'search'
+            ? 'flex-row justify-center gap-[24px] bg-none xl:gap-[32px]'
+            : ''
         }`}
       >
-        {/* search */}
         <SearchBox
           hotelData={hotelData}
           placesData={placesData}
@@ -49,17 +53,22 @@ const SearchSection = ({
           destData={destData}
           ver={ver}
         />
-        {/* online toggle */}
+
         <OnlineToggle ver={ver} />
-        {/* search Btn */}
         <div
-          className={`border-black/25px-[12px] flex h-[46px] w-full items-center justify-center gap-[0px] rounded-[8px] border bg-primary-blue text-white lg:w-[175px] xl:w-[225px] ${
-            ver === 'search' ? 'max-w-[130px] self-center rounded-full' : ''
-          } ${map === 'open' ? 'hidden' : ''}`}
+          className={`flex cursor-pointer items-center justify-center pt-[2px] font-medium  uppercase lg:max-w-[130px] ${
+            ver === 'normal'
+              ? 'h-[46px] w-full rounded-[8px] bg-primary-blue text-[16px] leading-[16px] text-white'
+              : ver === 'fixed'
+              ? 'h-[36px] rounded-full bg-white text-primary-blue lg:min-w-[80px] lg:text-[14px]'
+              : ver === 'headerSearch'
+              ? 'h-[36px] min-w-[100px] max-w-[130px] rounded-full bg-primary-blue text-[15px] text-white '
+              : ver === 'search'
+              ? 'h-[36px] rounded-full bg-white text-primary-blue shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] lg:min-w-[80px] lg:text-[14px]'
+              : ''
+          }`}
         >
-          <p className="text-[16px] font-normal uppercase">
-            {appState.lang === 'mn' ? 'Хайх' : 'Search'}
-          </p>
+          <p>{appState.lang === 'mn' ? 'хайх' : 'search'}</p>
         </div>
       </div>
     </div>
