@@ -5,7 +5,7 @@ interface iProps {
 const PrevBtn = ({ onClick }: iProps) => {
   return (
     <div
-      className="absolute left-[2px] top-[50%] z-30 flex h-[30px] w-[30px] translate-x-[50%] translate-y-[-50%] items-center justify-center rounded-full bg-black/[.7] pr-[2px] sm:left-[24px] md:left-[14px] md:h-[40px] md:w-[40px] lg:left-[113px] xl:left-[153px]"
+      className="absolute left-[10%] top-[50%] z-30 flex h-[30px] w-[30px] translate-x-[-50%] translate-y-[-50%] items-center justify-center rounded-full bg-black/[.7] pr-[2px] sm:left-[6%]  md:h-[40px] md:w-[40px] xl:left-[5%]"
       onClick={onClick}
     >
       <svg

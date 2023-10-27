@@ -1,12 +1,12 @@
 import Image from 'next/image';
-import { useAppCtx } from '@/utils/app';
+import { useAppState } from '@/contexts/appStateContext';
 
 interface iProps {
   data: any[];
 }
 
 const HeroCategory = ({ data }: iProps) => {
-  const { appState } = useAppCtx();
+  const { state } = useAppState();
 
   const categoryData = [
     {
@@ -61,42 +61,8 @@ const HeroCategory = ({ data }: iProps) => {
             />
           </div>
           <p className="lg:text-[16px]] text-center text-[11px] xs:text-[12px] sm:text-[13px] md:text-[14px] xl:text-[18px]">
-            {/* {appState.lang === 'mn' ? data.name : data.nameEn} */}
-            {appState.lang === 'mn' ? data.name : data.nameEn}
+            {state.language === 'mn' ? data.name : data.nameEn}
           </p>
-          {/* <div className="relative h-[65px] w-[65px] overflow-hidden  rounded-full bg-black sm:h-[100px] sm:w-[100px]  md:h-[140px] md:w-[140px] lg:h-[190px] lg:w-[190px]">
-            <Image
-              src={data.img}
-              alt="heroCategory"
-              fill={true}
-              //   layout="fill"
-              //   width={114}
-              //   height={36}
-              //   objectFit="cover"
-              priority
-              quality={75}
-              sizes="25vw"
-              className="object-cover w-full h-auto duration-500 hover:scale-110"
-            />
-          </div> */}
-
-          {/*  */}
-          {/* {data.id === 'guestHouse' ? (
-            <p className="w-2/5 text-center text-[12px] md:w-full md:text-[14px] lg:text-[16px]">
-              {data.title}
-            </p>
-          ) : data.id === 'hotel' ? (
-            <p className="w-3/5 text-center text-[12px] md:w-full md:text-[14px] lg:text-[16px]">
-              {data.title}
-            </p>
-          ) : (
-            <p className="w-4/7 text-center text-[12px] md:w-full md:text-[14px] lg:text-[16px]">
-              {data.title}
-            </p>
-          )} */}
-          {/* <p className="w-4/7 text-center text-[12px] md:w-full md:text-[14px] lg:text-[16px]">
-            {data.title}
-          </p> */}
         </div>
       ))}
     </div>

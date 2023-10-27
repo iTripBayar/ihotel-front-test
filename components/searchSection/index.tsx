@@ -1,7 +1,7 @@
 import React from 'react';
-import { useAppCtx } from '@/utils/app';
 import SearchBox from './searchBox';
 import OnlineToggle from './onlineToggle';
+import { useAppState } from '@/contexts/appStateContext';
 
 interface iProps {
   hotelData: any[];
@@ -20,7 +20,13 @@ const SearchSection = ({
   ver,
   map,
 }: iProps) => {
-  const { appState } = useAppCtx();
+  const { state, dispatch } = useAppState();
+
+  const toggleLanguage = () => {
+    const newLanguage = state.language === 'mn' ? 'en' : 'mn';
+    dispatch({ type: 'SET_LANGUAGE', payload: newLanguage });
+  };
+
   return (
     <div
       className={`flex w-full items-center ${
@@ -68,7 +74,7 @@ const SearchSection = ({
               : ''
           }`}
         >
-          <p>{appState.lang === 'mn' ? 'хайх' : 'search'}</p>
+          <p>{state.language === 'mn' ? 'хайх' : 'search'}</p>
         </div>
       </div>
     </div>

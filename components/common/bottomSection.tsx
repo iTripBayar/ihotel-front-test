@@ -1,8 +1,9 @@
 'use client';
 import React, { useRef, useState } from 'react';
 import Image from 'next/image';
-import { useAppCtx } from '@/utils/app';
-import { Lang } from '@/utils/app';
+// import { useAppCtx } from '@/utils/app';
+// import { Lang } from '@/utils/app';
+import { useAppState } from '@/contexts/appStateContext';
 
 type iProps = {
   ver: string;
@@ -11,7 +12,7 @@ type iProps = {
 };
 
 const BottomSection = ({ ver, map, openMap }: iProps) => {
-  const { appState, dispatch } = useAppCtx();
+  const { state, dispatch } = useAppState();
   const btnRef = useRef<HTMLDivElement>(null);
   const handleScrollToTop = () => {
     btnRef.current?.classList.add('animate-bounce');
@@ -29,14 +30,11 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
     setDelay(true);
   }, 1500);
 
-  const handleDay = (type: Lang) => {
-    dispatch({
-      type: 'CHANGE_APP_STATE',
-      payload: {
-        lang: type,
-      },
-    });
+  const handleDay = () => {
+    const newLanguage = state.language === 'mn' ? 'en' : 'mn';
+    dispatch({ type: 'SET_LANGUAGE', payload: newLanguage });
   };
+
   return (
     <div
       className={` fixed  z-[899] flex animate-fade  items-stretch gap-[16px] text-white  ${
@@ -70,15 +68,15 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
             />
           </svg>
           {delay == false ? (
-            <p>{appState.lang === 'mn' ? 'Газрын зураг' : 'Map'}</p>
+            <p>{state.language === 'mn' ? 'Газрын зураг' : 'Map'}</p>
           ) : null}
           {delay == true ? (
             <div
               className={`absolute left-[70%] top-0 flex w-[90px] animate-fade items-center justify-center rounded-full bg-primary-blue text-[11px] font-medium  ${
-                appState.lang === 'en' ? 'w-[45px] duration-500' : ''
+                state.language === 'en' ? 'w-[45px] duration-500' : ''
               }`}
             >
-              {appState.lang === 'mn' ? 'Газрын зураг' : 'Map'}
+              {state.language === 'mn' ? 'Газрын зураг' : 'Map'}
             </div>
           ) : null}
         </div>
@@ -97,16 +95,13 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
         <div
           className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue"
           onClick={() => {
-            if (appState.lang === 'mn') {
-              handleDay('en');
-            } else {
-              handleDay('mn');
-            }
+            handleDay();
+            console.log(state.language);
           }}
         >
           <Image
             src={
-              appState.lang === 'mn'
+              state.language === 'mn'
                 ? '/images/uk-flag.png'
                 : '/images/mongolian-flag.png'
             }

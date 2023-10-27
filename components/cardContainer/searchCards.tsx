@@ -1,6 +1,6 @@
 import HotelCard from '../common/hotelCard';
-import { useAppCtx } from '@/utils/app';
 import { useRef } from 'react';
+import { useAppState } from '@/contexts/appStateContext';
 
 interface iProps {
   hotelData: any[];
@@ -9,7 +9,7 @@ interface iProps {
 }
 
 const SearchCards = ({ hotelData, campsData, map }: iProps) => {
-  const { appState } = useAppCtx();
+  const { state } = useAppState();
 
   let data = [];
   data = [...hotelData, ...campsData];
@@ -20,7 +20,7 @@ const SearchCards = ({ hotelData, campsData, map }: iProps) => {
     e.preventDefault();
   });
 
-  console.log('test');
+  // console.log('test');
 
   return (
     <div
@@ -43,7 +43,7 @@ const SearchCards = ({ hotelData, campsData, map }: iProps) => {
       {data.length > 0 ? (
         <div className="flex max-w-[171px] cursor-pointer items-center  justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
           <p className="flex gap-[4px]">
-            {appState.lang === 'mn' ? 'Цааш үзэх' : 'More'}
+            {state.language === 'mn' ? 'Цааш үзэх' : 'More'}
             <span>({data.length}+)</span>
           </p>
         </div>

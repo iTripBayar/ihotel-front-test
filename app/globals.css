@@ -13,9 +13,9 @@
 .slick-slide > div {
   padding: 0 6px;
 }
-.slick-current {
+/* .slick-current {
   max-width: 90vw;
-}
+} */
 .slick-list {
   box-sizing: border-box;
 }

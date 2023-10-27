@@ -1,7 +1,5 @@
-// import React from 'react';
-import { useAppCtx } from '@/utils/app';
 import Image from 'next/image';
-import { Lang } from '@/utils/app';
+import { useAppState } from '@/contexts/appStateContext';
 
 interface iProps {
   ver: string;
@@ -11,15 +9,13 @@ interface iProps {
 }
 
 const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
-  const { appState, dispatch } = useAppCtx();
+  // const { appState, dispatch } = useAppCtx();
+  const { state, dispatch } = useAppState();
 
-  const handleDay = (type: Lang) => {
-    dispatch({
-      type: 'CHANGE_APP_STATE',
-      payload: {
-        lang: type,
-      },
-    });
+  const handleDay = () => {
+    const newLanguage = state.language === 'mn' ? 'en' : 'mn';
+    dispatch({ type: 'SET_LANGUAGE', payload: newLanguage });
+    console.log(state);
   };
 
   return (
@@ -51,7 +47,7 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
             }}
           >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
-            {appState.lang === 'mn' ? 'Нэвтрэх' : 'Log In'}
+            {state.language === 'mn' ? 'Нэвтрэх' : 'Log In'}
           </div>
           {/* sign in */}
           <div
@@ -61,7 +57,7 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
             }}
           >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
-            {appState.lang === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'}
+            {state.language === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'}
           </div>
           {/* phone number */}
           <a className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]">
@@ -99,23 +95,20 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
                 d="M12 4.5v15m7.5-7.5h-15"
               />
             </svg>
-            {appState.lang === 'mn' ? 'Буудал нэмэх' : 'Add hotel'}
+            {state.language === 'mn' ? 'Буудал нэмэх' : 'Add hotel'}
           </a>
           {/* lang btn */}
           <div
             className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]"
             onClick={() => {
-              if (appState.lang === 'mn') {
-                handleDay('en');
-              } else {
-                handleDay('mn');
-              }
+              handleDay();
+              console.log(state.language);
             }}
           >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
             <Image
               src={
-                appState.lang === 'mn'
+                state.language === 'mn'
                   ? '/images/uk-flag.png'
                   : '/images/mongolian-flag.png'
               }
@@ -127,7 +120,7 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
               sizes="20vw"
               className="object-fit max-h-[22px] max-w-[22px] cursor-pointer"
             />
-            {appState.lang === 'mn' ? 'EN' : 'MN'}
+            {state.language === 'mn' ? 'EN' : 'MN'}
           </div>
         </div>
         <div

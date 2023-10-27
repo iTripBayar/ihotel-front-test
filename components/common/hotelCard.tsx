@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { useAppCtx } from '@/utils/app';
 import Image from 'next/image';
+import { useAppState } from '@/contexts/appStateContext';
 
 type iProps = {
   data: any;
 };
 
 const HotelCard = ({ data }: iProps) => {
-  const { appState } = useAppCtx();
+  const { state } = useAppState();
   const [fav, setFav] = useState(false);
 
   let stat = '';
@@ -76,14 +76,14 @@ const HotelCard = ({ data }: iProps) => {
               data.name.length > 27 ? 'xl:text-[14px]' : ''
             }`}
           >
-            {appState.lang === 'mn' ? data.name : data.nameEn}
+            {state.language === 'mn' ? data.name : data.nameEn}
           </p>
           <p className="text-[12px] leading-[12px] text-sub-text/60 2xs:text-[14px] 2xs:leading-[14px]">
-            {appState.lang === 'mn'
+            {state.language === 'mn'
               ? data?.district?.name
               : data?.district?.international}
             ,&nbsp;
-            {appState.lang === 'mn'
+            {state.language === 'mn'
               ? data?.province?.name
               : data?.province?.international}
           </p>
@@ -125,7 +125,7 @@ const HotelCard = ({ data }: iProps) => {
                   : 'bg-main-offline px-[6px] text-[11px] leading-[11px] 2xs:px-[12px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[2px] sm:text-[10px] sm:leading-[10px] md:px-[4px] md:text-[14px] md:leading-[14px]'
               }`}
             >
-              {appState.lang === 'mn' ? (
+              {state.language === 'mn' ? (
                 <p>
                   {stat === 'online'
                     ? 'Шууд баталгаажна'
@@ -164,9 +164,9 @@ const HotelCard = ({ data }: iProps) => {
                 {data.includedPrice
                   ? data.includedPrice.toLocaleString()
                   : (70000).toLocaleString()}
-                {appState.lang === 'mn' ? ' ₮' : ' $'}
+                {state.language === 'mn' ? ' ₮' : ' $'}
                 <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
-                  / {appState.lang === 'mn' ? 'хоног' : 'day'}
+                  / {state.language === 'mn' ? 'хоног' : 'day'}
                 </span>
               </p>
             </div>
@@ -183,9 +183,9 @@ const HotelCard = ({ data }: iProps) => {
               {data.includedPrice
                 ? data.includedPrice.toLocaleString()
                 : (70000).toLocaleString()}
-              {appState.lang === 'mn' ? ' ₮' : ' $'}
+              {state.language === 'mn' ? ' ₮' : ' $'}
               <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
-                / {appState.lang === 'mn' ? 'хоног' : 'day'}
+                / {state.language === 'mn' ? 'хоног' : 'day'}
               </span>
             </p>
             <div
@@ -195,7 +195,7 @@ const HotelCard = ({ data }: iProps) => {
                   : 'px-[12px] 2xs:px-[16px] sm:px-[10px] md:px-[20px]'
               }`}
             >
-              {appState.lang === 'mn' ? (
+              {state.language === 'mn' ? (
                 <p>{stat === 'offline' ? 'Харах' : 'Захиалах'}</p>
               ) : (
                 <p>{stat === 'offline' ? 'View' : 'Order'}</p>

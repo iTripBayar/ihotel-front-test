@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "pages/*.tsx",
-    "pages/**/*.tsx"
+    "pages/**/*.tsx",
+    "node_modules/@deck.gl/aggregation-layers/typed/**.ts"
   ],
   "exclude": ["node_modules"]
 }

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useAppCtx } from '@/utils/app';
+import { useAppState } from '@/contexts/appStateContext';
 
 interface iProps {
   data: any[];
@@ -7,7 +7,7 @@ interface iProps {
 }
 
 const News = ({ data, cap }: iProps) => {
-  const { appState } = useAppCtx();
+  const { state } = useAppState();
 
   if (cap != 0) {
     data = data.slice(0, cap);
@@ -20,7 +20,7 @@ const News = ({ data, cap }: iProps) => {
         // style={{ borderTop: 'dashed 2px rgb(0 0 0 /15%)' }}
       >
         <h3 className="text-[20px] font-bold text-main-text">
-          {appState.lang === 'mn' ? 'Нийтлэлүүд' : 'Articles'}
+          {state.language === 'mn' ? 'Нийтлэлүүд' : 'Articles'}
         </h3>
         {/* cardContainer */}
         <div
@@ -51,7 +51,7 @@ const News = ({ data, cap }: iProps) => {
                 {/* <p>{appState.lang === 'mn' ? data.name : data.nameEn}</p> */}
                 {/* <p className=''>{appState.lang === 'mn' ? data.excerpt : ''}</p> */}
                 <p className=" max-w-[50ch] overflow-hidden text-ellipsis whitespace-normal ">
-                  {appState.lang === 'mn' ? data.title : ''}
+                  {state.language === 'mn' ? data.title : ''}
                 </p>
                 {/* white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
                 max-width: 15ch; */}
@@ -61,7 +61,7 @@ const News = ({ data, cap }: iProps) => {
         </div>
         <div className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
           <p className="flex gap-[4px]">
-            {appState.lang === 'mn' ? 'Цааш үзэх' : 'More'} <span>(100+)</span>
+            {state.language === 'mn' ? 'Цааш үзэх' : 'More'} <span>(100+)</span>
           </p>
         </div>
       </div>

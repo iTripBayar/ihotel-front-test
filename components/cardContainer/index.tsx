@@ -1,5 +1,5 @@
-import { useAppCtx } from '@/utils/app';
 import HotelCard from '../common/hotelCard';
+import { useAppState } from '@/contexts/appStateContext';
 
 interface iProps {
   cap: number;
@@ -20,7 +20,7 @@ const CardsContainer = ({
   campsData,
   map,
 }: iProps) => {
-  const { appState } = useAppCtx();
+  const { state } = useAppState();
 
   if (cap != 0) {
     data = data.slice(0, cap);
@@ -46,17 +46,17 @@ const CardsContainer = ({
         {title !== '' ? (
           <h3 className="text-[20px] font-bold text-main-text">
             {title === 'cheap'
-              ? appState.lang === 'mn'
+              ? state.language === 'mn'
                 ? 'Тохилог & Хямд буудлууд'
                 : 'Comfortable & Cheap hotels'
               : null}
             {title === 'hotels'
-              ? appState.lang === 'mn'
+              ? state.language === 'mn'
                 ? 'Онцлох зочид буудлууд'
                 : 'Featured hotels'
               : null}
             {title === 'camps'
-              ? appState.lang === 'mn'
+              ? state.language === 'mn'
                 ? 'Онцлох амралтын газрууд'
                 : 'Featured camps'
               : null}
@@ -76,7 +76,7 @@ const CardsContainer = ({
         {data.length > 0 ? (
           <div className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
             <p className="flex gap-[4px]">
-              {appState.lang === 'mn' ? 'Цааш үзэх' : 'More'}{' '}
+              {state.language === 'mn' ? 'Цааш үзэх' : 'More'}{' '}
               <span>({data.length}+)</span>
             </p>
           </div>

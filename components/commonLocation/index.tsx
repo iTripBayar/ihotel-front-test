@@ -11,8 +11,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import NextBtn from './nextBtn';
 import PrevBtn from './prevBtn';
-import { useAppCtx } from '@/utils/app';
-import useWindowSize from '@/hooks/windowSize';
+import { useAppState } from '@/contexts/appStateContext';
 
 interface iProps {
   data: any[];
@@ -20,95 +19,8 @@ interface iProps {
 }
 
 const CommonLocation = ({ data, destinations }: iProps) => {
-  const { appState } = useAppCtx();
-  const size = useWindowSize();
+  const { state } = useAppState();
 
-  const categories = [
-    {
-      key: 'ub',
-      img: '/samples/ub_city.png',
-      title: 'Хотод ойр',
-      titleEn: 'Near Ub',
-      desc: 'Улаанбаатар',
-      descEn: 'Ulaanbaatar',
-    },
-    {
-      key: 'lakes',
-      img: '/samples/lakes.png',
-      title: 'Нуурууд',
-      titleEn: 'Lakes',
-      desc: 'Үзэсгэлэнт нуурууд',
-      descEn: 'Beautiful lakes',
-    },
-    {
-      key: 'gobi',
-      img: '/samples/gobi.png',
-      title: 'Говь',
-      titleEn: 'Gobi desert',
-      desc: 'Говийн үзэсгэлэнт газрууд',
-      descEn: 'Astonishing places in desert',
-    },
-    {
-      key: 'talHangai',
-      img: '/samples/tal_hangai.png',
-      title: 'Тал, Хангай',
-      titleEn: 'Steppe',
-      desc: 'Тал, хангайн үзэсгэлэнт газрууд',
-      descEn: 'Stunning places in steppe',
-    },
-    {
-      key: 'rashaan',
-      img: '/samples/rashaan.png',
-      title: 'Рашаан, сувилал',
-      titleEn: 'Spa resorts',
-      desc: 'Рашаан сувлилууд',
-      descEn: 'Rejuvenating spa resorts',
-    },
-  ];
-  const locations = [
-    {
-      key: 'terelj',
-      img: '/samples/slider1.png',
-      title: 'Тэрэлж',
-      desc: 'Байгалийн цогцолбор газар',
-    },
-    {
-      key: 'jargalantiinAm',
-      img: '/samples/slider2.png',
-      title: 'Жаргалантын ам',
-      desc: 'Богд уулын баруун ам',
-    },
-    {
-      key: 'bogdkhanUul',
-      img: '/samples/slider3.png',
-      title: 'Богдхан уул',
-      desc: 'Богд уулын баруун ам',
-    },
-    {
-      key: 'sugnuguriinGol',
-      img: '/samples/slider4.png',
-      title: 'Сөгнөгөрийн гол',
-      desc: 'Байгалийн цогцолбор газар',
-    },
-    // {
-    //   key: 'khuvsgul nuur',
-    //   img: '/samples/slider5.png',
-    //   title: 'Хөвсгөл нуур',
-    //   desc: 'Байгалийн цогцолбор газар',
-    // },
-    // {
-    //   key: 'ugiinNuur',
-    //   img: '/samples/slider6.png',
-    //   title: 'Өгийн нуур',
-    //   desc: 'Байгалийн цогцолбор газар',
-    // },
-    // {
-    //   key: 'hyargasNuur',
-    //   img: '/samples/slider7.png',
-    //   title: 'Хяргас нуур',
-    //   desc: 'Байгалийн цогцолбор газар',
-    // },
-  ];
   const sliderRef = React.useRef<Slider>(null);
 
   function SampleNextArrow(props: any) {
@@ -129,14 +41,14 @@ const CommonLocation = ({ data, destinations }: iProps) => {
     centerMode: true,
     // lazyLoad: 'progressive',
     infinite: true,
-    centerPadding:
-      size?.width && size?.width > 1536
-        ? '100px'
-        : size?.width && size?.width > 1280
-        ? '100px'
-        : size?.width && size?.width > 1024
-        ? '100px'
-        : '24px',
+    centerPadding: '5%',
+    // size?.width && size?.width > 1536
+    //   ? '100px'
+    //   : size?.width && size?.width > 1280
+    //   ? '100px'
+    //   : size?.width && size?.width > 1024
+    //   ? '5vw'
+    //   : '24px',
     slidesToShow: 1,
     initialSlide: 0,
     speed: 500,
@@ -173,7 +85,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
   return (
     <div className="flex w-full flex-col gap-[20px]">
       <h3 className="mb-[-10px] self-center text-[16px] font-medium md:text-[18px] lg:text-[22px]">
-        {appState.lang === 'mn' ? 'Түгээмэл байршлууд' : 'Common destinations'}
+        {state.language === 'mn' ? 'Түгээмэл байршлууд' : 'Common destinations'}
       </h3>
       <Slider {...settings} ref={sliderRef}>
         {data.map((index) => (
@@ -197,11 +109,11 @@ const CommonLocation = ({ data, destinations }: iProps) => {
             <div className="absolute bottom-0 z-[1] flex h-[50px] w-full flex-col items-center justify-center gap-[2px] bg-black/50 md:h-[75px] md:gap-[4px]">
               <h3 className="text-[16px] font-medium leading-[14px] md:text-[18px] md:leading-[18px]">
                 {/* {appState.lang === 'mn' ? data.title : data.titleEn} */}
-                {appState.lang === 'mn' ? index.name : ''}
+                {state.language === 'mn' ? index.name : ''}
               </h3>
               <p className="text-[12px] md:text-[14px]">
                 {/* {appState.lang === 'mn' ? data.desc : data.descEn} */}
-                {appState.lang === 'mn' ? index.subtitle : ''}
+                {state.language === 'mn' ? index.subtitle : ''}
               </p>
               {index.author !== null && index.author !== '' ? (
                 <div className="z-100 absolute bottom-[4px] right-[8px] flex items-center justify-center gap-[4px] text-[8px] font-medium text-white sm:right-[24px] sm:text-[12px]">
@@ -268,7 +180,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
             />
             <div className="absolute z-10 flex h-full w-full flex-col items-start justify-end gap-[4px] bg-gradient-to-t from-black/60 to-transparent px-[16px] py-[12px] lg:gap-[6px]">
               <h3 className="text-[18px] font-medium leading-[18px] md:text-[20px] lg:text-[18px]">
-                {appState.lang === 'mn' ? data.name : data.nameEn}
+                {state.language === 'mn' ? data.name : data.nameEn}
               </h3>
               <p className="text-[14px] leading-[14px] md:text-[16px] lg:w-[80%] lg:text-[14px] lg:leading-[16px]">
                 {data.description}

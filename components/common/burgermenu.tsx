@@ -1,7 +1,8 @@
 'use client';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { Lang, useAppCtx } from '@/utils/app';
+// import { Lang, useAppCtx } from '@/utils/app';
+import { useAppState } from '@/contexts/appStateContext';
 
 interface iProps {
   open: boolean;
@@ -15,15 +16,12 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
   const [closeAnimation, setCloseAnimation] = useState(false);
   const [open1, setOpen1] = useState('');
 
-  const { dispatch, appState } = useAppCtx();
+  // const { dispatch, appState } = useAppCtx();
+  const { state, dispatch } = useAppState();
 
-  const handleDay = (type: Lang) => {
-    dispatch({
-      type: 'CHANGE_APP_STATE',
-      payload: {
-        lang: type,
-      },
-    });
+  const handleDay = () => {
+    const newLanguage = state.language === 'mn' ? 'en' : 'mn';
+    dispatch({ type: 'SET_LANGUAGE', payload: newLanguage });
   };
 
   const handleClick = (event: React.MouseEvent) => {
@@ -88,7 +86,7 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
               }, 400);
             }}
           >
-            {appState.lang === 'mn' ? 'Нэвтрэх' : 'Log In'}
+            {state.language === 'mn' ? 'Нэвтрэх' : 'Log In'}
           </div>
           {/* signUp */}
           <div
@@ -102,11 +100,11 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
               }, 400);
             }}
           >
-            {appState.lang === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'}
+            {state.language === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'}
           </div>
           {/* add hotel */}
           <div className="flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]">
-            {appState.lang === 'mn' ? 'Буудал нэмэх' : 'Add hotel'}
+            {state.language === 'mn' ? 'Буудал нэмэх' : 'Add hotel'}
           </div>
         </div>
         {/* bottom section */}
@@ -133,7 +131,7 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
                   }}
                 >
                   <h3 className="text-[14px]">
-                    {appState.lang === 'mn' ? 'Тухай' : 'About'}
+                    {state.language === 'mn' ? 'Тухай' : 'About'}
                   </h3>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -154,13 +152,15 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
                 </div>
                 <div className="mb-[12px] flex flex-col items-end justify-start gap-[16px] text-end ">
                   <a href="/" className="underline-0  relative text-white">
-                    {appState.lang === 'mn' ? 'Бидний тухай' : 'About us'}
+                    {state.language === 'mn' ? 'Бидний тухай' : 'About us'}
                   </a>
                   <a href="/" className="underline-0  relative text-white">
-                    {appState.lang === 'mn' ? 'Түгээмэл асуулт хариулт' : 'Q&A'}
+                    {state.language === 'mn'
+                      ? 'Түгээмэл асуулт хариулт'
+                      : 'Q&A'}
                   </a>
                   <a href="/" className="underline-0  relative text-white">
-                    {appState.lang === 'mn'
+                    {state.language === 'mn'
                       ? 'Үйлчилгээний нөхцөл'
                       : 'Terms of service'}
                   </a>
@@ -185,7 +185,7 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
                   }}
                 >
                   <h3 className="text-[14px]">
-                    {appState.lang === 'mn' ? 'Мэдээлэл' : 'News'}
+                    {state.language === 'mn' ? 'Мэдээлэл' : 'News'}
                   </h3>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -206,20 +206,20 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
                 </div>
                 <div className="justif-start mb-[12px] flex flex-col items-end gap-[16px] text-end ">
                   <a href="/" className="underline-0  relative text-white">
-                    {appState.lang === 'mn' ? 'Мэдээ мэдээлэл' : 'Articles'}
+                    {state.language === 'mn' ? 'Мэдээ мэдээлэл' : 'Articles'}
                   </a>
                   <a href="/" className="underline-0  relative text-white">
-                    {appState.lang === 'mn'
+                    {state.language === 'mn'
                       ? 'Буудалд зориулсан зөвлөмж'
                       : 'Tips for hotels'}
                   </a>
                   <a href="/" className="underline-0  relative text-white">
-                    {appState.lang === 'mn'
+                    {state.language === 'mn'
                       ? 'Аялагчдад зориулсан зөвлөмж'
                       : 'Tips for travelers'}
                   </a>
                   <a href="/" className="underline-0  relative text-white">
-                    {appState.lang === 'mn'
+                    {state.language === 'mn'
                       ? 'iHotel амжилтын түүх'
                       : "iHotel's success history"}
                   </a>
@@ -244,7 +244,7 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
                   }}
                 >
                   <h3 className="text-[14px]">
-                    {appState.lang === 'mn' ? 'Үйлчилгээ' : 'Services'}
+                    {state.language === 'mn' ? 'Үйлчилгээ' : 'Services'}
                   </h3>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -268,15 +268,17 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
                     href="/"
                     className="underline-0  relative font-medium text-white"
                   >
-                    {appState.lang === 'mn'
+                    {state.language === 'mn'
                       ? 'Өрөөний удирдлагын систем'
                       : 'Room management system'}
                   </a>
                   <a href="/" className="underline-0  relative text-white">
-                    {appState.lang === 'mn' ? 'Веб сайт бүтээх' : 'Web service'}
+                    {state.language === 'mn'
+                      ? 'Веб сайт бүтээх'
+                      : 'Web service'}
                   </a>
                   <a href="/" className="underline-0  relative text-white">
-                    {appState.lang === 'mn' ? 'Тусламж' : 'Support'}
+                    {state.language === 'mn' ? 'Тусламж' : 'Support'}
                   </a>
                 </div>
               </div>
@@ -306,16 +308,12 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
           <div
             className="flex h-[43px] w-full items-center justify-end gap-[8px]  border-b-[1px] border-white/[.15]"
             onClick={() => {
-              if (appState.lang === 'mn') {
-                handleDay('en');
-              } else {
-                handleDay('mn');
-              }
+              handleDay();
             }}
           >
             <Image
               src={
-                appState.lang === 'mn'
+                state.language === 'mn'
                   ? '/images/uk-flag.png'
                   : '/images/mongolian-flag.png'
               }
@@ -328,7 +326,7 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
               className="object-fit max-h-[22px] max-w-[22px] cursor-pointer"
             />
 
-            {appState.lang === 'mn' ? 'EN' : 'MN'}
+            {state.language === 'mn' ? 'EN' : 'MN'}
           </div>
         </div>
       </div>

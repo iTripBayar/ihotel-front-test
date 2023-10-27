@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { useAppCtx } from '@/utils/app';
 import useSwitchSuggestion from '@/hooks/switchSuggestion';
+import { useAppState } from '@/contexts/appStateContext';
 
 interface iProps {
   hotelData: any[];
@@ -19,8 +19,8 @@ const SearchBox = ({
 }: iProps) => {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(false);
+  const { state, dispatch } = useAppState();
 
-  const { appState } = useAppCtx();
   const inputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -75,12 +75,20 @@ const SearchBox = ({
     (obj, index, self) => index === self.findIndex((o) => o.key === obj.key),
   );
 
+  const openFilter = () => {
+    dispatch({ type: 'TOGGLE_FILTER', payload: true });
+    console.log(state.showFilter);
+  };
   return (
-    <div className="relative flex w-full max-w-[500px] flex-col gap-[10px]">
+    <div
+      className={`relative flex w-full  flex-col gap-[10px] ${
+        ver === 'normal' ? 'lg:max-w-[500px] xl:max-w-none' : 'lg:max-w-[500px]'
+      }`}
+    >
       <div
         className={`flex w-full  items-center bg-white px-[12px] ${
           ver === 'normal'
-            ? 'h-[46px] justify-start gap-[2px] rounded-[8px] border border-black/[.25]  2xs:gap-[4px] lg:min-w-[280px] xl:min-w-[306px]'
+            ? 'h-[46px] justify-start gap-[2px] rounded-[8px] border border-black/[.25]  2xs:gap-[4px] lg:min-w-[280px] xl:min-w-[306px] '
             : ver === 'fixed'
             ? 'h-[36px] justify-start rounded-full'
             : ver === 'headerSearch'
@@ -118,7 +126,7 @@ const SearchBox = ({
             name="searchInput"
             id="searchInput"
             placeholder={
-              appState.lang === 'mn'
+              state.language === 'mn'
                 ? 'Хайх газар оруулах'
                 : 'Search destinations'
             }
@@ -138,13 +146,17 @@ const SearchBox = ({
             `}
           />
         </div>
-        {ver === 'search' || 'headerSearch' ? (
+        {/* filter */}
+        {ver === 'search' || ver === 'headerSearch' ? (
           <div
             className={`flex h-full cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue ${
               ver === 'headerSearch' ? 'px-[8px]' : 'px-[12px]'
             } text-[13px] font-medium text-white ring-1 ring-primary-blue xl:px-[14px] xl:text-[14px] ${
-              query !== '' ? 'max-w-[36px]' : ''
+              query !== '' ? 'w-[46px]' : ''
             }`}
+            onClick={() => {
+              openFilter();
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -158,7 +170,6 @@ const SearchBox = ({
                   : ' 2x:min-w-[24px] max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] 2xs:max-h-[24px] 2xs:min-h-[24px] 2xs:max-w-[24px]'
               }
             >
-              {/* absolute left-[50%] top-[50%] h-[24px] w-[24px] translate-x-[-50%] translate-y-[-50%] */}
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -166,7 +177,7 @@ const SearchBox = ({
               />
             </svg>
             {query === '' ? (
-              <p>{appState.lang === 'mn' ? 'Шүүлтүүр' : 'Filter'}</p>
+              <p>{state.language === 'mn' ? 'Шүүлтүүр' : 'Filter'}</p>
             ) : null}
           </div>
         ) : (
@@ -179,7 +190,7 @@ const SearchBox = ({
             }`}
           >
             &ldquo;
-            {appState.lang === 'mn'
+            {state.language === 'mn'
               ? useSwitchSuggestion(3).mn
               : useSwitchSuggestion(3).en}
             &rdquo;

@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import { useAppCtx } from '@/utils/app';
 import { useState } from 'react';
+import { useAppState } from '@/contexts/appStateContext';
 
 interface iProps {
   cap: number;
@@ -8,7 +8,7 @@ interface iProps {
 }
 
 const FeaturedSample = ({ cap, title }: iProps) => {
-  const { appState } = useAppCtx();
+  const { state } = useAppState();
   const [fav, setFav] = useState(false);
 
   const hotels = [
@@ -140,12 +140,12 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                       data.name.length > 27 ? 'xl:text-[14px]' : ''
                     }`}
                   >
-                    {appState.lang === 'mn' ? data.name : data.name}
+                    {state.language === 'mn' ? data.name : data.name}
                   </p>
                   <p className="text-[12px] leading-[12px] text-sub-text/60 2xs:text-[14px] 2xs:leading-[14px]">
-                    {appState.lang === 'mn' ? data.dist : data.dist}
+                    {state.language === 'mn' ? data.dist : data.dist}
                     ,&nbsp;
-                    {appState.lang === 'mn' ? data.location : data.location}
+                    {state.language === 'mn' ? data.location : data.location}
                   </p>
                 </div>
                 {/* review & stat */}
@@ -185,7 +185,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                           : 'bg-main-offline px-[6px] text-[11px] leading-[11px] 2xs:px-[12px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[4px] sm:text-[10px] sm:leading-[10px] md:px-[4px] md:text-[14px] md:leading-[14px]'
                       }`}
                     >
-                      {appState.lang === 'mn' ? (
+                      {state.language === 'mn' ? (
                         <p>
                           {data.stat === 'online'
                             ? 'Шууд баталгаажна'
@@ -223,10 +223,10 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                         {data.price
                           ? data.price.toLocaleString()
                           : (70000).toLocaleString()}
-                        {appState.lang === 'mn' ? '₮' : '$'}
+                        {state.language === 'mn' ? '₮' : '$'}
                         <span className="text-[14px] text-sub-text/75">
                           {' '}
-                          / {appState.lang === 'mn' ? 'хоног' : 'day'}
+                          / {state.language === 'mn' ? 'хоног' : 'day'}
                         </span>
                       </p>
                     </div>
@@ -244,9 +244,9 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                       {data.price
                         ? data.price.toLocaleString()
                         : (70000).toLocaleString()}
-                      {appState.lang === 'mn' ? ' ₮' : ' $'}
+                      {state.language === 'mn' ? ' ₮' : ' $'}
                       <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
-                        / {appState.lang === 'mn' ? 'хоног' : 'day'}
+                        / {state.language === 'mn' ? 'хоног' : 'day'}
                       </span>
                     </p>
                     <div
@@ -256,7 +256,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                           : 'px-[12px] 2xs:px-[16px] sm:px-[10px] md:px-[20px]'
                       }`}
                     >
-                      {appState.lang === 'mn' ? (
+                      {state.language === 'mn' ? (
                         <p>{data.stat === 'offline' ? 'Харах' : 'Захиалах'}</p>
                       ) : (
                         <p>{data.stat === 'offline' ? 'View' : 'Order'}</p>

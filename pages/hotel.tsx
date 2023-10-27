@@ -8,6 +8,8 @@ const hotel = () => {
     return fetchDataSearch();
   });
 
+  console.log(data);
+
   return <div>hotel</div>;
 };
 

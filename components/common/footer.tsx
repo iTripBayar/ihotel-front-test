@@ -1,11 +1,11 @@
 'use client';
 import Image from 'next/image';
 import { useState } from 'react';
-import { useAppCtx } from '@/utils/app';
+import { useAppState } from '@/contexts/appStateContext';
 
 const Footer = () => {
   const [open, setOpen] = useState('');
-  const { appState } = useAppCtx();
+  const { state } = useAppState();
 
   return (
     <div className="flex w-full flex-col bg-footer px-[32px] pt-[32px] text-[14px] text-white sm:px-[42px] md:px-[50px] lg:px-[125px] xl:px-[150px] 2xl:px-[200px]">
@@ -30,7 +30,7 @@ const Footer = () => {
               }}
             >
               <h3 className="text-[18px]">
-                {appState.lang === 'mn' ? 'Тухай' : 'About'}
+                {state.language === 'mn' ? 'Тухай' : 'About'}
               </h3>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -51,15 +51,15 @@ const Footer = () => {
             </div>
             <div className="mb-[12px] flex flex-col justify-start gap-[16px] ">
               <a href="/" className="underline-0 group relative text-white">
-                {appState.lang === 'mn' ? 'Бидний тухай' : 'About us'}
+                {state.language === 'mn' ? 'Бидний тухай' : 'About us'}
                 <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
               <a href="/" className="underline-0 group relative text-white">
-                {appState.lang === 'mn' ? 'Түгээмэл асуулт хариулт' : 'Q&A'}
+                {state.language === 'mn' ? 'Түгээмэл асуулт хариулт' : 'Q&A'}
                 <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
               <a href="/" className="underline-0 group relative text-white">
-                {appState.lang === 'mn'
+                {state.language === 'mn'
                   ? 'Үйлчилгээний нөхцөл'
                   : 'Terms of service'}
                 <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
@@ -85,7 +85,7 @@ const Footer = () => {
               }}
             >
               <h3 className="text-[18px]">
-                {appState.lang === 'mn' ? 'Мэдээлэл' : 'News'}
+                {state.language === 'mn' ? 'Мэдээлэл' : 'News'}
               </h3>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -106,23 +106,23 @@ const Footer = () => {
             </div>
             <div className="mb-[12px] flex flex-col justify-start gap-[16px] ">
               <a href="/" className="underline-0 group relative text-white">
-                {appState.lang === 'mn' ? 'Мэдээ мэдээлэл' : 'Articles'}
+                {state.language === 'mn' ? 'Мэдээ мэдээлэл' : 'Articles'}
                 <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
               <a href="/" className="underline-0 group relative text-white">
-                {appState.lang === 'mn'
+                {state.language === 'mn'
                   ? 'Буудалд зориулсан зөвлөмж'
                   : 'Tips for hotels'}
                 <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
               <a href="/" className="underline-0 group relative text-white">
-                {appState.lang === 'mn'
+                {state.language === 'mn'
                   ? 'Аялагчдад зориулсан зөвлөмж'
                   : 'Tips for travelers'}
                 <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
               <a href="/" className="underline-0 group relative text-white">
-                {appState.lang === 'mn'
+                {state.language === 'mn'
                   ? 'iHotel амжилтын түүх'
                   : "iHotel's success history"}
                 <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
@@ -148,7 +148,7 @@ const Footer = () => {
               }}
             >
               <h3 className="text-[18px]">
-                {appState.lang === 'mn' ? 'Үйлчилгээ' : 'Services'}
+                {state.language === 'mn' ? 'Үйлчилгээ' : 'Services'}
               </h3>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -169,17 +169,17 @@ const Footer = () => {
             </div>
             <div className="mb-[12px] flex flex-col justify-start gap-[16px] ">
               <a href="/" className="underline-0 group relative text-white">
-                {appState.lang === 'mn'
+                {state.language === 'mn'
                   ? 'Өрөөний удирдлагын систем'
                   : 'Room management system'}
                 <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
               <a href="/" className="underline-0 group relative text-white">
-                {appState.lang === 'mn' ? 'Веб сайт бүтээх' : 'Web service'}
+                {state.language === 'mn' ? 'Веб сайт бүтээх' : 'Web service'}
                 <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
               <a href="/" className="underline-0 group relative text-white">
-                {appState.lang === 'mn' ? 'Тусламж' : 'Support'}
+                {state.language === 'mn' ? 'Тусламж' : 'Support'}
                 <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
               </a>
             </div>

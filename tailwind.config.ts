@@ -39,7 +39,6 @@ const config: Config = {
 
         close: 'close 0.5s ease-in-out',
         closeSearch: 'closeSearch 0.5s ease-in-out',
-
         'burger-top':
           'burger-top 8s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite',
         'burger-top1':
@@ -50,6 +49,7 @@ const config: Config = {
       },
       keyframes: {
         // translate-x-[-50%] translate-y-[-50%]
+
         brotate: {
           '0%': {
             transform: 'rotate(0)',
@@ -108,12 +108,28 @@ const config: Config = {
             height: '149px',
           },
         },
+        openFilter: {
+          '0%': {
+            height: '42px',
+          },
+          to: {
+            height: '149px',
+          },
+        },
         closeSearch: {
           '0%': {
             height: '149px',
           },
           to: {
-            height: '33px',
+            height: '40px',
+          },
+        },
+        closeFilter: {
+          '0%': {
+            height: '149px',
+          },
+          to: {
+            height: '42px',
           },
         },
         close: {
