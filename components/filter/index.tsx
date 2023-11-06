@@ -36,190 +36,358 @@ const Filter = () => {
     { id: 18, desc: 'Элсний волейбол' },
     { id: 19, desc: 'Дотоод аялал' },
   ];
+  const colapseDuration = 700;
+  const iconRotateDuration = 700;
+
+  // console.log(state.showFilter);
 
   const closeFilter = () => {
-    dispatch({ type: 'TOGGLE_FILTER', payload: false });
-  };
+    document.getElementById('container')?.classList.remove('animate-fade500');
+    document.getElementById('container')?.classList.add('animate-fadeOut300');
 
-  return (
-    <div className="flex w-full flex-col gap-[24px] px-[20px] sm:px-[50px] md:px-[72px]">
+    setTimeout(() => {
+      dispatch({ type: 'TOGGLE_FILTER', payload: '' });
+    }, 300);
+  };
+  if (state.showFilter === 'web')
+    return (
       <div
-        id="category"
-        className={` over grid-rows-[repeat(2, minmax(40px, 1fr))] grid w-full gap-[20px] overflow-hidden rounded-[20px] px-[16px]  py-[8px] shadow-[0px_2px_12px_0px_rgb(0,0,0,0.15)] ${
-          open === 'category'
-            ? ' h-[240px] rounded-[20px] pb-[16px]  duration-1000'
-            : '  h-[42px] rounded-[20px] duration-1000'
-        } `}
-        onClick={() => {
-          if (open !== 'category') {
-            setOpen('category');
-          }
-        }}
+        className="animate-fade500 flex max-h-[300px] w-[85vw] items-end"
+        id="container"
       >
-        <div className="flex w-full items-center justify-between">
-          <p className="text-[18px] font-medium text-sub-text">
-            {state.language === 'mn' ? 'Төрөл' : 'Category'}
-          </p>
-          <div className="relative h-[24px] w-[24px] rounded-full bg-primary-blue/25">
-            <div
-              className={`absolute left-[50%] top-[50%] h-[3px] w-[18px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
-                open === 'category'
-                  ? 'rotate-[360deg] duration-1000'
-                  : ' rotate-0 duration-1000'
-              }`}
-            ></div>
-            <div
-              className={`absolute left-[50%] top-[50%] h-[18px] w-[3px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
-                open === 'category'
-                  ? 'rotate-[270deg] duration-1000'
-                  : ' rotate-0 duration-1000'
-              }`}
-            ></div>
+        <div className="flex h-[95%] w-full flex-col items-center gap-[8px] rounded-[20px] border border-black/20 bg-white px-[24px] py-[12px]">
+          <div className="flex h-full w-full items-start justify-between gap-[24px]">
+            {/* Categories */}
+            <div className="flex h-full w-full flex-col items-center justify-start gap-[12px]">
+              <p className="text-[18px] font-medium">
+                {state.language === 'mn' ? 'Төрөл' : 'Categories'}
+              </p>
+              <div className="grid w-full grid-cols-2 gap-[8px] text-[15px] text-sub-text">
+                {sampleCat.map((index) => (
+                  <form
+                    key={index.id}
+                    className="flex w-full items-center gap-[8px]"
+                  >
+                    <input
+                      id={`${index.id}`}
+                      type="radio"
+                      className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0"
+                    />
+                    <label
+                      onClick={() => {
+                        document.getElementById(`${index.id}`)?.click();
+                      }}
+                    >
+                      {index.desc}
+                    </label>
+                  </form>
+                ))}
+              </div>
+            </div>
+            {/* Price */}
+            <div className="flex h-full w-[70%] flex-col items-center justify-start gap-[12px]">
+              <p className="text-[18px] font-medium">
+                {state.language === 'mn' ? 'Үнэ' : 'Price'}
+              </p>
+              <div className="grid w-full grid-cols-1 gap-[8px] text-[15px] text-sub-text">
+                {samplePrice.map((index) => (
+                  <form
+                    key={index.id}
+                    className="flex w-full items-center gap-[8px]"
+                  >
+                    <input
+                      id={`${index.id}`}
+                      type="checkbox"
+                      name="groupPriceCheckBox"
+                      value={index.id}
+                      className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 "
+                    />
+                    <label
+                      onClick={() => {
+                        document.getElementById(`${index.id}`)?.click();
+                      }}
+                    >
+                      {index.min.toLocaleString()}{' '}
+                      {state.language === 'mn' ? '₮' : '$'}{' '}
+                      {index.max !== 0 ? '-' : null}{' '}
+                      {index.max !== 0 ? (
+                        index.max.toLocaleString()
+                      ) : (
+                        <span className="text-[18px]">+</span>
+                      )}
+                      {index.max !== 0
+                        ? state.language === 'mn'
+                          ? '₮'
+                          : '$'
+                        : null}
+                    </label>
+                  </form>
+                ))}
+              </div>
+            </div>
+            {/* Additional */}
+            <div className="flex h-full w-full flex-col items-center justify-start gap-[12px]">
+              <p className="text-[18px] font-medium">
+                {state.language === 'mn' ? 'Нэмэлтээр' : 'Additional'}
+              </p>
+              <div className="grid w-full grid-cols-2 gap-[8px] text-[15px] text-sub-text">
+                {sampleAdditional.map((index) => (
+                  <form
+                    key={index.id}
+                    className="flex w-full items-center gap-[8px]"
+                  >
+                    <input
+                      id={`${index.id}`}
+                      type="radio"
+                      className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0"
+                    />
+                    <label
+                      onClick={() => {
+                        document.getElementById(`${index.id}`)?.click();
+                      }}
+                    >
+                      {index.desc}
+                    </label>
+                  </form>
+                ))}
+              </div>
+            </div>
+          </div>
+          {/* search Btn */}
+          <div
+            className="flex max-w-[180px] items-center  justify-center self-end rounded-full bg-primary-blue px-[14px] py-[4px] text-[13px] font-medium uppercase text-white"
+            onClick={() => closeFilter()}
+          >
+            {state.language === 'mn' ? 'Шүүх' : 'filter'}
           </div>
         </div>
-        <div
-          className={`grid-rows-${
-            sampleCat.length / 2
-          } grid h-auto w-full grid-cols-2 gap-[20px] text-[15px] font-medium text-sub-text ${
-            open === 'category' ? '   animate-fade  duration-500' : ''
-          }`}
-        >
-          {sampleCat.map((index) => (
-            <div key={index.id} className="flex w-full items-center gap-[8px]">
-              <input
-                id={`${index.id}`}
-                type="radio"
-                className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:border-none focus:shadow-none focus:ring-0"
-              />
-              <label>{index.desc}</label>
-            </div>
-          ))}
-        </div>
       </div>
+    );
+  else
+    return (
       <div
-        id="price"
-        className={` over grid-rows-[repeat(2, minmax(40px, 1fr))] grid w-full gap-[20px] overflow-hidden rounded-[20px] px-[16px]  py-[8px] shadow-[0px_2px_12px_0px_rgb(0,0,0,0.15)] ${
-          open === 'price'
-            ? ' h-[260px] rounded-[20px] pb-[16px]  duration-1000'
-            : '  h-[42px] rounded-[20px] duration-1000'
-        } `}
-        onClick={() => {
-          if (open !== 'price') {
-            setOpen('price');
-          }
-        }}
+        className="animate-fade500 flex w-full flex-col gap-[24px] px-[20px] sm:px-[50px] md:px-[72px]"
+        id="container"
       >
-        <div className="flex w-full items-center justify-between">
-          <p className="text-[18px] font-medium text-sub-text">
-            {state.language === 'mn' ? 'Үнэ' : 'Price'}
-          </p>
-          <div className="relative h-[24px] w-[24px] rounded-full bg-primary-blue/25">
-            <div
-              className={`absolute left-[50%] top-[50%] h-[3px] w-[18px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
-                open === 'price'
-                  ? 'rotate-[360deg] duration-1000'
-                  : ' rotate-0 duration-1000'
-              }`}
-            ></div>
-            <div
-              className={`absolute left-[50%] top-[50%] h-[18px] w-[3px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
-                open === 'price'
-                  ? 'rotate-[270deg] duration-1000'
-                  : ' rotate-0 duration-1000'
-              }`}
-            ></div>
+        {/* category */}
+        <div
+          id="category"
+          className={` over grid-rows-[repeat(2, minmax(40px, 1fr))] grid w-full gap-[20px] overflow-hidden rounded-[20px] px-[16px]  py-[8px] shadow-[0px_2px_12px_0px_rgb(0,0,0,0.15)] ${
+            open === 'category'
+              ? `h-[240px] rounded-[20px] pb-[16px]  duration-${colapseDuration}`
+              : `h-[42px] rounded-[20px] duration-${colapseDuration}`
+          } `}
+          onClick={() => {
+            if (open !== 'category') {
+              setOpen('category');
+            }
+          }}
+        >
+          <div className="flex w-full items-center justify-between">
+            <p className="text-[18px] font-medium text-sub-text">
+              {state.language === 'mn' ? 'Төрөл' : 'Category'}
+            </p>
+            {/* spinning + Icon */}
+            <div className="relative h-[24px] w-[24px] rounded-full bg-primary-blue/25">
+              <div
+                className={`absolute left-[50%] top-[50%] h-[3px] w-[18px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
+                  open === 'category'
+                    ? `rotate-[360deg] duration-${iconRotateDuration}`
+                    : `rotate-0 duration-${iconRotateDuration}`
+                }`}
+              ></div>
+              <div
+                className={`absolute left-[50%] top-[50%] h-[18px] w-[3px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
+                  open === 'category'
+                    ? `rotate-[270deg] duration-${iconRotateDuration}`
+                    : `rotate-0 duration-${iconRotateDuration}`
+                }`}
+              ></div>
+            </div>
+          </div>
+          {/* inputs */}
+          <div
+            className={`grid-rows-${
+              sampleCat.length / 2
+            } grid h-auto w-full grid-cols-2 gap-[20px] text-[15px] font-medium text-sub-text ${
+              open === 'category' ? '   animate-fade  duration-500' : ''
+            }`}
+          >
+            {sampleCat.map((index) => (
+              <form
+                key={index.id}
+                className="flex w-full items-center gap-[8px]"
+              >
+                <input
+                  id={`${index.id}`}
+                  type="checkbox"
+                  value={index.desc}
+                  className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0"
+                />
+                <label
+                  onClick={() => {
+                    document.getElementById(`${index.id}`)?.click();
+                  }}
+                >
+                  {index.desc}
+                </label>
+              </form>
+            ))}
           </div>
         </div>
+        {/* price */}
         <div
-          className={`grid-rows-${
-            samplePrice.length / 2
-          } grid h-auto w-full grid-cols-1 gap-[20px] text-[15px] font-medium text-sub-text ${
-            open === 'price' ? '   animate-fade  duration-500' : ''
-          }`}
+          id="price"
+          className={` over grid-rows-[repeat(2, minmax(40px, 1fr))] grid w-full gap-[20px] overflow-hidden rounded-[20px] px-[16px]  py-[8px] shadow-[0px_2px_12px_0px_rgb(0,0,0,0.15)] ${
+            open === 'price'
+              ? `h-[260px] rounded-[20px] pb-[16px]  duration-${colapseDuration}`
+              : `h-[42px] rounded-[20px] duration-${colapseDuration}`
+          } `}
+          onClick={() => {
+            if (open !== 'price') {
+              setOpen('price');
+            }
+          }}
         >
-          {samplePrice.map((index) => (
-            <div key={index.id} className="flex w-full items-center gap-[8px]">
-              <input
-                id={`${index.id}`}
-                type="radio"
-                name="priceRadio"
-                className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:border-none focus:shadow-none focus:ring-0 "
-              />
-              <label>
-                {index.min.toLocaleString()}{' '}
-                {state.language === 'mn' ? '₮' : '$'}{' '}
-                {index.max !== 0 ? '-' : null}{' '}
-                {index.max !== 0 ? (
-                  index.max.toLocaleString()
-                ) : (
-                  <span className="text-[18px]">+</span>
-                )}
-                {index.max !== 0 ? (state.language === 'mn' ? '₮' : '$') : null}
-              </label>
+          <div className="flex w-full items-center justify-between">
+            <p className="text-[18px] font-medium text-sub-text">
+              {state.language === 'mn' ? 'Үнэ' : 'Price'}
+            </p>
+            {/* spinning + Icon */}
+            <div className="relative h-[24px] w-[24px] rounded-full bg-primary-blue/25">
+              <div
+                className={`absolute left-[50%] top-[50%] h-[3px] w-[18px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
+                  open === 'price'
+                    ? `rotate-[360deg] duration-${iconRotateDuration}`
+                    : `rotate-0 duration-${iconRotateDuration}`
+                }`}
+              ></div>
+              <div
+                className={`absolute left-[50%] top-[50%] h-[18px] w-[3px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
+                  open === 'price'
+                    ? `rotate-[270deg] duration-${iconRotateDuration}`
+                    : `rotate-0 duration-${iconRotateDuration}`
+                }`}
+              ></div>
             </div>
-          ))}
-        </div>
-      </div>
-      <div
-        id="additional"
-        className={` over grid-rows-[repeat(2, minmax(40px, 1fr))] grid w-full gap-[20px] overflow-hidden rounded-[20px] px-[16px]  py-[8px] shadow-[0px_2px_12px_0px_rgb(0,0,0,0.15)] ${
-          open === 'additional'
-            ? ' h-[260px] rounded-[20px] pb-[24px]  duration-1000'
-            : '  h-[42px] rounded-[20px] duration-1000'
-        } `}
-        onClick={() => {
-          if (open !== 'additional') {
-            setOpen('additional');
-          }
-        }}
-      >
-        <div className="flex w-full items-center justify-between">
-          <p className="text-[18px] font-medium text-sub-text">
-            {state.language === 'mn' ? 'Нэмэлтээр' : 'Additional'}
-          </p>
-          <div className="relative h-[24px] w-[24px] rounded-full bg-primary-blue/25">
-            <div
-              className={`absolute left-[50%] top-[50%] h-[3px] w-[18px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
-                open === 'additional'
-                  ? 'rotate-[360deg] duration-1000'
-                  : ' rotate-0 duration-1000'
-              }`}
-            ></div>
-            <div
-              className={`absolute left-[50%] top-[50%] h-[18px] w-[3px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
-                open === 'additional'
-                  ? 'rotate-[270deg] duration-1000'
-                  : ' rotate-0 duration-1000'
-              }`}
-            ></div>
+          </div>
+          {/* inputs */}
+          <div
+            className={`grid-rows-${
+              samplePrice.length / 2
+            } grid h-auto w-full grid-cols-1 gap-[20px] text-[15px] font-medium text-sub-text ${
+              open === 'price' ? '   animate-fade  duration-500' : ''
+            }`}
+          >
+            {samplePrice.map((index) => (
+              <form
+                key={index.id}
+                className="flex w-full items-center gap-[8px]"
+              >
+                <input
+                  id={`${index.id}`}
+                  type="checkbox"
+                  name="groupPriceCheckBox"
+                  value={index.id}
+                  className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 "
+                />
+                <label
+                  onClick={() => {
+                    document.getElementById(`${index.id}`)?.click();
+                  }}
+                >
+                  {index.min.toLocaleString()}{' '}
+                  {state.language === 'mn' ? '₮' : '$'}{' '}
+                  {index.max !== 0 ? '-' : null}{' '}
+                  {index.max !== 0 ? (
+                    index.max.toLocaleString()
+                  ) : (
+                    <span className="text-[18px]">+</span>
+                  )}
+                  {index.max !== 0
+                    ? state.language === 'mn'
+                      ? '₮'
+                      : '$'
+                    : null}
+                </label>
+              </form>
+            ))}
           </div>
         </div>
+        {/* additional */}
         <div
-          className={`grid-rows-${
-            sampleAdditional.length / 2
-          } grid h-auto w-full grid-cols-2 gap-[20px] text-[15px] font-medium text-sub-text ${
-            open === 'additional' ? '   animate-fade  duration-500' : ''
-          }`}
+          id="additional"
+          className={` over grid-rows-[repeat(2, minmax(40px, 1fr))] grid w-full gap-[20px] overflow-hidden rounded-[20px] px-[16px]  py-[8px] shadow-[0px_2px_12px_0px_rgb(0,0,0,0.15)] ${
+            open === 'additional'
+              ? `h-[260px] rounded-[20px] pb-[24px]  duration-${colapseDuration}`
+              : `h-[42px] rounded-[20px] duration-${colapseDuration}`
+          } `}
+          onClick={() => {
+            if (open !== 'additional') {
+              setOpen('additional');
+            }
+          }}
         >
-          {sampleAdditional.map((index) => (
-            <div key={index.id} className="flex w-full items-center gap-[8px]">
-              <input
-                type="radio"
-                className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:border-none focus:shadow-none focus:ring-0"
-              />
-              <p>{index.desc}</p>
+          <div className="flex w-full items-center justify-between">
+            <p className="text-[18px] font-medium text-sub-text">
+              {state.language === 'mn' ? 'Нэмэлтээр' : 'Additional'}
+            </p>
+            {/* spinning + Icon */}
+            <div className="relative h-[24px] w-[24px] rounded-full bg-primary-blue/25">
+              <div
+                className={`absolute left-[50%] top-[50%] h-[3px] w-[18px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
+                  open === 'additional'
+                    ? `rotate-[360deg] duration-${iconRotateDuration}`
+                    : `rotate-0 duration-${iconRotateDuration}`
+                }`}
+              ></div>
+              <div
+                className={`absolute left-[50%] top-[50%] h-[18px] w-[3px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
+                  open === 'additional'
+                    ? `rotate-[270deg] duration-${iconRotateDuration}`
+                    : `rotate-0 duration-${iconRotateDuration}`
+                }`}
+              ></div>
             </div>
-          ))}
+          </div>
+          {/* inputs */}
+          <div
+            className={`grid-rows-${
+              sampleAdditional.length / 2
+            } grid h-auto w-full grid-cols-2 gap-[20px] text-[15px] font-medium text-sub-text ${
+              open === 'additional' ? '   animate-fade  duration-500' : ''
+            }`}
+          >
+            {sampleAdditional.map((index) => (
+              <form
+                key={index.id}
+                className="flex w-full items-center gap-[8px]"
+              >
+                <input
+                  type="checkbox"
+                  id={`${index.id}`}
+                  value={index.desc}
+                  className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0"
+                />
+                <label
+                  onClick={() => {
+                    document.getElementById(`${index.id}`)?.click();
+                  }}
+                >
+                  {index.desc}
+                </label>
+              </form>
+            ))}
+          </div>
         </div>
+        <p
+          className="flex min-h-[40px] w-auto min-w-[90px] items-center justify-center self-center rounded-full bg-primary-blue px-[12px] pt-[2px] text-[16px] font-medium uppercase tracking-wider text-white"
+          onClick={() => closeFilter()}
+        >
+          {state.language === 'mn' ? 'Шүүх' : 'Filter'}
+        </p>
       </div>
-      <p
-        className="flex h-[42px] w-auto min-w-[120px] items-center justify-center self-center rounded-full bg-primary-blue px-[16px] text-[16px] font-medium uppercase text-white"
-        onClick={() => closeFilter()}
-      >
-        {state.language === 'mn' ? 'Хайх' : 'Search'}
-      </p>
-    </div>
-  );
+    );
 };
 
 export default Filter;

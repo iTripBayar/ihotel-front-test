@@ -1,11 +1,14 @@
+'use client';
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 
 // Define the type for your state
 interface AppState {
   language: string;
-  showFilter: boolean;
+  showFilter: string;
   showMap: boolean;
   searchValue: string;
+  logInState: string;
+  hotel: string;
 }
 
 // Define the type for the context value
@@ -17,9 +20,11 @@ interface AppStateContextValue {
 // Define your action types
 type Action =
   | { type: 'SET_LANGUAGE'; payload: string }
-  | { type: 'TOGGLE_FILTER'; payload: boolean }
+  | { type: 'TOGGLE_FILTER'; payload: string }
   | { type: 'TOGGLE_MAP'; payload: boolean }
-  | { type: 'SET_SEARCH_VALUE'; payload: string };
+  | { type: 'SET_SEARCH_VALUE'; payload: string }
+  | { type: 'SET_LOGINSTATE'; payload: string }
+  | { type: 'SET_HOTEL'; payload: string };
 
 // Define the reducer function for handling state changes
 const appStateReducer: React.Reducer<AppState, Action> = (state, action) => {
@@ -27,11 +32,15 @@ const appStateReducer: React.Reducer<AppState, Action> = (state, action) => {
     case 'SET_LANGUAGE':
       return { ...state, language: action.payload };
     case 'TOGGLE_FILTER':
-      return { ...state, showFilter: !state.showFilter };
+      return { ...state, showFilter: action.payload };
     case 'TOGGLE_MAP':
       return { ...state, showMap: !state.showMap };
     case 'SET_SEARCH_VALUE':
       return { ...state, searchValue: action.payload };
+    case 'SET_LOGINSTATE':
+      return { ...state, logInState: action.payload };
+    case 'SET_HOTEL':
+      return { ...state, hotel: action.payload };
     default:
       return state;
   }
@@ -48,9 +57,11 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [state, dispatch] = useReducer(appStateReducer, {
     language: 'mn',
-    showFilter: false,
+    showFilter: '',
     showMap: false,
     searchValue: '',
+    logInState: '',
+    hotel: '',
   });
 
   return (

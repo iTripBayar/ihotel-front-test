@@ -75,10 +75,12 @@ const SearchBox = ({
     (obj, index, self) => index === self.findIndex((o) => o.key === obj.key),
   );
 
-  const openFilter = () => {
-    dispatch({ type: 'TOGGLE_FILTER', payload: true });
-    console.log(state.showFilter);
+  const openFilter = (filterType: string) => {
+    dispatch({ type: 'TOGGLE_FILTER', payload: filterType });
+    // console.log(state.showFilter);
   };
+
+  // console.log(ver, 'searchBox');
   return (
     <div
       className={`relative flex w-full  flex-col gap-[10px] ${
@@ -152,10 +154,25 @@ const SearchBox = ({
             className={`flex h-full cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue ${
               ver === 'headerSearch' ? 'px-[8px]' : 'px-[12px]'
             } text-[13px] font-medium text-white ring-1 ring-primary-blue xl:px-[14px] xl:text-[14px] ${
-              query !== '' ? 'w-[46px]' : ''
+              query !== '' || state.showFilter !== '' ? 'w-[46px]' : ''
             }`}
+            //  open === 'additional'
+            //   ? `h-[260px] rounded-[20px] pb-[24px]  duration-${colapseDuration}`
+            //   : `h-[42px] rounded-[20px] duration-${colapseDuration}`
             onClick={() => {
-              openFilter();
+              if (ver === 'headerSearch') {
+                if (state.showFilter === '') {
+                  openFilter('mobile');
+                } else {
+                  openFilter('');
+                }
+              } else {
+                if (state.showFilter === '') {
+                  openFilter('web');
+                } else {
+                  openFilter('');
+                }
+              }
             }}
           >
             <svg
@@ -177,7 +194,9 @@ const SearchBox = ({
               />
             </svg>
             {query === '' ? (
-              <p>{state.language === 'mn' ? 'Шүүлтүүр' : 'Filter'}</p>
+              <p className={`${state.showFilter === '' ? '' : 'hidden'}`}>
+                {state.language === 'mn' ? 'Шүүлтүүр' : 'Filter'}
+              </p>
             ) : null}
           </div>
         ) : (

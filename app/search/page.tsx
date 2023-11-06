@@ -2,10 +2,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import useWindowSize from '@/hooks/windowSize';
 import { useRequest } from 'ahooks';
-// import { AppCtxProvider } from '@/utils/app';
 import { fetchData } from '@/utils';
 import HeaderVariants from '@/components/common/headerVariants';
-import '../app/globals.css';
+import '../../app/globals.css';
+// import '../app/globals.css';
 import LogIn from '@/components/common/logIn';
 import BurgerMenu from '@/components/common/burgermenu';
 import BottomSection from '@/components/common/bottomSection';
@@ -27,9 +27,13 @@ const SearchPage = () => {
   const searchBoxRef = useRef(null);
   const size = useWindowSize();
 
+  // console.log(state);
+
   const { data } = useRequest(() => {
     return fetchData();
   });
+
+  // console.log(data);
 
   function openMenu() {
     setSideMenu(true);
@@ -76,12 +80,17 @@ const SearchPage = () => {
         ver={'search'}
       />
       <BottomSection ver={'search'} map={map} openMap={mapFunction} />
+      {state.showFilter === 'web' ? (
+        <div className="absolute left-[50%] top-[55px] z-[200] translate-x-[-50%]">
+          <Filter />
+        </div>
+      ) : null}
 
       {size?.width && size?.width < 1024 ? (
         <div
           ref={searchBoxRef}
           className={`lg:hidden ${
-            state.showFilter === true ? 'flex flex-col gap-[24px]' : ''
+            state.showFilter === 'mobile' ? 'flex flex-col gap-[24px]' : ''
           }`}
         >
           <SearchSection
@@ -92,10 +101,10 @@ const SearchPage = () => {
             destData={data ? data.destCategories : []}
             map={map}
           />
-          {state.showFilter === true ? <Filter /> : null}
+          {state.showFilter === 'mobile' ? <Filter /> : null}
         </div>
       ) : null}
-      {state.showFilter === false ? (
+      {state.showFilter !== 'mobile' ? (
         <div
           className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:h-screen lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
         >

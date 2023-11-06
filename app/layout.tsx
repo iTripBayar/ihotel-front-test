@@ -1,4 +1,8 @@
 import './globals.css';
+import { AppStateProvider } from '@/contexts/appStateContext';
+import { Montserrat } from 'next/font/google';
+
+const inter = Montserrat({ subsets: ['latin'] });
 
 // import type { Metadata } from 'next';
 
@@ -13,15 +17,19 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="icon" type="image/x-icon" href="/favicon.png"></link>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
-        ></meta>
-      </head>
-      <body className="relative overscroll-contain">{children}</body>
-    </html>
+    <AppStateProvider>
+      <html lang="en">
+        <head>
+          <link rel="icon" type="image/x-icon" href="/favicon.png"></link>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=1"
+          ></meta>
+        </head>
+        <body className={`relative overscroll-contain ${inter.className}`}>
+          {children}
+        </body>
+      </html>
+    </AppStateProvider>
   );
 }

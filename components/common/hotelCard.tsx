@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useAppState } from '@/contexts/appStateContext';
+import Link from 'next/link';
 
 type iProps = {
   data: any;
 };
 
 const HotelCard = ({ data }: iProps) => {
-  const { state } = useAppState();
+  const { state, dispatch } = useAppState();
   const [fav, setFav] = useState(false);
 
   let stat = '';
@@ -21,11 +22,27 @@ const HotelCard = ({ data }: iProps) => {
     stat = 'data';
   }
 
+  const handleHotelSelect = (hotel: string) => {
+    // const newLanguage = state.language === 'mn' ? 'en' : 'mn';
+    dispatch({ type: 'SET_HOTEL', payload: hotel });
+    // console.log(state);
+  };
+  console.log(data);
   return (
-    <div
+    <Link
+      // href={`/hotel`}
+      href={{
+        pathname: '/hotel',
+        query: { name: data.name, type: data.hotelType.name }, // the data
+      }}
+      target="blank"
       className={`flex w-full flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] shadow-[0px_2px_12px_2px_rgb(0,0,0,0.20)] xl:gap-[20px] ${
         stat === 'data' ? 'max-h-[350px] pb-[10px]' : ''
       }`}
+      onClick={() => {
+        handleHotelSelect(data.id);
+        console.log(state);
+      }}
     >
       {/* image */}
       <div className="relative h-[200px] w-full overflow-hidden rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] xs:h-[225px] sm:h-[175px] md:h-[225px] lg:h-[225px] xl:h-[225px] 2xl:h-[300px]">
@@ -59,7 +76,7 @@ const HotelCard = ({ data }: iProps) => {
           sizes="50vw"
           placeholder="blur"
           blurDataURL={`"_next/image/?url=${data.image}"`}
-          className="h-auto w-auto select-none object-cover duration-700 hover:scale-110"
+          className="absolute h-auto w-auto select-none object-cover duration-700 hover:scale-110"
           draggable={false}
         />
       </div>
@@ -218,7 +235,7 @@ const HotelCard = ({ data }: iProps) => {
           </div>
         ) : null}
       </div>
-    </div>
+    </Link>
   );
 };
 

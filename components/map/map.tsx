@@ -154,8 +154,8 @@ const MapContainer = ({
     dispatch({ type: 'SET_LANGUAGE', payload: newLanguage });
   };
 
-  console.log(clusters);
-  console.log(supercluster);
+  // console.log(clusters);
+  // console.log(supercluster);
 
   return (
     <div
@@ -208,13 +208,30 @@ const MapContainer = ({
                 longitude={longitude}
               >
                 <div
-                  className="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-primary-blue text-[14px] font-bold text-white ring-2 ring-white"
+                  className="relative flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-primary-blue text-[14px] font-medium text-white ring-2 ring-white "
                   // style={{
                   //   width: `${10 + (pointCount / points.length) * 20}px`,
                   //   height: `${10 + (pointCount / points.length) * 20}px`,
                   // }}
                 >
-                  {pointCount}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.75}
+                    stroke="currentColor"
+                    className="max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px]"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"
+                    />
+                  </svg>
+
+                  <div className="absolute right-0 top-0 z-[0] flex h-[22px] w-[22px] translate-x-[50%]  translate-y-[-35%] items-center justify-center rounded-full bg-primary-blue text-[12px] ring-[1.5px] ring-white">
+                    x{pointCount}
+                  </div>
                 </div>
               </Marker>
             );
@@ -227,8 +244,11 @@ const MapContainer = ({
               latitude={latitude}
               longitude={longitude}
             >
-              <button className="min-h-[36px] items-center justify-center rounded-full bg-white px-[12px] text-[14px] font-bold text-primary-blue ring-2 ring-primary-blue">
-                {cluster.properties.price.toLocaleString()}
+              <button className="min-h-[30px] items-center justify-center rounded-full bg-primary-blue px-[8px] text-[14px] font-medium tracking-wider text-white ring-2 ring-white">
+                {`${cluster.properties.price.toLocaleString()}${
+                  state.language === 'mn' ? '₮' : '$'
+                }`}
+                {}
               </button>
             </Marker>
           );

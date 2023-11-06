@@ -61,21 +61,23 @@ const SearchSection = ({
         />
 
         <OnlineToggle ver={ver} />
-        <div
-          className={`flex cursor-pointer items-center justify-center pt-[2px] font-medium  uppercase lg:max-w-[130px] ${
-            ver === 'normal'
-              ? 'h-[46px] w-full rounded-[8px] bg-primary-blue text-[16px] leading-[16px] text-white'
-              : ver === 'fixed'
-              ? 'h-[36px] rounded-full bg-white text-primary-blue lg:min-w-[80px] lg:text-[14px]'
-              : ver === 'headerSearch'
-              ? 'h-[36px] min-w-[100px] max-w-[130px] rounded-full bg-primary-blue text-[15px] text-white '
-              : ver === 'search'
-              ? 'h-[36px] rounded-full bg-white text-primary-blue shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] lg:min-w-[80px] lg:text-[14px]'
-              : ''
-          }`}
-        >
-          <p>{state.language === 'mn' ? 'хайх' : 'search'}</p>
-        </div>
+        {state.showFilter !== 'mobile' ? (
+          <div
+            className={`flex cursor-pointer items-center justify-center pt-[2px] font-medium  uppercase lg:max-w-[130px] ${
+              ver === 'normal'
+                ? 'h-[46px] w-full rounded-[8px] bg-primary-blue text-[16px] leading-[16px] text-white'
+                : ver === 'fixed'
+                ? 'h-[36px] rounded-full bg-white text-primary-blue lg:min-w-[80px] lg:text-[14px]'
+                : ver === 'headerSearch'
+                ? 'h-[36px] min-w-[100px] max-w-[130px] rounded-full bg-primary-blue text-[15px] text-white '
+                : ver === 'search'
+                ? 'h-[36px] rounded-full bg-white text-primary-blue shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] lg:min-w-[80px] lg:text-[14px]'
+                : ''
+            }`}
+          >
+            <p>{state.language === 'mn' ? 'хайх' : 'search'}</p>
+          </div>
+        ) : null}
       </div>
     </div>
   );

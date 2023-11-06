@@ -32,6 +32,8 @@ const config: Config = {
         'slide-top':
           'slide-top 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940)   both',
         fade: 'fadeIn 0.3s ease-in-out',
+        fade500: 'fadeIn500 0.5s ease-in',
+        fadeOut300: 'fadeOut300 0.3s ease-out',
         'spin-slow': 'spin 5s linear infinite',
         'to-left': 'to-left 5s linear',
         open: 'open 0.5s ease-in-out',
@@ -48,8 +50,6 @@ const config: Config = {
         brotate: 'brotate 7s linear infinite',
       },
       keyframes: {
-        // translate-x-[-50%] translate-y-[-50%]
-
         brotate: {
           '0%': {
             transform: 'rotate(0)',
@@ -146,6 +146,22 @@ const config: Config = {
           },
           to: {
             opacity: '100%',
+          },
+        },
+        fadeIn500: {
+          '0%': {
+            opacity: '0%',
+          },
+          to: {
+            opacity: '100%',
+          },
+        },
+        fadeOut300: {
+          '0%': {
+            opacity: '100%',
+          },
+          to: {
+            opacity: '0%',
           },
         },
         'to-left': {

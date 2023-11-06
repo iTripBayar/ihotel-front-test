@@ -15,7 +15,7 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
   const handleDay = () => {
     const newLanguage = state.language === 'mn' ? 'en' : 'mn';
     dispatch({ type: 'SET_LANGUAGE', payload: newLanguage });
-    console.log(state);
+    // console.log(state);
   };
 
   return (
@@ -102,7 +102,7 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
             className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]"
             onClick={() => {
               handleDay();
-              console.log(state.language);
+              // console.log(state.language);
             }}
           >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>

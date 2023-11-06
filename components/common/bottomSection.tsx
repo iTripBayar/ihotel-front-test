@@ -96,7 +96,7 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
           className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue"
           onClick={() => {
             handleDay();
-            console.log(state.language);
+            // console.log(state.language);
           }}
         >
           <Image
