@@ -1,9 +1,8 @@
 'use client';
 import React, { useRef, useState } from 'react';
 import Image from 'next/image';
-// import { useAppCtx } from '@/utils/app';
-// import { Lang } from '@/utils/app';
-import { useAppState } from '@/contexts/appStateContext';
+import { usePathname, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 type iProps = {
   ver: string;
@@ -12,7 +11,9 @@ type iProps = {
 };
 
 const BottomSection = ({ ver, map, openMap }: iProps) => {
-  const { state, dispatch } = useAppState();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
   const btnRef = useRef<HTMLDivElement>(null);
   const handleScrollToTop = () => {
     btnRef.current?.classList.add('animate-bounce');
@@ -29,11 +30,6 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
   setTimeout(() => {
     setDelay(true);
   }, 1500);
-
-  const handleDay = () => {
-    const newLanguage = state.language === 'mn' ? 'en' : 'mn';
-    dispatch({ type: 'SET_LANGUAGE', payload: newLanguage });
-  };
 
   return (
     <div
@@ -68,15 +64,17 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
             />
           </svg>
           {delay == false ? (
-            <p>{state.language === 'mn' ? 'Газрын зураг' : 'Map'}</p>
+            // <p>{state.language === 'mn' ? 'Газрын зураг' : 'Map'}</p>
+            <p>{lang === 'en' ? 'Map' : 'Газрын зураг'}</p>
           ) : null}
           {delay == true ? (
             <div
               className={`absolute left-[70%] top-0 flex w-[90px] animate-fade items-center justify-center rounded-full bg-primary-blue text-[11px] font-medium  ${
-                state.language === 'en' ? 'w-[45px] duration-500' : ''
+                lang === 'en' ? 'w-[45px] duration-500' : ''
               }`}
             >
-              {state.language === 'mn' ? 'Газрын зураг' : 'Map'}
+              {/* {state.language === 'mn' ? 'Газрын зураг' : 'Map'} */}
+              {lang === 'en' ? 'Map' : 'Газрын зураг'}
             </div>
           ) : null}
         </div>
@@ -92,18 +90,25 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
         }`}
       >
         {/* lang */}
-        <div
-          className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue"
-          onClick={() => {
-            handleDay();
-            // console.log(state.language);
+        <Link
+          scroll={false}
+          href={{
+            pathname: `${pathname}`,
+            query: lang === 'en' ? { lang: 'mn' } : { lang: 'en' },
           }}
+          className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue"
+          // onClick={() => {
+          //   handleDay();
+          // }}
         >
           <Image
             src={
-              state.language === 'mn'
-                ? '/images/uk-flag.png'
-                : '/images/mongolian-flag.png'
+              lang === 'en'
+                ? '/images/mongolian-flag.png'
+                : '/images/uk-flag.png'
+              // state.language === 'mn'
+              //   ? '/images/uk-flag.png'
+              //   : '/images/mongolian-flag.png'
             }
             alt="/lang"
             width={28}
@@ -113,7 +118,7 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
             sizes="20vw"
             className="h-[30px] w-[30px] cursor-pointer object-cover"
           />
-        </div>
+        </Link>
         {/* map with arrow when closed */}
         {ver === 'search' && map === '' ? (
           <div

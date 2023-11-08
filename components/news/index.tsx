@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useAppState } from '@/contexts/appStateContext';
+import { useSearchParams } from 'next/navigation';
 
 interface iProps {
   data: any[];
@@ -7,8 +7,8 @@ interface iProps {
 }
 
 const News = ({ data, cap }: iProps) => {
-  const { state } = useAppState();
-
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
   if (cap != 0) {
     data = data.slice(0, cap);
   }
@@ -20,7 +20,8 @@ const News = ({ data, cap }: iProps) => {
         // style={{ borderTop: 'dashed 2px rgb(0 0 0 /15%)' }}
       >
         <h3 className="text-[20px] font-bold text-main-text">
-          {state.language === 'mn' ? 'Нийтлэлүүд' : 'Articles'}
+          {/* {state.language === 'mn' ? 'Нийтлэлүүд' : 'Articles'} */}
+          {lang === 'en' ? 'Articles' : 'Нийтлэлүүд'}
         </h3>
         {/* cardContainer */}
         <div
@@ -48,20 +49,18 @@ const News = ({ data, cap }: iProps) => {
               </div>
               {/* bottom section */}
               <div className="flex w-full items-center justify-center px-[8px] text-[14px] text-main-text lg:px-[16px] lg:text-[16px]">
-                {/* <p>{appState.lang === 'mn' ? data.name : data.nameEn}</p> */}
-                {/* <p className=''>{appState.lang === 'mn' ? data.excerpt : ''}</p> */}
                 <p className=" max-w-[50ch] overflow-hidden text-ellipsis whitespace-normal ">
-                  {state.language === 'mn' ? data.title : ''}
+                  {/* {state.language === 'mn' ? data.title : ''} */}
+                  {lang === 'en' ? '' : data.title}
                 </p>
-                {/* white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-                max-width: 15ch; */}
               </div>
             </div>
           ))}
         </div>
         <div className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
           <p className="flex gap-[4px]">
-            {state.language === 'mn' ? 'Цааш үзэх' : 'More'} <span>(100+)</span>
+            {/* {state.language === 'mn' ? 'Цааш үзэх' : 'More'}{' '} */}
+            {lang === 'en' ? 'More' : 'Цааш үзэх'} <span>(100+)</span>
           </p>
         </div>
       </div>

@@ -1,63 +1,50 @@
-// import HotelImages from '@/components/hotelPage/hotelImages';
-// import React from 'react';
-// // interface User {
-// //   id: number;
-// //   name: string;
-// // }
+'use client';
+import HeaderVariants from '@/components/common/headerVariants';
+import HotelImages from '@/components/hotelPage/hotelImages';
+import { useRequest } from 'ahooks';
+import { fetchData } from '@/utils';
+import { fetchDataHotel } from '@/utils';
 
-// const HotelPage = async ({
-//   searchParams,
-// }: {
-//   searchParams: { name: string; type: string };
-// }) => {
-//   // let newDate = new Date();
-//   // let date = newDate.getDate();
-//   // let month = newDate.getMonth() + 1;
-//   // let year = newDate.getFullYear();
-//   // console.log(`${month}/${date}/${year}`);
-//   // const res = await fetch(
-//   //   `https://sandbox.api.myhotel.mn:9443/ihotel/hotel/${
-//   //     searchParams.name
-//   //   }?checkIn=${month}/${date}/${year}&checkOut=${month}/${date + 1}/${year}`,
-//   //   { cache: 'no-store' },
-//   //   // {next: {revalidate: 10}}
-//   // );
-//   // hotel/${searchParams.name}checkin=11/25/2023&checkout=12/25/2023
-//   // const data = await res.json();
+// const res = await fetch(
+//   `https://sandbox.api.myhotel.mn:9443/ihotel/hotel/${searchParams.slug}`,
+//   { cache: 'no-store' },
+//   // {next: {revalidate: 10}}
+// );
 
-//   console.log(searchParams); // Logs "search"
-
-//   return (
-//     <>
-//       {/* <h1>{searchParams.name}</h1> */}
-//       <HotelImages />
-//     </>
-//   );
-// };
-
-// export default HotelPage;
-import React from 'react';
-
-interface User {
-  id: number;
-  name: string;
-}
-
-const HotelPage = async ({
+const HotelPage = ({
   searchParams,
 }: {
-  searchParams: { name: string; type: string };
+  searchParams: { name: string; slug: string };
 }) => {
-  // const res = await fetch(
-  //   'https://jsonplaceholder.typicode.com/users',
-  //   { cache: 'no-store' },
-  //   // {next: {revalidate: 10}}
-  // );
-  // const users: User[] = await res.json();
-  console.log(searchParams);
+  // let newDate = new Date();
+  // let date = newDate.getDate();
+  // let month = newDate.getMonth() + 1;
+  // let year = newDate.getFullYear();
+  // console.log(`${month}/${date}/${year}`);
+  const { data } = useRequest(() => {
+    return fetchDataHotel(searchParams.slug);
+  });
+
+  console.log(data);
+  // const users: any = await res.json();
+  // const { data } = useRequest(() => {
+  //   return fetchData();
+  // });
+  // console.log(searchParams);
   return (
     <>
-      <h1>{searchParams.name}</h1>
+      {/* <HeaderVariants
+        ver={'hotel'}
+        openMenu={() => console.log('')}
+        hotelData={data ? data.hotels : []}
+        placesData={data ? data.places : []}
+        campsData={data ? data.camps : []}
+        destData={data ? data.destCategories : []}
+      />
+      <div className="pt-[62px]">
+        <h1>{searchParams.name}</h1>
+        <HotelImages data={data ? data.hotels.images : []} />
+      </div> */}
     </>
   );
 };

@@ -1,7 +1,6 @@
 'use client';
 import HeroCategory from '@/components/heroCategory';
 import '../app/globals.css';
-
 import CommonLocation from '@/components/commonLocation';
 import News from '@/components/news';
 import Footer from '@/components/common/footer';
@@ -11,15 +10,14 @@ import { useState, useRef, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import HeaderVariants from '@/components/common/headerVariants';
 import { fetchData } from '@/utils';
-// import { AppCtxProvider } from '@/utils/app';
 import SearchSection from '@/components/searchSection';
 import Header from '@/components/common/header';
 import FeaturedSample from '@/components/cardContainer/sample';
 import useWindowSize from '@/hooks/windowSize';
 import BottomSection from '@/components/common/bottomSection';
 import CardsContainer from '@/components/cardContainer';
-// import { useAppCtx } from '@/utils/app';
 import { useAppState } from '@/contexts/appStateContext';
+import { usePathname } from 'next/navigation';
 
 export default function Home() {
   const [headerVer, setHeaderVer] = useState('default');
@@ -27,16 +25,22 @@ export default function Home() {
   const [logIn, setLogIn] = useState('');
   const searchBoxRef = useRef(null);
   const size = useWindowSize();
-  // const { appState, dispatch } = useAppCtx();
+  const { state, dispatch } = useAppState();
+  const pathname = usePathname();
   const { data } = useRequest(() => {
     return fetchData();
   });
-  const { state, dispatch } = useAppState();
 
-  const toggleLanguage = () => {
-    const newLanguage = state.language === 'mn' ? 'en' : 'mn';
-    dispatch({ type: 'SET_LANGUAGE', payload: newLanguage });
-  };
+  useEffect(() => {
+    dispatch({
+      type: 'SET_SEARCHVALUE',
+      payload: '',
+    });
+    dispatch({
+      type: 'TOGGLE_ONLINETOGGLE',
+      payload: false,
+    });
+  }, [pathname === '/']);
 
   useEffect(() => {
     const options = {
@@ -76,8 +80,6 @@ export default function Home() {
     setLogIn(e);
   }
 
-  // console.log(state);
-
   return (
     <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
       {/* fixed components */}
@@ -108,7 +110,6 @@ export default function Home() {
       />
       {/* end of fixed components */}
       <Header
-        ver={headerVer}
         openMenu={openMenu}
         logIn={openLogIn}
         phone={data ? data.phoneNumber : ''}

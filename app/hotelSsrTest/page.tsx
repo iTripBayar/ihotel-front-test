@@ -7,18 +7,19 @@ interface User {
 
 const HotelPageSsrTest = async () => {
   const res = await fetch(
-    'https://jsonplaceholder.typicode.com/users',
+    'https://sandbox.api.myhotel.mn:9443/ihotel/search',
     { cache: 'no-store' },
     // {next: {revalidate: 10}}
   );
-  const users: User[] = await res.json();
+  const users = await res.json();
+  console.log(users);
   return (
     <>
       <h1>Users</h1>
       <ul>
-        {users.map((user) => (
+        {/* {users.map((user) => (
           <li key={user.id}>{user.name}</li>
-        ))}
+        ))} */}
       </ul>
     </>
   );

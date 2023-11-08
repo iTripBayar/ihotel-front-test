@@ -1,14 +1,23 @@
 import React from 'react';
 import { useState } from 'react';
 import { useAppState } from '@/contexts/appStateContext';
+import Link from 'next/link';
+import { InputType } from 'zlib';
+interface Props {
+  getFilterValue: (e: {
+    category: string[];
+    price: { min: number; max: number };
+    additional: string[];
+  }) => void;
+}
 
-const Filter = () => {
+const Filter = ({ getFilterValue }: Props) => {
   // const { appState, dispatch } = useAppCtx();
   const { state, dispatch } = useAppState();
   const [open, setOpen] = useState('category');
-  const [cat, setCat] = useState({ id: 0, desc: '' });
-  const [price, setPrice] = useState({ id: 0, min: 0, max: 0 });
-  const [additional, setAdditional] = useState({ id: 0, desc: '' });
+  const [cat, setCat] = useState<string[]>([]);
+  const [price, setPrice] = useState({ min: 0, max: 0 });
+  const [additional, setAdditional] = useState<string[]>([]);
 
   const sampleCat = [
     { id: 0, desc: 'Зочид буудал' },
@@ -36,6 +45,7 @@ const Filter = () => {
     { id: 18, desc: 'Элсний волейбол' },
     { id: 19, desc: 'Дотоод аялал' },
   ];
+
   const colapseDuration = 700;
   const iconRotateDuration = 700;
 
@@ -49,10 +59,13 @@ const Filter = () => {
       dispatch({ type: 'TOGGLE_FILTER', payload: '' });
     }, 300);
   };
+  let catVal: string[] = [];
+  let priceVal = { min: 0, max: 0 };
+  let addVal: string[] = [];
   if (state.showFilter === 'web')
     return (
       <div
-        className="animate-fade500 flex max-h-[300px] w-[85vw] items-end"
+        className="flex max-h-[300px] w-[85vw] animate-fade500 items-end"
         id="container"
       >
         <div className="flex h-[95%] w-full flex-col items-center gap-[8px] rounded-[20px] border border-black/20 bg-white px-[24px] py-[12px]">
@@ -89,9 +102,14 @@ const Filter = () => {
               <p className="text-[18px] font-medium">
                 {state.language === 'mn' ? 'Үнэ' : 'Price'}
               </p>
-              <div className="grid w-full grid-cols-1 gap-[8px] text-[15px] text-sub-text">
+              <form
+                className="grid w-full grid-cols-1 gap-[8px] text-[15px] text-sub-text"
+                onChange={(e) => {
+                  console.log(e);
+                }}
+              >
                 {samplePrice.map((index) => (
-                  <form
+                  <div
                     key={index.id}
                     className="flex w-full items-center gap-[8px]"
                   >
@@ -99,7 +117,7 @@ const Filter = () => {
                       id={`${index.id}`}
                       type="checkbox"
                       name="groupPriceCheckBox"
-                      value={index.id}
+                      value={`min: ${index.min}, max: ${index.max}`}
                       className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 "
                     />
                     <label
@@ -121,9 +139,9 @@ const Filter = () => {
                           : '$'
                         : null}
                     </label>
-                  </form>
+                  </div>
                 ))}
-              </div>
+              </form>
             </div>
             {/* Additional */}
             <div className="flex h-full w-full flex-col items-center justify-start gap-[12px]">
@@ -166,7 +184,7 @@ const Filter = () => {
   else
     return (
       <div
-        className="animate-fade500 flex w-full flex-col gap-[24px] px-[20px] sm:px-[50px] md:px-[72px]"
+        className="flex w-full animate-fade500 flex-col gap-[24px] px-[20px] sm:px-[50px] md:px-[72px]"
         id="container"
       >
         {/* category */}
@@ -206,7 +224,7 @@ const Filter = () => {
             </div>
           </div>
           {/* inputs */}
-          <div
+          <form
             className={`grid-rows-${
               sampleCat.length / 2
             } grid h-auto w-full grid-cols-2 gap-[20px] text-[15px] font-medium text-sub-text ${
@@ -214,7 +232,7 @@ const Filter = () => {
             }`}
           >
             {sampleCat.map((index) => (
-              <form
+              <div
                 key={index.id}
                 className="flex w-full items-center gap-[8px]"
               >
@@ -222,6 +240,23 @@ const Filter = () => {
                   id={`${index.id}`}
                   type="checkbox"
                   value={index.desc}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setCat((prevCat) => {
+                        // Use a callback to ensure that you are working with the latest state
+                        const updatedCat = [...prevCat, e.target.value];
+                        dispatch({
+                          type: 'SET_FILTERVALUE',
+                          payload: {
+                            category: updatedCat, // Use updatedCat here
+                            price: priceVal,
+                            additional: addVal,
+                          },
+                        });
+                        return updatedCat; // Update the state
+                      });
+                    }
+                  }}
                   className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0"
                 />
                 <label
@@ -231,9 +266,9 @@ const Filter = () => {
                 >
                   {index.desc}
                 </label>
-              </form>
+              </div>
             ))}
-          </div>
+          </form>
         </div>
         {/* price */}
         <div
@@ -286,9 +321,49 @@ const Filter = () => {
               >
                 <input
                   id={`${index.id}`}
-                  type="checkbox"
-                  name="groupPriceCheckBox"
-                  value={index.id}
+                  type="radio"
+                  name={'priceInput'}
+                  value={`min: ${index.min}, max: ${index.max}`}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      console.log(e.target.value.split(','));
+                      const updatedPrice = e.target.value.split(',');
+                      const updatedPrice1 = parseInt(
+                        updatedPrice[0].split(':')[1],
+                      );
+                      const updatedPrice2 = parseInt(
+                        updatedPrice[1].split(':')[1],
+                      );
+                      setPrice(() => {
+                        const finalPrice = {
+                          min: updatedPrice1,
+                          max: updatedPrice2,
+                        };
+                        dispatch({
+                          type: 'SET_FILTERVALUE',
+                          payload: {
+                            category: catVal, // Use updatedCat here
+                            price: finalPrice,
+                            additional: addVal,
+                          },
+                        });
+                        return finalPrice;
+                      });
+
+                      // setPrice(() => {
+                      //   const updatedCat = [e.target.value];
+                      //   dispatch({
+                      //     type: 'SET_FILTERVALUE',
+                      //     payload: {
+                      //       category: updatedCat, // Use updatedCat here
+                      //       price: priceVal,
+                      //       additional: addVal,
+                      //     },
+                      //   });
+                      //   return updatedCat; // Update the state
+                      // });
+                    }
+                  }}
                   className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 "
                 />
                 <label
@@ -381,8 +456,24 @@ const Filter = () => {
           </div>
         </div>
         <p
+          // href={{
+          //   pathname: '/search',
+          //   query: {
+          //     category: catVal,
+          //     price: priceVal,
+          //     additional: addVal,
+          //   }, // the data
+          // }}
           className="flex min-h-[40px] w-auto min-w-[90px] items-center justify-center self-center rounded-full bg-primary-blue px-[12px] pt-[2px] text-[16px] font-medium uppercase tracking-wider text-white"
-          onClick={() => closeFilter()}
+          onClick={() => {
+            closeFilter();
+
+            // console.log(state.filterValue);
+
+            // setTimeout(() => {
+            //   console.log(state.filterValue);
+            // }, 1000);
+          }}
         >
           {state.language === 'mn' ? 'Шүүх' : 'Filter'}
         </p>

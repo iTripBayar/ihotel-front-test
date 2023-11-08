@@ -1,5 +1,4 @@
-import React, { useState, useRef } from 'react';
-import useSwitchSuggestion from '@/hooks/switchSuggestion';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAppState } from '@/contexts/appStateContext';
 
 interface iProps {
@@ -8,6 +7,8 @@ interface iProps {
   campsData: any[];
   destData: any[];
   ver: string;
+  lang: string;
+  // searchBoxValue: (value: string) => void;
 }
 
 const SearchBox = ({
@@ -15,7 +16,8 @@ const SearchBox = ({
   placesData,
   campsData,
   destData,
-  ver,
+  ver, // searchBoxValue,
+  lang,
 }: iProps) => {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(false);
@@ -23,8 +25,44 @@ const SearchBox = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const sample = [];
+  const suggestion = [
+    {
+      id: 'Тэрэлж',
+      mn: 'Тэрэлж',
+      en: 'Terelj',
+      delay: 0,
+    },
+    {
+      id: 'Улаанбаатар',
+      mn: 'Улаанбаатар',
+      en: 'Ulaanbaatar',
+      delay: 3000,
+    },
+    {
+      id: 'Хөвсгөл',
+      mn: 'Хөвсгөл',
+      en: 'Khuvsgul',
+      delay: 6000,
+    },
+  ];
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % suggestion.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [query === '' && ver !== 'search' && ver !== 'headerSearch']);
+
+  useEffect(() => {
+    if (selected == false) {
+      dispatch({
+        type: 'SET_SEARCHVALUE',
+        payload: '',
+      });
+    }
+  }, [selected == true]);
 
   for (let i = 0; i < hotelData.length; i++) {
     sample.push({
@@ -128,13 +166,17 @@ const SearchBox = ({
             name="searchInput"
             id="searchInput"
             placeholder={
-              state.language === 'mn'
-                ? 'Хайх газар оруулах'
-                : 'Search destinations'
+              lang === 'en' ? 'Search destinations' : 'Хайх газар оруулах'
+              // state.language === 'mn'
+              //   ? 'Хайх газар оруулах'
+              //   : 'Search destinations'
             }
             onChange={(event) => {
               setQuery(event.target.value);
               setSelected(false);
+            }}
+            onLoad={(e) => {
+              e.preventDefault();
             }}
             value={query}
             ref={inputRef}
@@ -195,23 +237,40 @@ const SearchBox = ({
             </svg>
             {query === '' ? (
               <p className={`${state.showFilter === '' ? '' : 'hidden'}`}>
-                {state.language === 'mn' ? 'Шүүлтүүр' : 'Filter'}
+                {/* {state.language === 'mn' ? 'Шүүлтүүр' : 'Filter'} */}
+                {lang === 'en' ? 'Filter' : 'Шүүлтүүр'}
               </p>
             ) : null}
           </div>
         ) : (
           ''
         )}
+        {/* suggestion */}
         {query === '' && ver !== 'search' && ver !== 'headerSearch' ? (
+          // <div className="relative">
+          //   {suggestion.map((index, i) => (
+          //     <p
+          //       key={index.id}
+          //       className={`duration-3000 absolute left-0 top-0 transform transition-transform ${
+          //         i === 0 ? 'translate-x-0' : 'translate-x-full'
+          //       }`}
+          //     >
+          //       &ldquo;{state.language === 'mn' ? index.mn : index.en}&rdquo;
+          //     </p>
+          //   ))}
+          // </div>
           <p
             className={`text-[12px] leading-[12px] 2xs:text-[13px] 2xs:leading-[13px] sm:text-[14px] sm:leading-[14px] lg:text-[12px] lg:leading-[12px] xl:text-[14px] xl:leading-[14px] ${
               ver === 'fixed' ? 'hidden' : ''
             }`}
           >
             &ldquo;
-            {state.language === 'mn'
-              ? useSwitchSuggestion(3).mn
-              : useSwitchSuggestion(3).en}
+            {/* {state.language === 'mn'
+              ? suggestion[currentIndex].mn
+              : suggestion[currentIndex].en} */}
+            {lang === 'en'
+              ? suggestion[currentIndex].en
+              : suggestion[currentIndex].mn}
             &rdquo;
           </p>
         ) : null}
@@ -226,6 +285,10 @@ const SearchBox = ({
               onClick={() => {
                 setQuery(data.name);
                 setSelected(true);
+                dispatch({
+                  type: 'SET_SEARCHVALUE',
+                  payload: data.name,
+                });
               }}
               className=" flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
             >

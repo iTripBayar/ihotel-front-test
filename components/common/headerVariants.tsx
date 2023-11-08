@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import SearchSection from '../searchSection';
+import Link from 'next/link';
 
 interface iProps {
   ver: string;
@@ -29,11 +30,9 @@ const HeaderVariants = ({
       }`}
     >
       {/* short logo */}
-      <div
+      <Link
+        href="/"
         className="relative hidden h-[34px] w-[34px] min-w-[34px] cursor-pointer lg:flex xl:hidden"
-        onClick={() => {
-          window.location.reload();
-        }}
       >
         <Image
           src="/favicon-white.png"
@@ -44,24 +43,34 @@ const HeaderVariants = ({
           sizes="20vw"
           className="object-fit max-h-[34px] max-w-[34px]"
         />
-      </div>
+      </Link>
       {/* original logo */}
-      <div
-        className="relative flex h-[34px]  w-[114px] min-w-[114px] cursor-pointer lg:hidden xl:flex"
-        onClick={() => {
-          window.location.reload();
-        }}
+      <Link
+        href="/"
+        className="relative h-[36.5px]  w-[114px] lg:hidden xl:flex"
+        // onClick={() => {
+        //   dispatch({
+        //     type: 'SET_SEARCHVALUE',
+        //     payload: '',
+        //   });
+        //   dispatch({
+        //     type: 'TOGGLE_ONLINETOGGLE',
+        //     payload: false,
+        //   });
+        // }}
       >
         <Image
           src="/images/logo-white.png"
           alt="/logo"
-          fill
+          // fill
+          width={128}
+          height={36.5}
           priority
           quality={100}
           sizes="20vw"
-          className="object-fit max-h-[34px] max-w-[114px]"
+          className="absolute h-auto max-w-[114px] cursor-pointer object-cover"
         />
-      </div>
+      </Link>
       <div className="hidden w-full items-center lg:flex">
         <SearchSection
           hotelData={hotelData}

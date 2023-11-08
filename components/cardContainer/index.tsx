@@ -1,5 +1,7 @@
 import HotelCard from '../common/hotelCard';
 import { useAppState } from '@/contexts/appStateContext';
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 interface iProps {
   cap: number;
@@ -21,7 +23,8 @@ const CardsContainer = ({
   map,
 }: iProps) => {
   const { state } = useAppState();
-
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
   if (cap != 0) {
     data = data.slice(0, cap);
   }
@@ -46,19 +49,19 @@ const CardsContainer = ({
         {title !== '' ? (
           <h3 className="text-[20px] font-bold text-main-text">
             {title === 'cheap'
-              ? state.language === 'mn'
-                ? 'Тохилог & Хямд буудлууд'
-                : 'Comfortable & Cheap hotels'
+              ? lang === 'en'
+                ? 'Comfortable & Cheap hotels'
+                : 'Тохилог & Хямд буудлууд'
               : null}
             {title === 'hotels'
-              ? state.language === 'mn'
-                ? 'Онцлох зочид буудлууд'
-                : 'Featured hotels'
+              ? lang === 'en'
+                ? 'Featured hotels'
+                : 'Онцлох зочид буудлууд'
               : null}
             {title === 'camps'
-              ? state.language === 'mn'
-                ? 'Онцлох амралтын газрууд'
-                : 'Featured camps'
+              ? lang === 'en'
+                ? 'Featured camps'
+                : 'Онцлох амралтын газрууд'
               : null}
           </h3>
         ) : null}
@@ -74,12 +77,23 @@ const CardsContainer = ({
           ))}
         </div>
         {data.length > 0 ? (
-          <div className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
+          <Link
+            href={{
+              pathname: '/search',
+              query: {
+                searchValue: state.searchValue,
+                toggleState: state.onlineToggle,
+                type: title,
+              }, // the data
+            }}
+            className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white"
+          >
             <p className="flex gap-[4px]">
-              {state.language === 'mn' ? 'Цааш үзэх' : 'More'}{' '}
+              {/* {state.language === 'mn' ? 'Цааш үзэх' : 'More'}{' '} */}
+              {lang === 'en' ? 'More' : 'Цааш үзэх'}
               <span>({data.length}+)</span>
             </p>
-          </div>
+          </Link>
         ) : null}
       </div>
     </div>

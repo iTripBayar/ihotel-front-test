@@ -1,15 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAppState } from '@/contexts/appStateContext';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 import { Switch } from '@headlessui/react';
 
 type iProps = {
   ver: string;
+  // onlineToggleState: (value: boolean) => void;
 };
 
-const OnlineToggle = ({ ver }: iProps) => {
-  const { state } = useAppState();
+const OnlineToggle = ({
+  ver, //  onlineToggleState
+}: iProps) => {
+  const { dispatch } = useAppState();
   const [enabled, setEnabled] = useState(false);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -76,15 +83,29 @@ const OnlineToggle = ({ ver }: iProps) => {
             />
           </svg>
           <p>
-            {state.language === 'mn'
+            {/* {state.language === 'mn'
               ? 'Шууд баталгаажих газрууд'
-              : 'Online order confirmation'}
+              : 'Online order confirmation'} */}
+            {lang === 'en'
+              ? 'Online order confirmation'
+              : 'Шууд баталгаажих газрууд'}
           </p>
         </div>
         {/* switch */}
         <Switch
           checked={enabled}
-          onChange={setEnabled}
+          // onChange={setEnabled}
+          onLoad={(e) => {
+            e.preventDefault();
+          }}
+          onChange={(e) => {
+            setEnabled(e), console.log(e);
+            dispatch({
+              type: 'TOGGLE_ONLINETOGGLE',
+              payload: e,
+            });
+            //  onlineToggleState(e);
+          }}
           className={`${
             enabled ? 'bg-main-online' : ' bg-black/[.03]'
           } relative  inline-flex h-[24px] w-[40px] items-center rounded-full border border-black/10 2xs:w-[44px] lg:w-[40px] xl:w-[44px]`}

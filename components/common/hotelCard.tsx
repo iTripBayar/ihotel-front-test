@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useAppState } from '@/contexts/appStateContext';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 type iProps = {
   data: any;
 };
 
 const HotelCard = ({ data }: iProps) => {
-  const { state, dispatch } = useAppState();
+  const { dispatch } = useAppState();
   const [fav, setFav] = useState(false);
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
 
   let stat = '';
   if (data.isOnline == 1 && data.isOffline == 0) {
@@ -27,13 +30,13 @@ const HotelCard = ({ data }: iProps) => {
     dispatch({ type: 'SET_HOTEL', payload: hotel });
     // console.log(state);
   };
-  console.log(data);
+  // console.log(data);
   return (
     <Link
       // href={`/hotel`}
       href={{
         pathname: '/hotel',
-        query: { name: data.name, type: data.hotelType.name }, // the data
+        query: { name: data.name, slug: data.slug }, // the data
       }}
       target="blank"
       className={`flex w-full flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] shadow-[0px_2px_12px_2px_rgb(0,0,0,0.20)] xl:gap-[20px] ${
@@ -41,7 +44,7 @@ const HotelCard = ({ data }: iProps) => {
       }`}
       onClick={() => {
         handleHotelSelect(data.id);
-        console.log(state);
+        // console.log(state);
       }}
     >
       {/* image */}
@@ -67,7 +70,11 @@ const HotelCard = ({ data }: iProps) => {
           />
         </svg>
         <Image
-          src={`https://sandbox.api.myhotel.mn/image?path=${data.image}`}
+          src={
+            data.image !== null && data.image !== ''
+              ? `https://sandbox.api.myhotel.mn/image?path=${data.image}`
+              : '/samples/camp.png'
+          }
           alt="/hotel"
           fill={true}
           //   priority
@@ -75,7 +82,11 @@ const HotelCard = ({ data }: iProps) => {
           loading="lazy"
           sizes="50vw"
           placeholder="blur"
-          blurDataURL={`"_next/image/?url=${data.image}"`}
+          blurDataURL={
+            data.image !== null
+              ? `"_next/image/?url=${data.image}"`
+              : '/samples/camp.png'
+          }
           className="absolute h-auto w-auto select-none object-cover duration-700 hover:scale-110"
           draggable={false}
         />
@@ -93,14 +104,21 @@ const HotelCard = ({ data }: iProps) => {
               data.name.length > 27 ? 'xl:text-[14px]' : ''
             }`}
           >
-            {state.language === 'mn' ? data.name : data.nameEn}
+            {/* {state.language === 'mn' ? data.name : data.nameEn} */}
+            {lang === 'en' ? data.nameEn : data.name}
           </p>
           <p className="text-[12px] leading-[12px] text-sub-text/60 2xs:text-[14px] 2xs:leading-[14px]">
-            {state.language === 'mn'
+            {/* {state.language === 'mn'
               ? data?.district?.name
-              : data?.district?.international}
+              : data?.district?.international} */}
+            {lang === 'en'
+              ? data?.district?.international
+              : data?.district?.name}
             ,&nbsp;
-            {state.language === 'mn'
+            {/* {state.language === 'mn'
+              ? data?.province?.name
+              : data?.province?.international} */}
+            {lang === 'en'
               ? data?.province?.name
               : data?.province?.international}
           </p>
@@ -142,7 +160,38 @@ const HotelCard = ({ data }: iProps) => {
                   : 'bg-main-offline px-[6px] text-[11px] leading-[11px] 2xs:px-[12px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[2px] sm:text-[10px] sm:leading-[10px] md:px-[4px] md:text-[14px] md:leading-[14px]'
               }`}
             >
-              {state.language === 'mn' ? (
+              {lang === 'en' ? (
+                <p>
+                  {stat === 'online'
+                    ? 'Instant confirmation'
+                    : stat === 'pending'
+                    ? 'Confirmation delay: '
+                    : stat === 'offline'
+                    ? 'Booking unavailable'
+                    : ''}
+                  {stat === 'pending' ? (
+                    <span className="text-[14px] font-bold sm:text-[11px] md:text-[14px]">
+                      1-3 hours
+                    </span>
+                  ) : null}
+                </p>
+              ) : (
+                <p>
+                  {stat === 'online'
+                    ? 'Шууд баталгаажна'
+                    : stat === 'pending'
+                    ? 'Баталгаажих хугацаа: '
+                    : stat === 'offline'
+                    ? 'Онлайн захиалга боломжгүй'
+                    : ''}
+                  {stat === 'pending' ? (
+                    <span className="text-[14px] font-bold sm:text-[11px] md:text-[14px]">
+                      1-3 цаг
+                    </span>
+                  ) : null}
+                </p>
+              )}
+              {/* {state.language === 'mn' ? (
                 <p>
                   {stat === 'online'
                     ? 'Шууд баталгаажна'
@@ -172,7 +221,7 @@ const HotelCard = ({ data }: iProps) => {
                     </span>
                   ) : null}
                 </p>
-              )}
+              )} */}
             </div>
           ) : (
             // price if stat === 'data'
@@ -181,9 +230,11 @@ const HotelCard = ({ data }: iProps) => {
                 {data.includedPrice
                   ? data.includedPrice.toLocaleString()
                   : (70000).toLocaleString()}
-                {state.language === 'mn' ? ' ₮' : ' $'}
+                {/* {state.language === 'mn' ? ' ₮' : ' $'} */}
+                {lang === 'en' ? '$' : '₮'}
                 <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
-                  / {state.language === 'mn' ? 'хоног' : 'day'}
+                  / {lang === 'en' ? 'day' : 'хоног'}
+                  {/* {state.language === 'mn' ? 'хоног' : 'day'} */}
                 </span>
               </p>
             </div>
@@ -200,9 +251,12 @@ const HotelCard = ({ data }: iProps) => {
               {data.includedPrice
                 ? data.includedPrice.toLocaleString()
                 : (70000).toLocaleString()}
-              {state.language === 'mn' ? ' ₮' : ' $'}
+              {/* {state.language === 'mn' ? ' ₮' : ' $'} */}
+              {lang === 'en' ? '$' : '₮'}
+
               <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
-                / {state.language === 'mn' ? 'хоног' : 'day'}
+                {/* / {state.language === 'mn' ? 'хоног' : 'day'} */}/{' '}
+                {lang === 'en' ? 'day' : 'хоног'}
               </span>
             </p>
             <div
@@ -212,10 +266,15 @@ const HotelCard = ({ data }: iProps) => {
                   : 'px-[12px] 2xs:px-[16px] sm:px-[10px] md:px-[20px]'
               }`}
             >
-              {state.language === 'mn' ? (
+              {/* {state.language === 'mn' ? (
                 <p>{stat === 'offline' ? 'Харах' : 'Захиалах'}</p>
               ) : (
                 <p>{stat === 'offline' ? 'View' : 'Order'}</p>
+              )} */}
+              {lang === 'en' ? (
+                <p>{stat === 'offline' ? 'View' : 'Order'}</p>
+              ) : (
+                <p>{stat === 'offline' ? 'Харах' : 'Захиалах'}</p>
               )}
               <svg
                 xmlns="http://www.w3.org/2000/svg"

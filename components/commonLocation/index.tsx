@@ -1,17 +1,12 @@
 'use client';
 import Image from 'next/image';
-// import { Swiper, SwiperSlide } from 'swiper/react';
-// import { Navigation } from 'swiper/modules';
-// import 'swiper/css';
-// import 'swiper/css/pagination';
-// import 'swiper/css/navigation';
 import React, { useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import NextBtn from './nextBtn';
 import PrevBtn from './prevBtn';
-import { useAppState } from '@/contexts/appStateContext';
+import { useSearchParams } from 'next/navigation';
 
 interface iProps {
   data: any[];
@@ -19,7 +14,8 @@ interface iProps {
 }
 
 const CommonLocation = ({ data, destinations }: iProps) => {
-  const { state } = useAppState();
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
 
   const sliderRef = React.useRef<Slider>(null);
 
@@ -39,53 +35,20 @@ const CommonLocation = ({ data, destinations }: iProps) => {
   const settings = {
     className: 'center',
     centerMode: true,
-    // lazyLoad: 'progressive',
     infinite: true,
     centerPadding: '5%',
-    // size?.width && size?.width > 1536
-    //   ? '100px'
-    //   : size?.width && size?.width > 1280
-    //   ? '100px'
-    //   : size?.width && size?.width > 1024
-    //   ? '5vw'
-    //   : '24px',
     slidesToShow: 1,
     initialSlide: 0,
     speed: 500,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
-    // responsive: [
-    //   {
-    //     breakpoint: 1024,
-    //     settings: {
-    //       centerPadding: '58px',
-    //     },
-    //   },
-    //   {
-    //     breakpoint: 768,
-    //     settings: {
-    //       centerPadding: '5%',
-    //     },
-    //   },
-    //   {
-    //     breakpoint: 576,
-    //     settings: {
-    //       centerPadding: '5%',
-    //     },
-    //   },
-    //   {
-    //     breakpoint: 320,
-    //     settings: {
-    //       centerPadding: '6%',
-    //     },
-    //   },
-    // ],
     afterChange: (current: number) => setActive({ current }),
   };
   return (
     <div className="flex w-full flex-col gap-[20px]">
       <h3 className="mb-[-10px] self-center text-[16px] font-medium md:text-[18px] lg:text-[22px]">
-        {state.language === 'mn' ? 'Түгээмэл байршлууд' : 'Common destinations'}
+        {/* {state.language === 'mn' ? 'Түгээмэл байршлууд' : 'Common destinations'} */}
+        {lang === 'en' ? 'Common destinations' : 'Түгээмэл байршлууд'}
       </h3>
       <Slider {...settings} ref={sliderRef}>
         {data.map((index) => (
@@ -108,12 +71,12 @@ const CommonLocation = ({ data, destinations }: iProps) => {
             />
             <div className="absolute bottom-0 z-[1] flex h-[50px] w-full flex-col items-center justify-center gap-[2px] bg-black/50 md:h-[75px] md:gap-[4px]">
               <h3 className="text-[16px] font-medium leading-[14px] md:text-[18px] md:leading-[18px]">
-                {/* {appState.lang === 'mn' ? data.title : data.titleEn} */}
-                {state.language === 'mn' ? index.name : ''}
+                {/* {state.language === 'mn' ? index.name : ''} */}
+                {lang === 'en' ? '' : index.name}
               </h3>
               <p className="text-[12px] md:text-[14px]">
-                {/* {appState.lang === 'mn' ? data.desc : data.descEn} */}
-                {state.language === 'mn' ? index.subtitle : ''}
+                {/* {state.language === 'mn' ? index.subtitle : ''} */}
+                {lang === 'en' ? '' : index.subtitle}
               </p>
               {index.author !== null && index.author !== '' ? (
                 <div className="z-100 absolute bottom-[4px] right-[8px] flex items-center justify-center gap-[4px] text-[8px] font-medium text-white sm:right-[24px] sm:text-[12px]">
@@ -136,33 +99,6 @@ const CommonLocation = ({ data, destinations }: iProps) => {
         ))}
       </Slider>
       <div className=" grid w-full gap-[20px] px-[24px] text-white sm:grid-cols-2 sm:px-[38px] md:px-[68px] lg:grid-cols-4 lg:px-[140px] xl:px-[150px] 2xl:px-[200px]">
-        {/* {activeIndex == 0
-          ? destinations.map((data) => (
-              <div
-                key={data.id}
-                className="group relative h-[150px] w-full cursor-pointer overflow-hidden rounded-[10px]  md:h-[200px] md:rounded-[16px] lg:rounded-[16px]"
-              >
-                <Image
-                  // src={data.img}
-                  src={`https://ihotel.mn/${data.image}`}
-                  alt="/commonLocs"
-                  fill={true}
-                  priority
-                  quality={75}
-                  sizes="50vw"
-                  className="object-cover w-full h-auto duration-500 group-hover:scale-110"
-                />
-                <div className="absolute z-10 flex h-full w-full flex-col items-start justify-end gap-[4px] bg-gradient-to-t from-black/60 to-transparent px-[16px] py-[12px] lg:gap-[6px]">
-                  <h3 className="text-[18px] font-medium leading-[18px] md:text-[20px] lg:text-[18px]">
-                    {appState.lang === 'mn' ? data.name : data.nameEn}
-                  </h3>
-                  <p className="text-[14px] leading-[14px] md:text-[16px] lg:w-[80%] lg:text-[14px] lg:leading-[16px]">
-                    {data.description}
-                  </p>
-                </div>
-              </div>
-            ))
-          : null} */}
         {destinations.map((data) => (
           <div
             key={data.id}
@@ -170,7 +106,11 @@ const CommonLocation = ({ data, destinations }: iProps) => {
           >
             <Image
               // src={data.img}
-              src={`https://ihotel.mn/${data.image}`}
+              src={
+                data.image !== null && data.image !== ''
+                  ? `https://ihotel.mn/${data.image}`
+                  : '/samples/camp.png'
+              }
               alt="/commonLocs"
               fill={true}
               priority
@@ -180,7 +120,8 @@ const CommonLocation = ({ data, destinations }: iProps) => {
             />
             <div className="absolute z-10 flex h-full w-full flex-col items-start justify-end gap-[4px] bg-gradient-to-t from-black/60 to-transparent px-[16px] py-[12px] lg:gap-[6px]">
               <h3 className="text-[18px] font-medium leading-[18px] md:text-[20px] lg:text-[18px]">
-                {state.language === 'mn' ? data.name : data.nameEn}
+                {/* {state.language === 'mn' ? data.name : data.nameEn} */}
+                {lang === 'en' ? data.nameEn : data.name}
               </h3>
               <p className="text-[14px] leading-[14px] md:text-[16px] lg:w-[80%] lg:text-[14px] lg:leading-[16px]">
                 {data.description}

@@ -1,11 +1,10 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import useWindowSize from '@/hooks/windowSize';
 import { useRequest } from 'ahooks';
 import { fetchData } from '@/utils';
 import HeaderVariants from '@/components/common/headerVariants';
 import '../../app/globals.css';
-// import '../app/globals.css';
 import LogIn from '@/components/common/logIn';
 import BurgerMenu from '@/components/common/burgermenu';
 import BottomSection from '@/components/common/bottomSection';
@@ -16,24 +15,28 @@ import SearchCards from '@/components/cardContainer/searchCards';
 import MapContainer from '@/components/map/map';
 import Filter from '@/components/filter';
 import { useAppState } from '@/contexts/appStateContext';
+import TestFilter from '@/components/filter/testFilter';
 
-const SearchPage = () => {
-  const [headerVer, setHeaderVer] = useState('search');
-  const { state, dispatch } = useAppState();
+interface filterProps {
+  searchValue: string;
+  onlineToggle: boolean;
+  filters: string[];
+}
+
+const SearchPage = ({
+  searchParams,
+}: {
+  searchParams: { searchValue: string; toggleState: boolean; type: string };
+}) => {
+  const { state } = useAppState();
   const [sideMenu, setSideMenu] = useState(false);
   const [logIn, setLogIn] = useState('');
   const [map, setMap] = useState('');
-
-  const searchBoxRef = useRef(null);
   const size = useWindowSize();
-
-  // console.log(state);
 
   const { data } = useRequest(() => {
     return fetchData();
   });
-
-  // console.log(data);
 
   function openMenu() {
     setSideMenu(true);
@@ -52,6 +55,12 @@ const SearchPage = () => {
     setMap('');
   }
 
+  // useEffect(() => {
+  //   if (size.width && size.width >= 1024) {
+  //     setMap('open');
+  //   } else setMap('');
+  //   return;
+  // }, [size.width]);
   useEffect(() => {
     if (size.width && size.width >= 1024) {
       setMap('open');
@@ -59,9 +68,24 @@ const SearchPage = () => {
     return;
   }, [size.width]);
 
+  // if (screenWidth >= 1024) {
+  //   return setMap('open');
+  // } else setMap('');
+
+  const getFilterValue = (e: {
+    category: string[];
+    price: { min: number; max: number };
+    additional: string[];
+  }) => {
+    console.log(e);
+  };
+
+  console.log(state.filterValue);
+
   return (
     <main
       className={`relative flex h-screen w-full flex-col gap-[20px] overflow-y-auto`}
+      id="container"
     >
       <HeaderVariants
         ver={'search'}
@@ -82,13 +106,12 @@ const SearchPage = () => {
       <BottomSection ver={'search'} map={map} openMap={mapFunction} />
       {state.showFilter === 'web' ? (
         <div className="absolute left-[50%] top-[55px] z-[200] translate-x-[-50%]">
-          <Filter />
+          <Filter getFilterValue={getFilterValue} />
         </div>
       ) : null}
-
-      {size?.width && size?.width < 1024 ? (
+      {/* size?.width && size?.width < 1024 &&  */}
+      {size.width && size.width < 1024 ? (
         <div
-          ref={searchBoxRef}
           className={`lg:hidden ${
             state.showFilter === 'mobile' ? 'flex flex-col gap-[24px]' : ''
           }`}
@@ -101,7 +124,10 @@ const SearchPage = () => {
             destData={data ? data.destCategories : []}
             map={map}
           />
-          {state.showFilter === 'mobile' ? <Filter /> : null}
+          {state.showFilter === 'mobile' ? (
+            <Filter getFilterValue={getFilterValue} />
+          ) : // <TestFilter />
+          null}
         </div>
       ) : null}
       {state.showFilter !== 'mobile' ? (
@@ -117,6 +143,8 @@ const SearchPage = () => {
             <MapContainer
               closeMap={closeMap}
               changeMap={mapFunction}
+              // sizeHeight={size.height ? size.height : 0}
+              // sizeWidth={size.width ? size.width : 0}
               sizeHeight={size.height ? size.height : 0}
               sizeWidth={size.width ? size.width : 0}
               map={map}

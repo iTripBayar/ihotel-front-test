@@ -5,10 +5,16 @@ import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 interface AppState {
   language: string;
   showFilter: string;
+  filterValue: {
+    category: string[];
+    price: { min: number; max: number };
+    additional: string[];
+  };
   showMap: boolean;
-  searchValue: string;
   logInState: string;
   hotel: string;
+  searchValue: string;
+  onlineToggle: boolean;
 }
 
 // Define the type for the context value
@@ -21,10 +27,19 @@ interface AppStateContextValue {
 type Action =
   | { type: 'SET_LANGUAGE'; payload: string }
   | { type: 'TOGGLE_FILTER'; payload: string }
+  | {
+      type: 'SET_FILTERVALUE';
+      payload: {
+        category: string[];
+        price: { min: number; max: number };
+        additional: string[];
+      };
+    }
   | { type: 'TOGGLE_MAP'; payload: boolean }
-  | { type: 'SET_SEARCH_VALUE'; payload: string }
   | { type: 'SET_LOGINSTATE'; payload: string }
-  | { type: 'SET_HOTEL'; payload: string };
+  | { type: 'SET_HOTEL'; payload: string }
+  | { type: 'SET_SEARCHVALUE'; payload: string }
+  | { type: 'TOGGLE_ONLINETOGGLE'; payload: boolean };
 
 // Define the reducer function for handling state changes
 const appStateReducer: React.Reducer<AppState, Action> = (state, action) => {
@@ -33,14 +48,21 @@ const appStateReducer: React.Reducer<AppState, Action> = (state, action) => {
       return { ...state, language: action.payload };
     case 'TOGGLE_FILTER':
       return { ...state, showFilter: action.payload };
+    case 'SET_FILTERVALUE':
+      return {
+        ...state,
+        filterValue: action.payload,
+      };
     case 'TOGGLE_MAP':
       return { ...state, showMap: !state.showMap };
-    case 'SET_SEARCH_VALUE':
-      return { ...state, searchValue: action.payload };
     case 'SET_LOGINSTATE':
       return { ...state, logInState: action.payload };
     case 'SET_HOTEL':
       return { ...state, hotel: action.payload };
+    case 'SET_SEARCHVALUE':
+      return { ...state, searchValue: action.payload };
+    case 'TOGGLE_ONLINETOGGLE':
+      return { ...state, onlineToggle: action.payload };
     default:
       return state;
   }
@@ -58,10 +80,12 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({
   const [state, dispatch] = useReducer(appStateReducer, {
     language: 'mn',
     showFilter: '',
+    filterValue: { category: [], price: { min: 0, max: 0 }, additional: [] },
     showMap: false,
-    searchValue: '',
     logInState: '',
     hotel: '',
+    searchValue: '',
+    onlineToggle: false,
   });
 
   return (

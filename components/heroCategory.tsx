@@ -1,12 +1,13 @@
 import Image from 'next/image';
-import { useAppState } from '@/contexts/appStateContext';
+import { useSearchParams } from 'next/navigation';
 
 interface iProps {
   data: any[];
 }
 
 const HeroCategory = ({ data }: iProps) => {
-  const { state } = useAppState();
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
 
   const categoryData = [
     {
@@ -61,7 +62,8 @@ const HeroCategory = ({ data }: iProps) => {
             />
           </div>
           <p className="lg:text-[16px]] text-center text-[11px] xs:text-[12px] sm:text-[13px] md:text-[14px] xl:text-[18px]">
-            {state.language === 'mn' ? data.name : data.nameEn}
+            {/* {state.language === 'mn' ? data.name : data.nameEn} */}
+            {lang === 'en' ? data.nameEn : data.name}
           </p>
         </div>
       ))}

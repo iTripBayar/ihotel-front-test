@@ -1,41 +1,50 @@
 import Image from 'next/image';
-import { useAppState } from '@/contexts/appStateContext';
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 interface iProps {
-  ver: string;
   openMenu: () => void;
   logIn: (e: string) => void;
   phone: string;
 }
 
-const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
+const Header = ({ openMenu, logIn, phone }: iProps) => {
   // const { appState, dispatch } = useAppCtx();
-  const { state, dispatch } = useAppState();
-
-  const handleDay = () => {
-    const newLanguage = state.language === 'mn' ? 'en' : 'mn';
-    dispatch({ type: 'SET_LANGUAGE', payload: newLanguage });
-    // console.log(state);
-  };
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
 
   return (
     <header
       className={`flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white 2xs:px-[24px] sm:px-[50px] lg:px-[150px] xl:px-[200px]`}
     >
       {/* use ? : to only load one of the images */}
-      <Image
-        src="/images/logo-white.png"
-        alt="/logo"
-        width={128}
-        height={36.5}
-        priority
-        quality={100}
-        sizes="20vw"
-        className="h-auto max-w-[114px] cursor-pointer object-cover"
-        onClick={() => {
-          window.location.reload();
-        }}
-      />
+      <Link
+        href="/"
+        className="relative h-[36.5px] w-[114px]"
+        // onClick={() => {
+        //   dispatch({
+        //     type: 'SET_SEARCHVALUE',
+        //     payload: '',
+        //   });
+        //   dispatch({
+        //     type: 'TOGGLE_ONLINETOGGLE',
+        //     payload: false,
+        //   });
+        // }}
+      >
+        <Image
+          src="/images/logo-white.png"
+          alt="/logo"
+          // fill
+          width={128}
+          height={36.5}
+          priority
+          quality={100}
+          sizes="20vw"
+          className="absolute h-auto max-w-[114px] cursor-pointer object-cover"
+        />
+      </Link>
 
       <div className="flex items-center justify-end">
         <div className="hidden justify-end gap-[20px] text-[14px] font-medium leading-[14px] lg:flex xl:gap-[32px] xl:text-[15px] xl:leading-[15px]">
@@ -47,7 +56,8 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
             }}
           >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
-            {state.language === 'mn' ? 'Нэвтрэх' : 'Log In'}
+            {/* {state.language === 'mn' ? 'Нэвтрэх' : 'Log In'} */}
+            {lang === 'en' ? 'Log In' : 'Нэвтрэх'}
           </div>
           {/* sign in */}
           <div
@@ -57,7 +67,8 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
             }}
           >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
-            {state.language === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'}
+            {/* {state.language === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'} */}
+            {lang === 'en' ? 'Sign Up' : 'Бүртгүүлэх'}
           </div>
           {/* phone number */}
           <a className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]">
@@ -95,22 +106,26 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
                 d="M12 4.5v15m7.5-7.5h-15"
               />
             </svg>
-            {state.language === 'mn' ? 'Буудал нэмэх' : 'Add hotel'}
+            {/* {state.language === 'mn' ? 'Буудал нэмэх' : 'Add hotel'} */}
+            {lang === 'en' ? 'Add hotel' : 'Буудал нэмэх'}
           </a>
           {/* lang btn */}
-          <div
-            className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]"
-            onClick={() => {
-              handleDay();
-              // console.log(state.language);
+          <Link
+            href={{
+              pathname: `${pathname}`,
+              query: lang === 'en' ? { lang: 'mn' } : { lang: 'en' },
             }}
+            className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]"
+            // onClick={() => {
+            //   handleDay();
+            // }}
           >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
             <Image
               src={
-                state.language === 'mn'
-                  ? '/images/uk-flag.png'
-                  : '/images/mongolian-flag.png'
+                lang === 'en'
+                  ? '/images/mongolian-flag.png'
+                  : '/images/uk-flag.png'
               }
               alt="/lang"
               width={22}
@@ -120,8 +135,8 @@ const Header = ({ ver, openMenu, logIn, phone }: iProps) => {
               sizes="20vw"
               className="object-fit max-h-[22px] max-w-[22px] cursor-pointer"
             />
-            {state.language === 'mn' ? 'EN' : 'MN'}
-          </div>
+            {lang === 'en' ? 'MN' : 'EN'}
+          </Link>
         </div>
         <div
           className="relative flex h-[16px] w-[24px] flex-col items-center lg:hidden"
