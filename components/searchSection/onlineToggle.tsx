@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useAppState } from '@/contexts/appStateContext';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 import { Switch } from '@headlessui/react';
+import Link from 'next/link';
 
 type iProps = {
   ver: string;
@@ -12,11 +12,15 @@ type iProps = {
 const OnlineToggle = ({
   ver, //  onlineToggleState
 }: iProps) => {
-  const { dispatch } = useAppState();
   const [enabled, setEnabled] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const toggle = searchParams.get('toggle');
+  const searchValue = searchParams.get('searchValue');
+  const type = searchParams.get('type');
+  const filter = searchParams.get('filter');
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -92,39 +96,68 @@ const OnlineToggle = ({
           </p>
         </div>
         {/* switch */}
-        <Switch
-          checked={enabled}
-          // onChange={setEnabled}
-          onLoad={(e) => {
-            e.preventDefault();
+        <Link
+          href={{
+            pathname: `${pathname}`,
+            query:
+              toggle === 'true'
+                ? {
+                    toggle: false,
+                    searchValue: searchValue,
+                    type: type,
+                    filter: filter,
+                    lang: lang,
+                  }
+                : {
+                    toggle: true,
+                    searchValue: searchValue,
+                    type: type,
+                    filter: filter,
+                    lang: lang,
+                  },
           }}
-          onChange={(e) => {
-            setEnabled(e), console.log(e);
-            dispatch({
-              type: 'TOGGLE_ONLINETOGGLE',
-              payload: e,
-            });
-            //  onlineToggleState(e);
-          }}
-          className={`${
-            enabled ? 'bg-main-online' : ' bg-black/[.03]'
-          } relative  inline-flex h-[24px] w-[40px] items-center rounded-full border border-black/10 2xs:w-[44px] lg:w-[40px] xl:w-[44px]`}
+          scroll={false}
+          id="toggleLink"
         >
-          <div
+          <Switch
+            id="onlineToggle"
+            // checked={enabled}
+            checked={toggle === 'true'}
+            // onChange={setEnabled}
+            // onLoad={(e) => {
+            //   e.preventDefault();
+            // }}
+            onChange={(e) => {
+              setEnabled(e);
+              // console.log(e);
+              document.getElementById('toggleLink')?.click();
+
+              // dispatch({
+              //   type: 'TOGGLE_ONLINETOGGLE',
+              //   payload: e,
+              // });
+              //  onlineToggleState(e);
+            }}
             className={`${
-              enabled
-                ? 'absolute left-[4px] h-[8px] w-[8px] rounded-full border border-white bg-white/[0.1] shadow-[inset_0_-2px_2px_rgba(0,0,0,0.15)] 2xs:left-[6px] 2xs:h-[10px] 2xs:w-[10px] lg:left-[4px] xl:left-[6px]'
-                : 'absolute right-[4px] h-[4px] w-[10px] rounded-full bg-white shadow-[inset_0_-2px_2px_rgba(0,0,0,0.15)] 2xs:right-[6px] lg:right-[4px] xl:right-[6px]'
-            }`}
-          ></div>
-          <span
-            className={`${
-              enabled
-                ? 'translate-x-[18px] rotate-[-90deg] 2xs:translate-x-[22px] lg:translate-x-[18px] xl:translate-x-[22px]'
-                : 'translate-x-[2px] rotate-90 2xs:translate-x-1 lg:translate-x-[3px] xl:translate-x-1'
-            } relative inline-block h-[18px] w-[18px] transform rounded-full bg-white shadow-[inset_0_-2px_6px_rgba(0,0,0,0.25)] transition`}
-          />
-        </Switch>
+              toggle === 'true' ? 'bg-main-online' : ' bg-black/[.03]'
+            } relative  inline-flex h-[24px] w-[40px] items-center rounded-full border border-black/10 2xs:w-[44px] lg:w-[40px] xl:w-[44px]`}
+          >
+            <div
+              className={`${
+                toggle === 'true'
+                  ? 'absolute left-[4px] h-[8px] w-[8px] rounded-full border border-white bg-white/[0.1] shadow-[inset_0_-2px_2px_rgba(0,0,0,0.15)] 2xs:left-[6px] 2xs:h-[10px] 2xs:w-[10px] lg:left-[4px] xl:left-[6px]'
+                  : 'absolute right-[4px] h-[4px] w-[10px] rounded-full bg-white shadow-[inset_0_-2px_2px_rgba(0,0,0,0.15)] 2xs:right-[6px] lg:right-[4px] xl:right-[6px]'
+              }`}
+            ></div>
+            <span
+              className={`${
+                toggle === 'true'
+                  ? 'translate-x-[18px] rotate-[-90deg] 2xs:translate-x-[22px] lg:translate-x-[18px] xl:translate-x-[22px]'
+                  : 'translate-x-[2px] rotate-90 2xs:translate-x-1 lg:translate-x-[3px] xl:translate-x-1'
+              } relative inline-block h-[18px] w-[18px] transform rounded-full bg-white shadow-[inset_0_-2px_6px_rgba(0,0,0,0.25)] transition`}
+            />
+          </Switch>
+        </Link>
       </div>
     </div>
   );

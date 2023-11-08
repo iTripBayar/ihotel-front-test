@@ -1,7 +1,6 @@
-// import { useAppCtx } from '@/utils/app';
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import { useAppState } from '@/contexts/appStateContext';
+import { useSearchParams } from 'next/navigation';
 
 interface iProps {
   ver: string;
@@ -9,8 +8,6 @@ interface iProps {
 }
 
 const LogIn = ({ ver, changeVer }: iProps) => {
-  // const { appState } = useAppCtx();
-  const { state } = useAppState();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordConfirmRef = useRef<HTMLInputElement>(null);
@@ -18,6 +15,8 @@ const LogIn = ({ ver, changeVer }: iProps) => {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
 
   const handleClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
@@ -35,15 +34,11 @@ const LogIn = ({ ver, changeVer }: iProps) => {
         {/* title */}
         <div className="flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px] text-main-text">
           <p className="font-medium">
-            {ver === 'logIn'
-              ? state.language === 'mn'
-                ? 'Нэвтрэх'
-                : 'Log In'
-              : null}
+            {ver === 'logIn' ? (lang === 'en' ? 'Log In' : 'Нэвтрэх') : null}
             {ver === 'signUp'
-              ? state.language === 'mn'
-                ? 'Бүртгүүлэх'
-                : 'Sign Up'
+              ? lang === 'en'
+                ? 'Sign Up'
+                : 'Бүртгүүлэх'
               : null}
           </p>
           <svg
@@ -69,7 +64,7 @@ const LogIn = ({ ver, changeVer }: iProps) => {
             <div className="relative">
               <input
                 type="email"
-                placeholder={state.language === 'mn' ? 'И-мэйл хаяг' : 'E-mail'}
+                placeholder={lang === 'en' ? 'E-mail' : 'И-мэйл хая'}
                 className="h-[34px] w-full rounded-[4px] border-black/[.15]"
                 required
                 pattern="*@.*"
@@ -77,9 +72,9 @@ const LogIn = ({ ver, changeVer }: iProps) => {
               />
               {ver != '' && emailRef?.current?.validity.patternMismatch ? (
                 <p className=" absolute left-2 text-[11px] text-red-600 2xs:text-[12px]">
-                  {state.language === 'mn'
-                    ? '* И-мэйл хаяг буруу байна *'
-                    : '* Invalid email address *'}
+                  {lang === 'en'
+                    ? '* Invalid email address *'
+                    : '* И-мэйл хаяг буруу байна *'}
                 </p>
               ) : null}
             </div>
@@ -87,7 +82,7 @@ const LogIn = ({ ver, changeVer }: iProps) => {
             <div className="relative">
               <input
                 type={show === false ? 'password' : 'text'}
-                placeholder={state.language === 'mn' ? 'Нууц үг' : 'Password'}
+                placeholder={lang === 'en' ? 'Password' : 'Нууц үг'}
                 className="h-[34px] w-full rounded-[4px] border-black/[.15]"
                 onChange={(event) => setPassword(event.target.value)}
                 ref={passwordRef}
@@ -106,9 +101,10 @@ const LogIn = ({ ver, changeVer }: iProps) => {
                     !passwordRef?.current?.validity.patternMismatch ?? 'hidden'
                   }`}
                 >
-                  {state.language === 'mn'
+                  {/* {state.language === 'mn'
                     ? '* Чанаргүй нууц үг *'
-                    : '* Week password *'}
+                    : '* Week password *'} */}
+                  {lang === 'en' ? '* Week password *' : '* Чанаргүй нууц үг *'}
                 </p>
               ) : (
                 <></>
@@ -139,9 +135,12 @@ const LogIn = ({ ver, changeVer }: iProps) => {
                 <input
                   type={showConfirm === false ? 'password' : 'text'}
                   placeholder={
-                    state.language === 'mn'
-                      ? 'Нууц үг дахин оруулна уу'
-                      : 'Confirm password'
+                    lang === 'end'
+                      ? 'Confirm password'
+                      : 'Нууц үг дахин оруулна уу'
+                    // state.language === 'mn'
+                    //   ? 'Нууц үг дахин оруулна уу'
+                    //   : 'Confirm password'
                   }
                   className="h-[34px] w-full rounded-[4px] border-black/[.15]"
                   ref={passwordConfirmRef}
@@ -155,9 +154,12 @@ const LogIn = ({ ver, changeVer }: iProps) => {
                 passwordRef?.current?.value !==
                   passwordConfirmRef.current?.value ? (
                   <p className=" absolute left-2 text-[11px] text-red-600 2xs:text-[12px]">
-                    {state.language === 'mn'
+                    {/* {state.language === 'mn'
                       ? '* Нууц үг буруу *'
-                      : '* Incorrect password *'}
+                      : '* Incorrect password *'} */}
+                    {lang === 'en'
+                      ? '* Incorrect password *'
+                      : '* Нууц үг буруу *'}
                   </p>
                 ) : null}
                 {passwordConfirm !== '' ? (
@@ -183,17 +185,21 @@ const LogIn = ({ ver, changeVer }: iProps) => {
             ) : null}
             {/* forgot password */}
             <p className="text-[12px] font-bold text-primary-blue 2xs:text-[14px]">
-              {state.language === 'mn'
+              {/* {state.language === 'mn'
                 ? 'Нууц үгээ мартсан?'
-                : 'Forgot password?'}
+                : 'Forgot password?'} */}
+              {lang === 'en' ? 'Forgot password?' : 'Нууц үгээ мартсан?'}
             </p>
             {/* warning message */}
             {ver === 'signUp' &&
             passwordRef?.current?.validity.patternMismatch ? (
               <p className="mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]">
-                {state.language === 'mn'
+                {/* {state.language === 'mn'
                   ? '* Нууц үг дор хаяж 1 том үсэг, 1 тоо, 1 тусгай тэмдэгт агуулсан хамгийн багадаа 8 тэмдэгт байх хэрэгтэй *'
-                  : '* Password must have: an uppercase letter, a number, a symbol, and be at least 8 characters long *'}
+                  : '* Password must have: an uppercase letter, a number, a symbol, and be at least 8 characters long *'} */}
+                {lang === 'en'
+                  ? '* Password must haveL an uppercase letter, a number, a symbol, and be at least 8 characters long *'
+                  : '* Нууц үг дор хаяж 1 том үсэг, 1 тоо, 1 тусгай тэмдэгт агуулсан хамгийн багадаа 8 тэмдэгт байх хэрэгтэй *'}
               </p>
             ) : null}
           </div>
@@ -202,7 +208,8 @@ const LogIn = ({ ver, changeVer }: iProps) => {
         <div className="flex w-full items-center justify-between">
           <div className="h-[1px] w-[33%] bg-black/[.15]"></div>
           <p className="text-[16px] font-medium uppercase text-black/[.25]">
-            {state.language === 'mn' ? 'Эсвэл' : 'Or'}
+            {/* {state.language === 'mn' ? 'Эсвэл' : 'Or'} */}
+            {lang === 'en' ? 'Or' : 'Эсвэл'}
           </p>
           <div className="h-[1px] w-[33%] bg-black/[.15]"></div>
         </div>
@@ -242,18 +249,14 @@ const LogIn = ({ ver, changeVer }: iProps) => {
           <div></div>
           <div
             className={`flex h-[40px] w-auto items-center justify-center justify-self-center rounded-[8px] bg-primary-blue px-[20px] uppercase text-white ${
-              state.language === 'mn' ? '' : 'min-w-[100px] px-[14px]'
+              lang === 'en' ? 'min-w-[100px] px-[14px]' : ''
             }`}
           >
-            {ver === 'logIn'
-              ? state.language === 'mn'
-                ? 'Нэвтрэх'
-                : 'Log In'
-              : null}
+            {ver === 'logIn' ? (lang === 'en' ? 'Log In' : 'Нэвтрэх') : null}
             {ver === 'signUp'
-              ? state.language === 'mn'
-                ? 'Бүртгүүлэх'
-                : 'Sign Up'
+              ? lang === 'en'
+                ? 'Sign Up'
+                : 'Бүртгүүлэх'
               : null}
           </div>
           <p
@@ -263,15 +266,11 @@ const LogIn = ({ ver, changeVer }: iProps) => {
             }}
           >
             {ver === 'logIn'
-              ? state.language === 'mn'
-                ? 'Бүртгүүлэх'
-                : 'Sign Up'
+              ? lang === 'en'
+                ? 'Sign Up'
+                : 'Бүртгүүлэх'
               : null}
-            {ver === 'signUp'
-              ? state.language === 'mn'
-                ? 'Нэвтрэх'
-                : 'Log In'
-              : null}
+            {ver === 'signUp' ? (lang === 'en' ? 'Log In' : 'Нэвтрэх') : null}
           </p>
         </div>
       </div>

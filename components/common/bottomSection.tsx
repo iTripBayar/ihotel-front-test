@@ -1,4 +1,3 @@
-'use client';
 import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -14,6 +13,10 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const filter = searchParams.get('filter');
+  const toggle = searchParams.get('toggle');
+  const type = searchParams.get('type');
+  const searchValue = searchParams.get('searchValue');
   const btnRef = useRef<HTMLDivElement>(null);
   const handleScrollToTop = () => {
     btnRef.current?.classList.add('animate-bounce');
@@ -94,7 +97,17 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
           scroll={false}
           href={{
             pathname: `${pathname}`,
-            query: lang === 'en' ? { lang: 'mn' } : { lang: 'en' },
+            // query: lang === 'en' ? { lang: 'mn' } : { lang: 'en' },
+            query:
+              toggle == null
+                ? { lang: lang === 'en' ? 'mn' : 'en' }
+                : {
+                    lang: lang === 'en' ? 'mn' : 'en',
+                    searchValue: searchValue,
+                    toggle: toggle,
+                    filter: filter,
+                    type: type,
+                  },
           }}
           className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue"
           // onClick={() => {

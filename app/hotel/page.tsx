@@ -25,7 +25,7 @@ const HotelPage = ({
     return fetchDataHotel(searchParams.slug);
   });
 
-  console.log(data);
+  // console.log(data);
   // const users: any = await res.json();
   // const { data } = useRequest(() => {
   //   return fetchData();

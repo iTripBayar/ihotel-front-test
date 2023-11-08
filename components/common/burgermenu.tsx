@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
-// import { Lang, useAppCtx } from '@/utils/app';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -18,8 +17,6 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-
-  // const { dispatch, appState } = useAppCtx();
 
   const handleClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement; // Cast event.target to HTMLElement

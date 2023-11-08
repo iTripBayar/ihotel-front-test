@@ -9,30 +9,15 @@ interface iProps {
 }
 
 const Header = ({ openMenu, logIn, phone }: iProps) => {
-  // const { appState, dispatch } = useAppCtx();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-
   return (
     <header
       className={`flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white 2xs:px-[24px] sm:px-[50px] lg:px-[150px] xl:px-[200px]`}
     >
       {/* use ? : to only load one of the images */}
-      <Link
-        href="/"
-        className="relative h-[36.5px] w-[114px]"
-        // onClick={() => {
-        //   dispatch({
-        //     type: 'SET_SEARCHVALUE',
-        //     payload: '',
-        //   });
-        //   dispatch({
-        //     type: 'TOGGLE_ONLINETOGGLE',
-        //     payload: false,
-        //   });
-        // }}
-      >
+      <Link href="/" className="relative h-[36.5px] w-[114px]">
         <Image
           src="/images/logo-white.png"
           alt="/logo"

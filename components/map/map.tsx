@@ -1,36 +1,37 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
-// import { Map } from 'react-map-gl';
+import React, { useState, useRef } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, {
   GeolocateControl,
-  Map,
   Marker,
-  Source,
-  Layer,
   NavigationControl,
   FullscreenControl,
 } from 'react-map-gl';
-import { useAppState } from '@/contexts/appStateContext';
 import Image from 'next/image';
 import useSupercluster from 'use-supercluster';
+import { usePathname, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import HotelCard from '../common/hotelCard';
 
 interface iProps {
-  closeMap: () => void;
   changeMap: (e: string) => void;
-  sizeHeight: number;
-  sizeWidth: number;
   map: string;
+  hotelData: any[];
+  campsData: any[];
 }
 
-const MapContainer = ({
-  closeMap,
-  changeMap,
-  sizeHeight,
-  map,
-  sizeWidth,
-}: iProps) => {
+const MapContainer = ({ changeMap, map, hotelData, campsData }: iProps) => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
   const divRef = useRef<HTMLDivElement>(null);
+  const [selectedHotel, setSelectedHotel] = useState<{
+    lat: string;
+    lng: string;
+  }>({
+    lat: '',
+    lng: '',
+  });
 
   const defaultMarkers = [
     {
@@ -98,46 +99,57 @@ const MapContainer = ({
     },
   ];
 
-  //   [
-  //   {
-  //     "type": "Feature",
-  //     "properties": {
-  //       "cluster": false,
-  //       "crimeId": 78212911,
-  //       "category": "anti-social-behaviour"
-  //     },
-  //     "geometry": { "type": "Point", "coordinates": [-1.135171, 52.6376] }
-  //   }
-  // ]
+  const cardData = [...hotelData, ...campsData].filter(
+    (index) =>
+      index.location.lat === selectedHotel.lat &&
+      index.location.lng === selectedHotel.lng,
+  );
 
-  // const { appState, dispatch } = useAppCtx();
-  const { state, dispatch } = useAppState();
   const [viewPort, setViewPort] = useState({
     lng: 106.91744615540313,
     lat: 47.91768064540636,
     zoom: 12,
   });
   const mapRef = useRef<any>();
+  const markerRef = useRef<any>();
+  const samplePrice = 70000;
 
-  // const points = defaultMarkers.map((point) => ({
-  //   type: 'Feature',
-  //   properties: {
-  //     cluster: false,
-  //     crimeId: point.key,
-  //     name: point.name,
-  //     price: point.price,
-  //   },
-  //   geometry: { type: 'Point', coordinates: [point.lng, point.lat] },
-  // }));
-
-  const points = defaultMarkers.map((data) => ({
-    type: 'Feature',
-    properties: { cluster: false, pointId: data.key, price: data.price },
-    geometry: {
-      type: 'Point',
-      coordinates: [data.lng, data.lat],
-    },
-  }));
+  const points =
+    hotelData.length === 0 && campsData.length === 0
+      ? defaultMarkers.map((data) => ({
+          type: 'Sample',
+          properties: { cluster: false, pointId: data.key, price: data.price },
+          geometry: {
+            type: 'samplePoint',
+            coordinates: [data.lng, data.lat],
+          },
+        }))
+      : [
+          ...hotelData.map((data) => ({
+            type: 'Feature',
+            properties: {
+              cluster: false,
+              pointId: data.id,
+              price: data.includedPrice,
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [data.location.lng, data.location.lat],
+            },
+          })),
+          ...campsData.map((data) => ({
+            type: 'Feature',
+            properties: {
+              cluster: false,
+              pointId: data.id,
+              price: data.includedPrice,
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [data.location.lng, data.location.lat],
+            },
+          })),
+        ];
   const bounds = mapRef.current
     ? mapRef.current.getMap().getBounds().toArray().flat()
     : null;
@@ -148,14 +160,6 @@ const MapContainer = ({
     zoom: viewPort.zoom,
     options: { radius: 75, maxZoom: 20 },
   });
-
-  const handleDay = () => {
-    const newLanguage = state.language === 'mn' ? 'en' : 'mn';
-    dispatch({ type: 'SET_LANGUAGE', payload: newLanguage });
-  };
-
-  // console.log(clusters);
-  // console.log(supercluster);
 
   return (
     <div
@@ -206,6 +210,19 @@ const MapContainer = ({
                 key={`cluster-${cluster.id}`}
                 latitude={latitude}
                 longitude={longitude}
+                ref={markerRef}
+                onClick={() =>
+                  mapRef?.current?.flyTo({
+                    center: [
+                      cluster.geometry.coordinates[0],
+                      cluster.geometry.coordinates[1],
+                    ],
+                    zoom: 13,
+                    duration: 1500,
+                    speed: 0.5,
+                    curve: 2,
+                  })
+                }
               >
                 <div
                   className="relative flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-primary-blue text-[14px] font-medium text-white ring-2 ring-white "
@@ -244,15 +261,79 @@ const MapContainer = ({
               latitude={latitude}
               longitude={longitude}
             >
-              <button className="min-h-[30px] items-center justify-center rounded-full bg-primary-blue px-[8px] text-[14px] font-medium tracking-wider text-white ring-2 ring-white">
-                {`${cluster.properties.price.toLocaleString()}${
-                  state.language === 'mn' ? '₮' : '$'
+              <button
+                className="min-h-[30px] items-center justify-center rounded-full bg-primary-blue px-[8px] text-[14px] font-medium tracking-wider text-white ring-2 ring-white"
+                onClick={() => {
+                  setSelectedHotel(() => {
+                    const updatedState = {
+                      lat: cluster.geometry.coordinates[1],
+                      lng: cluster.geometry.coordinates[0],
+                    };
+                    return updatedState;
+                  });
+                  mapRef?.current?.flyTo({
+                    center: [
+                      cluster.geometry.coordinates[0],
+                      cluster.geometry.coordinates[1],
+                    ],
+                    zoom: 13,
+                    duration: 1500,
+                    speed: 0.5,
+                    curve: 2,
+                  });
+                }}
+              >
+                {`${
+                  cluster.properties.price >= 0 &&
+                  cluster.properties.price !== null
+                    ? cluster.properties.price
+                    : samplePrice.toLocaleString()
+                }${
+                  // state.language === 'mn' ? '₮' : '$'
+                  lang === 'en' ? '$' : '₮'
                 }`}
                 {}
               </button>
             </Marker>
           );
         })}
+        {cardData.length > 0 ? (
+          <Marker
+            key={cardData[0].id}
+            latitude={cardData[0].location.lat}
+            longitude={cardData[0].location.lng}
+            style={{
+              zIndex: 998,
+              position: 'absolute',
+              width: 'auto',
+              marginLeft: '-20px',
+            }}
+          >
+            <div
+              className="absolute left-0 top-0 z-[999] flex h-[30px] w-[30px] translate-x-[-50%] translate-y-[-50%] items-center justify-center rounded-full bg-primary-blue text-white ring-2 ring-white"
+              onClick={() => {
+                setSelectedHotel({ lng: '', lat: '' });
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </div>
+
+            <HotelCard data={cardData[0]} fromMap={true} />
+          </Marker>
+        ) : null}
         <FullscreenControl />
         <NavigationControl showCompass={false} />
         <GeolocateControl />
@@ -263,7 +344,8 @@ const MapContainer = ({
           className="flex h-[40px] max-w-[220px] cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue px-[16px] font-medium text-white"
           onClick={() => changeMap('')}
         >
-          {state.language === 'mn' ? 'Газрын зураг хаах' : 'Close map'}
+          {/* {state.language === 'mn' ? 'Газрын зураг хаах' : 'Close map'} */}
+          {lang === 'en' ? 'Close map' : 'Газрын зураг хаах'}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -280,17 +362,24 @@ const MapContainer = ({
           </svg>
         </div>
         {map === 'open' ? (
-          <div
-            className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue "
-            onClick={() => {
-              handleDay();
+          <Link
+            href={{
+              pathname: `${pathname}`,
+              query: lang === 'en' ? { lang: 'mn' } : { lang: 'en' },
             }}
+            className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue "
+            // onClick={() => {
+            //   handleDay();
+            // }}
           >
             <Image
               src={
-                state.language === 'mn'
-                  ? '/images/uk-flag.png'
-                  : '/images/mongolian-flag.png'
+                lang === 'en'
+                  ? '/images/mongolian-flag.png'
+                  : '/images/uk-flag.png'
+                // state.language === 'mn'
+                //   ? '/images/uk-flag.png'
+                //   : '/images/mongolian-flag.png'
               }
               alt="/lang"
               width={28}
@@ -300,7 +389,7 @@ const MapContainer = ({
               sizes="20vw"
               className="h-[30px] w-[30px] cursor-pointer object-cover"
             />
-          </div>
+          </Link>
         ) : null}
       </div>
     </div>

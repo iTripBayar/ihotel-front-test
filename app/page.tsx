@@ -16,8 +16,6 @@ import FeaturedSample from '@/components/cardContainer/sample';
 import useWindowSize from '@/hooks/windowSize';
 import BottomSection from '@/components/common/bottomSection';
 import CardsContainer from '@/components/cardContainer';
-import { useAppState } from '@/contexts/appStateContext';
-import { usePathname } from 'next/navigation';
 
 export default function Home() {
   const [headerVer, setHeaderVer] = useState('default');
@@ -25,22 +23,9 @@ export default function Home() {
   const [logIn, setLogIn] = useState('');
   const searchBoxRef = useRef(null);
   const size = useWindowSize();
-  const { state, dispatch } = useAppState();
-  const pathname = usePathname();
   const { data } = useRequest(() => {
     return fetchData();
   });
-
-  useEffect(() => {
-    dispatch({
-      type: 'SET_SEARCHVALUE',
-      payload: '',
-    });
-    dispatch({
-      type: 'TOGGLE_ONLINETOGGLE',
-      payload: false,
-    });
-  }, [pathname === '/']);
 
   useEffect(() => {
     const options = {
@@ -123,7 +108,6 @@ export default function Home() {
             campsData={data ? data.camps : []}
             destData={data ? data.destCategories : []}
             ver={'normal'}
-            map=""
           />
         ) : null}
       </div>

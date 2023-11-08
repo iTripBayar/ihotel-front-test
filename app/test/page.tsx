@@ -7,7 +7,7 @@ const page = () => {
   const { data } = useRequest(() => {
     return fetchDataSearch();
   });
-  console.log(data);
+  // console.log(data);
   return <div>test</div>;
 };
 

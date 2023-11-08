@@ -1,7 +1,6 @@
 import HotelCard from '../common/hotelCard';
-import { useAppState } from '@/contexts/appStateContext';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 interface iProps {
   cap: number;
@@ -22,9 +21,11 @@ const CardsContainer = ({
   campsData,
   map,
 }: iProps) => {
-  const { state } = useAppState();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const toggle = searchParams.get('toggle');
+  const searchValue = searchParams.get('searchValue');
+
   if (cap != 0) {
     data = data.slice(0, cap);
   }
@@ -73,7 +74,7 @@ const CardsContainer = ({
           }`}
         >
           {data.map((data, i: number) => (
-            <HotelCard data={data} key={i} />
+            <HotelCard data={data} key={i} fromMap={false} />
           ))}
         </div>
         {data.length > 0 ? (
@@ -81,8 +82,9 @@ const CardsContainer = ({
             href={{
               pathname: '/search',
               query: {
-                searchValue: state.searchValue,
-                toggleState: state.onlineToggle,
+                lang: lang,
+                searchValue: searchValue,
+                toggle: toggle,
                 type: title,
               }, // the data
             }}

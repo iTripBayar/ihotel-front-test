@@ -1,6 +1,6 @@
 import HotelCard from '../common/hotelCard';
 import { useRef } from 'react';
-import { useAppState } from '@/contexts/appStateContext';
+import { useSearchParams } from 'next/navigation';
 
 interface iProps {
   hotelData: any[];
@@ -9,7 +9,17 @@ interface iProps {
 }
 
 const SearchCards = ({ hotelData, campsData, map }: iProps) => {
-  const { state } = useAppState();
+  // searchParams
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
+  const searchValue = searchParams.get('searchValue');
+  const toggle = searchParams.get('toggle');
+  const type = searchParams.get('type');
+  const filter = searchParams.get('filter');
+  const catVal = searchParams.get('catVal');
+  const minVal = searchParams.get('minVal');
+  const maxVal = searchParams.get('maxVal');
+  const additionalVal = searchParams.getAll('additionalVal');
 
   let data = [];
   data = [...hotelData, ...campsData];
@@ -19,8 +29,6 @@ const SearchCards = ({ hotelData, campsData, map }: iProps) => {
   divRef.current?.addEventListener('scroll', (e) => {
     e.preventDefault();
   });
-
-  // console.log('test');
 
   return (
     <div
@@ -36,14 +44,17 @@ const SearchCards = ({ hotelData, campsData, map }: iProps) => {
           map === '' ? 'lg:grid-cols-3 2xl:grid-cols-4' : '2xl:grid-cols-3'
         }`}
       >
-        {data.map((data, i: number) => (
-          <HotelCard data={data} key={i} />
-        ))}
+        {data.length > 0
+          ? data.map((data, i: number) => (
+              <HotelCard data={data} key={i} fromMap={false} />
+            ))
+          : null}
       </div>
       {data.length > 0 ? (
         <div className="flex max-w-[171px] cursor-pointer items-center  justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
           <p className="flex gap-[4px]">
-            {state.language === 'mn' ? 'Цааш үзэх' : 'More'}
+            {/* {state.language === 'mn' ? 'Цааш үзэх' : 'More'} */}
+            {lang === 'en' ? 'More' : 'Цааш үзэх'}
             <span>({data.length}+)</span>
           </p>
         </div>

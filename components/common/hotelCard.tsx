@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { useAppState } from '@/contexts/appStateContext';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 type iProps = {
   data: any;
+  fromMap: boolean;
 };
 
-const HotelCard = ({ data }: iProps) => {
-  const { dispatch } = useAppState();
+const HotelCard = ({ data, fromMap }: iProps) => {
   const [fav, setFav] = useState(false);
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
@@ -25,27 +24,21 @@ const HotelCard = ({ data }: iProps) => {
     stat = 'data';
   }
 
-  const handleHotelSelect = (hotel: string) => {
-    // const newLanguage = state.language === 'mn' ? 'en' : 'mn';
-    dispatch({ type: 'SET_HOTEL', payload: hotel });
-    // console.log(state);
-  };
-  // console.log(data);
+  // const handleHotelSelect = (hotel: string) => {
+  //   // const newLanguage = state.language === 'mn' ? 'en' : 'mn';
+  //   dispatch({ type: 'SET_HOTEL', payload: hotel });
+  //   // console.log(state);
+  // };
   return (
     <Link
-      // href={`/hotel`}
       href={{
         pathname: '/hotel',
         query: { name: data.name, slug: data.slug }, // the data
       }}
       target="blank"
-      className={`flex w-full flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] shadow-[0px_2px_12px_2px_rgb(0,0,0,0.20)] xl:gap-[20px] ${
+      className={`flex  flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] bg-white shadow-[0px_2px_12px_2px_rgb(0,0,0,0.20)] xl:gap-[20px] ${
         stat === 'data' ? 'max-h-[350px] pb-[10px]' : ''
-      }`}
-      onClick={() => {
-        handleHotelSelect(data.id);
-        // console.log(state);
-      }}
+      } ${fromMap === false ? 'w-full' : 'w-[110%]'} `}
     >
       {/* image */}
       <div className="relative h-[200px] w-full overflow-hidden rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] xs:h-[225px] sm:h-[175px] md:h-[225px] lg:h-[225px] xl:h-[225px] 2xl:h-[300px]">
@@ -104,20 +97,13 @@ const HotelCard = ({ data }: iProps) => {
               data.name.length > 27 ? 'xl:text-[14px]' : ''
             }`}
           >
-            {/* {state.language === 'mn' ? data.name : data.nameEn} */}
             {lang === 'en' ? data.nameEn : data.name}
           </p>
           <p className="text-[12px] leading-[12px] text-sub-text/60 2xs:text-[14px] 2xs:leading-[14px]">
-            {/* {state.language === 'mn'
-              ? data?.district?.name
-              : data?.district?.international} */}
             {lang === 'en'
               ? data?.district?.international
               : data?.district?.name}
             ,&nbsp;
-            {/* {state.language === 'mn'
-              ? data?.province?.name
-              : data?.province?.international} */}
             {lang === 'en'
               ? data?.province?.name
               : data?.province?.international}
@@ -191,50 +177,17 @@ const HotelCard = ({ data }: iProps) => {
                   ) : null}
                 </p>
               )}
-              {/* {state.language === 'mn' ? (
-                <p>
-                  {stat === 'online'
-                    ? 'Шууд баталгаажна'
-                    : stat === 'pending'
-                    ? 'Баталгаажих хугацаа: '
-                    : stat === 'offline'
-                    ? 'Онлайн захиалга боломжгүй'
-                    : ''}
-                  {stat === 'pending' ? (
-                    <span className="text-[14px] font-bold sm:text-[11px] md:text-[14px]">
-                      1-3 цаг
-                    </span>
-                  ) : null}
-                </p>
-              ) : (
-                <p>
-                  {stat === 'online'
-                    ? 'Instant confirmation'
-                    : stat === 'pending'
-                    ? 'Confirmation delay: '
-                    : stat === 'offline'
-                    ? 'Booking unavailable'
-                    : ''}
-                  {stat === 'pending' ? (
-                    <span className="text-[14px] font-bold sm:text-[11px] md:text-[14px]">
-                      1-3 hours
-                    </span>
-                  ) : null}
-                </p>
-              )} */}
             </div>
           ) : (
             // price if stat === 'data'
             <div className="self-end">
               <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]">
                 {data.includedPrice
-                  ? data.includedPrice.toLocaleString()
+                  ? data.includedPrice.slice(0, 10).toLocaleString()
                   : (70000).toLocaleString()}
-                {/* {state.language === 'mn' ? ' ₮' : ' $'} */}
                 {lang === 'en' ? '$' : '₮'}
                 <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
                   / {lang === 'en' ? 'day' : 'хоног'}
-                  {/* {state.language === 'mn' ? 'хоног' : 'day'} */}
                 </span>
               </p>
             </div>
@@ -249,14 +202,12 @@ const HotelCard = ({ data }: iProps) => {
           >
             <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]">
               {data.includedPrice
-                ? data.includedPrice.toLocaleString()
+                ? data.includedPrice.slice(0, 10).toLocaleString()
                 : (70000).toLocaleString()}
-              {/* {state.language === 'mn' ? ' ₮' : ' $'} */}
               {lang === 'en' ? '$' : '₮'}
 
               <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
-                {/* / {state.language === 'mn' ? 'хоног' : 'day'} */}/{' '}
-                {lang === 'en' ? 'day' : 'хоног'}
+                / {lang === 'en' ? 'day' : 'хоног'}
               </span>
             </p>
             <div
@@ -266,11 +217,6 @@ const HotelCard = ({ data }: iProps) => {
                   : 'px-[12px] 2xs:px-[16px] sm:px-[10px] md:px-[20px]'
               }`}
             >
-              {/* {state.language === 'mn' ? (
-                <p>{stat === 'offline' ? 'Харах' : 'Захиалах'}</p>
-              ) : (
-                <p>{stat === 'offline' ? 'View' : 'Order'}</p>
-              )} */}
               {lang === 'en' ? (
                 <p>{stat === 'offline' ? 'View' : 'Order'}</p>
               ) : (

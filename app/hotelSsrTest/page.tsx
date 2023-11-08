@@ -12,7 +12,7 @@ const HotelPageSsrTest = async () => {
     // {next: {revalidate: 10}}
   );
   const users = await res.json();
-  console.log(users);
+  // console.log(users);
   return (
     <>
       <h1>Users</h1>

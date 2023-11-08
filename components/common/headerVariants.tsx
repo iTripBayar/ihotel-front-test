@@ -48,16 +48,6 @@ const HeaderVariants = ({
       <Link
         href="/"
         className="relative h-[36.5px]  w-[114px] lg:hidden xl:flex"
-        // onClick={() => {
-        //   dispatch({
-        //     type: 'SET_SEARCHVALUE',
-        //     payload: '',
-        //   });
-        //   dispatch({
-        //     type: 'TOGGLE_ONLINETOGGLE',
-        //     payload: false,
-        //   });
-        // }}
       >
         <Image
           src="/images/logo-white.png"
@@ -78,7 +68,6 @@ const HeaderVariants = ({
           campsData={campsData}
           destData={destData}
           ver={ver}
-          map=""
         />
       </div>
       {/* burger menu (animated) */}

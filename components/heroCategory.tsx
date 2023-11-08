@@ -9,32 +9,6 @@ const HeroCategory = ({ data }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
 
-  const categoryData = [
-    {
-      id: 'camp',
-      img: '/samples/camp.png',
-      title: 'Амралтын газар',
-      titleEn: 'Tourist camps',
-    },
-    {
-      id: 'hotel',
-      img: '/samples/hotel.png',
-      title: 'Зочид буудал',
-      titleEn: 'Hotels',
-    },
-    {
-      id: 'guestHouse',
-      img: '/samples/guestHouse.png',
-      title: 'Гэст хаус',
-      titleEn: 'Guest houses',
-    },
-    {
-      id: 'spa',
-      img: '/samples/spa.png',
-      title: 'Рашаан сувилал',
-      titleEn: 'Spa resorts',
-    },
-  ];
   return (
     <div className=" flex w-full items-start justify-between px-[10px] text-main-text sm:px-[50px] lg:px-[150px]">
       {data.map((data) => (
@@ -49,8 +23,6 @@ const HeroCategory = ({ data }: iProps) => {
                   ? `https://ihotel.mn/${data.image}`
                   : '/samples/camp.png'
               }
-              // src={`https://ihotel.mn/${index.coverPhoto}`}
-              // src={`https://ihotel.mn/${data.image}`}
               alt="/heroCategory"
               fill={true}
               priority
@@ -62,7 +34,6 @@ const HeroCategory = ({ data }: iProps) => {
             />
           </div>
           <p className="lg:text-[16px]] text-center text-[11px] xs:text-[12px] sm:text-[13px] md:text-[14px] xl:text-[18px]">
-            {/* {state.language === 'mn' ? data.name : data.nameEn} */}
             {lang === 'en' ? data.nameEn : data.name}
           </p>
         </div>

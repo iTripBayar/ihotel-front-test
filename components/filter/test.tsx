@@ -1,32 +1,32 @@
 import React from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { useAppState } from '@/contexts/appStateContext';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useSearchParams, usePathname } from 'next/navigation';
 
-const Filter = () => {
-  // searchParams
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const lang = searchParams.get('lang');
-  const searchValue = searchParams.get('searchValue');
-  const toggle = searchParams.get('toggle');
-  const type = searchParams.get('type');
-  const filter = searchParams.get('filter');
-  const catVal = searchParams.get('catVal');
-  const minVal = searchParams.get('minVal');
-  const maxVal = searchParams.get('maxVal');
-  const additionalVal = searchParams.getAll('additionalVal');
+interface Props {
+  getFilterValue: (e: {
+    category: string[];
+    price: { min: number; max: number };
+    additional: string[];
+  }) => void;
+}
 
-  // states
+const OldFilter = ({ getFilterValue }: Props) => {
+  // const { appState, dispatch } = useAppCtx();
+  const { state, dispatch } = useAppState();
   const [open, setOpen] = useState('category');
-  // const [cat, setCat] = useState<string>('');
-  // const [price, setPrice] = useState<{ min: number; max: number }>({
-  //   min: 0,
-  //   max: 0,
-  // });
+  const [cat, setCat] = useState<string[]>([]);
+  const [price, setPrice] = useState({ min: 0, max: 0 });
   const [additional, setAdditional] = useState<string[]>([]);
-  // let testVal: string[] = [];
-  // sample datas
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const lang = searchParams.get('lang');
+  const toggle = searchParams.get('toggle');
+  const searchValue = searchParams.get('searchValue');
+  const filter = searchParams.get('filter');
+  const type = searchParams.get('type');
+
   const sampleCat = [
     { id: 0, desc: 'Зочид буудал' },
     { id: 1, desc: 'Гэст хаус' },
@@ -53,14 +53,23 @@ const Filter = () => {
     { id: 18, desc: 'Элсний волейбол' },
     { id: 19, desc: 'Дотоод аялал' },
   ];
-  // Animation durations
+
   const colapseDuration = 700;
   const iconRotateDuration = 700;
-  useEffect(() => {
-    // This code will run whenever the 'additional' state changes
-    document.getElementById('additionalLink')?.click();
-  }, [additional]);
 
+  // console.log(state.showFilter);
+
+  // const closeFilter = () => {
+  //   document.getElementById('container')?.classList.remove('animate-fade500');
+  //   document.getElementById('container')?.classList.add('animate-fadeOut300');
+
+  //   setTimeout(() => {
+  //     dispatch({ type: 'TOGGLE_FILTER', payload: '' });
+  //   }, 300);
+  // };
+  let catVal: string[] = [];
+  let priceVal = { min: 0, max: 0 };
+  let addVal: string[] = [];
   if (filter === 'web')
     return (
       <div
@@ -77,31 +86,13 @@ const Filter = () => {
               </p>
               <div className="grid w-full grid-cols-2 gap-[8px] text-[15px] text-sub-text">
                 {sampleCat.map((index) => (
-                  <Link
-                    href={{
-                      pathname: `${pathname}`,
-                      query: {
-                        lang: lang,
-                        searchValue: searchValue,
-                        toggle: toggle,
-                        type: type,
-                        filter: filter,
-                        catVal: index.desc,
-                        minVal: minVal,
-                        maxVal: maxVal,
-                        additionalVal: additionalVal,
-                      },
-                    }}
-                    scroll={false}
+                  <form
                     key={index.id}
                     className="flex w-full items-center gap-[8px]"
                   >
                     <input
                       id={`${index.id}`}
-                      type="checkbox"
-                      readOnly
-                      value={index.desc}
-                      checked={index.desc === catVal}
+                      type="radio"
                       className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0"
                     />
                     <label
@@ -111,7 +102,7 @@ const Filter = () => {
                     >
                       {index.desc}
                     </label>
-                  </Link>
+                  </form>
                 ))}
               </div>
             </div>
@@ -121,35 +112,22 @@ const Filter = () => {
                 {/* {state.language === 'mn' ? 'Үнэ' : 'Price'} */}
                 {lang === 'en' ? 'Price' : 'Үнэ'}
               </p>
-              <div className="grid w-full grid-cols-1 gap-[8px] text-[15px] text-sub-text">
+              <form
+                className="grid w-full grid-cols-1 gap-[8px] text-[15px] text-sub-text"
+                onChange={(e) => {
+                  console.log(e);
+                }}
+              >
                 {samplePrice.map((index) => (
-                  <Link
-                    href={{
-                      pathname: `${pathname}`,
-                      query: {
-                        lang: lang,
-                        searchValue: searchValue,
-                        toggle: toggle,
-                        type: type,
-                        filter: filter,
-                        catVal: catVal,
-                        minVal: index.min,
-                        maxVal: index.max,
-                        additionalVal: additionalVal,
-                      },
-                    }}
-                    scroll={false}
+                  <div
                     key={index.id}
                     className="flex w-full items-center gap-[8px]"
                   >
                     <input
                       id={`${index.id}`}
-                      type="checkBox"
-                      value={index.max}
-                      checked={
-                        `${index.min}` === minVal && `${index.max}` === maxVal
-                      }
-                      readOnly
+                      type="checkbox"
+                      name="groupPriceCheckBox"
+                      value={`min: ${index.min}, max: ${index.max}`}
                       className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 "
                     />
                     <label
@@ -168,9 +146,9 @@ const Filter = () => {
                       )}
                       {index.max !== 0 ? (lang === 'en' ? '$' : '₮') : null}
                     </label>
-                  </Link>
+                  </div>
                 ))}
-              </div>
+              </form>
             </div>
             {/* Additional */}
             <div className="flex h-full w-full flex-col items-center justify-start gap-[12px]">
@@ -180,59 +158,23 @@ const Filter = () => {
               </p>
               <div className="grid w-full grid-cols-2 gap-[8px] text-[15px] text-sub-text">
                 {sampleAdditional.map((index) => (
-                  <Link
-                    href={{
-                      pathname: `${pathname}`,
-                      query: {
-                        lang: lang,
-                        searchValue: searchValue,
-                        toggle: toggle,
-                        type: type,
-                        filter: filter,
-                        catVal: catVal,
-                        minVal: minVal,
-                        maxVal: maxVal,
-                        additionalVal: additional,
-                        //   additionalVal != null
-                        //     ? [...additionalVal, ...index.desc]
-                        //     : [index.desc],
-                      },
-                    }}
-                    scroll={false}
+                  <form
                     key={index.id}
-                    id="additionalLink"
                     className="flex w-full items-center gap-[8px]"
                   >
                     <input
                       id={`${index.id}`}
-                      type="checkBox"
-                      value={index.desc}
-                      checked={additional?.includes(index.desc)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          if (additional.length <= 0) {
-                            setAdditional([index.desc]);
-                          } else {
-                            setAdditional((prev) => {
-                              const update = [...prev, ...[index.desc]];
-                              return update;
-                            });
-                          }
-                        }
-                        return additional;
-                        // console.log(additional);
-                      }}
-                      className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 "
+                      type="radio"
+                      className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0"
                     />
                     <label
-                      className="text-[14px] leading-[16px]"
                       onClick={() => {
                         document.getElementById(`${index.id}`)?.click();
                       }}
                     >
                       {index.desc}
                     </label>
-                  </Link>
+                  </form>
                 ))}
               </div>
             </div>
@@ -247,10 +189,6 @@ const Filter = () => {
                 toggle: toggle,
                 filter: '',
                 type: type,
-                catVal: catVal,
-                minVal: minVal,
-                maxVal: maxVal,
-                additionalVal: additional,
               },
             }}
             scroll={false}
@@ -271,6 +209,7 @@ const Filter = () => {
       >
         {/* category */}
         <div
+          id="category"
           className={` over grid-rows-[repeat(2, minmax(40px, 1fr))] grid w-full gap-[20px] overflow-hidden rounded-[20px] px-[16px]  py-[8px] shadow-[0px_2px_12px_0px_rgb(0,0,0,0.15)] ${
             open === 'category'
               ? `h-[240px] rounded-[20px] pb-[16px]  duration-${colapseDuration}`
@@ -282,7 +221,6 @@ const Filter = () => {
             }
           }}
         >
-          {/* title section */}
           <div className="flex w-full items-center justify-between">
             <p className="text-[18px] font-medium text-sub-text">
               {/* {state.language === 'mn' ? 'Төрөл' : 'Category'} */}
@@ -307,7 +245,7 @@ const Filter = () => {
             </div>
           </div>
           {/* inputs */}
-          <div
+          <form
             className={`grid-rows-${
               sampleCat.length / 2
             } grid h-auto w-full grid-cols-2 gap-[20px] text-[15px] font-medium text-sub-text ${
@@ -315,31 +253,26 @@ const Filter = () => {
             }`}
           >
             {sampleCat.map((index) => (
-              <Link
-                href={{
-                  pathname: `${pathname}`,
-                  query: {
-                    lang: lang,
-                    searchValue: searchValue,
-                    toggle: toggle,
-                    type: type,
-                    filter: filter,
-                    catVal: index.desc,
-                    minVal: minVal,
-                    maxVal: maxVal,
-                    additionalVal: additionalVal,
-                  },
-                }}
-                scroll={false}
+              <div
                 key={index.id}
                 className="flex w-full items-center gap-[8px]"
               >
                 <input
                   id={`${index.id}`}
                   type="checkbox"
-                  readOnly
                   value={index.desc}
-                  checked={index.desc === catVal}
+                  onChange={(e) => {
+                    console.log(index.id);
+                    if (e.target.checked) {
+                      setCat((prevCat) => {
+                        // Use a callback to ensure that you are working with the latest state
+                        const updatedCat = [...prevCat, e.target.value];
+
+                        console.log(updatedCat);
+                        return updatedCat; // Update the state
+                      });
+                    }
+                  }}
                   className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0"
                 />
                 <label
@@ -349,12 +282,13 @@ const Filter = () => {
                 >
                   {index.desc}
                 </label>
-              </Link>
+              </div>
             ))}
-          </div>
+          </form>
         </div>
         {/* price */}
         <div
+          id="price"
           className={` over grid-rows-[repeat(2, minmax(40px, 1fr))] grid w-full gap-[20px] overflow-hidden rounded-[20px] px-[16px]  py-[8px] shadow-[0px_2px_12px_0px_rgb(0,0,0,0.15)] ${
             open === 'price'
               ? `h-[260px] rounded-[20px] pb-[16px]  duration-${colapseDuration}`
@@ -366,7 +300,6 @@ const Filter = () => {
             }
           }}
         >
-          {/* title section */}
           <div className="flex w-full items-center justify-between">
             <p className="text-[18px] font-medium text-sub-text">
               {/* {state.language === 'mn' ? 'Үнэ' : 'Price'} */}
@@ -399,33 +332,55 @@ const Filter = () => {
             }`}
           >
             {samplePrice.map((index) => (
-              <Link
-                href={{
-                  pathname: `${pathname}`,
-                  query: {
-                    lang: lang,
-                    searchValue: searchValue,
-                    toggle: toggle,
-                    type: type,
-                    filter: filter,
-                    catVal: catVal,
-                    minVal: index.min,
-                    maxVal: index.max,
-                    additionalVal: additionalVal,
-                  },
-                }}
-                scroll={false}
+              <form
                 key={index.id}
                 className="flex w-full items-center gap-[8px]"
               >
                 <input
                   id={`${index.id}`}
-                  type="checkBox"
-                  value={index.max}
-                  checked={
-                    `${index.min}` === minVal && `${index.max}` === maxVal
-                  }
-                  readOnly
+                  type="radio"
+                  name={'priceInput'}
+                  value={`min: ${index.min}, max: ${index.max}`}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      console.log(e.target.value.split(','));
+                      const updatedPrice = e.target.value.split(',');
+                      const updatedPrice1 = parseInt(
+                        updatedPrice[0].split(':')[1],
+                      );
+                      const updatedPrice2 = parseInt(
+                        updatedPrice[1].split(':')[1],
+                      );
+                      setPrice(() => {
+                        const finalPrice = {
+                          min: updatedPrice1,
+                          max: updatedPrice2,
+                        };
+                        dispatch({
+                          type: 'SET_FILTERVALUE',
+                          payload: {
+                            category: catVal, // Use updatedCat here
+                            price: finalPrice,
+                            additional: addVal,
+                          },
+                        });
+                        return finalPrice;
+                      });
+
+                      // setPrice(() => {
+                      //   const updatedCat = [e.target.value];
+                      //   dispatch({
+                      //     type: 'SET_FILTERVALUE',
+                      //     payload: {
+                      //       category: updatedCat, // Use updatedCat here
+                      //       price: priceVal,
+                      //       additional: addVal,
+                      //     },
+                      //   });
+                      //   return updatedCat; // Update the state
+                      // });
+                    }
+                  }}
                   className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 "
                 />
                 <label
@@ -444,12 +399,13 @@ const Filter = () => {
                   )}
                   {index.max !== 0 ? (lang === 'en' ? '$' : '₮') : null}
                 </label>
-              </Link>
+              </form>
             ))}
           </div>
         </div>
         {/* additional */}
         <div
+          id="additional"
           className={` over grid-rows-[repeat(2, minmax(40px, 1fr))] grid w-full gap-[20px] overflow-hidden rounded-[20px] px-[16px]  py-[8px] shadow-[0px_2px_12px_0px_rgb(0,0,0,0.15)] ${
             open === 'additional'
               ? `h-[260px] rounded-[20px] pb-[24px]  duration-${colapseDuration}`
@@ -461,7 +417,6 @@ const Filter = () => {
             }
           }}
         >
-          {/* title section */}
           <div className="flex w-full items-center justify-between">
             <p className="text-[18px] font-medium text-sub-text">
               {/* {state.language === 'mn' ? 'Нэмэлтээр' : 'Additional'} */}
@@ -494,62 +449,28 @@ const Filter = () => {
             }`}
           >
             {sampleAdditional.map((index) => (
-              <Link
-                href={{
-                  pathname: `${pathname}`,
-                  query: {
-                    lang: lang,
-                    searchValue: searchValue,
-                    toggle: toggle,
-                    type: type,
-                    filter: filter,
-                    catVal: catVal,
-                    minVal: minVal,
-                    maxVal: maxVal,
-                    additionalVal: additional,
-                    //   additionalVal != null
-                    //     ? [...additionalVal, ...index.desc]
-                    //     : [index.desc],
-                  },
-                }}
-                scroll={false}
+              <form
                 key={index.id}
-                id="additionalLink"
                 className="flex w-full items-center gap-[8px]"
               >
                 <input
+                  type="checkbox"
                   id={`${index.id}`}
-                  type="checkBox"
                   value={index.desc}
-                  checked={additional?.includes(index.desc)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      if (additional.length <= 0) {
-                        setAdditional([index.desc]);
-                      } else {
-                        setAdditional((prev) => {
-                          const update = [...prev, ...[index.desc]];
-                          return update;
-                        });
-                      }
-                    }
-                    return additional;
-                    // console.log(additional);
-                  }}
-                  className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 "
+                  className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0"
                 />
                 <label
-                  className="text-[14px] leading-[16px]"
                   onClick={() => {
                     document.getElementById(`${index.id}`)?.click();
                   }}
                 >
                   {index.desc}
                 </label>
-              </Link>
+              </form>
             ))}
           </div>
         </div>
+
         <Link
           href={{
             pathname: `${pathname}`,
@@ -559,19 +480,33 @@ const Filter = () => {
               toggle: toggle,
               filter: '',
               type: type,
-              catVal: catVal,
-              minVal: minVal,
-              maxVal: maxVal,
-              additionalVal: additional,
             },
           }}
           scroll={false}
+          // href={{
+          //   pathname: '/search',
+          //   query: {
+          //     category: catVal,
+          //     price: priceVal,
+          //     additional: addVal,
+          //   }, // the data
+          // }}
           className="flex min-h-[40px] w-auto min-w-[90px] items-center justify-center self-center rounded-full bg-primary-blue px-[12px] pt-[2px] text-[16px] font-medium uppercase tracking-wider text-white"
+          // onClick={() => {
+          //   closeFilter();
+
+          //   // console.log(state.filterValue);
+
+          //   // setTimeout(() => {
+          //   //   console.log(state.filterValue);
+          //   // }, 1000);
+          // }}
         >
+          {/* {state.language === 'mn' ? 'Шүүх' : 'Filter'} */}
           {lang === 'en' ? 'Filter' : 'Шүүх'}
         </Link>
       </div>
     );
 };
 
-export default Filter;
+export default OldFilter;

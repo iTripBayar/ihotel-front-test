@@ -1,10 +1,8 @@
-'use client';
 import React from 'react';
 import SearchBox from './searchBox';
 import OnlineToggle from './onlineToggle';
-import { useAppState } from '@/contexts/appStateContext';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 interface iProps {
   hotelData: any[];
@@ -12,7 +10,6 @@ interface iProps {
   campsData: any[];
   destData: any[];
   ver: string;
-  map: string;
 }
 
 const SearchSection = ({
@@ -21,12 +18,13 @@ const SearchSection = ({
   campsData,
   destData,
   ver,
-  map,
 }: iProps) => {
-  const { state } = useAppState();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const toggle = searchParams.get('toggle');
+  const searchValue = searchParams.get('searchValue');
+  const type = searchParams.get('type');
+  const filter = searchParams.get('filter');
 
   return (
     <div
@@ -59,25 +57,20 @@ const SearchSection = ({
           campsData={campsData}
           destData={destData}
           ver={ver}
-          lang={lang === 'en' ? 'en' : 'mn'}
-          // searchBoxValue={searchBoxValue}
         />
-        <OnlineToggle
-          ver={ver}
-          // onlineToggleState={onlineToggleState}
-        />
-        {state.showFilter !== 'mobile' ? (
+        <OnlineToggle ver={ver} />
+        {filter !== 'mobile' ? (
           <Link
             href={{
               pathname: '/search',
               query: {
-                searchValue: state.searchValue,
-                toggleState: state.onlineToggle,
-                type: '',
-              }, // the data
+                lang: lang,
+                searchValue: searchValue,
+                toggle: toggle,
+                type: type,
+                filter: filter,
+              },
             }}
-            // href="/search"
-            // data-json={`searchValue: ${searchValue}, toggleState: ${toggleState}`}
             className={`flex cursor-pointer items-center justify-center pt-[2px] font-medium  uppercase lg:max-w-[130px] ${
               ver === 'normal'
                 ? 'h-[46px] w-full rounded-[8px] bg-primary-blue text-[16px] leading-[16px] text-white'
@@ -90,16 +83,9 @@ const SearchSection = ({
                 : ''
             }`}
           >
-            {/* <p>{state.language === 'mn' ? 'хайх' : 'search'}</p> */}
             <p>{lang === 'en' ? 'search' : 'хайх'}</p>
           </Link>
-        ) : // href={{
-        //         pathname: '/hotel',
-        //         query: { name: data.name, slug: data.slug }, // the data
-        //       }}
-        // let toggleState = false;
-        // let searchValue = '';
-        null}
+        ) : null}
       </div>
     </div>
   );
