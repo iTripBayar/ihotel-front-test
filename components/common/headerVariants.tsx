@@ -24,7 +24,7 @@ const HeaderVariants = ({
       className={`fixed z-[100] flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white 2xs:px-[24px] sm:px-[50px] ${
         ver === 'fixed'
           ? ' animate-slide-bottom md:px-[67px] lg:gap-[24px] lg:px-[150px] xl:gap-[65px] 2xl:gap-[100px] 2xl:px-[200px]'
-          : ver === 'search'
+          : ver === 'search' || ver === 'hotel'
           ? 'h-[60px] md:px-[72px] md:pr-[82px] lg:gap-[64px] lg:px-[60px] xl:gap-[100px] '
           : ''
       }`}
@@ -32,7 +32,9 @@ const HeaderVariants = ({
       {/* short logo */}
       <Link
         href="/"
-        className="relative hidden h-[34px] w-[34px] min-w-[34px] cursor-pointer lg:flex xl:hidden"
+        className={`relative ${
+          ver === 'hotel' ? '' : 'hidden'
+        } h-[34px] w-[34px] min-w-[34px] cursor-pointer lg:flex xl:hidden`}
       >
         <Image
           src="/favicon-white.png"
@@ -41,13 +43,15 @@ const HeaderVariants = ({
           priority
           quality={100}
           sizes="20vw"
-          className="object-fit max-h-[34px] max-w-[34px]"
+          className="max-h-[34px] max-w-[34px] object-contain"
         />
       </Link>
       {/* original logo */}
       <Link
         href="/"
-        className="relative h-[36.5px]  w-[114px] lg:hidden xl:flex"
+        className={`relative h-[36.5px] w-[114px] lg:hidden xl:flex ${
+          ver === 'hotel' ? 'hidden' : ''
+        }`}
       >
         <Image
           src="/images/logo-white.png"
@@ -58,10 +62,14 @@ const HeaderVariants = ({
           priority
           quality={100}
           sizes="20vw"
-          className="absolute h-auto max-w-[114px] cursor-pointer object-cover"
+          className="absolute max-w-[114px] cursor-pointer object-cover"
         />
       </Link>
-      <div className="hidden w-full items-center lg:flex">
+      <div
+        className={`${
+          ver === 'hotel' ? '' : 'hidden'
+        } w-full items-center lg:flex`}
+      >
         <SearchSection
           hotelData={hotelData}
           placesData={placesData}

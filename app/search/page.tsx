@@ -56,6 +56,8 @@ const SearchPage = ({
     return;
   }, [size.width]);
 
+  console.log(data);
+
   return (
     <main
       className={`relative flex h-screen w-full flex-col gap-[20px] overflow-y-auto`}

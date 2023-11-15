@@ -13,10 +13,14 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const filter = searchParams.get('filter');
+  const searchValue = searchParams.get('searchValue');
   const toggle = searchParams.get('toggle');
   const type = searchParams.get('type');
-  const searchValue = searchParams.get('searchValue');
+  const filter = searchParams.get('filter');
+  const catVal = searchParams.get('catVal');
+  const minVal = searchParams.get('minVal');
+  const maxVal = searchParams.get('maxVal');
+  const additionalVal = searchParams.getAll('additionalVal');
   const btnRef = useRef<HTMLDivElement>(null);
   const handleScrollToTop = () => {
     btnRef.current?.classList.add('animate-bounce');
@@ -107,6 +111,10 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
                     toggle: toggle,
                     filter: filter,
                     type: type,
+                    catVal: catVal,
+                    minVal: minVal,
+                    maxVal: maxVal,
+                    additionalVal: additionalVal,
                   },
           }}
           className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue"

@@ -305,7 +305,7 @@ const MapContainer = ({ changeMap, map, hotelData, campsData }: iProps) => {
             style={{
               zIndex: 998,
               position: 'absolute',
-              width: 'auto',
+              width: '75%',
               marginLeft: '-20px',
             }}
           >

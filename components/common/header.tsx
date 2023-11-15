@@ -12,6 +12,10 @@ const Header = ({ openMenu, logIn, phone }: iProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const searchValue = searchParams.get('searchValue');
+  const toggle = searchParams.get('toggle');
+  const type = searchParams.get('type');
+  const filter = searchParams.get('filter');
   return (
     <header
       className={`flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white 2xs:px-[24px] sm:px-[50px] lg:px-[150px] xl:px-[200px]`}
@@ -27,7 +31,7 @@ const Header = ({ openMenu, logIn, phone }: iProps) => {
           priority
           quality={100}
           sizes="20vw"
-          className="absolute h-auto max-w-[114px] cursor-pointer object-cover"
+          className="absolute max-h-[32.42px] max-w-[114px] cursor-pointer object-cover"
         />
       </Link>
 
@@ -98,7 +102,16 @@ const Header = ({ openMenu, logIn, phone }: iProps) => {
           <Link
             href={{
               pathname: `${pathname}`,
-              query: lang === 'en' ? { lang: 'mn' } : { lang: 'en' },
+              // query: lang === 'en' ? { lang: 'mn' } : { lang: 'en' },
+              query:
+                toggle == null && searchValue == null
+                  ? { lang: lang === 'en' ? 'mn' : 'en' }
+                  : {
+                      lang: lang === 'en' ? 'mn' : 'en',
+                      searchValue: searchValue,
+                      toggle: toggle,
+                      type: type,
+                    },
             }}
             className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]"
             // onClick={() => {
