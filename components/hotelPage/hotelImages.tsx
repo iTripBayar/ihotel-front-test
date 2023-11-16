@@ -7,23 +7,28 @@ interface Props {
 }
 
 const HotelImages = ({ images, image }: Props) => {
-  // console.log(images);
+  console.log(image);
 
   const sample = [
     '/samples/camps.png',
     'samples/gobi.png',
     '/samples/camps.png',
+    '/samples/camps.png',
+    '/samples/camps.png',
+    '/samples/camps.png',
+    '/samples/camps.png',
   ];
 
   return (
     <div className="flex w-full flex-col gap-[4px] overflow-hidden rounded-b-[6px] rounded-t-[12px]">
-      <div className="relative h-[200px] w-full">
+      <div className="relative h-[200px] w-full sm:h-[250px] md:h-[350px] lg:h-[400px] xl:h-[425px]">
         <Image
-          src={
-            image
-              ? `https://sandbox.api.myhotel.mn/image?path=${image}`
-              : '/samples/camp.png'
-          }
+          // src={
+          //   image
+          //     ? `https://sandbox.api.myhotel.mn/image?path=${image}`
+          //     : '/samples/camp.png'
+          // }
+          src={'/samples/camp.png'}
           alt="/hotel"
           fill={true}
           //   priority
@@ -31,17 +36,18 @@ const HotelImages = ({ images, image }: Props) => {
           loading="lazy"
           sizes="50vw"
           placeholder="blur"
-          blurDataURL={
-            image !== null ? `"_next/image/?url=${image}"` : '/samples/camp.png'
-          }
-          className="absolute h-auto w-auto select-none object-cover duration-700 hover:scale-110"
+          // blurDataURL={
+          //   image !== null ? `"_next/image/?url=${image}"` : '/samples/camp.png'
+          // }
+          blurDataURL="/samples/camp.png"
+          className="absolute h-auto w-auto select-none object-cover"
           draggable={false}
         />
       </div>
-      <div className="flex h-[75px] w-full gap-[4px]">
+      <div className="scrollHidden flex h-[60px] w-full gap-[4px] overflow-x-auto overflow-y-hidden 2xs:h-[75px] sm:h-[100px]">
         {images && images.length > 0
           ? images.map((index, i) => (
-              <div key={i} className="relative h-full w-[40%]">
+              <div key={i} className="relative h-full w-[40%] ">
                 <Image
                   src={`https://sandbox.api.myhotel.mn/image?path=${index}`}
                   alt="/hotel"
@@ -52,13 +58,16 @@ const HotelImages = ({ images, image }: Props) => {
                   sizes="50vw"
                   placeholder="blur"
                   blurDataURL={`"_next/image/?url=${index}"`}
-                  className="absolute h-auto w-auto select-none object-cover duration-700 hover:scale-110"
+                  className="absolute h-auto w-auto select-none object-cover"
                   draggable={false}
                 />
               </div>
             ))
           : sample.map((index, i) => (
-              <div key={i} className="relative h-full w-[40%]">
+              <div
+                key={i}
+                className="relative h-full min-w-[100px] 2xs:min-w-[135px] md:min-w-[165px] lg:min-w-[100px]"
+              >
                 <Image
                   src="/samples/camp.png"
                   alt="/hotel"
@@ -69,7 +78,7 @@ const HotelImages = ({ images, image }: Props) => {
                   sizes="50vw"
                   placeholder="blur"
                   blurDataURL={`"_next/image/?url=${index}"`}
-                  className="absolute h-auto w-auto select-none object-cover duration-700 hover:scale-110"
+                  className="absolute h-auto w-auto select-none object-cover "
                   draggable={false}
                 />
               </div>

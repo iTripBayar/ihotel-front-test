@@ -27,9 +27,9 @@ const HotelMap = ({ lat, lng }: Props) => {
       }}
       style={{
         width: '100%',
-        height: '200px',
+        height: '225px',
         borderRadius: 12,
-        border: 'solid 1px rgb(0,0,0,0.25)',
+        border: 'solid 1px rgb(0,0,0,0.15)',
         overflow: 'hidden',
       }}
       id="mapBox"
@@ -47,13 +47,15 @@ const HotelMap = ({ lat, lng }: Props) => {
         latitude={lat}
         longitude={lng}
         style={{
-          width: '16px',
-          height: '16px',
+          width: '14px',
+          height: '14px',
           backgroundColor: '#3C76FE',
           borderRadius: '100%',
         }}
       >
-        <div className="h-[16px] w-[16px] animate-ping rounded-full border-[1px] bg-primary-blue "></div>
+        <div className="flex h-[14px] w-[14px] animate-ping items-center justify-center rounded-full border-[1px] bg-primary-blue">
+          <div className="h-[4px] w-[4px] rounded-full bg-white/75"></div>
+        </div>
       </Marker>
     </ReactMapGL>
   );

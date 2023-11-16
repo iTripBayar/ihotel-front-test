@@ -21,11 +21,13 @@ const HeaderVariants = ({
 }: iProps) => {
   return (
     <header
-      className={`fixed z-[100] flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white 2xs:px-[24px] sm:px-[50px] ${
+      className={`fixed z-[100] flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white sm:px-[50px] ${
         ver === 'fixed'
-          ? ' animate-slide-bottom md:px-[67px] lg:gap-[24px] lg:px-[150px] xl:gap-[65px] 2xl:gap-[100px] 2xl:px-[200px]'
-          : ver === 'search' || ver === 'hotel'
-          ? 'h-[60px] md:px-[72px] md:pr-[82px] lg:gap-[64px] lg:px-[60px] xl:gap-[100px] '
+          ? ' animate-slide-bottom 2xs:px-[24px] md:px-[67px] lg:gap-[24px] lg:px-[150px] xl:gap-[65px] 2xl:gap-[100px] 2xl:px-[200px] '
+          : ver === 'search'
+          ? 'h-[60px] 2xs:px-[24px] md:px-[72px] md:pr-[82px] lg:gap-[64px] lg:px-[60px] xl:gap-[100px] '
+          : ver === 'hotel'
+          ? 'h-[60px] 2xs:px-[16px] md:px-[72px] md:pr-[82px] lg:gap-[64px] lg:px-[60px] xl:gap-[100px] xl:px-[100px] 2xl:px-[150px]'
           : ''
       }`}
     >
@@ -33,7 +35,7 @@ const HeaderVariants = ({
       <Link
         href="/"
         className={`relative ${
-          ver === 'hotel' ? '' : 'hidden'
+          ver === 'hotel' ? 'lg:hidden' : 'hidden'
         } h-[34px] w-[34px] min-w-[34px] cursor-pointer lg:flex xl:hidden`}
       >
         <Image
@@ -49,8 +51,8 @@ const HeaderVariants = ({
       {/* original logo */}
       <Link
         href="/"
-        className={`relative h-[36.5px] w-[114px] lg:hidden xl:flex ${
-          ver === 'hotel' ? 'hidden' : ''
+        className={`relative h-[36.5px] w-[114px]  xl:flex ${
+          ver === 'hotel' ? 'hidden lg:flex' : 'lg:hidden'
         }`}
       >
         <Image

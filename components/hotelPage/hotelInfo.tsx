@@ -18,29 +18,30 @@ const HotelInfo = ({ data }: Props) => {
   } else if (data.isOnline == 0 && data.isOffline == 1 && data.phone == null) {
     stat = 'data';
   }
+  stat = 'online';
   //   console.log(data);
   //   let phone = data.phone;
   //   const formattedPhone = `${phone.slice(0, 4)}-${phone.slice(4)}`;
 
   return (
-    <div className="flex flex-col gap-[16px]">
+    <div className="flex flex-col gap-[16px] lg:gap-[24px]">
       {/* name */}
-      <h3 className="text-[20px] font-medium">
+      <h3 className="text-[20px] font-medium leading-[24px] lg:text-[26px] lg:leading-[28px]">
         {lang === 'en' ? data.nameEn : data.name}
       </h3>
       {/* review & stat */}
       <div
-        className={`relative flex w-full justify-start gap-[12px] pr-[8px] text-[16px] font-medium text-white`}
+        className={` relative flex w-full justify-start gap-[12px] pr-[8px] text-[16px] font-medium text-white lg:hidden`}
       >
         {/* review */}
-        <div className="flex h-[36px] items-center justify-center gap-[4px] rounded-[8px] bg-primary-blue px-[20px]  sm:gap-[2px]">
+        <div className="flex h-[36px] items-center justify-center gap-[4px] rounded-[8px] bg-primary-blue px-[12px] xs:px-[16px] 2xs:px-[20px] sm:gap-[2px]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="white"
             viewBox="0 1 24 24"
             strokeWidth={1}
             stroke="white"
-            className="h-[16px] w-[16px]"
+            className="max-h-[16px] min-h-[16px] min-w-[16px] max-w-[16px]"
           >
             <path
               strokeLinecap="round"
@@ -51,66 +52,62 @@ const HotelInfo = ({ data }: Props) => {
           <p>{data.rating}</p>
         </div>
         {/* stat */}
-        {stat !== 'data' ? (
-          <div
-            className={`flex h-[36px] items-center justify-center gap-[4px] rounded-[8px] text-center ${
-              stat === 'online'
-                ? 'bg-main-online px-[20px] 2xs:px-[24px]'
+        <div
+          className={`flex h-[36px] items-center justify-center gap-[4px] rounded-[8px] text-center ${
+            stat === 'online'
+              ? 'bg-main-online px-[12px] xs:px-[16px] 2xs:px-[20px] sm:px-[28px] '
+              : stat === 'pending'
+              ? 'bg-main-pending px-[10px] text-[12px] leading-[14px] text-main-text 2xs:px-[12px] 2xs:text-[14px] sm:px-[20px]'
+              : stat === 'offline'
+              ? 'bg-main-offline px-[10px] text-[12px] leading-[14px] 2xs:px-[12px] 2xs:text-[14px] sm:px-[20px]'
+              : 'bg-black/[.15] px-[10px] text-[12px] leading-[14px] text-main-text 2xs:px-[12px] 2xs:text-[14px] sm:px-[20px]'
+          }`}
+        >
+          {lang === 'en' ? (
+            <p>
+              {stat === 'online'
+                ? 'Instant confirmation'
                 : stat === 'pending'
-                ? 'bg-main-pending px-[16px]  text-main-text '
-                : 'bg-main-offline px-[16px]'
-            }`}
-          >
-            {lang === 'en' ? (
-              <p>
-                {stat === 'online'
-                  ? 'Instant confirmation'
-                  : stat === 'pending'
-                  ? 'Confirmation delay: '
-                  : stat === 'offline'
-                  ? 'Booking unavailable'
-                  : ''}
-                {stat === 'pending' ? (
-                  <span className=" font-bold">1-3 hours</span>
-                ) : null}
-              </p>
-            ) : (
-              <p>
-                {stat === 'online'
-                  ? 'Шууд баталгаажна'
-                  : stat === 'pending'
-                  ? 'Баталгаажих хугацаа: '
-                  : stat === 'offline'
-                  ? 'Онлайн захиалга боломжгүй'
-                  : ''}
-                {stat === 'pending' ? (
-                  <span className=" font-bold ">1-3 цаг</span>
-                ) : null}
-              </p>
-            )}
-          </div>
-        ) : null}
+                ? 'Confirmation delay: '
+                : 'Booking unavailable'}
+              {stat === 'pending' ? (
+                <span className=" font-bold">1-3 hours</span>
+              ) : null}
+            </p>
+          ) : (
+            <p>
+              {stat === 'online'
+                ? 'Шууд баталгаажна'
+                : stat === 'pending'
+                ? 'Баталгаажих хугацаа: '
+                : 'Онлайн захиалга боломжгүй'}
+              {stat === 'pending' ? (
+                <span className=" font-bold ">1-3 цаг</span>
+              ) : null}
+            </p>
+          )}
+        </div>
       </div>
       {/* address */}
-      <div className="relative w-full text-primary-blue">
+      <div className="relative w-full text-justify indent-6 text-[14px] leading-[20px] text-primary-blue">
         <svg
           viewBox="0 0 13 13"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="absolute left-0 top-0 max-h-[14px] min-h-[14px] min-w-[14px] max-w-[14px] translate-y-[25%]"
+          className="absolute left-0 top-0 max-h-[14px] min-h-[14px] min-w-[14px] max-w-[14px] translate-y-[25%] lg:max-h-[17px] lg:min-h-[17px] lg:min-w-[17px] lg:max-w-[17px] lg:translate-y-[10%]"
         >
           <path
             d="M12.9656 0.604255C12.9999 0.524592 13.0096 0.436465 12.9932 0.351279C12.9769 0.266092 12.9354 0.187765 12.8741 0.126432C12.8127 0.0650999 12.7344 0.0235845 12.6492 0.00725787C12.564 -0.00906876 12.4759 0.000544753 12.3962 0.0348545L0.2629 5.23485C0.18211 5.26947 0.113755 5.32783 0.0669079 5.4022C0.0200605 5.47657 -0.0030632 5.56343 0.000603676 5.65125C0.00427055 5.73906 0.0345554 5.82369 0.0874395 5.89389C0.140323 5.9641 0.213305 6.01656 0.2967 6.04432L5.2913 7.70919L6.9553 12.7038C6.98289 12.7875 7.03533 12.8607 7.10563 12.9138C7.17593 12.9669 7.26075 12.9974 7.34877 13.001C7.4368 13.0047 7.52385 12.9815 7.59833 12.9344C7.67281 12.8873 7.73117 12.8187 7.76563 12.7376L12.9656 0.604255Z"
             fill="#3C76FE"
           />
         </svg>
-        <p className=" text-justify indent-6 text-[14px] leading-[20px] text-sub-text opacity-75">
+        <p className="  text-sub-text opacity-75">
           {lang === 'en' ? data.addressEn : data.address}
         </p>
       </div>
       {/* contact */}
-      <div className="flex w-full flex-wrap gap-[20px] font-medium tracking-[0.26px]">
-        <div className="flex items-center gap-[6px] text-[14px] text-sub-text">
+      <div className="flex w-full flex-wrap gap-[12px] tracking-[0.26px]  sm:gap-[20px] lg:hidden">
+        <div className="flex items-center gap-[8px] text-[14px] tracking-wider text-sub-text">
           <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-primary-blue text-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -129,7 +126,7 @@ const HotelInfo = ({ data }: Props) => {
             {data.phone && `${data?.phone.slice(0, 4)}-${data?.phone.slice(4)}`}
           </p>
         </div>
-        <div className="flex items-center gap-[6px] text-[14px] text-sub-text">
+        <div className="flex items-center gap-[8px] text-[14px] tracking-wider text-sub-text">
           <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-primary-blue text-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"

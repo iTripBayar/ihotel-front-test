@@ -58,10 +58,13 @@ const SearchBox = ({
     },
   ];
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % suggestion.length);
-    }, 3000);
-    return () => clearInterval(interval);
+    if (ver !== 'hotel') {
+      const interval = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % suggestion.length);
+        console.log(ver);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
   }, [query === '' && ver !== 'search' && ver !== 'headerSearch']);
 
   for (let i = 0; i < hotelData.length; i++) {
@@ -140,6 +143,8 @@ const SearchBox = ({
             ? 'h-[46px] justify-between rounded-full pr-0 shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)]'
             : ver === 'search'
             ? 'h-[36px] justify-between rounded-full shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] lg:pr-0'
+            : ver === 'hotel'
+            ? 'h-[36px] min-w-[225px] justify-between overflow-hidden rounded-full shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] lg:pr-0 xl:min-w-[400px] 2xl:min-w-[500px]'
             : ''
         }`}
         ref={searchRef}
@@ -264,7 +269,10 @@ const SearchBox = ({
           ''
         )}
         {/* suggestion */}
-        {query === '' && ver !== 'search' && ver !== 'headerSearch' ? (
+        {query === '' &&
+        ver !== 'search' &&
+        ver !== 'headerSearch' &&
+        ver !== 'hotel' ? (
           <p
             className={`text-[12px] leading-[12px] 2xs:text-[13px] 2xs:leading-[13px] sm:text-[14px] sm:leading-[14px] lg:text-[12px] lg:leading-[12px] xl:text-[14px] xl:leading-[14px] ${
               ver === 'fixed' ? 'hidden' : ''

@@ -1,5 +1,6 @@
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import useWindowSize from '@/hooks/windowSize';
 
 interface Props {
   data: { activities: string[] };
@@ -9,6 +10,8 @@ const Amenity = ({ data }: Props) => {
   const [open, setOpen] = useState(false);
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const size = useWindowSize();
+
   let sample = [
     { key: 0, name: 'Утасгүй интернэт', nameEn: 'Wifi', category: 'wifi' },
     { key: 1, name: 'Мини бар', nameEn: 'Minibar', category: 'fridge' },
@@ -39,22 +42,45 @@ const Amenity = ({ data }: Props) => {
     },
     { key: 7, name: 'Англи', nameEn: 'English', category: 'lang' },
     { key: 8, name: 'Хятад', nameEn: 'Chinese', category: 'lang' },
+    { key: 9, name: 'Япон', nameEn: 'Japanese', category: 'lang' },
+    { key: 10, name: 'Франц', nameEn: 'French', category: 'lang' },
+    { key: 11, name: 'Орос', nameEn: 'Russian', category: 'lang' },
+    { key: 12, name: 'Монгол', nameEn: 'Mongolian', category: 'lang' },
   ];
   //   console.log(data.activities);
   return (
-    <div className="flex flex-col gap-[16px] border-t-[1px] border-t-black/[.15] pt-[24px] text-[16px]">
-      <p className="font-medium">{lang === 'en' ? 'Amenities' : 'Уг газарт'}</p>
-      <div className="flex w-full flex-wrap gap-[12px]">
+    <div className="flex flex-col gap-[16px] border-t-[1px] border-t-black/[.1] pt-[24px] text-[16px] lg:border-none lg:pt-0">
+      <p className="text-[20px] font-medium leading-[20px]">
+        {lang === 'en' ? 'Amenities' : 'Уг газарт'}
+      </p>
+      <div className="flex w-full flex-wrap gap-[12px] 2xs:gap-[8px] sm:gap-[12px]">
         {data?.activities?.length > 3
           ? data.activities
               .splice(0, open === false ? 4 : data.activities.length)
               .map((index, i) => <div key={i}></div>)
           : sample
-              .slice(0, open === false ? 4 : sample.length)
+              .slice(
+                0,
+                open === false
+                  ? size.width && size?.width < 360
+                    ? 3
+                    : size.width && size?.width < 450
+                    ? 4
+                    : size.width && size?.width < 640
+                    ? 5
+                    : size.width && size?.width < 800
+                    ? 6
+                    : size.width && size?.width < 850
+                    ? 7
+                    : size.width && size?.width < 1000
+                    ? 8
+                    : 10
+                  : sample.length,
+              )
               .map((index, i) => (
                 <div
                   key={i}
-                  className="flex h-[76px] w-[76px] flex-col justify-between rounded-[10px] border border-sub-text/50 bg-white p-[8px] text-main-text"
+                  className="md:w-[86px]lg:h-[90px] flex h-[84px] w-[84px] flex-col justify-between rounded-[10px] border border-sub-text/[.35] bg-white p-[6px] text-main-text 2xs:h-[76px] 2xs:w-[76px] sm:h-[80px] sm:w-[80px]  sm:p-[8px] md:h-[86px] lg:w-[90px]"
                 >
                   {index.category === 'wifi' ? (
                     // wifi
@@ -153,14 +179,14 @@ const Amenity = ({ data }: Props) => {
                   ) : (
                     <></>
                   )}
-                  <p className="text-[11px] leading-[12px] text-main-text">
+                  <p className="text-[11px] leading-[12px] text-main-text lg:text-[12px] lg:leading-[13px]">
                     {lang === 'en' ? index.nameEn : index.name}
                   </p>
                 </div>
               ))}
       </div>
       <div
-        className="flex items-center gap-[8px] text-[15px] font-medium text-primary-blue"
+        className="flex items-center gap-[8px] text-[15px] font-medium leading-[15px] text-primary-blue lg:text-[16px] lg:leading-[17px]"
         onClick={() => setOpen(!open)}
       >
         <p>

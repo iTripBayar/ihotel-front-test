@@ -30,20 +30,34 @@ const Services = ({ services }: Props) => {
       desc: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animi nam dolorum, pariatur atque voluptate molestias.',
       price: 70000,
     },
+    {
+      key: 3,
+      name: 'Abcdefg',
+      nameEn: 'Abcdefg',
+      desc: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animi nam dolorum, pariatur atque voluptate molestias.',
+      price: 70000,
+    },
+    {
+      key: 4,
+      name: 'Abcdefgh',
+      nameEn: 'Abcdefgh',
+      desc: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Animi nam dolorum, pariatur atque voluptate molestias.',
+      price: 70000,
+    },
   ];
 
   return (
     <div className="flex flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] text-[16px] text-main-text">
-      <p className=" font-medium">
+      <p className=" text-[20px] font-medium">
         {lang === 'en' ? 'Special services' : 'Онцлох үйлчилгээ'}
       </p>
-      <div className="scrollHidden flex w-full gap-[8px] overflow-x-auto">
+      <div className="scrollHidden flex w-full gap-[8px] overflow-x-auto lg:gap-[20px]">
         {sample.map((index, i) => (
           <div
             key={i}
-            className="w-[50%] min-w-[175px] overflow-hidden rounded-[16px] border border-black/[.15]"
+            className="w-[50%] min-w-[170px] overflow-hidden rounded-[16px] border border-black/[.15] lg:min-w-[250px]"
           >
-            <div className="relative h-[125px] w-full">
+            <div className="relative h-[125px] w-full overflow-hidden lg:h-[180px]">
               <Image
                 src={'/samples/camp.png'}
                 // src={
