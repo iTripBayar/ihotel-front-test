@@ -8,7 +8,7 @@ const OrderCount = ({ count }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   return (
-    <div className="relative h-[110px] w-full lg:h-[120px] ">
+    <div className="relative h-[110px] w-full max-w-[400px] self-center lg:h-[120px] ">
       <div className="absolute top-[12px] z-20 w-[200px] rounded-[6px] bg-primary-blue py-[8px] pl-[25px] pr-[12px] text-[15px] font-medium text-white lg:top-[16px]">
         {lang === 'en' ? 'Total order count' : 'Нийт захиалсан тоо'}
       </div>

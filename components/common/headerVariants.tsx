@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import SearchSection from '../searchSection';
 import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 interface iProps {
   ver: string;
@@ -19,6 +21,28 @@ const HeaderVariants = ({
   campsData,
   destData,
 }: iProps) => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  console.log(searchParams.values);
+  // const lang = searchParams.get('lang');
+  // const searchValue = searchParams.get('searchValue');
+  // const toggle = searchParams.get('toggle');
+  // const type = searchParams.get('type');
+  // const filter = searchParams.get('filter');
+  // const catVal = searchParams.get('catVal');
+  // const minVal = searchParams.get('minVal');
+  // const maxVal = searchParams.get('maxVal');
+  // const additionalVal = searchParams.getAll('additionalVal');
+
+  // lang: lang === 'en' ? 'mn' : 'en',
+  //                 searchValue: searchValue,
+  //                 toggle: toggle,
+  //                 filter: filter,
+  //                 type: type,
+  //                 catVal: catVal,
+  //                 minVal: minVal,
+  //                 maxVal: maxVal,
+  //                 additionalVal: additionalVal,
   return (
     <header
       className={`fixed z-[100] flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white sm:px-[50px] ${
@@ -81,7 +105,28 @@ const HeaderVariants = ({
         />
       </div>
       {/* burger menu (animated) */}
-      <div className="flex items-center justify-end">
+      <Link
+        scroll={false}
+        href={{
+          pathname: `${pathname}`,
+          // query: lang === 'en' ? { lang: 'mn' } : { lang: 'en' },
+          query: {},
+          // toggle == null
+          //   ? { lang: lang === 'en' ? 'mn' : 'en' }
+          //   : {
+          //       lang: lang === 'en' ? 'mn' : 'en',
+          //       searchValue: searchValue,
+          //       toggle: toggle,
+          //       filter: filter,
+          //       type: type,
+          //       catVal: catVal,
+          //       minVal: minVal,
+          //       maxVal: maxVal,
+          //       additionalVal: additionalVal,
+          //     },
+        }}
+        className="flex items-center justify-end"
+      >
         <div
           className="relative flex h-[16px] w-[24px] flex-col items-center "
           onClick={openMenu}
@@ -90,7 +135,7 @@ const HeaderVariants = ({
           <div className="absolute top-0 h-[2px] w-[24px] animate-burger-top1  rounded-full bg-white"></div>
           <div className="absolute bottom-0 h-[2px] w-[24px] animate-burger-top2  rounded-full bg-white"></div>
         </div>
-      </div>
+      </Link>
     </header>
   );
 };

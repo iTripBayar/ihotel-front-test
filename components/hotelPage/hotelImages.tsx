@@ -3,15 +3,19 @@ import Image from 'next/image';
 
 interface Props {
   images: string[];
-  image: string;
+  image: string | never[];
 }
 
 const HotelImages = ({ images, image }: Props) => {
-  console.log(image);
+  // console.log(image);
 
   const sample = [
     '/samples/camps.png',
     'samples/gobi.png',
+    '/samples/camps.png',
+    '/samples/camps.png',
+    '/samples/camps.png',
+    '/samples/camps.png',
     '/samples/camps.png',
     '/samples/camps.png',
     '/samples/camps.png',

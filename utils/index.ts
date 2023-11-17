@@ -14,7 +14,7 @@ export async function fetchDataSearch() {
   return result;
 }
 
-export async function fetchDataHotel(slug: string) {
+export async function fetchDataHotel(slug: string): Promise<hotelData.full> {
   const response = await fetch(
     `https://sandbox.api.myhotel.mn:9443/ihotel/hotel/${slug}`,
   );

@@ -17,6 +17,7 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const sideMenu = searchParams.get('sideMenu');
 
   const handleClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement; // Cast event.target to HTMLElement

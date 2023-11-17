@@ -47,17 +47,17 @@ const Services = ({ services }: Props) => {
   ];
 
   return (
-    <div className="flex flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] text-[16px] text-main-text">
-      <p className=" text-[20px] font-medium">
+    <div className="flex flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] text-[16px] text-main-text lg:gap-[32px] lg:pt-[32px]">
+      <p className=" text-[20px] font-medium leading-[20px]">
         {lang === 'en' ? 'Special services' : 'Онцлох үйлчилгээ'}
       </p>
       <div className="scrollHidden flex w-full gap-[8px] overflow-x-auto lg:gap-[20px]">
         {sample.map((index, i) => (
           <div
             key={i}
-            className="w-[50%] min-w-[170px] overflow-hidden rounded-[16px] border border-black/[.15] lg:min-w-[250px]"
+            className="w-[50%] min-w-[170px] overflow-hidden rounded-[16px] border border-black/[.15] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[250px]"
           >
-            <div className="relative h-[125px] w-full overflow-hidden lg:h-[180px]">
+            <div className="relative h-[125px] w-full overflow-hidden sm:h-[150px] md:h-[160px] lg:h-[180px]">
               <Image
                 src={'/samples/camp.png'}
                 // src={

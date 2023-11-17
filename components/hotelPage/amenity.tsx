@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import useWindowSize from '@/hooks/windowSize';
 
 interface Props {
-  data: { activities: string[] };
+  data: string[];
 }
 
 const Amenity = ({ data }: Props) => {
@@ -49,14 +49,14 @@ const Amenity = ({ data }: Props) => {
   ];
   //   console.log(data.activities);
   return (
-    <div className="flex flex-col gap-[16px] border-t-[1px] border-t-black/[.1] pt-[24px] text-[16px] lg:border-none lg:pt-0">
-      <p className="text-[20px] font-medium leading-[20px]">
+    <div className="flex flex-col gap-[16px] border-t-[1px] border-t-black/[.1] pt-[24px] text-[16px] text-main-text lg:gap-[24px] lg:border-none lg:pt-0">
+      <p className=" text-[20px] font-medium leading-[20px]">
         {lang === 'en' ? 'Amenities' : 'Уг газарт'}
       </p>
-      <div className="flex w-full flex-wrap gap-[12px] 2xs:gap-[8px] sm:gap-[12px]">
-        {data?.activities?.length > 3
-          ? data.activities
-              .splice(0, open === false ? 4 : data.activities.length)
+      <div className="flex w-full flex-wrap gap-[12px] 2xs:gap-[8px] sm:gap-[12px] lg:gap-[16px]">
+        {data?.length > 3
+          ? data
+              .splice(0, open === false ? 4 : data.length)
               .map((index, i) => <div key={i}></div>)
           : sample
               .slice(

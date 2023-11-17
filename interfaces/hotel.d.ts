@@ -1,4 +1,29 @@
 declare namespace hotelData {
+  interface full {
+    activities: [];
+    average: number;
+    comfort: number;
+    diff: number;
+    employees: number;
+    enddate: string;
+    fresh: number;
+    hasPage: number;
+    hotel: hotel;
+    isClosed: number;
+    location: number;
+    offerHotels: hotel[];
+    orderCount: number;
+    path: string;
+    phoneNumber: string;
+    price: number;
+    rate: string;
+    reviews: [];
+    rooms: roomData.room[];
+    services: { activities: [] };
+    specialServices: [];
+    startdate: string;
+    things: number;
+  }
   interface hotel {
     address: string;
     addressEn: string | null;

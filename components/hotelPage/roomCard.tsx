@@ -24,11 +24,11 @@ const RoomCard = ({ data }: Props) => {
   //   const [selected, setSelected] = useState(people[0]);
   const [selectedRoom, setSelectedRoom] = useState();
 
-  console.log(data.photos);
-  console.log(data.photos.split('"')[1]);
+  // console.log(data.photos);
+  // console.log(data.photos.split('"')[1]);
   return (
     <div className="flex flex-col overflow-hidden rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]">
-      <div className="relative h-[225px] w-full bg-sky-500">
+      <div className="relative h-[225px] w-full bg-sky-500 2xs:h-[260px] sm:h-[300px] ">
         <Image
           //   src={
           //     data.photos !== null
@@ -159,7 +159,7 @@ const RoomCard = ({ data }: Props) => {
         </div>
         {/* room select section */}
         <div className="flex w-full justify-between">
-          <div className="flex h-[38px] items-center justify-center gap-[8px] rounded-[8px] border-[2px] border-primary-blue/50 px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] lg:px-[8px] lg:text-[14px]">
+          <div className="flex h-[38px] items-center justify-center gap-[8px] rounded-[8px] border-[2px] border-primary-blue/50 px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px]">
             <p>
               {'0'}
               {lang === 'en' ? ' rooms' : ' өрөө'}
@@ -176,7 +176,7 @@ const RoomCard = ({ data }: Props) => {
               />
             </svg>
           </div>
-          <div className="flex h-[38px] items-center justify-center rounded-[8px] border-[2px] border-primary-blue px-[12px] text-[14px] font-medium text-primary-blue 2xs:px-[16px] 2xs:text-[18px] lg:px-[12px] lg:text-[16px]">
+          <div className="flex h-[38px] items-center justify-center rounded-[8px] border-[2px] border-primary-blue px-[12px] text-[14px] font-medium text-primary-blue 2xs:px-[16px] 2xs:text-[18px] md:px-[8px] md:text-[16px]">
             {lang === 'en' ? 'Add to cart' : 'Сангсанд нэмэх'}
           </div>
 

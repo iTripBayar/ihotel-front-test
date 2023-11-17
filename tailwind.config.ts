@@ -22,6 +22,7 @@ const config: Config = {
         'main-data': '#D9D9D9',
         footer: '#343A40',
       },
+
       animation: {
         'slide-left':
           'slide-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940)   both',
