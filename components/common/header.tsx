@@ -1,21 +1,33 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 
 interface iProps {
-  openMenu: () => void;
-  logIn: (e: string) => void;
   phone: string;
 }
 
-const Header = ({ openMenu, logIn, phone }: iProps) => {
-  const pathname = usePathname();
+const Header = ({ phone }: iProps) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const menu = searchParams.get('menu');
   const lang = searchParams.get('lang');
-  const searchValue = searchParams.get('searchValue');
-  const toggle = searchParams.get('toggle');
-  const type = searchParams.get('type');
-  const filter = searchParams.get('filter');
+  const addHotel = searchParams.get('addHotel');
+  const signUpState = searchParams.get('signUpState');
+  const logInState = searchParams.get('logInState');
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (value !== null) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      return params.toString();
+    },
+    [searchParams],
+  );
+
   return (
     <header
       className={`flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white 2xs:px-[24px] sm:px-[50px] lg:px-[150px] xl:px-[200px]`}
@@ -40,8 +52,12 @@ const Header = ({ openMenu, logIn, phone }: iProps) => {
           {/* log in */}
           <div
             className="group relative flex h-[32px] cursor-pointer items-center"
+            // onClick={() => {
+            //   logIn('logIn');
+            // }}
             onClick={() => {
-              logIn('logIn');
+              let nextLogIn = logInState !== 'open' ? 'open' : null;
+              router.push(`/?${createQueryString('logInState', nextLogIn)}`);
             }}
           >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
@@ -51,8 +67,12 @@ const Header = ({ openMenu, logIn, phone }: iProps) => {
           {/* sign in */}
           <div
             className="group relative flex h-[32px] cursor-pointer items-center"
+            // onClick={() => {
+            //   logIn('signUp');
+            // }}
             onClick={() => {
-              logIn('signUp');
+              let nextSignUp = signUpState !== 'open' ? 'open' : null;
+              router.push(`/?${createQueryString('signUpState', nextSignUp)}`);
             }}
           >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
@@ -60,7 +80,10 @@ const Header = ({ openMenu, logIn, phone }: iProps) => {
             {lang === 'en' ? 'Sign Up' : 'Бүртгүүлэх'}
           </div>
           {/* phone number */}
-          <a className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]">
+          <div
+            draggable={false}
+            className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]"
+          >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -77,9 +100,15 @@ const Header = ({ openMenu, logIn, phone }: iProps) => {
               />
             </svg>
             <p className="leading-[16px]">{phone ? phone : '7727 9090'}</p>
-          </a>
+          </div>
           {/* add hotel */}
-          <a className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]">
+          <div
+            className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]"
+            onClick={() => {
+              let nextAddHotel = addHotel !== 'open' ? 'open' : null;
+              router.push(`/?${createQueryString('addHotel', nextAddHotel)}`);
+            }}
+          >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -97,21 +126,12 @@ const Header = ({ openMenu, logIn, phone }: iProps) => {
             </svg>
             {/* {state.language === 'mn' ? 'Буудал нэмэх' : 'Add hotel'} */}
             {lang === 'en' ? 'Add hotel' : 'Буудал нэмэх'}
-          </a>
+          </div>
           {/* lang btn */}
-          <Link
-            href={{
-              pathname: `${pathname}`,
-              // query: lang === 'en' ? { lang: 'mn' } : { lang: 'en' },
-              query:
-                toggle == null && searchValue == null
-                  ? { lang: lang === 'en' ? 'mn' : 'en' }
-                  : {
-                      lang: lang === 'en' ? 'mn' : 'en',
-                      searchValue: searchValue,
-                      toggle: toggle,
-                      type: type,
-                    },
+          <div
+            onClick={() => {
+              let nextLang = lang === 'en' ? 'mn' : 'en';
+              router.push(`/?${createQueryString('lang', nextLang)}`);
             }}
             className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]"
             // onClick={() => {
@@ -134,11 +154,14 @@ const Header = ({ openMenu, logIn, phone }: iProps) => {
               className="object-fit max-h-[22px] max-w-[22px] cursor-pointer"
             />
             {lang === 'en' ? 'MN' : 'EN'}
-          </Link>
+          </div>
         </div>
         <div
           className="relative flex h-[16px] w-[24px] flex-col items-center lg:hidden"
-          onClick={openMenu}
+          onClick={() => {
+            let nextMenu = menu !== 'open' ? 'open' : null;
+            router.push(`/?${createQueryString('menu', nextMenu)}`);
+          }}
         >
           <div className="absolute top-[50%] h-[2px] w-[24px] translate-y-[-50%] animate-burger-top rounded-full bg-white"></div>
           <div className="absolute top-0 h-[2px] w-[24px] animate-burger-top1  rounded-full bg-white"></div>

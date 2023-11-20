@@ -1,8 +1,9 @@
-import React from 'react';
+'use client';
 import SearchBox from './searchBox';
 import OnlineToggle from './onlineToggle';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useCallback } from 'react';
 
 interface iProps {
   hotelData: any[];
@@ -25,12 +26,25 @@ const SearchSection = ({
   const searchValue = searchParams.get('searchValue');
   const type = searchParams.get('type');
   const filter = searchParams.get('filter');
-
+  const router = useRouter();
+  const pathname = usePathname();
+  const menu = searchParams.get('menu');
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (value !== null) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      return params.toString();
+    },
+    [searchParams],
+  );
   let newDate = new Date();
   let date = newDate.getDate();
   let month = newDate.getMonth() + 1;
   let year = newDate.getFullYear();
-  // console.log(`${month}/${date}/${year}`);
 
   return (
     <div

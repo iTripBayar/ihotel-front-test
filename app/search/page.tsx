@@ -1,17 +1,20 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import useWindowSize from '@/hooks/windowSize';
 import { useRequest } from 'ahooks';
 import { fetchData } from '@/utils';
 import HeaderVariants from '@/components/common/headerVariants';
 import '../../app/globals.css';
-import LogIn from '@/components/common/logIn';
 import BurgerMenu from '@/components/common/burgermenu';
 import BottomSection from '@/components/common/bottomSection';
-import SearchSection from '@/components/searchSection';
-import SearchCards from '@/components/cardContainer/searchCards';
-import MapContainer from '@/components/map/map';
-import Filter from '@/components/filter';
+import SearchSection from '@/components/common/searchSection';
+import SearchCards from '@/components/searchPage/searchCards';
+import MapContainer from '@/components/common/map/map';
+import Filter from '@/components/common/filter';
+import LogSign from '@/components/common/logIn';
+import SignUp from '@/components/common/log&signUp/signUp';
+import LogIn from '@/components/common/log&signUp/logIn';
+import { usePathname, useRouter } from 'next/navigation';
 
 const SearchPage = ({
   searchParams,
@@ -21,42 +24,26 @@ const SearchPage = ({
     toggle: boolean;
     type: string;
     filter: string;
+    logInState: string | null;
+    signUpState: string | null;
+    map: string | null;
   };
 }) => {
-  const [sideMenu, setSideMenu] = useState(false);
-  const [logIn, setLogIn] = useState('');
-  const [map, setMap] = useState('');
+  // const [map, setMap] = useState('');
   const size = useWindowSize();
-
   const { data } = useRequest(() => {
     return fetchData();
   });
 
-  function openMenu() {
-    setSideMenu(true);
-  }
-  function closeMenu() {
-    setSideMenu(false);
-  }
-  function openLogIn(e: string) {
-    setLogIn(e);
-  }
-
-  function mapFunction(e: string) {
-    setMap(e);
-  }
-  function closeMap() {
-    setMap('');
-  }
-
-  useEffect(() => {
-    if (size.width && size.width >= 1024) {
-      setMap('open');
-    } else setMap('');
-    return;
-  }, [size.width]);
-
-  console.log(data);
+  // function mapFunction(e: string) {
+  //   setMap(e);
+  // }
+  // useEffect(() => {
+  //   if (size.width && size.width >= 1024) {
+  //     setMap('open');
+  //   } else setMap('');
+  //   return;
+  // }, [size.width]);
 
   return (
     <main
@@ -65,27 +52,29 @@ const SearchPage = ({
     >
       <HeaderVariants
         ver={'search'}
-        openMenu={openMenu}
         hotelData={data ? data.hotels : []}
         placesData={data ? data.places : []}
         campsData={data ? data.camps : []}
         destData={data ? data.destCategories : []}
       />
-      {logIn !== '' ? <LogIn ver={logIn} changeVer={openLogIn} /> : null}
-      <BurgerMenu
-        open={sideMenu}
-        close={closeMenu}
-        logIn={openLogIn}
-        phone={data ? data.phoneNumber : ''}
-        ver={'search'}
-      />
-      <BottomSection ver={'search'} map={map} openMap={mapFunction} />
-      {searchParams.filter === 'web' ? (
+      {searchParams.logInState ? <LogIn /> : null}
+      {searchParams.signUpState ? <SignUp /> : null}
+      <BurgerMenu phone={data ? data.phoneNumber : ''} ver={'search'} />
+      <BottomSection ver={'search'} />
+      {/* {searchParams.filter === 'webFilter' ? (
         <div className="absolute left-[50%] top-[55px] z-[200] translate-x-[-50%]">
-          {/* // <OldFilter getFilterValue={getFilterValue} /> */}
           <Filter />
         </div>
-      ) : null}
+      ) : null} */}
+      <div
+        className={`${
+          searchParams.filter === 'webFilter'
+            ? 'absolute left-[50%] top-[55px] z-[200] translate-x-[-50%]'
+            : 'hidden'
+        }`}
+      >
+        <Filter />
+      </div>
       {/* size?.width && size?.width < 1024 &&  */}
       {size.width && size.width < 1024 ? (
         <div
@@ -100,11 +89,7 @@ const SearchPage = ({
             campsData={data ? data.camps : []}
             destData={data ? data.destCategories : []}
           />
-          {searchParams.filter === 'mobile' ? (
-            // <OldFilter getFilterValue={getFilterValue} />
-            <Filter />
-          ) : // <TestFilter />
-          null}
+          {searchParams.filter === 'mobile' ? <Filter /> : null}
         </div>
       ) : null}
       {searchParams.filter !== 'mobile' ? (
@@ -114,16 +99,19 @@ const SearchPage = ({
           <SearchCards
             hotelData={data ? data.hotels : []}
             campsData={data ? data.camps : []}
-            map={map}
           />
-          {map !== '' ? (
+          <MapContainer
+            // changeMap={mapFunction}
+            hotelData={data ? data.hotels : []}
+            campsData={data ? data.camps : []}
+          />
+          {/* {map !== '' ? (
             <MapContainer
               changeMap={mapFunction}
               hotelData={data ? data.hotels : []}
               campsData={data ? data.camps : []}
-              map={map}
             />
-          ) : null}
+          ) : null} */}
         </div>
       ) : null}
     </main>

@@ -1,14 +1,19 @@
+import useWindowSize from '@/hooks/windowSize';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 
 interface iProps {
   data: any[];
-  cap: number;
 }
 
-const News = ({ data, cap }: iProps) => {
+const News = ({ data }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const size = useWindowSize();
+  let cap = 4;
+  if (size.width && size.width >= 1024) {
+    cap = 6;
+  }
   if (cap != 0) {
     data = data.slice(0, cap);
   }
@@ -49,7 +54,7 @@ const News = ({ data, cap }: iProps) => {
               </div>
               {/* bottom section */}
               <div className="flex w-full items-center justify-center px-[8px] text-[14px] text-main-text lg:px-[16px] lg:text-[16px]">
-                <p className=" line-clamp-3 2xs:line-clamp-2 ">
+                <p className=" line-clamp-3 2xs:line-clamp-2">
                   {/* {state.language === 'mn' ? data.title : ''} */}
                   {lang === 'en' ? '' : data.title}
                 </p>

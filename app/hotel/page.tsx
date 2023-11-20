@@ -18,6 +18,7 @@ import Description from '@/components/hotelPage/description';
 import HotelCard from '@/components/common/hotelCard';
 import Footer from '@/components/common/footer';
 import type { Metadata } from 'next';
+import LogSign from '@/components/common/logIn';
 
 // export const metadata: Metadata = {
 //   title: 'iHotel',
@@ -27,7 +28,7 @@ import type { Metadata } from 'next';
 const HotelPage = ({
   searchParams,
 }: {
-  searchParams: { name: string; slug: string; lang: string };
+  searchParams: { slug: string; lang: string };
 }) => {
   const { data } = useRequest(() => {
     return fetchDataHotel(searchParams.slug);
@@ -51,7 +52,6 @@ const HotelPage = ({
     setLogIn(e);
   }
 
-  console.log(data);
   let stat = '';
   if (data?.hotel.isOnline == 1 && data?.hotel.isOffline == 0) {
     stat = 'online';
@@ -75,20 +75,14 @@ const HotelPage = ({
     <main>
       <HeaderVariants
         ver={'hotel'}
-        openMenu={openMenu}
+        // openMenu={openMenu}
         hotelData={[]}
         placesData={[]}
         campsData={[]}
         destData={[]}
       />
-      {logIn !== '' ? <LogIn ver={logIn} changeVer={openLogIn} /> : null}
-      <BurgerMenu
-        open={sideMenu}
-        close={closeMenu}
-        logIn={openLogIn}
-        phone={data ? data.phoneNumber : ''}
-        ver={'search'}
-      />
+      {logIn !== '' ? <LogSign /> : null}
+      <BurgerMenu phone={data ? data.phoneNumber : ''} ver={'search'} />
       <div className="flex flex-col gap-[24px] overflow-x-hidden px-[16px] pb-[32px] pt-[80px] sm:px-[50px] md:px-[72px] lg:gap-[48px] lg:px-[60px]  xl:px-[100px] 2xl:px-[150px]">
         <div className="grid grid-cols-1 gap-[24px] lg:grid-cols-5 lg:gap-[20px]">
           <div className="flex w-full flex-col gap-[24px] lg:col-span-3 lg:gap-[24px] ">
@@ -179,7 +173,7 @@ const HotelPage = ({
                         ? 'Booking unavailable'
                         : ''}
                       {stat === 'pending' ? (
-                        <span className=" font-bold">1-3 hours</span>
+                        <span className="font-bold ">1-3 hours</span>
                       ) : null}
                     </p>
                   ) : (
@@ -192,7 +186,7 @@ const HotelPage = ({
                         ? 'Онлайн захиалга боломжгүй'
                         : ''}
                       {stat === 'pending' ? (
-                        <span className=" font-bold ">1-3 цаг</span>
+                        <span className="font-bold ">1-3 цаг</span>
                       ) : null}
                     </p>
                   )}

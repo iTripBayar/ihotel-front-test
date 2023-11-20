@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 import { Switch } from '@headlessui/react';
 import Link from 'next/link';
@@ -22,7 +22,20 @@ const OnlineToggle = ({
   const filter = searchParams.get('filter');
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (value !== null) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      return params.toString();
+    },
+    [searchParams],
+  );
   return (
     <div
       className={`relative flex w-full items-center justify-center overflow-hidden bg-white text-[12px] leading-[12px] text-main-text 2xs:text-[13px] 2xs:leading-[13px] sm:text-[14px] sm:leading-[14px] lg:text-[12px] lg:leading-[12px]  xl:text-[14px] xl:leading-[14px] ${
@@ -39,7 +52,7 @@ const OnlineToggle = ({
       ref={containerRef}
     >
       {ver === 'headerSearch' ? (
-        <div className=" grid  h-full w-full animate-brotate grid-cols-2 grid-rows-2 overflow-visible ">
+        <div className="grid h-full w-full animate-brotate grid-cols-2 grid-rows-2 overflow-visible">
           <div className="h-full w-full rounded-r-full bg-gradient-to-t from-main-online/90 from-50% via-white/90 to-transparent "></div>
           <div className="h-full w-full bg-white"></div>
           <div className="h-full w-full rounded-r-full bg-gradient-to-b from-main-online/90 from-50% via-white/90 to-transparent"></div>
@@ -96,27 +109,36 @@ const OnlineToggle = ({
           </p>
         </div>
         {/* switch */}
-        <Link
-          href={{
-            pathname: `${pathname}`,
-            query:
-              toggle === 'true'
-                ? {
-                    toggle: false,
-                    searchValue: searchValue,
-                    type: type,
-                    filter: filter,
-                    lang: lang,
-                  }
-                : {
-                    toggle: true,
-                    searchValue: searchValue,
-                    type: type,
-                    filter: filter,
-                    lang: lang,
-                  },
+        <div
+          // href={{
+          //   pathname: `${pathname}`,
+          //   query:
+          //     toggle === 'true'
+          //       ? {
+          //           toggle: false,
+          //           searchValue: searchValue,
+          //           type: type,
+          //           filter: filter,
+          //           lang: lang,
+          //         }
+          //       : {
+          //           toggle: true,
+          //           searchValue: searchValue,
+          //           type: type,
+          //           filter: filter,
+          //           lang: lang,
+          //         },
+          // }}
+          // scroll={false}
+          onClick={() => {
+            let nextToggle = !toggle ? 'true' : null;
+            router.push(
+              `${pathname}?${createQueryString('toggle', nextToggle)}`,
+              {
+                scroll: false,
+              },
+            );
           }}
-          scroll={false}
           id="toggleLink"
         >
           <Switch
@@ -129,7 +151,6 @@ const OnlineToggle = ({
             // }}
             onChange={(e) => {
               setEnabled(e);
-              // console.log(e);
               document.getElementById('toggleLink')?.click();
 
               // dispatch({
@@ -157,7 +178,7 @@ const OnlineToggle = ({
               } relative inline-block h-[18px] w-[18px] transform rounded-full bg-white shadow-[inset_0_-2px_6px_rgba(0,0,0,0.25)] transition`}
             />
           </Switch>
-        </Link>
+        </div>
       </div>
     </div>
   );

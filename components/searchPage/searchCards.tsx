@@ -5,21 +5,12 @@ import { useSearchParams } from 'next/navigation';
 interface iProps {
   hotelData: any[];
   campsData: any[];
-  map: string;
 }
 
-const SearchCards = ({ hotelData, campsData, map }: iProps) => {
-  // searchParams
+const SearchCards = ({ hotelData, campsData }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const searchValue = searchParams.get('searchValue');
-  const toggle = searchParams.get('toggle');
-  const type = searchParams.get('type');
-  const filter = searchParams.get('filter');
-  const catVal = searchParams.get('catVal');
-  const minVal = searchParams.get('minVal');
-  const maxVal = searchParams.get('maxVal');
-  const additionalVal = searchParams.getAll('additionalVal');
+  const map = searchParams.get('map');
 
   let data = [];
   data = [...hotelData, ...campsData];

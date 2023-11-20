@@ -1,28 +1,32 @@
 'use client';
-import HeroCategory from '@/components/heroCategory';
+import HeroCategory from '@/components/homePage/heroCategory';
 import '../app/globals.css';
-import CommonLocation from '@/components/commonLocation';
-import News from '@/components/news';
+import CommonLocation from '@/components/homePage/commonLocation';
+import News from '@/components/homePage';
 import Footer from '@/components/common/footer';
-import LogIn from '@/components/common/logIn';
 import BurgerMenu from '@/components/common/burgermenu';
 import { useState, useRef, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import HeaderVariants from '@/components/common/headerVariants';
 import { fetchData } from '@/utils';
-import SearchSection from '@/components/searchSection';
+import SearchSection from '@/components/common/searchSection';
 import Header from '@/components/common/header';
-import FeaturedSample from '@/components/cardContainer/sample';
-import useWindowSize from '@/hooks/windowSize';
+import FeaturedSample from '@/components/homePage/sampleContainer';
 import BottomSection from '@/components/common/bottomSection';
-import CardsContainer from '@/components/cardContainer';
+import CardsContainer from '@/components/homePage/cardsContainer';
+import LogIn from '@/components/common/log&signUp/logIn';
+import SignUp from '@/components/common/log&signUp/signUp';
 
-export default function Home() {
+export default function Home({
+  searchParams,
+}: {
+  searchParams: {
+    logInState: string | null;
+    signUpState: string | null;
+  };
+}) {
   const [headerVer, setHeaderVer] = useState('default');
-  const [sideMenu, setSideMenu] = useState(false);
-  const [logIn, setLogIn] = useState('');
   const searchBoxRef = useRef(null);
-  const size = useWindowSize();
   const { data } = useRequest(() => {
     return fetchData();
   });
@@ -55,50 +59,26 @@ export default function Home() {
     };
   }, []);
 
-  function openMenu() {
-    setSideMenu(true);
-  }
-  function closeMenu() {
-    setSideMenu(false);
-  }
-  function openLogIn(e: string) {
-    setLogIn(e);
-  }
-
   return (
     <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
       {/* fixed components */}
       {headerVer === 'fixed' ? (
         <HeaderVariants
           ver={headerVer}
-          openMenu={openMenu}
           hotelData={data ? data.hotels : []}
           placesData={data ? data.places : []}
           campsData={data ? data.camps : []}
           destData={data ? data.destCategories : []}
         />
       ) : null}
-      {logIn !== '' ? <LogIn ver={logIn} changeVer={openLogIn} /> : null}
-      <BurgerMenu
-        open={sideMenu}
-        close={closeMenu}
-        logIn={openLogIn}
-        phone={data ? data.phoneNumber : ''}
-        ver={'normal'}
-      />
-      <BottomSection
-        ver={headerVer}
-        map={''}
-        openMap={() => {
-          ('');
-        }}
-      />
+      {/* {searchParams.logInState ||
+        (searchParams.signUpState ? <LogSign /> : null)} */}
+      {searchParams.logInState ? <LogIn /> : null}
+      {searchParams.signUpState ? <SignUp /> : null}
+      <BurgerMenu phone={data ? data.phoneNumber : ''} ver={'normal'} />
+      <BottomSection ver={headerVer} />
       {/* end of fixed components */}
-      <Header
-        openMenu={openMenu}
-        logIn={openLogIn}
-        phone={data ? data.phoneNumber : ''}
-      />
+      <Header phone={data ? data.phoneNumber : ''} />
       <HeroCategory data={data ? data.propertyTypes : []} />
       <div ref={searchBoxRef}>
         {headerVer !== 'fixed' ? (
@@ -116,7 +96,6 @@ export default function Home() {
         destinations={data ? data.topDestinations : []}
       />
       <CardsContainer
-        cap={size.width && size.width <= 1280 && size.width >= 576 ? 2 : 3}
         title={'cheap'}
         data={data ? data.cheapHotels : []}
         ver={'home'}
@@ -125,7 +104,6 @@ export default function Home() {
         map={''}
       />
       <CardsContainer
-        cap={6}
         title={'hotels'}
         data={data ? data.hotels : []}
         ver={'home'}
@@ -134,7 +112,6 @@ export default function Home() {
         map={''}
       />
       <CardsContainer
-        cap={6}
         title={'camps'}
         data={data ? data.camps : []}
         ver={'home'}
@@ -143,11 +120,7 @@ export default function Home() {
         map={''}
       />
       <FeaturedSample cap={6} title={'sample'} />
-
-      <News
-        cap={size.width && size.width >= 1024 ? 6 : 4}
-        data={data ? data.posts : []}
-      />
+      <News data={data ? data.posts : []} />
       <Footer />
     </main>
   );

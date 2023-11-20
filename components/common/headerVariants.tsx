@@ -1,12 +1,12 @@
+'use client';
 import Image from 'next/image';
-import SearchSection from '../searchSection';
+import SearchSection from './searchSection';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import { useCallback, useEffect } from 'react';
 
 interface iProps {
   ver: string;
-  openMenu: () => void;
   hotelData: any[];
   placesData: any[];
   campsData: any[];
@@ -15,34 +15,29 @@ interface iProps {
 
 const HeaderVariants = ({
   ver,
-  openMenu,
   hotelData,
   placesData,
   campsData,
   destData,
 }: iProps) => {
-  const pathname = usePathname();
+  const router = useRouter();
   const searchParams = useSearchParams();
-  console.log(searchParams.values);
-  // const lang = searchParams.get('lang');
-  // const searchValue = searchParams.get('searchValue');
-  // const toggle = searchParams.get('toggle');
-  // const type = searchParams.get('type');
-  // const filter = searchParams.get('filter');
-  // const catVal = searchParams.get('catVal');
-  // const minVal = searchParams.get('minVal');
-  // const maxVal = searchParams.get('maxVal');
-  // const additionalVal = searchParams.getAll('additionalVal');
+  const pathname = usePathname();
+  const menu = searchParams.get('menu');
 
-  // lang: lang === 'en' ? 'mn' : 'en',
-  //                 searchValue: searchValue,
-  //                 toggle: toggle,
-  //                 filter: filter,
-  //                 type: type,
-  //                 catVal: catVal,
-  //                 minVal: minVal,
-  //                 maxVal: maxVal,
-  //                 additionalVal: additionalVal,
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (value !== null) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      return params.toString();
+    },
+    [searchParams],
+  );
+
   return (
     <header
       className={`fixed z-[100] flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white sm:px-[50px] ${
@@ -50,7 +45,7 @@ const HeaderVariants = ({
           ? ' animate-slide-bottom 2xs:px-[24px] md:px-[67px] lg:gap-[24px] lg:px-[150px] xl:gap-[65px] 2xl:gap-[100px] 2xl:px-[200px] '
           : ver === 'search'
           ? 'h-[60px] 2xs:px-[24px] md:px-[72px] md:pr-[82px] lg:gap-[64px] lg:px-[60px] xl:gap-[100px] '
-          : ver === 'hotel'
+          : ver === 'hotel' || ver === 'reservation'
           ? 'h-[60px] 2xs:px-[16px] md:px-[72px] md:pr-[82px] lg:gap-[64px] lg:px-[60px] xl:gap-[100px] xl:px-[100px] 2xl:px-[150px]'
           : ''
       }`}
@@ -59,7 +54,7 @@ const HeaderVariants = ({
       <Link
         href="/"
         className={`relative ${
-          ver === 'hotel' ? 'lg:hidden' : 'hidden'
+          ver === 'hotel' || ver === 'reservation' ? 'lg:hidden' : 'hidden'
         } h-[34px] w-[34px] min-w-[34px] cursor-pointer lg:flex xl:hidden`}
       >
         <Image
@@ -76,7 +71,9 @@ const HeaderVariants = ({
       <Link
         href="/"
         className={`relative h-[36.5px] w-[114px]  xl:flex ${
-          ver === 'hotel' ? 'hidden lg:flex' : 'lg:hidden'
+          ver === 'hotel' || ver === 'reservation'
+            ? 'hidden lg:flex'
+            : 'lg:hidden'
         }`}
       >
         <Image
@@ -93,7 +90,7 @@ const HeaderVariants = ({
       </Link>
       <div
         className={`${
-          ver === 'hotel' ? '' : 'hidden'
+          ver === 'hotel' || ver === 'reservation' ? '' : 'hidden'
         } w-full items-center lg:flex`}
       >
         <SearchSection
@@ -104,38 +101,26 @@ const HeaderVariants = ({
           ver={ver}
         />
       </div>
-      {/* burger menu (animated) */}
-      <Link
-        scroll={false}
-        href={{
-          pathname: `${pathname}`,
-          // query: lang === 'en' ? { lang: 'mn' } : { lang: 'en' },
-          query: {},
-          // toggle == null
-          //   ? { lang: lang === 'en' ? 'mn' : 'en' }
-          //   : {
-          //       lang: lang === 'en' ? 'mn' : 'en',
-          //       searchValue: searchValue,
-          //       toggle: toggle,
-          //       filter: filter,
-          //       type: type,
-          //       catVal: catVal,
-          //       minVal: minVal,
-          //       maxVal: maxVal,
-          //       additionalVal: additionalVal,
-          //     },
-        }}
-        className="flex items-center justify-end"
-      >
+      <div className="flex items-center justify-end">
+        {/* lang btn for reservationPage */}
+        {ver === 'reservation' ? (
+          <div className="hidden lg:flex">Lang</div>
+        ) : null}
+        {/* burger menu (animated) */}
         <div
+          onClick={() => {
+            let nextMenu = menu !== 'open' ? 'open' : null;
+            router.push(`${pathname}?${createQueryString('menu', nextMenu)}`, {
+              scroll: false,
+            });
+          }}
           className="relative flex h-[16px] w-[24px] flex-col items-center "
-          onClick={openMenu}
         >
           <div className="absolute top-[50%] h-[2px] w-[24px] translate-y-[-50%] animate-burger-top rounded-full bg-white"></div>
           <div className="absolute top-0 h-[2px] w-[24px] animate-burger-top1  rounded-full bg-white"></div>
           <div className="absolute bottom-0 h-[2px] w-[24px] animate-burger-top2  rounded-full bg-white"></div>
         </div>
-      </Link>
+      </div>
     </header>
   );
 };

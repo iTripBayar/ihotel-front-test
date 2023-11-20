@@ -1,13 +1,9 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 
-interface iProps {
-  ver: string;
-  changeVer: (e: string) => void;
-}
-
-const LogIn = ({ ver, changeVer }: iProps) => {
+const LogSign = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordConfirmRef = useRef<HTMLInputElement>(null);
@@ -15,13 +11,38 @@ const LogIn = ({ ver, changeVer }: iProps) => {
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+
   const searchParams = useSearchParams();
+  const router = useRouter();
   const lang = searchParams.get('lang');
+  const signUpState = searchParams.get('signUpState');
+  const logInState = searchParams.get('logInState');
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (value !== null) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  function clearBoth() {
+    if (signUpState) {
+      router.push(`/?${createQueryString('signUpState', null)}`);
+    }
+    if (logInState) {
+      router.push(`/?${createQueryString('logInState', null)}`);
+    }
+  }
 
   const handleClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
     if (target.classList.contains('bg-black/[.35]')) {
-      changeVer('');
+      clearBoth();
     }
   };
 
@@ -34,8 +55,12 @@ const LogIn = ({ ver, changeVer }: iProps) => {
         {/* title */}
         <div className="flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px] text-main-text">
           <p className="font-medium">
-            {ver === 'logIn' ? (lang === 'en' ? 'Log In' : 'Нэвтрэх') : null}
-            {ver === 'signUp'
+            {logInState === 'open'
+              ? lang === 'en'
+                ? 'Log In'
+                : 'Нэвтрэх'
+              : null}
+            {signUpState === 'open'
               ? lang === 'en'
                 ? 'Sign Up'
                 : 'Бүртгүүлэх'
@@ -48,7 +73,7 @@ const LogIn = ({ ver, changeVer }: iProps) => {
             strokeWidth={2}
             stroke="currentColor"
             className="h-[22px] w-[22px]"
-            onClick={() => changeVer('')}
+            onClick={() => clearBoth()}
           >
             <path
               strokeLinecap="round"
@@ -70,7 +95,9 @@ const LogIn = ({ ver, changeVer }: iProps) => {
                 pattern="*@.*"
                 ref={emailRef}
               />
-              {ver != '' && emailRef?.current?.validity.patternMismatch ? (
+              {logInState != '' ||
+              (signUpState !== '' &&
+                emailRef?.current?.validity.patternMismatch) ? (
                 <p className=" absolute left-2 text-[11px] text-red-600 2xs:text-[12px]">
                   {lang === 'en'
                     ? '* Invalid email address *'
@@ -89,12 +116,12 @@ const LogIn = ({ ver, changeVer }: iProps) => {
                 minLength={8}
                 required
                 pattern={
-                  ver === 'signUp'
+                  signUpState === 'open'
                     ? '^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'
                     : undefined
                 }
               />
-              {ver === 'signUp' &&
+              {signUpState === 'open' &&
               passwordRef?.current?.validity.patternMismatch == true ? (
                 <p
                   className={`absolute left-2 text-[11px] text-red-600 2xs:text-[12px] ${
@@ -130,7 +157,7 @@ const LogIn = ({ ver, changeVer }: iProps) => {
               ) : null}
             </div>
             {/* password confirmation input for signUp */}
-            {ver == 'signUp' ? (
+            {signUpState == 'open' ? (
               <div className="relative">
                 <input
                   type={showConfirm === false ? 'password' : 'text'}
@@ -148,7 +175,7 @@ const LogIn = ({ ver, changeVer }: iProps) => {
                   minLength={8}
                   required
                 />
-                {ver === 'signUp' &&
+                {signUpState === 'open' &&
                 passwordConfirmRef.current?.value.length &&
                 passwordConfirmRef.current?.value.length > 0 &&
                 passwordRef?.current?.value !==
@@ -191,7 +218,7 @@ const LogIn = ({ ver, changeVer }: iProps) => {
               {lang === 'en' ? 'Forgot password?' : 'Нууц үгээ мартсан?'}
             </p>
             {/* warning message */}
-            {ver === 'signUp' &&
+            {signUpState === 'open' &&
             passwordRef?.current?.validity.patternMismatch ? (
               <p className="mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]">
                 {/* {state.language === 'mn'
@@ -252,8 +279,12 @@ const LogIn = ({ ver, changeVer }: iProps) => {
               lang === 'en' ? 'min-w-[100px] px-[14px]' : ''
             }`}
           >
-            {ver === 'logIn' ? (lang === 'en' ? 'Log In' : 'Нэвтрэх') : null}
-            {ver === 'signUp'
+            {logInState === 'open'
+              ? lang === 'en'
+                ? 'Log In'
+                : 'Нэвтрэх'
+              : null}
+            {signUpState === 'open'
               ? lang === 'en'
                 ? 'Sign Up'
                 : 'Бүртгүүлэх'
@@ -262,15 +293,26 @@ const LogIn = ({ ver, changeVer }: iProps) => {
           <p
             className="justify-self-end text-[13px] text-primary-blue 2xs:text-[14px]"
             onClick={() => {
-              ver === 'logIn' ? changeVer('signUp') : changeVer('logIn');
+              if (logInState === 'open') {
+                router.push(`/?${createQueryString('signUpState', 'open')}`);
+                router.push(`/?${createQueryString('logInState', null)}`);
+              } else {
+                router.push(`/?${createQueryString('signUpState', null)}`);
+                router.push(`/?${createQueryString('logInState', 'open')}`);
+              }
+              // logIn === 'open' ? changeVer('signUp') : changeVer('logIn');
             }}
           >
-            {ver === 'logIn'
+            {logInState === 'open'
               ? lang === 'en'
                 ? 'Sign Up'
                 : 'Бүртгүүлэх'
               : null}
-            {ver === 'signUp' ? (lang === 'en' ? 'Log In' : 'Нэвтрэх') : null}
+            {signUpState === 'open'
+              ? lang === 'en'
+                ? 'Log In'
+                : 'Нэвтрэх'
+              : null}
           </p>
         </div>
       </div>
@@ -278,4 +320,4 @@ const LogIn = ({ ver, changeVer }: iProps) => {
   );
 };
 
-export default LogIn;
+export default LogSign;

@@ -61,7 +61,7 @@ const Filter = () => {
     document.getElementById('additionalLink')?.click();
   }, [additional]);
 
-  if (filter === 'web')
+  if (filter === 'webFilter')
     return (
       <div
         className="flex max-h-[300px] w-[85vw] animate-fade500 items-end"
@@ -220,7 +220,6 @@ const Filter = () => {
                           }
                         }
                         return additional;
-                        // console.log(additional);
                       }}
                       className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 "
                     />
@@ -534,7 +533,6 @@ const Filter = () => {
                       }
                     }
                     return additional;
-                    // console.log(additional);
                   }}
                   className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 "
                 />

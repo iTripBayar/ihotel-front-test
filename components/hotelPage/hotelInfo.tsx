@@ -24,21 +24,6 @@ const HotelInfo = ({
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
 
-  // let stat = '';
-  // if (data.isOnline == 1 && data.isOffline == 0) {
-  //   stat = 'online';
-  // } else if (data.isOnline == 0 && data.isOffline == 0) {
-  //   stat = 'pending';
-  // } else if (data.isOnline == 0 && data.isOffline == 1 && data.phone != null) {
-  //   stat = 'offline';
-  // } else if (data.isOnline == 0 && data.isOffline == 1 && data.phone == null) {
-  //   stat = 'data';
-  // }
-  // stat = 'online';
-  //   console.log(data);
-  //   let phone = data.phone;
-  //   const formattedPhone = `${phone.slice(0, 4)}-${phone.slice(4)}`;
-
   return (
     <div className="flex flex-col gap-[16px] lg:gap-[24px]">
       {/* name */}
@@ -87,7 +72,7 @@ const HotelInfo = ({
                 ? 'Confirmation delay: '
                 : 'Booking unavailable'}
               {stat === 'pending' ? (
-                <span className=" font-bold">1-3 hours</span>
+                <span className="font-bold ">1-3 hours</span>
               ) : null}
             </p>
           ) : (
@@ -98,7 +83,7 @@ const HotelInfo = ({
                 ? 'Баталгаажих хугацаа: '
                 : 'Онлайн захиалга боломжгүй'}
               {stat === 'pending' ? (
-                <span className=" font-bold ">1-3 цаг</span>
+                <span className="font-bold ">1-3 цаг</span>
               ) : null}
             </p>
           )}
@@ -117,7 +102,7 @@ const HotelInfo = ({
             fill="#3C76FE"
           />
         </svg>
-        <p className="  text-sub-text opacity-75">
+        <p className="text-sub-text  opacity-75">
           {lang === 'en' ? addressEn : address}
         </p>
       </div>

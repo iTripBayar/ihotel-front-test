@@ -1,27 +1,31 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import Image from 'next/image';
-import { usePathname, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 type iProps = {
   ver: string;
-  map: string;
-  openMap: (e: string) => void;
 };
 
-const BottomSection = ({ ver, map, openMap }: iProps) => {
-  const pathname = usePathname();
+const BottomSection = ({ ver }: iProps) => {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const lang = searchParams.get('lang');
-  const searchValue = searchParams.get('searchValue');
-  const toggle = searchParams.get('toggle');
-  const type = searchParams.get('type');
-  const filter = searchParams.get('filter');
-  const catVal = searchParams.get('catVal');
-  const minVal = searchParams.get('minVal');
-  const maxVal = searchParams.get('maxVal');
-  const additionalVal = searchParams.getAll('additionalVal');
+  const map = searchParams.get('map');
   const btnRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (value !== null) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      return params.toString();
+    },
+    [searchParams],
+  );
   const handleScrollToTop = () => {
     btnRef.current?.classList.add('animate-bounce');
     setTimeout(() => {
@@ -51,12 +55,15 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
       }  `}
     >
       {/* map */}
-      {ver === 'search' && map === '' ? (
+      {ver === 'search' && !map ? (
         <div
           className={`relative flex h-[40px] animate-fade items-center  justify-center gap-[10px] self-end rounded-full border-2 border-white bg-primary-blue px-[8px] text-white duration-700 lg:hidden lg:h-[45px] ${
             delay == true ? 'w-[40px] lg:w-[45px] ' : 'w-[171px]'
           }`}
-          onClick={() => openMap('open')}
+          onClick={() => {
+            let nextMap = map !== 'open' ? 'open' : null;
+            router.push(`/search/?${createQueryString('map', nextMap)}`);
+          }}
         >
           <svg
             viewBox="0 0 24 22"
@@ -77,7 +84,7 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
           {delay == true ? (
             <div
               className={`absolute left-[70%] top-0 flex w-[90px] animate-fade items-center justify-center rounded-full bg-primary-blue text-[11px] font-medium  ${
-                lang === 'en' ? 'w-[45px] duration-500' : ''
+                lang === 'en' ? 'max-w-[45px] duration-500' : ''
               }`}
             >
               {/* {state.language === 'mn' ? 'Газрын зураг' : 'Map'} */}
@@ -97,25 +104,12 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
         }`}
       >
         {/* lang */}
-        <Link
-          scroll={false}
-          href={{
-            pathname: `${pathname}`,
-            // query: lang === 'en' ? { lang: 'mn' } : { lang: 'en' },
-            query:
-              toggle == null
-                ? { lang: lang === 'en' ? 'mn' : 'en' }
-                : {
-                    lang: lang === 'en' ? 'mn' : 'en',
-                    searchValue: searchValue,
-                    toggle: toggle,
-                    filter: filter,
-                    type: type,
-                    catVal: catVal,
-                    minVal: minVal,
-                    maxVal: maxVal,
-                    additionalVal: additionalVal,
-                  },
+        <div
+          onClick={() => {
+            let nextLang = lang === 'en' ? 'mn' : 'en';
+            router.push(`${pathname}?${createQueryString('lang', nextLang)}`, {
+              scroll: false,
+            });
           }}
           className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue"
           // onClick={() => {
@@ -139,12 +133,16 @@ const BottomSection = ({ ver, map, openMap }: iProps) => {
             sizes="20vw"
             className="h-[30px] w-[30px] cursor-pointer object-cover"
           />
-        </Link>
+        </div>
         {/* map with arrow when closed */}
         {ver === 'search' && map === '' ? (
           <div
             className="hidden h-[40px] min-w-[40px] items-center justify-center gap-[4px] rounded-full border-2 border-white bg-primary-blue px-[12px] lg:flex"
-            onClick={() => openMap('open')}
+            // onClick={() => openMap('open')}
+            // onClick={() => {
+            //   let nextMap = map !== 'open' ? 'open' : null;
+            //   router.push(`/?${createQueryString('map', nextMap)}`);
+            // }}
           >
             {/* arrow */}
             <svg

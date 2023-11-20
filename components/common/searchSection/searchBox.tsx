@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 interface iProps {
   hotelData: any[];
@@ -20,21 +20,29 @@ const SearchBox = ({
 }: iProps) => {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(false);
-
   const inputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const toggle = searchParams.get('toggle');
   const searchValue = searchParams.get('searchValue');
   const filter = searchParams.get('filter');
-  const type = searchParams.get('type');
-  const catVal = searchParams.get('catVal');
-  const minVal = searchParams.get('minVal');
-  const maxVal = searchParams.get('maxVal');
-  const additionalVal = searchParams.getAll('additionalVal');
+  const map = searchParams.get('map');
+  const router = useRouter();
+
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (value !== null) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      return params.toString();
+    },
+    [searchParams],
+  );
 
   const sample = [];
   const suggestion = [
@@ -61,7 +69,6 @@ const SearchBox = ({
     if (ver !== 'hotel') {
       const interval = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % suggestion.length);
-        console.log(ver);
       }, 3000);
       return () => clearInterval(interval);
     }
@@ -81,7 +88,6 @@ const SearchBox = ({
       key: placesData[i].id,
       name: placesData[i].name,
       nameEn: placesData[i].nameEn ? placesData[i].nameEn : '',
-
       type: 'location',
     });
   }
@@ -123,10 +129,6 @@ const SearchBox = ({
     }
   }, [searchValue !== '']);
 
-  // const openFilter = (filterType: string) => {
-  //   dispatch({ type: 'TOGGLE_FILTER', payload: filterType });
-  //   // console.log(state.showFilter);
-  // };
   return (
     <div
       className={`relative flex w-full  flex-col gap-[10px] ${
@@ -206,39 +208,20 @@ const SearchBox = ({
         </div>
         {/* filter */}
         {ver === 'search' || ver === 'headerSearch' ? (
-          <Link
-            href={{
-              pathname: `${pathname}`,
-              query:
-                ver === 'headerSearch'
-                  ? {
-                      lang: lang,
-                      searchValue: searchValue,
-                      toggle: toggle,
-                      type: type,
-                      filter: filter === 'mobile' ? '' : 'mobile',
-                      catVal: catVal,
-                      minVal: minVal,
-                      maxVal: maxVal,
-                      additionalVal: additionalVal,
-                    }
-                  : {
-                      lang: lang,
-                      searchValue: searchValue,
-                      toggle: toggle,
-                      type: type,
-                      filter: filter === 'web' ? '' : 'web',
-                      catVal: catVal,
-                      minVal: minVal,
-                      maxVal: maxVal,
-                      additionalVal: additionalVal,
-                    },
+          <div
+            onClick={() => {
+              let nextFilter =
+                filter === '' || !filter
+                  ? `${ver === 'search' ? 'webFilter' : 'mobile'}`
+                  : null;
+              router.push(
+                `${pathname}?${createQueryString('filter', nextFilter)}`,
+              );
             }}
-            scroll={false}
             className={`flex h-full cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue ${
               ver === 'headerSearch' ? 'px-[8px]' : 'px-[12px]'
             } text-[13px] font-medium text-white ring-1 ring-primary-blue xl:px-[14px] xl:text-[14px] ${
-              query !== '' || filter !== '' ? 'w-[46px]' : ''
+              query !== '' || filter ? 'w-[46px]' : 'min-w-[100px]'
             }`}
           >
             <svg
@@ -260,11 +243,12 @@ const SearchBox = ({
               />
             </svg>
             {query === '' ? (
-              <p className={`${filter === '' ? '' : 'hidden'}`}>
+              // <p className={`${filter === '' ? '' : 'hidden'}`}>
+              <p className={`${!filter || filter === '' ? '' : 'hidden'}`}>
                 {lang === 'en' ? 'Filter' : 'Шүүлтүүр'}
               </p>
             ) : null}
-          </Link>
+          </div>
         ) : (
           ''
         )}
@@ -291,23 +275,37 @@ const SearchBox = ({
           className={` flex h-[150px] w-full flex-col justify-start gap-[12px] overflow-x-hidden overflow-y-scroll rounded-[8px] border border-black/20 bg-white px-[12px] text-main-text md:grid md:grid-cols-2 md:grid-rows-[auto] md:gap-[24px] md:px-[20px] lg:absolute lg:top-[50px] lg:h-[250px] lg:min-w-[400px] lg:grid-rows-[auto] lg:gap-[16px] lg:px-[10px] xl:gap-[24px] xl:px-[20px] lg:max-w-[${searchRef.current?.clientWidth}px] lg:z-50`}
         >
           {uniqueData.map((data) => (
-            <Link
-              href={{
-                pathname: `${pathname}`,
-                query: {
-                  lang: lang,
-                  searchValue: data.name,
-                  toggle: toggle,
-                  filter: filter,
-                  type: type,
-                },
-              }}
-              scroll={false}
-              key={data.key}
+            <div
               onClick={() => {
+                let nextSearchValue = data.name;
+                router.push(
+                  `${pathname}?${createQueryString(
+                    'searchValue',
+                    nextSearchValue,
+                  )}`,
+                  {
+                    scroll: false,
+                  },
+                );
                 setQuery(data.name);
                 setSelected(true);
               }}
+              // href={{
+              //   pathname: `${pathname}`,
+              //   query: {
+              //     lang: lang,
+              //     searchValue: data.name,
+              //     toggle: toggle,
+              //     filter: filter,
+              //     type: type,
+              //   },
+              // }}
+              // scroll={false}
+              key={data.key}
+              // onClick={() => {
+              //   setQuery(data.name);
+              //   setSelected(true);
+              // }}
               className=" flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
             >
               {data.type === 'location' ? (
@@ -362,7 +360,7 @@ const SearchBox = ({
                 </svg>
               )}
               {data.name}
-            </Link>
+            </div>
           ))}
         </div>
       ) : null}

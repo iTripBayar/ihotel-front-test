@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { useState } from 'react';
-import { useAppState } from '@/contexts/appStateContext';
 
 interface iProps {
   cap: number;
@@ -8,7 +7,6 @@ interface iProps {
 }
 
 const FeaturedSample = ({ cap, title }: iProps) => {
-  const { state } = useAppState();
   const [fav, setFav] = useState(false);
 
   const hotels = [
@@ -140,12 +138,12 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                       data.name.length > 27 ? 'xl:text-[14px]' : ''
                     }`}
                   >
-                    {state.language === 'mn' ? data.name : data.name}
+                    {data.name}
                   </p>
                   <p className="text-[12px] leading-[12px] text-sub-text/60 2xs:text-[14px] 2xs:leading-[14px]">
-                    {state.language === 'mn' ? data.dist : data.dist}
+                    {data.dist}
                     ,&nbsp;
-                    {state.language === 'mn' ? data.location : data.location}
+                    {data.location}
                   </p>
                 </div>
                 {/* review & stat */}
@@ -185,37 +183,20 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                           : 'bg-main-offline px-[6px] text-[11px] leading-[11px] 2xs:px-[12px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[4px] sm:text-[10px] sm:leading-[10px] md:px-[4px] md:text-[14px] md:leading-[14px]'
                       }`}
                     >
-                      {state.language === 'mn' ? (
-                        <p>
-                          {data.stat === 'online'
-                            ? 'Шууд баталгаажна'
-                            : data.stat === 'pending'
-                            ? 'Баталгаажих хугацаа: '
-                            : data.stat === 'offline'
-                            ? 'Онлайн захиалга боломжгүй'
-                            : ''}
-                          {data.stat === 'pending' ? (
-                            <span className="text-[14px] font-bold sm:text-[11px] md:text-[14px]">
-                              1-3 цаг
-                            </span>
-                          ) : null}
-                        </p>
-                      ) : (
-                        <p>
-                          {data.stat === 'online'
-                            ? 'Instant confirmation'
-                            : data.stat === 'pending'
-                            ? 'Confirmation delay: '
-                            : data.stat === 'offline'
-                            ? 'Booking unavailable'
-                            : ''}
-                          {data.stat === 'pending' ? (
-                            <span className="text-[14px] font-bold sm:text-[11px] md:text-[14px]">
-                              1-3 hours
-                            </span>
-                          ) : null}
-                        </p>
-                      )}
+                      <p>
+                        {data.stat === 'online'
+                          ? 'Шууд баталгаажна'
+                          : data.stat === 'pending'
+                          ? 'Баталгаажих хугацаа: '
+                          : data.stat === 'offline'
+                          ? 'Онлайн захиалга боломжгүй'
+                          : ''}
+                        {data.stat === 'pending' ? (
+                          <span className="text-[14px] font-bold sm:text-[11px] md:text-[14px]">
+                            1-3 цаг
+                          </span>
+                        ) : null}
+                      </p>
                     </div>
                   ) : (
                     <div className="self-end">
@@ -223,10 +204,10 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                         {data.price
                           ? data.price.toLocaleString()
                           : (70000).toLocaleString()}
-                        {state.language === 'mn' ? '₮' : '$'}
+                        {'₮'}
                         <span className="text-[14px] text-sub-text/75">
                           {' '}
-                          / {state.language === 'mn' ? 'хоног' : 'day'}
+                          / {'хоног'}
                         </span>
                       </p>
                     </div>
@@ -244,9 +225,9 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                       {data.price
                         ? data.price.toLocaleString()
                         : (70000).toLocaleString()}
-                      {state.language === 'mn' ? ' ₮' : ' $'}
+                      {' ₮'}
                       <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
-                        / {state.language === 'mn' ? 'хоног' : 'day'}
+                        / {'хоног'}
                       </span>
                     </p>
                     <div
@@ -256,11 +237,7 @@ const FeaturedSample = ({ cap, title }: iProps) => {
                           : 'px-[12px] 2xs:px-[16px] sm:px-[10px] md:px-[20px]'
                       }`}
                     >
-                      {state.language === 'mn' ? (
-                        <p>{data.stat === 'offline' ? 'Харах' : 'Захиалах'}</p>
-                      ) : (
-                        <p>{data.stat === 'offline' ? 'View' : 'Order'}</p>
-                      )}
+                      <p>{data.stat === 'offline' ? 'Харах' : 'Захиалах'}</p>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"

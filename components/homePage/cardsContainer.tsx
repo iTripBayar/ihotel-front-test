@@ -1,9 +1,10 @@
+import useWindowSize from '@/hooks/windowSize';
 import HotelCard from '../common/hotelCard';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 interface iProps {
-  cap: number;
   title: string;
   data: any[];
   ver: string;
@@ -13,7 +14,6 @@ interface iProps {
 }
 
 const CardsContainer = ({
-  cap,
   title,
   data,
   ver,
@@ -25,6 +25,17 @@ const CardsContainer = ({
   const lang = searchParams.get('lang');
   const toggle = searchParams.get('toggle');
   const searchValue = searchParams.get('searchValue');
+  const size = useWindowSize();
+
+  let cap = 6;
+
+  if (title === 'cheap') {
+    if (size.width && size.width <= 1280 && size.width >= 576) {
+      cap = 2;
+    } else {
+      cap = 3;
+    }
+  }
 
   if (cap != 0) {
     data = data.slice(0, cap);

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, {
   GeolocateControl,
@@ -9,21 +9,52 @@ import ReactMapGL, {
 } from 'react-map-gl';
 import Image from 'next/image';
 import useSupercluster from 'use-supercluster';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import HotelCard from '../common/hotelCard';
+import HotelCard from '../hotelCard';
+import useWindowSize from '@/hooks/windowSize';
 
 interface iProps {
-  changeMap: (e: string) => void;
-  map: string;
   hotelData: any[];
   campsData: any[];
 }
 
-const MapContainer = ({ changeMap, map, hotelData, campsData }: iProps) => {
+const MapContainer = ({ hotelData, campsData }: iProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const router = useRouter();
+  const map = searchParams.get('map');
+  const size = useWindowSize();
+
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (value !== null) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      return params.toString();
+    },
+    [searchParams],
+  );
+  useEffect(() => {
+    if (size.width && size.width >= 1024) {
+      // setMap('open');
+      let nextMap = 'open';
+
+      router.push(`${pathname}?${createQueryString('map', nextMap)}`, {
+        scroll: false,
+      });
+    } else {
+      router.push(`${pathname}?${createQueryString('map', null)}`, {
+        scroll: false,
+      });
+    }
+    return;
+  }, [size.width]);
+
   const divRef = useRef<HTMLDivElement>(null);
   const [selectedHotel, setSelectedHotel] = useState<{
     lat: string;
@@ -164,7 +195,7 @@ const MapContainer = ({ changeMap, map, hotelData, campsData }: iProps) => {
   return (
     <div
       className={`sticky h-full w-full flex-col items-center justify-start gap-[24px] bg-white px-[16px] pb-[24px]  sm:px-[42px] md:px-[72px] lg:h-[calc(100vh-60px)] lg:px-0 lg:pb-[24px]  lg:pt-[16px] ${
-        map === '' ? 'hidden' : 'flex lg:col-span-2'
+        !map || map === '' ? 'hidden' : 'flex lg:col-span-2'
       }`}
       ref={divRef}
     >
@@ -338,11 +369,14 @@ const MapContainer = ({ changeMap, map, hotelData, campsData }: iProps) => {
         <NavigationControl showCompass={false} />
         <GeolocateControl />
       </ReactMapGL>
-
-      <div className="flex w-full items-center justify-center gap-[24px] lg:justify-between ">
+      <div className="flex w-full items-center justify-between gap-[24px] lg:justify-between ">
         <div
           className="flex h-[40px] max-w-[220px] cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue px-[16px] font-medium text-white"
-          onClick={() => changeMap('')}
+          onClick={() => {
+            router.push(`${pathname}?${createQueryString('map', null)}`, {
+              scroll: false,
+            });
+          }}
         >
           {/* {state.language === 'mn' ? 'Газрын зураг хаах' : 'Close map'} */}
           {lang === 'en' ? 'Close map' : 'Газрын зураг хаах'}
@@ -362,24 +396,23 @@ const MapContainer = ({ changeMap, map, hotelData, campsData }: iProps) => {
           </svg>
         </div>
         {map === 'open' ? (
-          <Link
-            href={{
-              pathname: `${pathname}`,
-              query: lang === 'en' ? { lang: 'mn' } : { lang: 'en' },
+          <div
+            onClick={() => {
+              let nextLang = lang === 'en' ? 'mn' : 'en';
+              router.push(
+                `${pathname}?${createQueryString('lang', nextLang)}`,
+                {
+                  scroll: false,
+                },
+              );
             }}
             className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue "
-            // onClick={() => {
-            //   handleDay();
-            // }}
           >
             <Image
               src={
                 lang === 'en'
                   ? '/images/mongolian-flag.png'
                   : '/images/uk-flag.png'
-                // state.language === 'mn'
-                //   ? '/images/uk-flag.png'
-                //   : '/images/mongolian-flag.png'
               }
               alt="/lang"
               width={28}
@@ -389,7 +422,7 @@ const MapContainer = ({ changeMap, map, hotelData, campsData }: iProps) => {
               sizes="20vw"
               className="h-[30px] w-[30px] cursor-pointer object-cover"
             />
-          </Link>
+          </div>
         ) : null}
       </div>
     </div>

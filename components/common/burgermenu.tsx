@@ -1,40 +1,52 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useCallback } from 'react';
 
 interface iProps {
-  open: boolean;
-  close: () => void;
-  logIn: (e: string) => void;
   phone: string;
   ver: string;
 }
 
-const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
+const BurgerMenu = ({ phone, ver }: iProps) => {
   const [closeAnimation, setCloseAnimation] = useState(false);
   const [open1, setOpen1] = useState('');
-  const pathname = usePathname();
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const lang = searchParams.get('lang');
-  const sideMenu = searchParams.get('sideMenu');
+  const menu = searchParams.get('menu');
+  const logIn = searchParams.get('logIn');
+  const signUp = searchParams.get('signUp');
+
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (value !== null) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+
+      return params.toString();
+    },
+    [searchParams],
+  );
 
   const handleClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement; // Cast event.target to HTMLElement
     // Check if the click target is not the white div
     if (target.classList.contains('bg-black/50')) {
       setCloseAnimation(true);
-      setTimeout(() => {
-        setCloseAnimation(false);
-        close();
-      }, 400);
+      let nextMenu = menu !== 'open' ? 'open' : null;
+      router.push(`${pathname}?${createQueryString('menu', nextMenu)}`);
     }
   };
 
   return (
     <div
       className={` fixed right-0 top-0 z-[999] flex h-full w-full justify-end bg-black/50 ${
-        open === false ? 'hidden' : null
+        menu !== 'open' ? 'hidden' : null
       }`}
       onClick={handleClick}
     >
@@ -52,10 +64,8 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
           className="absolute right-[18px] top-[18px] h-[28px] w-[28px]"
           onClick={() => {
             setCloseAnimation(true);
-            setTimeout(() => {
-              setCloseAnimation(false);
-              close();
-            }, 400);
+            let nextMenu = menu !== 'open' ? 'open' : null;
+            router.push(`${pathname}?${createQueryString('menu', nextMenu)}`);
           }}
         >
           <path
@@ -71,14 +81,11 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
           <div
             className="flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]"
             onClick={() => {
-              logIn('logIn');
               setCloseAnimation(true);
-
-              setTimeout(() => {
-                setCloseAnimation(false);
-
-                close();
-              }, 400);
+              let nextLogIn = logIn !== 'open' ? 'open' : null;
+              router.push(
+                `${pathname}?${createQueryString('logIn', nextLogIn)}`,
+              );
             }}
           >
             {/* {state.language === 'mn' ? 'Нэвтрэх' : 'Log In'} */}
@@ -88,12 +95,9 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
           <div
             className="flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]"
             onClick={() => {
-              logIn('signUp');
               setCloseAnimation(true);
-              setTimeout(() => {
-                setCloseAnimation(false);
-                close();
-              }, 400);
+              let nextSignUp = signUp !== 'open' ? 'open' : null;
+              router.push(`${pathname}?${createQueryString('signUp', signUp)}`);
             }}
           >
             {/* {state.language === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'} */}
@@ -150,17 +154,17 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
                   </svg>
                 </div>
                 <div className="mb-[12px] flex flex-col items-end justify-start gap-[16px] text-end ">
-                  <a href="/" className="underline-0  relative text-white">
+                  <a href="/" className="underline-0 relative text-white">
                     {/* {state.language === 'mn' ? 'Бидний тухай' : 'About us'} */}
                     {lang === 'en' ? 'About us' : 'Бидний тухай'}
                   </a>
-                  <a href="/" className="underline-0  relative text-white">
+                  <a href="/" className="underline-0 relative text-white">
                     {/* {state.language === 'mn'
                       ? 'Түгээмэл асуулт хариулт'
                       : 'Q&A'} */}
                     {lang === 'en' ? 'Q&A' : 'Түгээмэл асуулт хариулт'}
                   </a>
-                  <a href="/" className="underline-0  relative text-white">
+                  <a href="/" className="underline-0 relative text-white">
                     {/* {state.language === 'mn'
                       ? 'Үйлчилгээний нөхцөл'
                       : 'Terms of service'} */}
@@ -208,11 +212,11 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
                   </svg>
                 </div>
                 <div className="justif-start mb-[12px] flex flex-col items-end gap-[16px] text-end ">
-                  <a href="/" className="underline-0  relative text-white">
+                  <a href="/" className="underline-0 relative text-white">
                     {/* {state.language === 'mn' ? 'Мэдээ мэдээлэл' : 'Articles'} */}
                     {lang === 'en' ? 'Articles' : 'Мэдээ мэдээлэл'}
                   </a>
-                  <a href="/" className="underline-0  relative text-white">
+                  <a href="/" className="underline-0 relative text-white">
                     {/* {state.language === 'mn'
                       ? 'Буудалд зориулсан зөвлөмж'
                       : 'Tips for hotels'} */}
@@ -220,7 +224,7 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
                       ? 'Tips for hotels'
                       : 'Буудалд зориулсан зөвлөмж'}
                   </a>
-                  <a href="/" className="underline-0  relative text-white">
+                  <a href="/" className="underline-0 relative text-white">
                     {/* {state.language === 'mn'
                       ? 'Аялагчдад зориулсан зөвлөмж'
                       : 'Tips for travelers'} */}
@@ -228,7 +232,7 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
                       ? 'Tips for travelers'
                       : 'Аялагчдад зориулсан зөвлөмж'}
                   </a>
-                  <a href="/" className="underline-0  relative text-white">
+                  <a href="/" className="underline-0 relative text-white">
                     {/* {state.language === 'mn'
                       ? 'iHotel амжилтын түүх'
                       : "iHotel's success history"} */}
@@ -280,7 +284,7 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
                 <div className="mb-[12px] flex flex-col items-end justify-start gap-[16px] text-end ">
                   <a
                     href="/"
-                    className="underline-0  relative font-medium text-white"
+                    className="underline-0 relative font-medium text-white"
                   >
                     {/* {state.language === 'mn'
                       ? 'Өрөөний удирдлагын систем'
@@ -289,13 +293,13 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
                       ? 'Room management system'
                       : 'Өрөөний удирдлагын систем'}
                   </a>
-                  <a href="/" className="underline-0  relative text-white">
+                  <a href="/" className="underline-0 relative text-white">
                     {/* {state.language === 'mn'
                       ? 'Веб сайт бүтээх'
                       : 'Web service'} */}
                     {lang === 'en' ? 'We service' : 'Веб сайт бүтээх'}
                   </a>
-                  <a href="/" className="underline-0  relative text-white">
+                  <a href="/" className="underline-0 relative text-white">
                     {/* {state.language === 'mn' ? 'Тусламж' : 'Support'} */}
                     {lang === 'en' ? 'Support' : 'Тусламж'}
                   </a>
@@ -324,12 +328,11 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
             <p className="leading-[16px]">{phone ? phone : '7727 9090'}</p>
           </div>
           {/* lang */}
-          <Link
-            href={{
-              pathname: `${pathname}`,
-              query: lang === 'en' ? { lang: 'mn' } : { lang: 'en' },
+          <div
+            onClick={() => {
+              let nextLang = lang === 'en' ? 'mn' : 'en';
+              router.push(`${pathname}?${createQueryString('lang', nextLang)}`);
             }}
-            scroll={false}
             className="flex h-[43px] w-full items-center justify-end gap-[8px]  border-b-[1px] border-white/[.15]"
             // onClick={() => {
             //   handleDay();
@@ -355,7 +358,7 @@ const BurgerMenu = ({ open, close, logIn, phone, ver }: iProps) => {
 
             {/* {state.language === 'mn' ? 'EN' : 'MN'} */}
             {lang === 'en' ? 'MN' : 'EN'}
-          </Link>
+          </div>
         </div>
       </div>
     </div>

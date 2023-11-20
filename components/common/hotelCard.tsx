@@ -27,13 +27,12 @@ const HotelCard = ({ data, fromMap }: iProps) => {
   // const handleHotelSelect = (hotel: string) => {
   //   // const newLanguage = state.language === 'mn' ? 'en' : 'mn';
   //   dispatch({ type: 'SET_HOTEL', payload: hotel });
-  //   // console.log(state);
   // };
   return (
     <Link
       href={{
         pathname: '/hotel',
-        query: { name: data.name, slug: data.slug }, // the data
+        query: { slug: data.slug }, // the data
       }}
       target="blank"
       className={`flex  flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] bg-white shadow-[0px_2px_12px_2px_rgb(0,0,0,0.20)] xl:gap-[20px] ${

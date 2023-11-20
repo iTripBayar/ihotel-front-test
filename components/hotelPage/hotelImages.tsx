@@ -7,8 +7,6 @@ interface Props {
 }
 
 const HotelImages = ({ images, image }: Props) => {
-  // console.log(image);
-
   const sample = [
     '/samples/camps.png',
     'samples/gobi.png',
