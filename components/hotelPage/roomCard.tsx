@@ -1,8 +1,6 @@
-import { useState, Fragment } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { Listbox, Transition } from '@headlessui/react';
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 
 interface Props {
   data: roomData.room;

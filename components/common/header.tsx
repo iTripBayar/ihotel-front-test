@@ -56,7 +56,7 @@ const Header = ({ phone }: iProps) => {
             //   logIn('logIn');
             // }}
             onClick={() => {
-              let nextLogIn = logInState !== 'open' ? 'open' : null;
+              const nextLogIn = logInState !== 'open' ? 'open' : null;
               router.push(`/?${createQueryString('logInState', nextLogIn)}`);
             }}
           >
@@ -71,7 +71,7 @@ const Header = ({ phone }: iProps) => {
             //   logIn('signUp');
             // }}
             onClick={() => {
-              let nextSignUp = signUpState !== 'open' ? 'open' : null;
+              const nextSignUp = signUpState !== 'open' ? 'open' : null;
               router.push(`/?${createQueryString('signUpState', nextSignUp)}`);
             }}
           >
@@ -105,7 +105,7 @@ const Header = ({ phone }: iProps) => {
           <div
             className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]"
             onClick={() => {
-              let nextAddHotel = addHotel !== 'open' ? 'open' : null;
+              const nextAddHotel = addHotel !== 'open' ? 'open' : null;
               router.push(`/?${createQueryString('addHotel', nextAddHotel)}`);
             }}
           >
@@ -130,7 +130,7 @@ const Header = ({ phone }: iProps) => {
           {/* lang btn */}
           <div
             onClick={() => {
-              let nextLang = lang === 'en' ? 'mn' : 'en';
+              const nextLang = lang === 'en' ? 'mn' : 'en';
               router.push(`/?${createQueryString('lang', nextLang)}`);
             }}
             className="group relative flex h-[32px] cursor-pointer items-center gap-[8px]"
@@ -159,7 +159,7 @@ const Header = ({ phone }: iProps) => {
         <div
           className="relative flex h-[16px] w-[24px] flex-col items-center lg:hidden"
           onClick={() => {
-            let nextMenu = menu !== 'open' ? 'open' : null;
+            const nextMenu = menu !== 'open' ? 'open' : null;
             router.push(`/?${createQueryString('menu', nextMenu)}`);
           }}
         >

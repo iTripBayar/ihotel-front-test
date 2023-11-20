@@ -1,9 +1,4 @@
-import ReactMapGL, {
-  GeolocateControl,
-  Marker,
-  NavigationControl,
-  FullscreenControl,
-} from 'react-map-gl';
+import ReactMapGL, { Marker } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useState } from 'react';
 interface Props {

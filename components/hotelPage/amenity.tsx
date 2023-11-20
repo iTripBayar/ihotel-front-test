@@ -1,5 +1,5 @@
 import { useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import useWindowSize from '@/hooks/windowSize';
 
 interface Props {
@@ -12,7 +12,7 @@ const Amenity = ({ data }: Props) => {
   const lang = searchParams.get('lang');
   const size = useWindowSize();
 
-  let sample = [
+  const sample = [
     { key: 0, name: 'Утасгүй интернэт', nameEn: 'Wifi', category: 'wifi' },
     { key: 1, name: 'Мини бар', nameEn: 'Minibar', category: 'fridge' },
     { key: 2, name: 'Буфет', nameEn: 'Buffet', category: 'food' },

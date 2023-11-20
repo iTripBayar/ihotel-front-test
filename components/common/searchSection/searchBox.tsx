@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import Link from 'next/link';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 interface iProps {
@@ -28,7 +27,6 @@ const SearchBox = ({
   const lang = searchParams.get('lang');
   const searchValue = searchParams.get('searchValue');
   const filter = searchParams.get('filter');
-  const map = searchParams.get('map');
   const router = useRouter();
 
   const createQueryString = useCallback(

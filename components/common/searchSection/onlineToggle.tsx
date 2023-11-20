@@ -1,9 +1,7 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 import { Switch } from '@headlessui/react';
-import Link from 'next/link';
-
 type iProps = {
   ver: string;
   // onlineToggleState: (value: boolean) => void;
@@ -17,9 +15,6 @@ const OnlineToggle = ({
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const toggle = searchParams.get('toggle');
-  const searchValue = searchParams.get('searchValue');
-  const type = searchParams.get('type');
-  const filter = searchParams.get('filter');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();

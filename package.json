@@ -11,20 +11,18 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
-    "@heroicons/react": "^2.0.18",
     "@types/react-slick": "^0.23.10",
     "ahooks": "^3.7.8",
     "axios": "^1.5.1",
-    "deck.gl": "^8.9.32",
+    "depcheck": "^1.4.7",
     "mapbox-gl": "^2.15.0",
-    "next": "latest",
+    "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
     "react-map-gl": "^7.1.6",
     "react-slick": "^0.29.0",
     "slick-carousel": "^1.8.1",
     "supercluster": "^8.0.1",
-    "swiper": "^10.3.1",
     "use-supercluster": "^1.1.0"
   },
   "devDependencies": {

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import SearchSection from './searchSection';
 import Link from 'next/link';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 
 interface iProps {
   ver: string;
@@ -109,7 +109,7 @@ const HeaderVariants = ({
         {/* burger menu (animated) */}
         <div
           onClick={() => {
-            let nextMenu = menu !== 'open' ? 'open' : null;
+            const nextMenu = menu !== 'open' ? 'open' : null;
             router.push(`${pathname}?${createQueryString('menu', nextMenu)}`, {
               scroll: false,
             });

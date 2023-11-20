@@ -1,5 +1,4 @@
 import { useCallback, useRef, useState } from 'react';
-import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 export default function LogIn() {

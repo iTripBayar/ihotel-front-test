@@ -10,7 +10,6 @@ import ReactMapGL, {
 import Image from 'next/image';
 import useSupercluster from 'use-supercluster';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
 import HotelCard from '../hotelCard';
 import useWindowSize from '@/hooks/windowSize';
 
@@ -44,11 +43,11 @@ const MapContainer = ({ hotelData, campsData }: iProps) => {
       // setMap('open');
       let nextMap = 'open';
 
-      router.push(`${pathname}?${createQueryString('map', nextMap)}`, {
+      router.push(`/search/?${createQueryString('map', nextMap)}`, {
         scroll: false,
       });
     } else {
-      router.push(`${pathname}?${createQueryString('map', null)}`, {
+      router.push(`/search/?${createQueryString('map', null)}`, {
         scroll: false,
       });
     }

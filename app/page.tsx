@@ -11,7 +11,6 @@ import HeaderVariants from '@/components/common/headerVariants';
 import { fetchData } from '@/utils';
 import SearchSection from '@/components/common/searchSection';
 import Header from '@/components/common/header';
-import FeaturedSample from '@/components/homePage/sampleContainer';
 import BottomSection from '@/components/common/bottomSection';
 import CardsContainer from '@/components/homePage/cardsContainer';
 import LogIn from '@/components/common/log&signUp/logIn';
@@ -119,7 +118,6 @@ export default function Home({
         campsData={[]}
         map={''}
       />
-      <FeaturedSample cap={6} title={'sample'} />
       <News data={data ? data.posts : []} />
       <Footer />
     </main>

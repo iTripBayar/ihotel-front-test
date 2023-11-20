@@ -2,7 +2,6 @@ import useWindowSize from '@/hooks/windowSize';
 import HotelCard from '../common/hotelCard';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
 
 interface iProps {
   title: string;

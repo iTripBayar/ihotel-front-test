@@ -106,7 +106,7 @@ const BottomSection = ({ ver }: iProps) => {
         {/* lang */}
         <div
           onClick={() => {
-            let nextLang = lang === 'en' ? 'mn' : 'en';
+            const nextLang = lang === 'en' ? 'mn' : 'en';
             router.push(`${pathname}?${createQueryString('lang', nextLang)}`, {
               scroll: false,
             });
@@ -136,14 +136,7 @@ const BottomSection = ({ ver }: iProps) => {
         </div>
         {/* map with arrow when closed */}
         {ver === 'search' && map === '' ? (
-          <div
-            className="hidden h-[40px] min-w-[40px] items-center justify-center gap-[4px] rounded-full border-2 border-white bg-primary-blue px-[12px] lg:flex"
-            // onClick={() => openMap('open')}
-            // onClick={() => {
-            //   let nextMap = map !== 'open' ? 'open' : null;
-            //   router.push(`/?${createQueryString('map', nextMap)}`);
-            // }}
-          >
+          <div className="hidden h-[40px] min-w-[40px] items-center justify-center gap-[4px] rounded-full border-2 border-white bg-primary-blue px-[12px] lg:flex">
             {/* arrow */}
             <svg
               xmlns="http://www.w3.org/2000/svg"

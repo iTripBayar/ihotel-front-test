@@ -1,6 +1,4 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
-import useWindowSize from '@/hooks/windowSize';
 import { useRequest } from 'ahooks';
 import { fetchData } from '@/utils';
 import HeaderVariants from '@/components/common/headerVariants';
@@ -11,10 +9,8 @@ import SearchSection from '@/components/common/searchSection';
 import SearchCards from '@/components/searchPage/searchCards';
 import MapContainer from '@/components/common/map/map';
 import Filter from '@/components/common/filter';
-import LogSign from '@/components/common/logIn';
 import SignUp from '@/components/common/log&signUp/signUp';
 import LogIn from '@/components/common/log&signUp/logIn';
-import { usePathname, useRouter } from 'next/navigation';
 
 const SearchPage = ({
   searchParams,
@@ -29,21 +25,9 @@ const SearchPage = ({
     map: string | null;
   };
 }) => {
-  // const [map, setMap] = useState('');
-  const size = useWindowSize();
   const { data } = useRequest(() => {
     return fetchData();
   });
-
-  // function mapFunction(e: string) {
-  //   setMap(e);
-  // }
-  // useEffect(() => {
-  //   if (size.width && size.width >= 1024) {
-  //     setMap('open');
-  //   } else setMap('');
-  //   return;
-  // }, [size.width]);
 
   return (
     <main
@@ -76,22 +60,21 @@ const SearchPage = ({
         <Filter />
       </div>
       {/* size?.width && size?.width < 1024 &&  */}
-      {size.width && size.width < 1024 ? (
-        <div
-          className={`lg:hidden ${
-            searchParams.filter === 'mobile' ? 'flex flex-col gap-[24px]' : ''
-          }`}
-        >
-          <SearchSection
-            ver={'headerSearch'}
-            hotelData={data ? data.hotels : []}
-            placesData={data ? data.places : []}
-            campsData={data ? data.camps : []}
-            destData={data ? data.destCategories : []}
-          />
-          {searchParams.filter === 'mobile' ? <Filter /> : null}
-        </div>
-      ) : null}
+
+      <div
+        className={`lg:hidden ${
+          searchParams.filter === 'mobile' ? 'flex flex-col gap-[24px]' : ''
+        }`}
+      >
+        <SearchSection
+          ver={'headerSearch'}
+          hotelData={data ? data.hotels : []}
+          placesData={data ? data.places : []}
+          campsData={data ? data.camps : []}
+          destData={data ? data.destCategories : []}
+        />
+        {searchParams.filter === 'mobile' ? <Filter /> : null}
+      </div>
       {searchParams.filter !== 'mobile' ? (
         <div
           className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:h-screen lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
