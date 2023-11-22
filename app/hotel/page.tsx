@@ -3,7 +3,7 @@ import HeaderVariants from '@/components/common/headerVariants';
 import HotelImages from '@/components/hotelPage/hotelImages';
 import { useRequest } from 'ahooks';
 import { fetchDataHotel } from '@/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import HotelInfo from '@/components/hotelPage/hotelInfo';
 import Amenity from '@/components/hotelPage/amenity';
 import Review from '@/components/hotelPage/review';
@@ -15,7 +15,9 @@ import BurgerMenu from '@/components/common/burgermenu';
 import Description from '@/components/hotelPage/description';
 import HotelCard from '@/components/common/hotelCard';
 import Footer from '@/components/common/footer';
-import LogSign from '@/components/common/logIn';
+import OrderDialog from '@/components/hotelPage/dialogs/orderDialog';
+import RoomSelection from '@/components/hotelPage/dialogs/roomSelection';
+import Dialogs from '@/components/hotelPage/dialogs';
 
 const HotelPage = ({
   searchParams,
@@ -31,9 +33,6 @@ const HotelPage = ({
   //   // {next: {revalidate: 10}}
   // );
   // const data = await res.json();
-  const [sideMenu, setSideMenu] = useState(false);
-  const [logIn, setLogIn] = useState('');
-
   let stat = '';
   if (data?.hotel.isOnline == 1 && data?.hotel.isOffline == 0) {
     stat = 'online';
@@ -53,8 +52,18 @@ const HotelPage = ({
     stat = 'data';
   }
 
+  let roomPrices: any[] = [];
+  if (data?.rooms && data?.rooms.length) {
+    for (let i = 0; i < data?.rooms.length; i++) {
+      roomPrices.push(data?.rooms[i].priceDayUse);
+    }
+  }
+  roomPrices.sort((a, b) => b - a);
+
+  // console.log(data);
+
   return (
-    <main>
+    <main className="relative">
       <HeaderVariants
         ver={'hotel'}
         // openMenu={openMenu}
@@ -63,8 +72,12 @@ const HotelPage = ({
         campsData={[]}
         destData={[]}
       />
-      {logIn !== '' ? <LogSign /> : null}
       <BurgerMenu phone={data ? data.phoneNumber : ''} ver={'search'} />
+      <Dialogs
+        roomPrices={roomPrices}
+        stat={stat}
+        allRooms={data?.rooms ? data?.rooms : []}
+      />
       <div className="flex flex-col gap-[24px] overflow-x-hidden px-[16px] pb-[32px] pt-[80px] sm:px-[50px] md:px-[72px] lg:gap-[48px] lg:px-[60px]  xl:px-[100px] 2xl:px-[150px]">
         <div className="grid grid-cols-1 gap-[24px] lg:grid-cols-5 lg:gap-[20px]">
           <div className="flex w-full flex-col gap-[24px] lg:col-span-3 lg:gap-[24px] ">

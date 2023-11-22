@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 interface Props {
   data: roomData.room;
@@ -9,7 +9,80 @@ interface Props {
 const RoomCard = ({ data }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const router = useRouter();
+  const roomAmount = searchParams.getAll('roomAmount');
+
   const [openDesc, setOpenDesc] = useState(false);
+
+  const createQueryString = useCallback(
+    (
+      name: string,
+      value: string | null,
+      name1: string,
+      value1: string | null,
+    ) => {
+      const params = new URLSearchParams(searchParams);
+      if (value !== null) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      if (value1 !== null) {
+        params.set(name1, value1);
+      } else {
+        params.delete(name1);
+      }
+      return params.toString();
+    },
+    [searchParams],
+  );
+  const multipleCreateQueryString = useCallback(
+    (
+      name: string,
+      value: string | null,
+      name1: string,
+      value1: string | null,
+    ) => {
+      const params = new URLSearchParams(searchParams);
+
+      if (value !== null && !params.get(name)) {
+        params.set(name, value);
+      } else if (value !== null && params.get(name)) {
+        if (value.split('$')[1] !== '0') {
+          for (let i = 0; i < roomAmount.length; i++) {
+            if (roomAmount[i].split('$')[0] === data.id.toString()) {
+              params.delete(name, roomAmount[i]);
+            }
+          }
+          params.append(name, value);
+        } else {
+          for (let i = 0; i < roomAmount.length; i++) {
+            if (roomAmount[i].split('$')[0] === data.id.toString()) {
+              params.delete(name, roomAmount[i]);
+            }
+          }
+        }
+      } else {
+        params.delete(name);
+      }
+      if (value1 !== null) {
+        params.set(name1, value1);
+      } else {
+        params.delete(name1);
+      }
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  let updatedAmount = '';
+  if (roomAmount && roomAmount.length > 0) {
+    for (let i = 0; i < roomAmount.length; i++) {
+      if (roomAmount[i].split('$')[0] === data.id.toString()) {
+        updatedAmount = roomAmount[i];
+      }
+    }
+  }
 
   return (
     <div className="flex flex-col overflow-hidden rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]">
@@ -144,9 +217,24 @@ const RoomCard = ({ data }: Props) => {
         </div>
         {/* room select section */}
         <div className="flex w-full justify-between">
-          <div className="flex h-[38px] items-center justify-center gap-[8px] rounded-[8px] border-[2px] border-primary-blue/50 px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px]">
+          <div
+            className="flex h-[38px] items-center justify-center gap-[8px] rounded-[8px] border-[2px] border-primary-blue/50 px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px]"
+            onClick={() => {
+              router.push(
+                `/hotel/?${createQueryString(
+                  'roomSelect',
+                  'open',
+                  'room',
+                  data.id.toString(),
+                )}`,
+                {
+                  scroll: false,
+                },
+              );
+            }}
+          >
             <p>
-              {'0'}
+              {updatedAmount.length > 2 ? updatedAmount.split('$')[1] : 0}
               {lang === 'en' ? ' rooms' : ' өрөө'}
             </p>
             <svg
@@ -161,7 +249,20 @@ const RoomCard = ({ data }: Props) => {
               />
             </svg>
           </div>
-          <div className="flex h-[38px] items-center justify-center rounded-[8px] border-[2px] border-primary-blue px-[12px] text-[14px] font-medium text-primary-blue 2xs:px-[16px] 2xs:text-[18px] md:px-[8px] md:text-[16px]">
+          <div
+            className="flex h-[38px] items-center justify-center rounded-[8px] border-[2px] border-primary-blue px-[12px] text-[14px] font-medium text-primary-blue 2xs:px-[16px] 2xs:text-[18px] md:px-[8px] md:text-[16px]"
+            onClick={() => {
+              router.push(
+                `/hotel/?${multipleCreateQueryString(
+                  'cart',
+                  updatedAmount,
+                  'roomSelect',
+                  null,
+                )}`,
+                { scroll: false },
+              );
+            }}
+          >
             {lang === 'en' ? 'Add to cart' : 'Сангсанд нэмэх'}
           </div>
 
