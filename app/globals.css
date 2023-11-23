@@ -45,3 +45,55 @@
   border: none;
   border-radius: 20px;
 }
+/* 
+.rdp {
+  --rdp-accent-color-light: var(--rdp-accent-color-dark);
+  --rdp-accent-color-lighter: var(--rdp-accent-color-darker);
+  --rdp-accent-color-lightest: var(--rdp-accent-color-darkest);
+  --rdp-background-color: var(--rdp-background-color-dark);
+}
+
+
+.bg-near-black {
+  background-color: #eeeeee;
+}
+.bg-near-white {
+  background-color: #111111;
+}
+.black {
+  color: #ffffff;
+}
+.white {
+  color: #eeeeee;
+}
+.dark-gray {
+  color: #cccccc;
+}
+.bg-white {
+  background-color: #111111;
+}
+.ba {
+  border-color: #333;
+} */
+.rdp{
+  --rdp-cell-size: 36px !important;
+  --rdp-caption-font-size: 16px !important;
+  --rdp-accent-color: #3C76FE !important
+}
+.rdp-months{
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  gap: 24px;
+}
+.rdp-month{
+  margin: 0 !important;
+  padding: 0;
+}
+.rdp-table{
+  margin: 0 auto !important;
+}
+.rdp-day_today:not(.rdp-day_outside){
+  font-weight: 400 !important;
+}
+

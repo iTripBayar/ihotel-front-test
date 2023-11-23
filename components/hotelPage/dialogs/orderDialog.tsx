@@ -1,5 +1,6 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useCallback } from 'react';
+import { addDays, format } from 'date-fns';
 
 interface Props {
   roomPrices: number[];
@@ -10,6 +11,10 @@ export default function OrderDialog({ roomPrices, allRooms }: Props) {
   const router = useRouter();
   const lang = searchParams.get('lang');
   const cart = searchParams.getAll('cart');
+  const dateFrom = searchParams.get('dateFrom');
+  const dateTo = searchParams.get('dateTo');
+
+
 
   const createQueryString = useCallback(
     (name: string, index: number) => {
@@ -33,9 +38,93 @@ export default function OrderDialog({ roomPrices, allRooms }: Props) {
       }
     }
   }
+  let newDate = new Date();
+  let nextDay = addDays(newDate, 1);
+  let formattedDate = {
+    from: {
+      month: `${format(newDate, 'yyyy-MM-dd').split('-')[1]}`,
+      date: `${format(newDate, 'yyyy-MM-dd').split('-')[2]}`,
+    },
+    to: {
+      month: `${format(nextDay, 'yyyy-MM-dd').split('-')[1]}`,
+      date: `${format(nextDay, 'yyyy-MM-dd').split('-')[2]}`,
+    },
+    fromEn: {
+      month: `${newDate.toDateString().split(' ')[1]}`,
+      date: `${newDate.toDateString().split(' ')[2]}`,
+    },
+    toEn: {
+      month: `${nextDay.toDateString().split(' ')[1]}`,
+      date: `${nextDay.toDateString().split(' ')[2]}`,
+    },
+    
+  };
+  let displayDate = {mn: '', en: '', days: '',}
+  if(!dateFrom && !dateTo){
+    if(formattedDate.from.month === formattedDate.to.month){
+      displayDate = {
+        mn: `${formattedDate.from.month}-р сар ${formattedDate.from.date}-${formattedDate.to.date}`,
+        en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.date}`,
+        days: `${
+          parseInt(formattedDate.toEn.date) -
+          parseInt(formattedDate.fromEn.date) + 1
+        }`,
+      };
+    }else{
+       displayDate = {
+         mn: `${formattedDate.from.month}.${formattedDate.from.date}-${formattedDate.to.month}.${formattedDate.to.date}`,
+         en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.month} ${formattedDate.toEn.date}`,
+         days: `${
+           parseInt(formattedDate.toEn.date) -
+           parseInt(formattedDate.fromEn.date) + 1
+         }`,
+       };
+      };
+  }
+  else{
+      let mnDate = {
+        from: {
+          month: dateFrom?.split('|')[0].split('/')[0],
+          date: dateFrom?.split('|')[0].split('/')[1],
+        },
+        to: {
+          month: dateTo?.split('|')[0].split('/')[0],
+          date: dateTo?.split('|')[0].split('/')[1],
+        },
+      };
+      let enDate = {
+        from: {
+          month: dateFrom?.split('|')[1].split('-')[0],
+          date: dateFrom?.split('|')[1].split('-')[1],
+        },
+        to: {
+          month: dateTo?.split('|')[1].split('-')[0],
+          date: dateTo?.split('|')[1].split('-')[1],
+        },
+      };
+      if(mnDate.from.month === mnDate.to.month){
+        displayDate = {
+          mn: `${mnDate.from.month}-р сар ${mnDate.from.date}-${mnDate.to.date}`,
+          en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.date}`,
+          days: `${
+            parseInt(mnDate.to.date ? mnDate.to.date : '0') -
+            parseInt(mnDate.from.date ? mnDate.from.date : '0') + 1
+          }`,
+        };
+      } else{
+        displayDate = {
+          mn: `${mnDate.from.month}.${mnDate.from.date}-${mnDate.to.month}.${mnDate.to.date}`,
+          en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.month} ${enDate.to.date}`,
+          days: `${
+            parseInt(mnDate.to.date ? mnDate.to.date : '0') -
+            parseInt(mnDate.from.date ? mnDate.from.date : '0') + 1
+          }`,
+        };
+      }
+}
 
   return (
-    <div className="flex w-full flex-col rounded-t-[30px] bg-white px-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px]">
+    <div className="absolute bottom-0 flex w-full flex-col rounded-t-[30px] bg-white px-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px]">
       {cart && cart.length > 0 ? (
         <div
           className={` flex-col justify-between gap-[4px]  ${
@@ -109,7 +198,7 @@ export default function OrderDialog({ roomPrices, allRooms }: Props) {
                       )}`,
                       { scroll: false },
                     );
-                    console.log(cart.indexOf(index));
+                    // console.log(cart.indexOf(index));
                   }}
                 >
                   <svg
@@ -137,12 +226,23 @@ export default function OrderDialog({ roomPrices, allRooms }: Props) {
         {/* date & price */}
         <div className="flex flex-col justify-between gap-[8px]">
           <p className="text-[12px] font-medium leading-[13px] text-sub-text/75 2xs:text-[14px] 2xs:leading-[15px] 2xs:tracking-wide">
-            {lang === 'en' ? '' : '9-p cap 20-21 (хоног)'}
+            {/* {lang === 'en' ? '' : '9-p cap 20-21 (хоног)'} */}
+            {/* {!dateFrom && !dateTo
+              ? `${
+                  lang === 'en'
+                    ? `${displayDate.en} (${displayDate.days} days)`
+                    : `${displayDate.mn} (${displayDate.days} хоног)`
+                }`
+              : ''} */}
+            {lang === 'en'
+              ? `${displayDate.en} (${displayDate.days} days)`
+              : `${displayDate.mn} (${displayDate.days} хоног)`}
           </p>
           <h3 className="text-[20px] font-medium leading-[20px] text-main-text 2xs:text-[24px] 2xs:leading-[24px] 2xs:tracking-wide">
             {cart && cart.length > 0
-              ? totalPrice.toLocaleString()
-              : roomPrices[0].toLocaleString()}{' '}
+              ? (totalPrice * parseInt(displayDate.days)).toLocaleString()
+              : (roomPrices[0] *
+                parseInt(displayDate.days)).toLocaleString()}{' '}
             {lang === 'en' ? '$' : '₮'}
           </h3>
         </div>

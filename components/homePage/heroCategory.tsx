@@ -25,6 +25,7 @@ const HeroCategory = ({ data }: iProps) => {
     },
     [searchParams],
   );
+  console.log(data)
   return (
     <div className=" flex w-full items-start justify-between px-[10px] text-main-text sm:px-[50px] lg:px-[150px]">
       {data.map((data) => (
@@ -44,7 +45,7 @@ const HeroCategory = ({ data }: iProps) => {
             <Image
               src={
                 data.image
-                  ? `https://ihotel.mn/${data.image}`
+                  ? `https://sandbox.api.myhotel.mn:9443/img/type_${data.image}`
                   : '/samples/camp.png'
               }
               alt="/heroCategory"

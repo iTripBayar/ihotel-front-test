@@ -67,7 +67,7 @@ export default function RoomSelection({ roomData }: Props) {
         updatedAmount = parseInt(roomAmount[i].split('$')[1]);
       }
     }
-    console.log(roomAmount);
+    // console.log(roomAmount);
   }
   return (
     <div

@@ -28,6 +28,7 @@ const HotelCard = ({ data, fromMap }: iProps) => {
   //   // const newLanguage = state.language === 'mn' ? 'en' : 'mn';
   //   dispatch({ type: 'SET_HOTEL', payload: hotel });
   // };
+  // console.log(data?.images !== null ? data?.images[0] : 'no');
   return (
     <Link
       href={{
@@ -61,10 +62,16 @@ const HotelCard = ({ data, fromMap }: iProps) => {
             d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
           />
         </svg>
+        {/* data?.images !== null ? data?.images[0] : 'no' */}
         <Image
+          // src={
+          //   data.image !== null && data.image !== ''
+          //     ? `https://sandbox.api.myhotel.mn/image?path=${data.images}`
+          //     : '/samples/camp.png'
+          // }
           src={
-            data.image !== null && data.image !== ''
-              ? `https://sandbox.api.myhotel.mn/image?path=${data.image}`
+            data?.images !== null && data?.images !== ''
+              ? `https://sandbox.api.myhotel.mn:9443/${data?.coverPhoto}`
               : '/samples/camp.png'
           }
           alt="/hotel"

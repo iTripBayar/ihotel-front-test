@@ -4,6 +4,7 @@ import OnlineToggle from './onlineToggle';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useCallback } from 'react';
+import { addDays, format } from 'date-fns';
 
 interface iProps {
   hotelData: any[];
@@ -29,6 +30,10 @@ const SearchSection = ({
   const router = useRouter();
   const pathname = usePathname();
   const menu = searchParams.get('menu');
+  const dateFrom = searchParams.get('dateFrom');
+  const dateTo = searchParams.get('dateTo');
+
+
   const createQueryString = useCallback(
     (name: string, value: string | null) => {
       const params = new URLSearchParams(searchParams);
@@ -41,10 +46,39 @@ const SearchSection = ({
     },
     [searchParams],
   );
+  // let newDate = new Date();
+  // let date = newDate.getDate();
+  // let month = newDate.getMonth() + 1;
+  // let year = newDate.getFullYear();
+
   let newDate = new Date();
-  let date = newDate.getDate();
-  let month = newDate.getMonth() + 1;
-  let year = newDate.getFullYear();
+  let nextDay = addDays(newDate, 1);
+   let formattedDate = {
+     from: {
+       year: !dateFrom
+         ? `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`
+         : dateFrom.split('|')[0].split('/')[2],
+       month: !dateFrom
+         ? `${format(newDate, 'yyyy-MM-dd').split('-')[1]}`
+         : dateFrom.split('|')[0].split('/')[0],
+       date: !dateFrom
+         ? `${format(newDate, 'yyyy-MM-dd').split('-')[2]}`
+         : dateFrom.split('|')[0].split('/')[1],
+     },
+     to: {
+       year: !dateTo
+         ? `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`
+         : dateTo.split('|')[0].split('/')[2],
+       month: !dateTo
+         ? `${format(nextDay, 'yyyy-MM-dd').split('-')[1]}`
+         : dateTo.split('|')[0].split('/')[0],
+       date: !dateTo
+         ? `${format(nextDay, 'yyyy-MM-dd').split('-')[2]}`
+         : dateTo.split('|')[0].split('/')[1],
+     },
+   };
+
+    console.log(formattedDate);
 
   return (
     <div
@@ -122,7 +156,15 @@ const SearchSection = ({
               ver={ver}
             />
           </div>
-          <div className="flex h-[36px] items-center justify-center gap-[12px] rounded-full bg-white px-[8px] text-[15px] font-medium leading-[1px] text-primary-blue 2xs:px-[16px] xl:min-w-[250px]">
+          <div
+            className="flex h-[36px] items-center justify-center gap-[12px] rounded-full bg-white px-[8px] text-[15px] font-medium leading-[1px] text-primary-blue 2xs:px-[16px] xl:min-w-[250px]"
+            onClick={() => {
+              router.push(
+                `${pathname}?${createQueryString('calendar', 'open')}`,
+                { scroll: false },
+              );
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -138,7 +180,8 @@ const SearchSection = ({
               />
             </svg>
             <p>
-              {`${month}/${date}/${year}`} - {`${month}/${date + 1}/${year}`}
+              {/* {`${month}/${date}/${year}`} - {`${month}/${date + 1}/${year}`} */}
+              {`${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year} - ${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}`}
             </p>
           </div>
         </div>

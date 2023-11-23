@@ -19,19 +19,34 @@ export default function Dialogs({ roomPrices, stat, allRooms }: Props) {
   const amount = searchParams.get('amount');
   const dateStart = searchParams.get('dateStart');
   const dateEnd = searchParams.get('dateEnd');
+  const calendar = searchParams.get('calendar');
+
 
   const createQueryString = useCallback(
-    (name: string, value: string | null) => {
+    (
+      name: string,
+      value: string | null,
+      name1: string,
+      value1: string | null,
+    ) => {
       const params = new URLSearchParams(searchParams);
       if (value !== null) {
         params.set(name, value);
       } else {
         params.delete(name);
       }
+      if (value1 !== null) {
+        params.set(name1, value1);
+      } else {
+        params.delete(name1);
+      }
       return params.toString();
     },
     [searchParams],
   );
+
+              // {`${month}/${date}/${year}`} - {`${month}/${date + 1}/${year}`}
+
 
   //   useEffect(() => {
   //     if (open.room.roomId) {
@@ -51,12 +66,15 @@ export default function Dialogs({ roomPrices, stat, allRooms }: Props) {
           roomData={allRooms.filter((index) => index.id.toString() === room)[0]}
         />
       ) : null}
+      {calendar && calendar === 'open' && !roomSelect ? (
+        <CalendarDialog />
+      ) : null}
+
       {stat === 'online' || stat === 'pending' ? (
-        !roomSelect && roomSelect !== 'open' && !dateStart ? (
+        !roomSelect && roomSelect !== 'open' && !dateStart && !calendar ? (
           <OrderDialog roomPrices={roomPrices} allRooms={allRooms} />
         ) : null
       ) : null}
-      {dateStart && dateEnd && !roomSelect ? <CalendarDialog /> : null}
     </div>
   );
 }
