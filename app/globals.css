@@ -45,46 +45,19 @@
   border: none;
   border-radius: 20px;
 }
-/* 
-.rdp {
-  --rdp-accent-color-light: var(--rdp-accent-color-dark);
-  --rdp-accent-color-lighter: var(--rdp-accent-color-darker);
-  --rdp-accent-color-lightest: var(--rdp-accent-color-darkest);
-  --rdp-background-color: var(--rdp-background-color-dark);
-}
-
-
-.bg-near-black {
-  background-color: #eeeeee;
-}
-.bg-near-white {
-  background-color: #111111;
-}
-.black {
-  color: #ffffff;
-}
-.white {
-  color: #eeeeee;
-}
-.dark-gray {
-  color: #cccccc;
-}
-.bg-white {
-  background-color: #111111;
-}
-.ba {
-  border-color: #333;
-} */
 .rdp{
   --rdp-cell-size: 36px !important;
   --rdp-caption-font-size: 16px !important;
   --rdp-accent-color: #3C76FE !important
 }
 .rdp-months{
-  flex-direction: column;
+  flex-direction: row;
   margin: 0;
   padding: 0;
+  padding-bottom: 12px;
   gap: 24px;
+  justify-content: center;
+  min-height: 300px;
 }
 .rdp-month{
   margin: 0 !important;
@@ -96,4 +69,19 @@
 .rdp-day_today:not(.rdp-day_outside){
   font-weight: 400 !important;
 }
+
+@media (max-width: 1023px){
+  .rdp-months{
+  flex-direction: column !important;
+  margin: 0;
+  padding: 0;
+  gap: 24px;
+}
+}
+/* @media (max-width: 2560px){
+  .rdp-months{
+  flex-direction: row !important;
+  gap: 12px;
+}
+} */
 

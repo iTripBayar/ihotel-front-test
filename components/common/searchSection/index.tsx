@@ -25,14 +25,11 @@ const SearchSection = ({
   const lang = searchParams.get('lang');
   const toggle = searchParams.get('toggle');
   const searchValue = searchParams.get('searchValue');
-  const type = searchParams.get('type');
   const filter = searchParams.get('filter');
   const router = useRouter();
   const pathname = usePathname();
-  const menu = searchParams.get('menu');
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
-
 
   const createQueryString = useCallback(
     (name: string, value: string | null) => {
@@ -46,11 +43,43 @@ const SearchSection = ({
     },
     [searchParams],
   );
-  // let newDate = new Date();
-  // let date = newDate.getDate();
-  // let month = newDate.getMonth() + 1;
-  // let year = newDate.getFullYear();
-
+  const multipleCreateQueryString = useCallback(
+    (
+      name: string | null,
+      value: string | null,
+      name1: string | null,
+      value1: string | null,
+      name2: string | null,
+      value2: string | null,
+      name3: string | null,
+      value3: string | null,
+    ) => {
+      const params = new URLSearchParams(searchParams);
+      if (value !== null && name !== null) {
+        params.set(name, value);
+      } else if(value !== null && name) {
+        params.delete(name);
+      }
+       if (value1 !== null && name1 !== null) {
+         params.set(name1, value1);
+       } else if (value1 !== null && name1) {
+         params.delete(name1);
+       }
+        if (value2 !== null && name2 !== null) {
+          params.set(name2, value2);
+        } else if (value2 !== null && name2) {
+          params.delete(name2);
+        }
+         if (value3 !== null && name3 !== null) {
+           params.set(name3, value3);
+         } else if (value3 !== null && name3) {
+           params.delete(name3);
+         }
+      return params.toString();
+    },
+    [searchParams],
+  );
+  
   let newDate = new Date();
   let nextDay = addDays(newDate, 1);
    let formattedDate = {
@@ -77,8 +106,6 @@ const SearchSection = ({
          : dateTo.split('|')[0].split('/')[1],
      },
    };
-
-    console.log(formattedDate);
 
   return (
     <div
@@ -117,17 +144,21 @@ const SearchSection = ({
           />
           <OnlineToggle ver={ver} />
           {filter !== 'mobile' ? (
-            <Link
-              href={{
-                pathname: '/search',
-                query: {
-                  lang: lang,
-                  searchValue: searchValue,
-                  toggle: toggle,
-                  type: type,
-                  filter: filter,
-                },
-              }}
+            <div
+             onClick={()=>{
+              router.push(
+                `/search/?${multipleCreateQueryString(
+                  `${lang ? 'lang' : null}`,
+                  lang,
+                  `${searchValue ? 'searchValue' : null}`,
+                  searchValue,
+                  `${toggle ? 'toggle' : null}`,
+                  toggle,
+                  `${filter ? 'filter' : null}`,
+                  filter,
+                )}`,
+              );
+             }}
               className={`flex cursor-pointer items-center justify-center pt-[2px] font-medium  uppercase lg:max-w-[130px] ${
                 ver === 'normal'
                   ? 'h-[46px] w-full rounded-[8px] bg-primary-blue text-[16px] leading-[16px] text-white'
@@ -141,7 +172,7 @@ const SearchSection = ({
               }`}
             >
               <p>{lang === 'en' ? 'search' : 'хайх'}</p>
-            </Link>
+            </div>
           ) : null}
         </div>
       ) : null}

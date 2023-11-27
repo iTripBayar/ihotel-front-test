@@ -6,9 +6,10 @@ import { useSearchParams } from 'next/navigation';
 type iProps = {
   data: any;
   fromMap: boolean;
+  dollarRate: string | null
 };
 
-const HotelCard = ({ data, fromMap }: iProps) => {
+const HotelCard = ({ data, fromMap, dollarRate }: iProps) => {
   const [fav, setFav] = useState(false);
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
@@ -29,6 +30,7 @@ const HotelCard = ({ data, fromMap }: iProps) => {
   //   dispatch({ type: 'SET_HOTEL', payload: hotel });
   // };
   // console.log(data?.images !== null ? data?.images[0] : 'no');
+  // console.log(data);
   return (
     <Link
       href={{
@@ -79,14 +81,14 @@ const HotelCard = ({ data, fromMap }: iProps) => {
           //   priority
           quality={75}
           loading="lazy"
-          sizes="50vw"
+          sizes=" 60vw"
           placeholder="blur"
           blurDataURL={
             data.image !== null
-              ? `"_next/image/?url=${data.image}"`
+              ? `"_next/image/?url=${data?.coverPhoto}"`
               : '/samples/camp.png'
           }
-          className="absolute h-auto w-auto select-none object-cover duration-700 hover:scale-110"
+          className=" h-auto w-auto select-none object-cover duration-700 hover:scale-110"
           draggable={false}
         />
       </div>
@@ -188,10 +190,29 @@ const HotelCard = ({ data, fromMap }: iProps) => {
             // price if stat === 'data'
             <div className="self-end">
               <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]">
-                {data.includedPrice
+                {/* {data.includedPrice
                   ? data.includedPrice.slice(0, 10).toLocaleString()
-                  : (70000).toLocaleString()}
-                {lang === 'en' ? '$' : '₮'}
+                  : (70000).toLocaleString()} */}
+
+                {/* {lang === 'en' ? '$' : '₮'} */}
+                {lang === 'en'
+                  ? `${
+                      dollarRate
+                        ? `${
+                            data.includedPrice
+                              ? (
+                                  data.includedPrice.slice(0, 10) /
+                                  parseInt(dollarRate)
+                                ).toLocaleString()
+                              : 70000 / parseInt(dollarRate)
+                          } $`
+                        : `${(70000).toLocaleString()}`
+                    } $`
+                  : `${
+                      data.includedPrice
+                        ? data.includedPrice.slice(0, 10).toLocaleString()
+                        : (70000).toLocaleString()
+                    }₮`}
                 <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
                   / {lang === 'en' ? 'day' : 'хоног'}
                 </span>
@@ -207,10 +228,29 @@ const HotelCard = ({ data, fromMap }: iProps) => {
             }`}
           >
             <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]">
-              {data.includedPrice
+              {/* {data.includedPrice
                 ? data.includedPrice.slice(0, 10).toLocaleString()
                 : (70000).toLocaleString()}
-              {lang === 'en' ? '$' : '₮'}
+              {lang === 'en' ? '$' : '₮'} */}
+
+              {lang === 'en'
+                ? `${
+                    dollarRate
+                      ? `${
+                          data.includedPrice
+                            ? (
+                                data.includedPrice.slice(0, 10) /
+                                parseInt(dollarRate)
+                              ).toLocaleString()
+                            : (70000 / parseInt(dollarRate)).toLocaleString()
+                        } $`
+                      : `${(70000).toLocaleString()} $`
+                  } `
+                : `${
+                    data.includedPrice
+                      ? data.includedPrice.slice(0, 10).toLocaleString()
+                      : (70000).toLocaleString()
+                  }₮`}
 
               <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
                 / {lang === 'en' ? 'day' : 'хоног'}

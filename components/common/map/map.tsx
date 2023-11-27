@@ -16,9 +16,10 @@ import useWindowSize from '@/hooks/windowSize';
 interface iProps {
   hotelData: any[];
   campsData: any[];
+  dollarRate: string
 }
 
-const MapContainer = ({ hotelData, campsData }: iProps) => {
+const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
@@ -193,8 +194,8 @@ const MapContainer = ({ hotelData, campsData }: iProps) => {
 
   return (
     <div
-      className={`sticky h-full w-full flex-col items-center justify-start gap-[24px] bg-white px-[16px] pb-[24px]  sm:px-[42px] md:px-[72px] lg:h-[calc(100vh-60px)] lg:px-0 lg:pb-[24px]  lg:pt-[16px] ${
-        !map || map === '' ? 'hidden' : 'flex lg:col-span-2'
+      className={`sticky h-screen w-full flex-col items-center justify-start gap-[24px] bg-white px-[16px] pb-[24px]  sm:px-[42px] md:px-[72px] lg:h-[calc(100vh-60px)] lg:px-0 lg:pb-[24px]  lg:pt-[16px] ${
+        map || map !== '' ? 'flex lg:col-span-2' : ' hidden '
       }`}
       ref={divRef}
     >
@@ -208,7 +209,7 @@ const MapContainer = ({ hotelData, campsData }: iProps) => {
         ref={mapRef}
         style={{
           width: '100%',
-          height: '100%',
+          height: '100vh',
           borderRadius: 20,
           border: 'solid 1px rgb(0,0,0,0.25)',
         }}
@@ -361,7 +362,11 @@ const MapContainer = ({ hotelData, campsData }: iProps) => {
               </svg>
             </div>
 
-            <HotelCard data={cardData[0]} fromMap={true} />
+            <HotelCard
+              data={cardData[0]}
+              fromMap={true}
+              dollarRate={dollarRate}
+            />
           </Marker>
         ) : null}
         <FullscreenControl />

@@ -1,5 +1,7 @@
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import RoomCard from './roomCard';
+import { useCallback } from 'react';
+import { addDays, format } from 'date-fns';
 
 interface Props {
   data: roomData.room[] | undefined;
@@ -8,11 +10,167 @@ interface Props {
 const HotelRooms = ({ data }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const cart = searchParams.getAll('cart');
+const router = useRouter();
+const dateFrom = searchParams.get('dateFrom');
+const dateTo = searchParams.get('dateTo');
+const days = searchParams.get('days');
+
+
+const createQueryString = useCallback(
+  (name: string, index: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.delete(name, cart[index]);
+    return params.toString();
+  },
+  [searchParams],
+);
+
+  // let newDate = new Date();
+ 
+
+  let totalPrice = 0;
+if (cart && cart.length > 0 && data) {
+  for (let i = 0; i < data.length; i++) {
+    for (let j = 0; j < cart.length; j++) {
+      if (data[i].id === parseInt(cart[j].split('$')[0])) {
+        totalPrice =
+          totalPrice +
+          data[i].priceDayUse * parseInt(cart[j].split('$')[1]);
+      }
+    }
+  }
+
+}
 
   let newDate = new Date();
-  let date = newDate.getDate();
-  let month = newDate.getMonth() + 1;
-  let year = newDate.getFullYear();
+  let nextDay = addDays(newDate, 1);
+   let date = newDate.getDate();
+   let month = newDate.getMonth() + 1;
+   let year = newDate.getFullYear();
+   
+let formattedDate = {
+  from: {
+    year: `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`,
+    month: `${format(newDate, 'yyyy-MM-dd').split('-')[1]}`,
+    date: `${format(newDate, 'yyyy-MM-dd').split('-')[2]}`,
+  },
+  to: {
+    year: `${format(nextDay, 'yyyy-MM-dd').split('-')[0]}`,
+    month: `${format(nextDay, 'yyyy-MM-dd').split('-')[1]}`,
+    date: `${format(nextDay, 'yyyy-MM-dd').split('-')[2]}`,
+  },
+  fromEn: {
+    year: `${newDate.toDateString().split(' ')[3]}`,
+    month: `${newDate.toDateString().split(' ')[1]}`,
+    date: `${newDate.toDateString().split(' ')[2]}`,
+  },
+  toEn: {
+    year: `${nextDay.toDateString().split(' ')[3]}`,
+    month: `${nextDay.toDateString().split(' ')[1]}`,
+    date: `${nextDay.toDateString().split(' ')[2]}`,
+  },
+};
+if(dateFrom && dateTo){
+  // console.log(dateFrom, dateTo)
+  formattedDate = {
+    from: {
+      year: `${dateFrom.split('|')[0].split('/')[2]}`,
+      month: `${dateFrom.split('|')[0].split('/')[0]}`,
+      date: `${dateFrom.split('|')[0].split('/')[1]}`,
+    },
+    to: {
+      year: `${dateTo.split('|')[0].split('/')[2]}`,
+      month: `${dateTo.split('|')[0].split('/')[0]}`,
+      date: `${dateTo.split('|')[0].split('/')[1]}`,
+    },
+    fromEn: {
+      year: `${dateFrom.split('|')[1].split('-')[2]}`,
+      month: `${dateFrom.split('|')[1].split('-')[0]}`,
+      date: `${dateFrom.split('|')[1].split('-')[1]}`,
+    },
+    toEn: {
+      year: `${dateTo.split('|')[1].split('-')[2]}`,
+      month: `${dateTo.split('|')[1].split('-')[0]}`,
+      date: `${dateTo.split('|')[1].split('-')[1]}`,
+    },
+  };
+}
+let testDates: { from: Date; to: Date; fromEn: any; toEn: any } = {
+  from: new Date(11 / 27 / 2023),
+  to: new Date(11 / 27 / 2023),
+  fromEn: '',
+  toEn: '',
+};
+
+  let displayDate = { mn: '', en: '', days: '' };
+
+if (!dateFrom && !dateTo) {
+  if (formattedDate.from.month === formattedDate.to.month) {
+    displayDate = {
+      mn: `${formattedDate.from.month}-р сар ${formattedDate.from.date}-${formattedDate.to.date}`,
+      en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.date}`,
+      days: `${
+        parseInt(formattedDate.toEn.date) -
+        parseInt(formattedDate.fromEn.date) +
+        1
+      }`,
+    };
+  } else {
+    displayDate = {
+      mn: `${formattedDate.from.month}.${formattedDate.from.date}-${formattedDate.to.month}.${formattedDate.to.date}`,
+      en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.month} ${formattedDate.toEn.date}`,
+      days: `${
+        parseInt(formattedDate.toEn.date) -
+        parseInt(formattedDate.fromEn.date) +
+        1
+      }`,
+    };
+  }
+} else {
+  let mnDate = {
+    from: {
+      month: dateFrom?.split('|')[0].split('/')[0],
+      date: dateFrom?.split('|')[0].split('/')[1],
+    },
+    to: {
+      month: dateTo?.split('|')[0].split('/')[0],
+      date: dateTo?.split('|')[0].split('/')[1],
+    },
+  };
+  let enDate = {
+    from: {
+      month: dateFrom?.split('|')[1].split('-')[0],
+      date: dateFrom?.split('|')[1].split('-')[1],
+    },
+    to: {
+      month: dateTo?.split('|')[1].split('-')[0],
+      date: dateTo?.split('|')[1].split('-')[1],
+    },
+  };
+  if (mnDate.from.month === mnDate.to.month) {
+    displayDate = {
+      mn: `${mnDate.from.month}-р сар ${mnDate.from.date}-${mnDate.to.date}`,
+      en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.date}`,
+      days: `${
+        parseInt(mnDate.to.date ? mnDate.to.date : '0') -
+        parseInt(mnDate.from.date ? mnDate.from.date : '0') +
+        1
+      }`,
+    };
+  } else {
+    displayDate = {
+      mn: `${mnDate.from.month}.${mnDate.from.date}-${mnDate.to.month}.${mnDate.to.date}`,
+      en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.month} ${enDate.to.date}`,
+      days: `${
+        parseInt(mnDate.to.date ? mnDate.to.date : '0') -
+        parseInt(mnDate.from.date ? mnDate.from.date : '0') +
+        1
+      }`,
+    };
+  }
+}
+
   return (
     <div className="flex flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] text-main-text lg:gap-[32px] lg:pt-[32px]">
       <p className="text-[20px] font-medium leading-[20px]">
@@ -36,12 +194,13 @@ const HotelRooms = ({ data }: Props) => {
             />
           </svg>
           <p className="text-sub-text">
-            {`${month}/${date}/${year}`} - {`${month}/${date + 1}/${year}`}
+            {/* {`${month}/${date}/${year}`} - {`${month}/${date + 1}/${year}`} */}
+            {`${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year} - ${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}`}
           </p>
         </div>
         {/* selected days */}
         <div className="text-sub-text">
-          (1 {lang === 'en' ? 'days' : 'хоног'})
+          ({days ? days : 1} {lang === 'en' ? 'days' : 'хоног'})
         </div>
       </div>
       <div className="relative grid grid-cols-1 gap-[24px] md:grid-cols-2 lg:grid-cols-6 lg:gap-[24px]">
@@ -67,11 +226,121 @@ const HotelRooms = ({ data }: Props) => {
                 />
               </svg>
               <p className="text-sub-text">
-                {`${month}/${date}/${year}`} - {`${month}/${date + 1}/${year}`}
+                {`${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year} - ${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}`}
               </p>
             </div>
           </div>
-          <div className="flex w-full items-start justify-center rounded-[12px] border border-black/[.15] px-[12px] py-[10px]">
+          {/* inside cart */}
+          <div className="flex w-full flex-col items-start justify-center rounded-[12px] border border-black/[.15] px-[12px] py-[10px]">
+            {cart && cart.length > 0 ? (
+              <div className="flex w-full flex-col-reverse justify-between gap-[24px]">
+                <div className="mb-[12px] flex h-[50px] flex-col items-center gap-[8px]">
+                  <p className="text-[12px] font-medium leading-[13px] text-sub-text/75 2xs:text-[14px] 2xs:leading-[15px] 2xs:tracking-wide">
+                    {lang === 'en'
+                      ? `${displayDate.en} (${days ? days : 1} days)`
+                      : `${displayDate.mn} (${days ? days : 1} хоног)`}
+                  </p>
+                  <div className="flex w-full items-center justify-between text-[20px] font-medium leading-[20px] text-main-text">
+                    <p>{lang === 'en' ? 'Total price:' : 'Нийт үнэ:'}</p>
+                    <h3 className="text-[20px] font-medium leading-[20px] text-main-text 2xs:text-[24px] 2xs:leading-[24px] 2xs:tracking-wide">
+                      {cart && cart.length > 0
+                        ? (
+                            totalPrice * parseInt(`${days ? days : 1}`)
+                          ).toLocaleString()
+                        : (
+                            (0) * parseInt(`${days ? days : 1}`)
+                          ).toLocaleString()}{' '}
+                      {lang === 'en' ? '$' : '₮'}
+                    </h3>
+                  </div>
+                </div>
+                {cart &&
+                  cart.map((index, i) => (
+                    <div
+                      key={i}
+                      className={`flex min-h-[45px] w-full items-center  justify-between gap-[10px] border-b border-b-black/[.15] pb-[8px] pt-[6px] text-primary-blue `}
+                    >
+                      <div className="flex w-full flex-col justify-between gap-[8px] font-medium">
+                        <div className="flex w-full items-center justify-between">
+                          <h3 className="text-[20px] leading-[20px] text-main-text">
+                            {cart && index && data
+                              ? data.filter(
+                                  (room) =>
+                                    room.id === parseInt(index.split('$')[0]),
+                                )[0].name
+                              : null}
+                          </h3>
+                          {/* <p className="flex gap-[4px] text-[16px] leading-[16px] text-sub-text/75">
+                            {cart.length > 1 && data
+                              ? `${data
+                                  .filter(
+                                    (room) =>
+                                      room.id === parseInt(index.split('$')[0]),
+                                  )[0]
+                                  .priceDayUse.toLocaleString()}${
+                                  lang === 'en' ? '$' : '₮'
+                                }`
+                              : ''}
+                            <span>x{index.split('$')[1]}</span>
+                          </p> */}
+                          <div
+                            className="flex h-[36px] w-[36px] items-center justify-end"
+                            onClick={() => {
+                              router.push(
+                                `/hotel/?${createQueryString(
+                                  'cart',
+                                  cart.indexOf(index),
+                                )}`,
+                                { scroll: false },
+                              );
+                              // console.log(cart.indexOf(index));
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={2}
+                              stroke="currentColor"
+                              className="max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px]"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+
+                        {data ? (
+                          <div className="flex w-full items-end justify-between text-[16px] leading-[16px] text-sub-text/75">
+                            <p>
+                              {
+                                data.filter(
+                                  (room) =>
+                                    room.id === parseInt(index.split('$')[0]),
+                                )[0].occupancy
+                              }{' '}
+                              {lang === 'en' ? 'people' : 'хүн'}
+                            </p>
+                            <p>
+                              {data
+                                .filter(
+                                  (room) =>
+                                    room.id === parseInt(index.split('$')[0]),
+                                )[0]
+                                .priceDayUse.toLocaleString()}{' '}
+                              {lang === 'en' ? '$' : '₮'}
+                              <span> x{index.split('$')[1]}</span>
+                            </p>
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            ) : null}
             <div className="flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white">
               {lang === 'en' ? 'Order' : 'Захиалах'}
             </div>

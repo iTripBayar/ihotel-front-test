@@ -18,11 +18,13 @@ import Footer from '@/components/common/footer';
 import OrderDialog from '@/components/hotelPage/dialogs/orderDialog';
 import RoomSelection from '@/components/hotelPage/dialogs/roomSelection';
 import Dialogs from '@/components/hotelPage/dialogs';
+import CalendarDialog from '@/components/hotelPage/dialogs/calendarDialog';
+
 
 const HotelPage = ({
   searchParams,
 }: {
-  searchParams: { slug: string; lang: string };
+  searchParams: { slug: string; lang: string; calendar: string };
 }) => {
   const { data } = useRequest(() => {
     return fetchDataHotel(searchParams.slug);
@@ -66,12 +68,14 @@ const HotelPage = ({
     <main className="relative">
       <HeaderVariants
         ver={'hotel'}
-        // openMenu={openMenu}
         hotelData={[]}
         placesData={[]}
         campsData={[]}
         destData={[]}
       />
+      {searchParams.calendar === 'open' ? <div className="fixed left-[50%] top-[60px] z-[900] hidden h-[425px] lg:w-[60vw] xl:w-[50vw] translate-x-[-50%] lg:flex">
+        <CalendarDialog ver={'web'} />
+      </div> : null}
       <BurgerMenu phone={data ? data.phoneNumber : ''} ver={'search'} />
       <Dialogs
         roomPrices={roomPrices}
@@ -85,6 +89,7 @@ const HotelPage = ({
               <HotelImages
                 images={data?.hotel?.images ? data?.hotel.images : []}
                 image={data?.hotel?.image ? data?.hotel.image : []}
+                coverPhoto={data?.hotel.coverPhoto ? data.hotel.coverPhoto : ''}
               />
               <HotelInfo
                 name={data?.hotel.name}
@@ -96,8 +101,6 @@ const HotelPage = ({
                 address={data?.hotel.address}
                 addressEn={data?.hotel.addressEn}
               />
-              {/* name: string; nameEn: string; rating: number; stat: string; phone:
-              string email: string */}
             </div>
             <Amenity
               data={data?.services.activities ? data?.services.activities : []}
@@ -224,7 +227,12 @@ const HotelPage = ({
           <div className="grid w-full grid-cols-1 gap-[24px] sm:grid-cols-2 lg:grid-cols-3 lg:gap-[32px]">
             {data?.offerHotels &&
               data?.offerHotels.map((index, i) => (
-                <HotelCard data={index} key={i} fromMap={false} />
+                <HotelCard
+                  data={index}
+                  key={i}
+                  fromMap={false}
+                  dollarRate={null}
+                />
               ))}
           </div>
         </div>

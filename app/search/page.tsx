@@ -8,9 +8,9 @@ import BottomSection from '@/components/common/bottomSection';
 import SearchSection from '@/components/common/searchSection';
 import SearchCards from '@/components/searchPage/searchCards';
 import MapContainer from '@/components/common/map/map';
-import Filter from '@/components/common/filter';
 import SignUp from '@/components/common/log&signUp/signUp';
 import LogIn from '@/components/common/log&signUp/logIn';
+import FilterOptions from '@/components/common/searchSection/filterOptions';
 
 const SearchPage = ({
   searchParams,
@@ -28,6 +28,8 @@ const SearchPage = ({
   const { data } = useRequest(() => {
     return fetchData();
   });
+
+  // console.log(data)
 
   return (
     <main
@@ -57,7 +59,7 @@ const SearchPage = ({
             : 'hidden'
         }`}
       >
-        <Filter />
+        <FilterOptions />
       </div>
       {/* size?.width && size?.width < 1024 &&  */}
 
@@ -73,7 +75,7 @@ const SearchPage = ({
           campsData={data ? data.camps : []}
           destData={data ? data.destCategories : []}
         />
-        {searchParams.filter === 'mobile' ? <Filter /> : null}
+        {searchParams.filter === 'mobile' ? <FilterOptions /> : null}
       </div>
       {searchParams.filter !== 'mobile' ? (
         <div
@@ -82,11 +84,13 @@ const SearchPage = ({
           <SearchCards
             hotelData={data ? data.hotels : []}
             campsData={data ? data.camps : []}
+            dollarRate={data ? data.dollarRate : ''}
           />
           <MapContainer
             // changeMap={mapFunction}
             hotelData={data ? data.hotels : []}
             campsData={data ? data.camps : []}
+            dollarRate={data ? data.dollarRate : ''}
           />
           {/* {map !== '' ? (
             <MapContainer

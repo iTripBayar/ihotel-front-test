@@ -1,12 +1,12 @@
 'use client';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import NextBtn from './nextBtn';
 import PrevBtn from './prevBtn';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 interface iProps {
   data: any[];
@@ -16,6 +16,19 @@ interface iProps {
 const CommonLocation = ({ data, destinations }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const router = useRouter();
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (value !== null) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      return params.toString();
+    },
+    [searchParams],
+  );
 
   const sliderRef = React.useRef<Slider>(null);
 
@@ -64,6 +77,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
               quality={100}
               // sizes="100vw"
               loading="lazy"
+              // sizes="100vw"
               sizes="100vw"
               placeholder="blur"
               blurDataURL={`"_next/image/?url=${index.coverPhoto}"`}
@@ -103,20 +117,23 @@ const CommonLocation = ({ data, destinations }: iProps) => {
           <div
             key={data.id}
             className="group relative h-[150px] w-full cursor-pointer overflow-hidden rounded-[10px]  md:h-[200px] md:rounded-[16px] lg:rounded-[16px]"
+            onClick={() => {
+              router.push(`/search/?${createQueryString('topDestination', data.id)}`);
+            }}
           >
             <Image
               // src={data.img}
               src={
-                data.image !== null && data.image !== ''
-                  ? `https://ihotel.mn/${data.image}`
+                data.thumbnail !== null && data.thumbnail !== ''
+                  ? `https://sandbox.api.myhotel.mn:9443/${data.thumbnail}`
                   : '/samples/camp.png'
               }
               alt="/commonLocs"
               fill={true}
               priority
               quality={75}
-              sizes="50vw"
-              className="h-auto w-full object-cover duration-500 group-hover:scale-110"
+              sizes="(max-width: 576px) 50vw, (max-width: 768px) 40vw, 50vw"
+              className="h-auto w-full object-fill duration-500 group-hover:scale-110"
             />
             <div className="absolute z-10 flex h-full w-full flex-col items-start justify-end gap-[4px] bg-gradient-to-t from-black/60 to-transparent px-[16px] py-[12px] lg:gap-[6px]">
               <h3 className="text-[18px] font-medium leading-[18px] md:text-[20px] lg:text-[18px]">

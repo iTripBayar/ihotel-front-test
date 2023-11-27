@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 interface iProps {
   hotelData: any[];
@@ -7,7 +10,6 @@ interface iProps {
   campsData: any[];
   destData: any[];
   ver: string;
-  // searchBoxValue: (value: string) => void;
 }
 
 const SearchBox = ({
@@ -15,13 +17,12 @@ const SearchBox = ({
   placesData,
   campsData,
   destData,
-  ver, // searchBoxValue,
+  ver, 
 }: iProps) => {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
@@ -63,50 +64,62 @@ const SearchBox = ({
       delay: 6000,
     },
   ];
-  useEffect(() => {
-    if (ver !== 'hotel') {
-      const interval = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % suggestion.length);
-      }, 3000);
-      return () => clearInterval(interval);
-    }
-  }, [query === '' && ver !== 'search' && ver !== 'headerSearch']);
-
+  
   for (let i = 0; i < hotelData.length; i++) {
-    sample.push({
-      key: hotelData[i].id,
-      name: hotelData[i].name,
-      nameEn: hotelData[i].nameEn ? hotelData[i].nameEn : '',
-      type: 'hotel',
-    });
+    sample.push(
+      {
+        key: hotelData[i].id,
+        name: hotelData[i].name,
+        nameEn: hotelData[i].nameEn ? hotelData[i].nameEn : '',
+        type: 'name',
+      },
+      {
+        key: hotelData[i].id,
+        name: hotelData[i].district.name,
+        nameEn: hotelData[i].district.international
+          ? hotelData[i].district.international
+          : '',
+        type: 'district',
+      },
+    );
   }
 
-  for (let i = 0; i < placesData.length; i++) {
-    sample.push({
-      key: placesData[i].id,
-      name: placesData[i].name,
-      nameEn: placesData[i].nameEn ? placesData[i].nameEn : '',
-      type: 'location',
-    });
-  }
+  // for (let i = 0; i < placesData.length; i++) {
+  //   sample.push({
+  //     key: placesData[i].districtId,
+  //     name: placesData[i].name,
+  //     nameEn: placesData[i].nameEn ? placesData[i].nameEn : '',
+  //     type: 'place',
+  //   });
+  // }
 
-  for (let i = 0; i < destData.length; i++) {
-    sample.push({
-      key: destData[i].id,
-      name: destData[i].name,
-      nameEn: destData[i].nameEn ? destData[i].nameEn : '',
-
-      type: 'location',
-    });
-  }
+  // for (let i = 0; i < destData.length; i++) {
+  //   sample.push({
+  //     key: destData[i].id,
+  //     name: destData[i].name,
+  //     nameEn: destData[i].nameEn ? destData[i].nameEn : '',
+  //     type: 'dest',
+  //   });
+  // }
 
   for (let i = 0; i < campsData.length; i++) {
-    sample.push({
-      key: campsData[i].id,
-      name: campsData[i].name,
-      nameEn: campsData[i].nameEn ? campsData[i].nameEn : '',
-      type: 'smth',
-    });
+    sample.push(
+      {
+        key: campsData[i].id,
+        name: campsData[i].name,
+        nameEn: campsData[i].nameEn ? campsData[i].nameEn : '',
+        type: 'camp',
+      },
+      {
+        key: campsData[i].id,
+        name: campsData[i].district.name,
+        nameEn: campsData[i].district.international
+          ? campsData[i].district.international
+          : '',
+        type: 'district',
+      },
+    );
+   
   }
 
   const filteredDataValue =
@@ -117,15 +130,28 @@ const SearchBox = ({
         });
 
   const uniqueData = filteredDataValue.filter(
-    (obj, index, self) => index === self.findIndex((o) => o.key === obj.key),
+    (obj, index, self) => index === self.findIndex((o) => o.name === obj.name),
   );
 
   useEffect(() => {
     if (searchValue && searchValue !== '') {
-      setQuery(searchValue);
+      setQuery(searchValue.split('$')[0]);
       setSelected(true);
     }
   }, [searchValue !== '']);
+
+  const sliderRef = React.useRef<Slider>(null);
+  const settings = {
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    speed: 1000,
+    autoplaySpeed: 3000,
+    cssEase: 'fade',
+  };
+
+  // console.log(placesData)
 
   return (
     <div
@@ -178,16 +204,17 @@ const SearchBox = ({
             placeholder={
               lang === 'en' ? 'Search destinations' : 'Хайх газар оруулах'
             }
-            // placeholder={
-            //   searchValue && searchValue !== ''
-            //     ? searchValue
-            //     : lang === 'en'
-            //     ? 'Search destinations'
-            //     : 'Хайх газар оруулах'
-            // }
             onChange={(event) => {
               setQuery(event.target.value);
               setSelected(false);
+              if (
+                searchValue &&
+                event.target.value.length < searchValue.length
+              ) {
+                router.push(
+                  `${pathname}?${createQueryString('searchValue', null)}`,
+                );
+              }
             }}
             onLoad={(e) => {
               e.preventDefault();
@@ -195,7 +222,7 @@ const SearchBox = ({
             value={query}
             ref={inputRef}
             onFocus={(e) => e.preventDefault()}
-            className={`h-[36px] border-transparent px-0 text-[12px] text-sub-text/75 placeholder-sub-text/75 focus:border-transparent focus:ring-0 2xs:text-[13px] sm:text-[14px] lg:text-[12px] xl:text-[14px]
+            className={`h-full border-transparent px-0 text-[12px] text-sub-text/75 placeholder-sub-text/75 focus:border-transparent focus:ring-0 2xs:text-[13px] sm:text-[14px] lg:text-[12px] xl:text-[14px]
             ${
               query === ''
                 ? 'w-[124px] 2xs:w-[134px] sm:w-[144px] lg:w-[124px] xl:w-[144px]'
@@ -209,7 +236,7 @@ const SearchBox = ({
           <div
             onClick={() => {
               let nextFilter =
-                filter === '' || !filter
+                filter === '' || !filter || filter === 'on'
                   ? `${ver === 'search' ? 'webFilter' : 'mobile'}`
                   : null;
               router.push(
@@ -219,7 +246,9 @@ const SearchBox = ({
             className={`flex h-full cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue ${
               ver === 'headerSearch' ? 'px-[8px]' : 'px-[12px]'
             } text-[13px] font-medium text-white ring-1 ring-primary-blue xl:px-[14px] xl:text-[14px] ${
-              query !== '' || filter ? 'w-[46px]' : 'min-w-[100px]'
+              query !== '' || (filter && filter !== 'on')
+                ? 'w-[46px]'
+                : 'min-w-[100px]'
             }`}
           >
             <svg
@@ -242,7 +271,11 @@ const SearchBox = ({
             </svg>
             {query === '' ? (
               // <p className={`${filter === '' ? '' : 'hidden'}`}>
-              <p className={`${!filter || filter === '' ? '' : 'hidden'}`}>
+              <p
+                className={`${
+                  !filter || filter === '' || filter === 'on' ? '' : 'hidden'
+                }`}
+              >
                 {lang === 'en' ? 'Filter' : 'Шүүлтүүр'}
               </p>
             ) : null}
@@ -255,17 +288,20 @@ const SearchBox = ({
         ver !== 'search' &&
         ver !== 'headerSearch' &&
         ver !== 'hotel' ? (
-          <p
-            className={`text-[12px] leading-[12px] 2xs:text-[13px] 2xs:leading-[13px] sm:text-[14px] sm:leading-[14px] lg:text-[12px] lg:leading-[12px] xl:text-[14px] xl:leading-[14px] ${
-              ver === 'fixed' ? 'hidden' : ''
-            }`}
-          >
-            &ldquo;
-            {lang === 'en'
-              ? suggestion[currentIndex].en
-              : suggestion[currentIndex].mn}
-            &rdquo;
-          </p>
+          <div className=" max-w-[120px] overflow-hidden">
+            <Slider {...settings} ref={sliderRef}>
+              {suggestion.map((index, i) => (
+                <p
+                  key={i}
+                  className={` w-full text-[12px] leading-[12px] 2xs:text-[13px] 2xs:leading-[13px] sm:text-[14px] sm:leading-[14px] lg:text-[12px] lg:leading-[12px] xl:text-[14px] xl:leading-[14px]`}
+                >
+                  &ldquo;
+                  {lang === 'en' ? index.en : index.mn}
+                  &rdquo;
+                </p>
+              ))}
+            </Slider>
+          </div>
         ) : null}
       </div>
       {query !== '' && selected == false ? (
@@ -275,7 +311,7 @@ const SearchBox = ({
           {uniqueData.map((data) => (
             <div
               onClick={() => {
-                let nextSearchValue = data.name;
+                let nextSearchValue = `${data.name}$${data.type}`;
                 router.push(
                   `${pathname}?${createQueryString(
                     'searchValue',
@@ -288,22 +324,7 @@ const SearchBox = ({
                 setQuery(data.name);
                 setSelected(true);
               }}
-              // href={{
-              //   pathname: `${pathname}`,
-              //   query: {
-              //     lang: lang,
-              //     searchValue: data.name,
-              //     toggle: toggle,
-              //     filter: filter,
-              //     type: type,
-              //   },
-              // }}
-              // scroll={false}
               key={data.key}
-              // onClick={() => {
-              //   setQuery(data.name);
-              //   setSelected(true);
-              // }}
               className=" flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
             >
               {data.type === 'location' ? (

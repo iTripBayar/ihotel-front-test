@@ -11,6 +11,10 @@ const RoomCard = ({ data }: Props) => {
   const lang = searchParams.get('lang');
   const router = useRouter();
   const roomAmount = searchParams.getAll('roomAmount');
+  const roomSelect = searchParams.get('roomSelect');
+  const room = searchParams.get('room')
+  const cart = searchParams.getAll('cart');
+
 
   const [openDesc, setOpenDesc] = useState(false);
 
@@ -20,6 +24,8 @@ const RoomCard = ({ data }: Props) => {
       value: string | null,
       name1: string,
       value1: string | null,
+      name2: string,
+      value2: string | null,
     ) => {
       const params = new URLSearchParams(searchParams);
       if (value !== null) {
@@ -32,6 +38,11 @@ const RoomCard = ({ data }: Props) => {
       } else {
         params.delete(name1);
       }
+      if (value2 !== null) {
+        params.set(name2, value2);
+      } else {
+        params.delete(name2);
+      }
       return params.toString();
     },
     [searchParams],
@@ -42,6 +53,8 @@ const RoomCard = ({ data }: Props) => {
       value: string | null,
       name1: string,
       value1: string | null,
+      name2: string,
+      value2: string | null,
     ) => {
       const params = new URLSearchParams(searchParams);
 
@@ -49,16 +62,16 @@ const RoomCard = ({ data }: Props) => {
         params.set(name, value);
       } else if (value !== null && params.get(name)) {
         if (value.split('$')[1] !== '0') {
-          for (let i = 0; i < roomAmount.length; i++) {
-            if (roomAmount[i].split('$')[0] === data.id.toString()) {
-              params.delete(name, roomAmount[i]);
-            }
+          for (let i = 0; i < cart.length; i++) {
+            if (cart[i].split('$')[0] === data.id.toString()) {
+              params.delete(name, cart[i]);
+            } 
           }
           params.append(name, value);
         } else {
-          for (let i = 0; i < roomAmount.length; i++) {
+          for (let i = 0; i < cart.length; i++) {
             if (roomAmount[i].split('$')[0] === data.id.toString()) {
-              params.delete(name, roomAmount[i]);
+              params.delete(name, cart[i]);
             }
           }
         }
@@ -70,6 +83,12 @@ const RoomCard = ({ data }: Props) => {
       } else {
         params.delete(name1);
       }
+      if (value2 !== null) {
+        params.set(name2, value2);
+      } else {
+        params.delete(name2);
+      }
+
       return params.toString();
     },
     [searchParams],
@@ -84,9 +103,21 @@ const RoomCard = ({ data }: Props) => {
     }
   }
 
+   const sampleRooms = [
+     { id: data?.id, amount: 0 },
+     { id: data?.id, amount: 1 },
+     { id: data?.id, amount: 2 },
+     { id: data?.id, amount: 3 },
+     { id: data?.id, amount: 4 },
+     { id: data?.id, amount: 5 },
+     { id: data?.id, amount: 6 },
+     { id: data?.id, amount: 7 },
+     { id: data?.id, amount: 8 },
+   ];
+
   return (
-    <div className="flex flex-col overflow-hidden rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]">
-      <div className="relative h-[225px] w-full bg-sky-500 2xs:h-[260px] sm:h-[300px] ">
+    <div className="flex flex-col rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]">
+      <div className="relative h-[225px] w-full overflow-hidden rounded-t-[16px] bg-sky-500 2xs:h-[260px] sm:h-[300px] ">
         <Image
           //   src={
           //     data.photos !== null
@@ -216,9 +247,15 @@ const RoomCard = ({ data }: Props) => {
           </div>
         </div>
         {/* room select section */}
-        <div className="flex w-full justify-between">
+        <div
+          className={`relative flex w-full ${
+            room === data.id.toString() ? ' lg:justify-end justify-between' : 'justify-between'
+          }`}
+        >
           <div
-            className="flex h-[38px] items-center justify-center gap-[8px] rounded-[8px] border-[2px] border-primary-blue/50 px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px]"
+            className={`overflow-hidden rounded-[8px] border-[2px] border-primary-blue/50 px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px] ${
+              room !== data.id.toString() ? 'lg:max-h-[38px]' : ' lg:hidden'
+            }`}
             onClick={() => {
               router.push(
                 `/hotel/?${createQueryString(
@@ -226,6 +263,7 @@ const RoomCard = ({ data }: Props) => {
                   'open',
                   'room',
                   data.id.toString(),
+                  'null', null
                 )}`,
                 {
                   scroll: false,
@@ -233,94 +271,88 @@ const RoomCard = ({ data }: Props) => {
               );
             }}
           >
-            <p>
-              {updatedAmount.length > 2 ? updatedAmount.split('$')[1] : 0}
-              {lang === 'en' ? ' rooms' : ' өрөө'}
-            </p>
-            <svg
-              className="max-h-[8px] min-h-[8px] min-w-[12px] max-w-[12px]"
-              viewBox="0 0 12 8"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              className={`flex h-[34px] items-center justify-center gap-[8px] `}
             >
-              <path
-                d="M5.04535 7.14L0.249351 1.658C-0.316649 1.013 0.143351 3.67706e-07 1.00235 3.67706e-07H10.5944C10.7866 -0.000164459 10.9748 0.0550878 11.1365 0.159141C11.2981 0.263194 11.4263 0.411637 11.5058 0.586693C11.5853 0.761749 11.6126 0.955998 11.5845 1.14618C11.5564 1.33636 11.474 1.51441 11.3474 1.659L6.55135 7.139C6.45749 7.24641 6.34174 7.3325 6.21186 7.39148C6.08198 7.45046 5.94099 7.48098 5.79835 7.48098C5.65571 7.48098 5.51472 7.45046 5.38484 7.39148C5.25497 7.3325 5.13921 7.24641 5.04535 7.139V7.14Z"
-                fill="currentColor"
-              />
-            </svg>
+              <p>
+                {updatedAmount.length > 2 ? updatedAmount.split('$')[1] : 0}
+                {lang === 'en' ? ' rooms' : ' өрөө'}
+              </p>
+              <svg
+                className="max-h-[8px] min-h-[8px] min-w-[12px] max-w-[12px]"
+                viewBox="0 0 12 8"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5.04535 7.14L0.249351 1.658C-0.316649 1.013 0.143351 3.67706e-07 1.00235 3.67706e-07H10.5944C10.7866 -0.000164459 10.9748 0.0550878 11.1365 0.159141C11.2981 0.263194 11.4263 0.411637 11.5058 0.586693C11.5853 0.761749 11.6126 0.955998 11.5845 1.14618C11.5564 1.33636 11.474 1.51441 11.3474 1.659L6.55135 7.139C6.45749 7.24641 6.34174 7.3325 6.21186 7.39148C6.08198 7.45046 5.94099 7.48098 5.79835 7.48098C5.65571 7.48098 5.51472 7.45046 5.38484 7.39148C5.25497 7.3325 5.13921 7.24641 5.04535 7.139V7.14Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
           </div>
+          {/* web roomSelect dropdown */}
+          {roomSelect === 'open' &&  room === data.id.toString() ? (
+            <div className=" hidden lg:flex min-w-[90px] scrollHidden absolute left-0 z-50 max-h-[166px] flex-col overflow-y-auto rounded-[8px] border-[2px] border-primary-blue/50 bg-white px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px]">
+              {sampleRooms.map((index, i) => (
+                <div
+                  key={i}
+                  className=" flex min-h-[34px] items-center justify-center border-b border-b-primary-blue/50"
+                  onClick={() => {
+                    router.push(
+                      `/hotel/?${multipleCreateQueryString(
+                        'roomAmount',
+                        `${room}$${sampleRooms.indexOf(index).toString()}`,
+                        'roomSelect',
+                        null,
+                        'room',
+                        null
+                        
+                      )}`,
+                      { scroll: false },
+                    );
+                  }}
+                >
+                  {index.amount} {lang === 'en' ? 'rooms' : 'өрөө'}{' '}
+                  {sampleRooms.indexOf(index) === parseInt(updatedAmount) ? (
+                    <svg
+                      viewBox="0 0 19 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="absolute right-0 top-[50%] max-h-[14px] min-h-[14px] min-w-[20px] max-w-[20px] translate-y-[-50%] text-primary-blue"
+                    >
+                      <path
+                        d="M17 2L7 12L2 7"
+                        stroke="#3C76FE"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          ) : null}
           <div
             className="flex h-[38px] items-center justify-center rounded-[8px] border-[2px] border-primary-blue px-[12px] text-[14px] font-medium text-primary-blue 2xs:px-[16px] 2xs:text-[18px] md:px-[8px] md:text-[16px]"
             onClick={() => {
-              router.push(
-                `/hotel/?${multipleCreateQueryString(
-                  'cart',
-                  updatedAmount,
-                  'roomSelect',
-                  null,
-                )}`,
-                { scroll: false },
-              );
+              if (updatedAmount.length > 2) {
+                router.push(
+                  `/hotel/?${multipleCreateQueryString(
+                    'cart',
+                    updatedAmount,
+                    'roomSelect',
+                    null,
+                    'room', null
+                  )}`,
+                  { scroll: false },
+                );
+              }
             }}
           >
             {lang === 'en' ? 'Add to cart' : 'Сангсанд нэмэх'}
           </div>
-
-          {/* <Listbox value={selected} onChange={setSelected}>
-            <div className="relative mt-1">
-              <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                <span className="block truncate">{selected.name}</span>
-                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                  <ChevronUpDownIcon
-                    className="w-5 h-5 text-gray-400"
-                    aria-hidden="true"
-                  />
-                </span>
-              </Listbox.Button>
-              <Transition
-                as={Fragment}
-                leave="transition ease-in duration-100"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                  {people.map((person, personIdx) => (
-                    <Listbox.Option
-                      key={personIdx}
-                      className={({ active }) =>
-                        `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                          active
-                            ? 'bg-amber-100 text-amber-900'
-                            : 'text-gray-900'
-                        }`
-                      }
-                      value={person}
-                    >
-                      {({ selected }) => (
-                        <>
-                          <span
-                            className={`block truncate ${
-                              selected ? 'font-medium' : 'font-normal'
-                            }`}
-                          >
-                            {person.name}
-                          </span>
-                          {selected ? (
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                              <CheckIcon
-                                className="w-5 h-5"
-                                aria-hidden="true"
-                              />
-                            </span>
-                          ) : null}
-                        </>
-                      )}
-                    </Listbox.Option>
-                  ))}
-                </Listbox.Options>
-              </Transition>
-            </div>
-          </Listbox> */}
         </div>
         {/* order btn */}
         <div className="flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white">

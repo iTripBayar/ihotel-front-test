@@ -1,33 +1,18 @@
-import React from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useState, useCallback } from 'react';
 
-const Filter = () => {
+const FilterOptions = () => {
   // searchParams
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const searchValue = searchParams.get('searchValue');
-  const toggle = searchParams.get('toggle');
-  const type = searchParams.get('type');
   const filter = searchParams.get('filter');
   const catVal = searchParams.get('catVal');
   const minVal = searchParams.get('minVal');
   const maxVal = searchParams.get('maxVal');
   const additionalVal = searchParams.getAll('additionalVal');
+const router = useRouter();
 
-  // states
-  const [open, setOpen] = useState('category');
-  // const [cat, setCat] = useState<string>('');
-  // const [price, setPrice] = useState<{ min: number; max: number }>({
-  //   min: 0,
-  //   max: 0,
-  // });
-  const [additional, setAdditional] = useState<string[]>([]);
-  // let testVal: string[] = [];
-  // sample datas
-  const sampleCat = [
+const sampleCat = [
     { id: 0, desc: 'Зочид буудал' },
     { id: 1, desc: 'Гэст хаус' },
     { id: 2, desc: 'Амралтын газар' },
@@ -53,13 +38,41 @@ const Filter = () => {
     { id: 18, desc: 'Элсний волейбол' },
     { id: 19, desc: 'Дотоод аялал' },
   ];
+ 
+const createAdditionalQueryString = useCallback((name: string, value: string | null, name1: string, value1: string | null, name2: string, value2: string | null)=>{
+  const params = new URLSearchParams(searchParams)
+  if(value !== null && !params.get(name)){
+    params.set(name, value)
+  } else if(value !== null && params.get(name)){
+    if(additionalVal.includes(value)){
+      for (let i = 0; i < additionalVal.length; i++) {
+        if (additionalVal[i] === value) {
+          params.delete(name, additionalVal[i]);
+        }
+      }
+    }else{
+    params.append(name, value);
+
+    }
+  } else{
+    params.delete(name)
+  }
+   if (value1 !== null) {
+     params.set(name1, value1);
+   } else {
+     params.delete(name1);
+   }
+   if (value2 !== null) {
+     params.set(name2, value2);
+   } else {
+     params.delete(name2);
+   }
+  return params.toString()
+}, [searchParams])
+  const [open, setOpen] = useState('category');
   // Animation durations
   const colapseDuration = 700;
   const iconRotateDuration = 700;
-  useEffect(() => {
-    // This code will run whenever the 'additional' state changes
-    document.getElementById('additionalLink')?.click();
-  }, [additional]);
 
   if (filter === 'webFilter')
     return (
@@ -72,27 +85,25 @@ const Filter = () => {
             {/* Categories */}
             <div className="flex h-full w-full flex-col items-center justify-start gap-[12px]">
               <p className="text-[18px] font-medium">
-                {/* {state.language === 'mn' ? 'Төрөл' : 'Categories'} */}
                 {lang === 'en' ? 'Categories' : 'Төрөл'}
               </p>
               <div className="grid w-full grid-cols-2 gap-[8px] text-[15px] text-sub-text">
                 {sampleCat.map((index) => (
-                  <Link
-                    href={{
-                      pathname: `${pathname}`,
-                      query: {
-                        lang: lang,
-                        searchValue: searchValue,
-                        toggle: toggle,
-                        type: type,
-                        filter: filter,
-                        catVal: index.desc,
-                        minVal: minVal,
-                        maxVal: maxVal,
-                        additionalVal: additionalVal,
-                      },
+                  <div
+                    
+                    onClick={() => {
+                      router.push(
+                        `/search/?${createAdditionalQueryString(
+                          'null',
+                          null,
+                          'catVal',
+                          index.desc,
+                          'null',
+                          null,
+                        )}`,
+                        { scroll: false },
+                      );
                     }}
-                    scroll={false}
                     key={index.id}
                     className="flex w-full items-center gap-[8px]"
                   >
@@ -111,34 +122,32 @@ const Filter = () => {
                     >
                       {index.desc}
                     </label>
-                  </Link>
+                  </div>
                 ))}
               </div>
             </div>
             {/* Price */}
             <div className="flex h-full w-[70%] flex-col items-center justify-start gap-[12px]">
               <p className="text-[18px] font-medium">
-                {/* {state.language === 'mn' ? 'Үнэ' : 'Price'} */}
                 {lang === 'en' ? 'Price' : 'Үнэ'}
               </p>
               <div className="grid w-full grid-cols-1 gap-[8px] text-[15px] text-sub-text">
                 {samplePrice.map((index) => (
-                  <Link
-                    href={{
-                      pathname: `${pathname}`,
-                      query: {
-                        lang: lang,
-                        searchValue: searchValue,
-                        toggle: toggle,
-                        type: type,
-                        filter: filter,
-                        catVal: catVal,
-                        minVal: index.min,
-                        maxVal: index.max,
-                        additionalVal: additionalVal,
-                      },
+                  <div
+                    
+                    onClick={() => {
+                      router.push(
+                        `/search/?${createAdditionalQueryString(
+                          'null',
+                          null,
+                          'minVal',
+                          index.min.toString(),
+                          'maxVal',
+                          index.max.toString(),
+                        )}`,
+                        { scroll: false },
+                      );
                     }}
-                    scroll={false}
                     key={index.id}
                     className="flex w-full items-center gap-[8px]"
                   >
@@ -158,7 +167,6 @@ const Filter = () => {
                       }}
                     >
                       {index.min.toLocaleString()}{' '}
-                      {/* {state.language === 'mn' ? '₮' : '$'} */}
                       {lang === 'en' ? '$' : '₮'}
                       {index.max !== 0 ? '-' : null}{' '}
                       {index.max !== 0 ? (
@@ -168,37 +176,32 @@ const Filter = () => {
                       )}
                       {index.max !== 0 ? (lang === 'en' ? '$' : '₮') : null}
                     </label>
-                  </Link>
+                  </div>
                 ))}
               </div>
             </div>
             {/* Additional */}
             <div className="flex h-full w-full flex-col items-center justify-start gap-[12px]">
               <p className="text-[18px] font-medium">
-                {/* {state.language === 'mn' ? 'Нэмэлтээр' : 'Additional'} */}
                 {lang === 'en' ? 'Additional' : 'Нэмэлтээр'}
               </p>
               <div className="grid w-full grid-cols-2 gap-[8px] text-[15px] text-sub-text">
                 {sampleAdditional.map((index) => (
-                  <Link
-                    href={{
-                      pathname: `${pathname}`,
-                      query: {
-                        lang: lang,
-                        searchValue: searchValue,
-                        toggle: toggle,
-                        type: type,
-                        filter: filter,
-                        catVal: catVal,
-                        minVal: minVal,
-                        maxVal: maxVal,
-                        additionalVal: additional,
-                        //   additionalVal != null
-                        //     ? [...additionalVal, ...index.desc]
-                        //     : [index.desc],
-                      },
+                  <div
+                    onClick={() => {
+                      router.push(
+                        `/search/?${createAdditionalQueryString(
+                          'additionalVal',
+                          index.desc,
+                          'null',
+                          null,
+                          'null',
+                          null,
+                        )}`,
+                        { scroll: false },
+                      );
+                      // console.log(additionalVal);
                     }}
-                    scroll={false}
                     key={index.id}
                     id="additionalLink"
                     className="flex w-full items-center gap-[8px]"
@@ -207,20 +210,8 @@ const Filter = () => {
                       id={`${index.id}`}
                       type="checkBox"
                       value={index.desc}
-                      checked={additional?.includes(index.desc)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          if (additional.length <= 0) {
-                            setAdditional([index.desc]);
-                          } else {
-                            setAdditional((prev) => {
-                              const update = [...prev, ...[index.desc]];
-                              return update;
-                            });
-                          }
-                        }
-                        return additional;
-                      }}
+                      checked={additionalVal.includes(index.desc)}
+                      readOnly
                       className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 "
                     />
                     <label
@@ -231,34 +222,31 @@ const Filter = () => {
                     >
                       {index.desc}
                     </label>
-                  </Link>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
           {/* search Btn */}
-          <Link
-            href={{
-              pathname: `${pathname}`,
-              query: {
-                lang: lang,
-                searchValue: searchValue,
-                toggle: toggle,
-                filter: '',
-                type: type,
-                catVal: catVal,
-                minVal: minVal,
-                maxVal: maxVal,
-                additionalVal: additional,
-              },
+          <div
+           
+            onClick={() => {
+              router.push(
+                `/search/?${createAdditionalQueryString(
+                  'null',
+                  null,
+                  'filter',
+                  'on',
+                  'null',
+                  null,
+                )}`,
+                { scroll: false },
+              );
             }}
-            scroll={false}
             className="flex max-w-[180px] items-center  justify-center self-end rounded-full bg-primary-blue px-[14px] py-[4px] text-[13px] font-medium uppercase text-white"
-            // onClick={() => closeFilter()}
           >
-            {/* {state.language === 'mn' ? 'Шүүх' : 'filter'} */}
             {lang === 'en' ? 'Filter' : 'Шүүх'}
-          </Link>
+          </div>
         </div>
       </div>
     );
@@ -284,7 +272,6 @@ const Filter = () => {
           {/* title section */}
           <div className="flex w-full items-center justify-between">
             <p className="text-[18px] font-medium text-sub-text">
-              {/* {state.language === 'mn' ? 'Төрөл' : 'Category'} */}
               {lang === 'en' ? 'Category' : 'Төрөл'}
             </p>
             {/* spinning + Icon */}
@@ -314,22 +301,17 @@ const Filter = () => {
             }`}
           >
             {sampleCat.map((index) => (
-              <Link
-                href={{
-                  pathname: `${pathname}`,
-                  query: {
-                    lang: lang,
-                    searchValue: searchValue,
-                    toggle: toggle,
-                    type: type,
-                    filter: filter,
-                    catVal: index.desc,
-                    minVal: minVal,
-                    maxVal: maxVal,
-                    additionalVal: additionalVal,
-                  },
+              <div
+                onClick={() => {
+                  router.push(
+                    `/search/?${createAdditionalQueryString('null', null,
+                      'catVal',
+                      index.desc,
+                      'null',
+                      null,
+                    )}`, {scroll: false}
+                  );
                 }}
-                scroll={false}
                 key={index.id}
                 className="flex w-full items-center gap-[8px]"
               >
@@ -348,7 +330,7 @@ const Filter = () => {
                 >
                   {index.desc}
                 </label>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
@@ -368,7 +350,6 @@ const Filter = () => {
           {/* title section */}
           <div className="flex w-full items-center justify-between">
             <p className="text-[18px] font-medium text-sub-text">
-              {/* {state.language === 'mn' ? 'Үнэ' : 'Price'} */}
               {lang === 'en' ? 'Price' : 'Үнэ'}
             </p>
             {/* spinning + Icon */}
@@ -398,22 +379,18 @@ const Filter = () => {
             }`}
           >
             {samplePrice.map((index) => (
-              <Link
-                href={{
-                  pathname: `${pathname}`,
-                  query: {
-                    lang: lang,
-                    searchValue: searchValue,
-                    toggle: toggle,
-                    type: type,
-                    filter: filter,
-                    catVal: catVal,
-                    minVal: index.min,
-                    maxVal: index.max,
-                    additionalVal: additionalVal,
-                  },
+              <div
+                onClick={() => {
+                  router.push(
+                    `/search/?${createAdditionalQueryString('null', null,
+                      'minVal',
+                      index.min.toString(),
+                      'maxVal',
+                      index.max.toString(),
+                    )}`,
+                    { scroll: false },
+                  );
                 }}
-                scroll={false}
                 key={index.id}
                 className="flex w-full items-center gap-[8px]"
               >
@@ -433,7 +410,6 @@ const Filter = () => {
                   }}
                 >
                   {index.min.toLocaleString()}{' '}
-                  {/* {state.language === 'mn' ? '₮' : '$'} */}
                   {lang === 'en' ? '$' : '₮'}
                   {index.max !== 0 ? '-' : null}{' '}
                   {index.max !== 0 ? (
@@ -443,7 +419,7 @@ const Filter = () => {
                   )}
                   {index.max !== 0 ? (lang === 'en' ? '$' : '₮') : null}
                 </label>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
@@ -463,7 +439,6 @@ const Filter = () => {
           {/* title section */}
           <div className="flex w-full items-center justify-between">
             <p className="text-[18px] font-medium text-sub-text">
-              {/* {state.language === 'mn' ? 'Нэмэлтээр' : 'Additional'} */}
               {lang === 'en' ? 'Additional' : 'Нэмэлтээр'}
             </p>
             {/* spinning + Icon */}
@@ -493,25 +468,16 @@ const Filter = () => {
             }`}
           >
             {sampleAdditional.map((index) => (
-              <Link
-                href={{
-                  pathname: `${pathname}`,
-                  query: {
-                    lang: lang,
-                    searchValue: searchValue,
-                    toggle: toggle,
-                    type: type,
-                    filter: filter,
-                    catVal: catVal,
-                    minVal: minVal,
-                    maxVal: maxVal,
-                    additionalVal: additional,
-                    //   additionalVal != null
-                    //     ? [...additionalVal, ...index.desc]
-                    //     : [index.desc],
-                  },
+              <div
+                onClick={() => {
+                  router.push(
+                    `/search/?${createAdditionalQueryString(
+                      'additionalVal',
+                      index.desc, 'null', null, 'null', null
+                    )}`, {scroll: false}
+                  );
+                  // console.log(additionalVal)
                 }}
-                scroll={false}
                 key={index.id}
                 id="additionalLink"
                 className="flex w-full items-center gap-[8px]"
@@ -520,20 +486,10 @@ const Filter = () => {
                   id={`${index.id}`}
                   type="checkBox"
                   value={index.desc}
-                  checked={additional?.includes(index.desc)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      if (additional.length <= 0) {
-                        setAdditional([index.desc]);
-                      } else {
-                        setAdditional((prev) => {
-                          const update = [...prev, ...[index.desc]];
-                          return update;
-                        });
-                      }
-                    }
-                    return additional;
-                  }}
+                  checked={
+                   additionalVal.includes(index.desc)
+                  }
+                  readOnly
                   className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 "
                 />
                 <label
@@ -544,32 +500,21 @@ const Filter = () => {
                 >
                   {index.desc}
                 </label>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
-        <Link
-          href={{
-            pathname: `${pathname}`,
-            query: {
-              lang: lang,
-              searchValue: searchValue,
-              toggle: toggle,
-              filter: '',
-              type: type,
-              catVal: catVal,
-              minVal: minVal,
-              maxVal: maxVal,
-              additionalVal: additional,
-            },
+        <div
+          onClick={()=>{
+            router.push(`/search/?${createAdditionalQueryString('null', null, 'filter', 'on', 'null', null)}`, {scroll: false})
           }}
-          scroll={false}
+
           className="flex min-h-[40px] w-auto min-w-[90px] items-center justify-center self-center rounded-full bg-primary-blue px-[12px] pt-[2px] text-[16px] font-medium uppercase tracking-wider text-white"
         >
           {lang === 'en' ? 'Filter' : 'Шүүх'}
-        </Link>
+        </div>
       </div>
     );
 };
 
-export default Filter;
+export default FilterOptions;

@@ -58,8 +58,6 @@ export default function Home({
     };
   }, []);
 
-  console.log(data);
-
   return (
     <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
       {/* fixed components */}
@@ -99,26 +97,17 @@ export default function Home({
       <CardsContainer
         title={'cheap'}
         data={data ? data.cheapHotels : []}
-        ver={'home'}
-        hotelData={[]}
-        campsData={[]}
-        map={''}
+        dollarRate={data ? data.dollarRate : null}
       />
       <CardsContainer
         title={'hotels'}
         data={data ? data.hotels : []}
-        ver={'home'}
-        hotelData={[]}
-        campsData={[]}
-        map={''}
+        dollarRate={data ? data.dollarRate : null}
       />
       <CardsContainer
         title={'camps'}
         data={data ? data.camps : []}
-        ver={'home'}
-        hotelData={[]}
-        campsData={[]}
-        map={''}
+        dollarRate={data ? data.dollarRate : null}
       />
       <News data={data ? data.posts : []} />
       <Footer />

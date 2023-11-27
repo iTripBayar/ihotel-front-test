@@ -1,30 +1,36 @@
 import useWindowSize from '@/hooks/windowSize';
 import HotelCard from '../common/hotelCard';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 
 interface iProps {
   title: string;
   data: any[];
-  ver: string;
-  hotelData: any[];
-  campsData: any[];
-  map: string;
+  dollarRate: string | null
 }
 
 const CardsContainer = ({
   title,
   data,
-  ver,
-  hotelData,
-  campsData,
-  map,
+  dollarRate
 }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const toggle = searchParams.get('toggle');
-  const searchValue = searchParams.get('searchValue');
   const size = useWindowSize();
+  const router = useRouter();
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (value !== null) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      return params.toString();
+    },
+    [searchParams],
+  );
 
   let cap = 6;
 
@@ -40,22 +46,13 @@ const CardsContainer = ({
     data = data.slice(0, cap);
   }
 
-  if (ver === 'search') {
-    data = [...hotelData, ...campsData];
-  }
 
   return (
     <div
-      className={`w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px] ${
-        map === 'open'
-          ? 'lg:px-0 lg:pl-[100px] lg:pt-[82px]'
-          : 'pt-0 lg:px-[100px] lg:pt-[82px]'
-      }`}
+      className={`w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px]  lg:px-[150px] lg:py-[0] 2xl:px-[200px] `}
     >
       <div
-        className={`flex w-full flex-col gap-[24px] border-t-[1px]  border-black/[.15] pt-[32px] lg:gap-[32px] ${
-          ver === 'search' ? ' border-none pt-0' : ''
-        }`}
+        className={`flex w-full flex-col gap-[24px] border-t-[1px]  border-black/[.15] pt-[32px] lg:gap-[32px]`}
       >
         {title !== '' ? (
           <h3 className="text-[20px] font-bold text-main-text">
@@ -79,24 +76,41 @@ const CardsContainer = ({
         <div
           className={`grid xs:grid-rows-${cap} gap-[32px] sm:grid-cols-2 sm:grid-rows-${
             cap / 2
-          }  xl:grid-rows-${cap / 3} xl:gap-[24px] 2xl:gap-[48px] ${
-            map !== 'open' ? 'xl:grid-cols-3' : 'lg:grid-cols-1 xl:grid-cols-2'
-          }`}
+          }  xl:grid-rows-${
+            cap / 3
+          } xl:grid-cols-3 xl:gap-[24px] 2xl:gap-[48px] `}
         >
           {data.map((data, i: number) => (
-            <HotelCard data={data} key={i} fromMap={false} />
+            <HotelCard
+              data={data}
+              key={i}
+              fromMap={false}
+              dollarRate={dollarRate}
+            />
           ))}
         </div>
         {data.length > 0 ? (
-          <Link
-            href={{
-              pathname: '/search',
-              query: {
-                lang: lang,
-                searchValue: searchValue,
-                toggle: toggle,
-                type: title,
-              }, // the data
+          // <Link
+          //   href={{
+          //     pathname: '/search',
+          //     query: {
+          //       lang: lang,
+          //       searchValue: searchValue,
+          //       toggle: toggle,
+          //       type: title,
+          //     }, // the data
+          //   }}
+          //   className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white"
+          // >
+          //   <p className="flex gap-[4px]">
+          //     {/* {state.language === 'mn' ? 'Цааш үзэх' : 'More'}{' '} */}
+          //     {lang === 'en' ? 'More' : 'Цааш үзэх'}
+          //     <span>({data.length}+)</span>
+          //   </p>
+          // </Link>
+          <div
+            onClick={() => {
+              router.push(`/search/?${createQueryString('title', title)}`);
             }}
             className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white"
           >
@@ -105,7 +119,7 @@ const CardsContainer = ({
               {lang === 'en' ? 'More' : 'Цааш үзэх'}
               <span>({data.length}+)</span>
             </p>
-          </Link>
+          </div>
         ) : null}
       </div>
     </div>

@@ -44,7 +44,7 @@ const News = ({ data }: iProps) => {
                 <Image
                   // src={data.img}
                   src={`https://ihotel.mn/${data.photos.match(/"([^"]+)"/)[1]}`}
-                  alt="/hotel"
+                  alt="/posts"
                   fill={true}
                   priority
                   quality={75}

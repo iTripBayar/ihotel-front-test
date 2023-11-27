@@ -13,6 +13,7 @@ export default function OrderDialog({ roomPrices, allRooms }: Props) {
   const cart = searchParams.getAll('cart');
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
+  const days = searchParams.get('days')
 
 
 
@@ -124,7 +125,7 @@ export default function OrderDialog({ roomPrices, allRooms }: Props) {
 }
 
   return (
-    <div className="absolute bottom-0 flex w-full flex-col rounded-t-[30px] bg-white px-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px]">
+    <div className="flex w-full flex-col rounded-t-[30px] bg-white px-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px]">
       {cart && cart.length > 0 ? (
         <div
           className={` flex-col justify-between gap-[4px]  ${
@@ -235,14 +236,15 @@ export default function OrderDialog({ roomPrices, allRooms }: Props) {
                 }`
               : ''} */}
             {lang === 'en'
-              ? `${displayDate.en} (${displayDate.days} days)`
-              : `${displayDate.mn} (${displayDate.days} хоног)`}
+              ? `${displayDate.en} (${days ? days : 1} days)`
+              : `${displayDate.mn} (${days ? days : 1} хоног)`}
           </p>
           <h3 className="text-[20px] font-medium leading-[20px] text-main-text 2xs:text-[24px] 2xs:leading-[24px] 2xs:tracking-wide">
-            {cart && cart.length > 0
-              ? (totalPrice * parseInt(displayDate.days)).toLocaleString()
-              : (roomPrices[0] *
-                parseInt(displayDate.days)).toLocaleString()}{' '}
+            {cart && cart.length > 0 
+              ? (totalPrice * parseInt(`${days ? days : 1}`)).toLocaleString()
+              : (
+                  roomPrices[0] * parseInt(`${days ? days : 1}`)
+                ).toLocaleString()}{' '}
             {lang === 'en' ? '$' : '₮'}
           </h3>
         </div>
