@@ -19,7 +19,7 @@ export default function OrderInfo({rooms, dollarRate}:Props) {
   const cart = searchParams.getAll('cart');
 
 
-  console.log(days, cart)
+  // console.log(days, cart)
 
   let totalPrice = 0
   for (let i = 0; i < cart.length; i++) {
@@ -39,7 +39,7 @@ export default function OrderInfo({rooms, dollarRate}:Props) {
       {/* title */}
       <Button
         onClick={onToggle}
-        className="!m-0 flex h-[41px] w-full items-center !justify-between"
+        className="!m-0 flex h-[41px] sm:h-[46px] w-full items-center !justify-between"
       >
         <p className="text-[18px] font-medium leading-[18px] text-sub-text">
           {lang === 'en' ? 'Order Information' : 'Захиалгын мэдээлэл'}
@@ -65,8 +65,8 @@ export default function OrderInfo({rooms, dollarRate}:Props) {
       <Collapse
         in={isOpen}
         animateOpacity
-        className={`!flex w-full !flex-col !gap-[16px]  ${
-          isOpen === true ? 'h-auto pb-[16px]' : 'hidden'
+        className={`!flex w-full !flex-col !gap-[16px] sm:!gap-[20px]  ${
+          isOpen === true ? 'h-auto pb-[16px] sm:pb-[20px]' : 'hidden'
         }`}
       >
         {cart.map((index, i) => (
@@ -74,19 +74,10 @@ export default function OrderInfo({rooms, dollarRate}:Props) {
             className="flex w-full flex-col gap-[10px] border-b border-b-black/[.15] pb-[16px]"
             key={i}
           >
-            {/* duration */}
-            <div className="leadin-[14px] flex w-full items-center justify-between text-[14px] font-medium">
-              <p className="  text-main-text/[.65]">
-                {lang === 'en' ? 'Duration' : 'Хугацаа'}
-              </p>
-              <p className="text-[16px] text-main-text">
-                {days} {lang === 'en' ? 'days' : 'хоног'}
-              </p>
-            </div>
             {/* roomType */}
             <div className="leadin-[14px] flex w-full items-center justify-between text-[14px] font-medium">
               <p className="  text-main-text/[.65]">
-                {lang === 'en' ? 'Room type' : 'Өрөөний ангилал'}
+                {lang === 'en' ? 'Room name' : 'Өрөөний нэр'}
               </p>
               <p className="text-[16px] text-main-text">
                 {/* {} {lang === 'en' ? '' : ''} */}
@@ -109,6 +100,15 @@ export default function OrderInfo({rooms, dollarRate}:Props) {
                 {index.split('$')[1]} {lang === 'en' ? '' : 'ш'}
               </p>
             </div>
+            {/* duration */}
+            <div className="leadin-[14px] flex w-full items-center justify-between text-[14px] font-medium">
+              <p className="  text-main-text/[.65]">
+                {lang === 'en' ? 'Duration' : 'Хугацаа'}
+              </p>
+              <p className="text-[16px] text-main-text">
+                {days} {lang === 'en' ? 'days' : 'хоног'}
+              </p>
+            </div>
             {/* price per room */}
             <div className="leadin-[14px] flex w-full items-center justify-between text-[14px] font-medium">
               <p className="  text-main-text/[.65]">
@@ -129,7 +129,9 @@ export default function OrderInfo({rooms, dollarRate}:Props) {
           <h3>{lang === 'en' ? 'Total price' : 'Нийт үнэ'}</h3>
           <h3>
             {lang === 'en'
-              ? dollarRate ? (totalPrice/parseInt(dollarRate)).toLocaleString() : ''
+              ? dollarRate
+                ? (totalPrice / parseInt(dollarRate)).toLocaleString()
+                : ''
               : totalPrice.toLocaleString()}
             {lang === 'en' ? '$' : '₮'}
           </h3>

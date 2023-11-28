@@ -36,10 +36,6 @@ export default function GeneralInfo({name, nameEn, image, address, addressEn, ph
       .split('-')[1]} ${dateFrom?.split('|')[1].split('-')[2]}`,
   };
 
-  console.log(displayDate)
-  console.log(dateFrom);
-
-
   return (
     <div className="flex w-full flex-col gap-[16px]">
       <h3 className="text-[20px] font-medium text-main-text">
@@ -48,13 +44,13 @@ export default function GeneralInfo({name, nameEn, image, address, addressEn, ph
       <div className="flex w-full flex-col gap-[24px]">
         {/* calendar */}
         <div className="flex w-full flex-col gap-[24px]">
-          <div className="flex w-full items-center justify-between gap-[36px] rounded-[20px] bg-white px-[16px] py-[12px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)]">
+          <div className="flex w-full items-center justify-between gap-[20px] rounded-[20px] bg-white px-[16px] py-[12px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] 2xs:gap-[36px]">
             {/* dateFrom */}
-            <div className="flex flex-col items-center justify-center gap-[4px]">
-              <p className="text-[12px] leading-[14px] text-sub-text/75">
-                {lang === 'en' ? 'From' : 'Ирэх өдөр'}
+            <div className="flex flex-col items-center justify-center gap-[4px] sm:gap-[8px]">
+              <p className="text-[12px] leading-[14px] text-sub-text/75 sm:text-[14px]">
+                {lang === 'en' ? 'Check In' : 'Ирэх өдөр'}
               </p>
-              <h4 className="text-[18px] font-medium leading-[20px] text-primary-blue">
+              <h4 className="text-[18px] font-medium leading-[20px] text-primary-blue sm:text-[20px]">
                 {lang === 'en' ? displayDate.fromEn : displayDate.from}
               </h4>
             </div>
@@ -76,26 +72,25 @@ export default function GeneralInfo({name, nameEn, image, address, addressEn, ph
               </svg>
             </div>
             {/* dateTo */}
-            <div className="flex flex-col items-center justify-center gap-[4px]">
-              <p className="text-[12px] leading-[14px] text-sub-text/75">
-                {lang === 'en' ? 'To' : 'Гарах өдөр'}
+            <div className="flex flex-col items-center justify-center gap-[4px] sm:gap-[8px]">
+              <p className="text-[12px] leading-[14px] text-sub-text/75 sm:text-[14px]">
+                {lang === 'en' ? 'Check Out' : 'Гарах өдөр'}
               </p>
-              <h4 className="text-[18px] font-medium leading-[20px] text-primary-blue">
+              <h4 className="text-[18px] font-medium  leading-[20px] text-primary-blue sm:text-[20px]">
                 {lang === 'en' ? displayDate.fromEn : displayDate.from}
               </h4>
             </div>
           </div>
-          <div className="flex min-h-[42px] w-full items-center justify-between rounded-full bg-primary-blue px-[20px] font-medium text-white">
-            <div></div>
-            <p>{lang === 'en' ? 'Change dates' : 'Өдөр солих'}</p>
-            <div className="flex items-center justify-center">
+          <div className="flex min-h-[42px] relative justify-center sm:min-h-[46px] text-[16px] sm:text-[18px] w-full items-center rounded-full bg-primary-blue px-[20px] font-medium text-white">
+            <p className='justify-self-center'>{lang === 'en' ? 'Change dates' : 'Өдөр солих'}</p>
+            <div className="flex items-center justify-center absolute right-[16px] top-[50%] translate-y-[-50%]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="2 2 24 20"
                 strokeWidth="2.15"
                 stroke="currentColor"
-                className="max-h-[16px] min-h-[16px] min-w-[20px] max-w-[20px]"
+                className="max-h-[16px] min-h-[16px] min-w-[20px] max-w-[20px] sm:max-h-[18px] sm:min-h-[18px] sm:min-w-[22px] sm:max-w-[22px]"
               >
                 <path
                   strokeLinecap="round"
@@ -107,11 +102,11 @@ export default function GeneralInfo({name, nameEn, image, address, addressEn, ph
           </div>
         </div>
         {/* hotelInfo */}
-        <div className="flex h-auto w-full flex-col  rounded-[20px] px-[20px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)]">
+        <div className="flex h-auto w-full flex-col rounded-[20px] px-[20px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)]">
           {/* title */}
           <Button
             onClick={onToggle}
-            className="!m-0 flex h-[41px] w-full items-center !justify-between"
+            className="!m-0 flex h-[41px] sm:h-[46px] w-full items-center !justify-between"
           >
             <p className="text-[18px] font-medium leading-[18px] text-sub-text">
               {lang === 'en' ? 'Hotel Information' : 'Буудлын мэдээлэл'}
@@ -137,11 +132,11 @@ export default function GeneralInfo({name, nameEn, image, address, addressEn, ph
           <Collapse
             in={isOpen}
             animateOpacity
-            className={`!flex w-full !flex-col !gap-[16px]  ${
-              isOpen === true ? 'h-auto pb-[16px]' : 'hidden'
+            className={`!flex w-full !flex-col !gap-[16px] sm:!gap-[20px]  ${
+              isOpen === true ? 'h-auto pb-[16px] sm:pb-[20px] mt-[8px]' : 'h-0'
             }`}
           >
-            <div className="relative h-[200px] w-full overflow-hidden rounded-[12px]">
+            <div className="relative h-[200px] sm:h-[250px] w-full overflow-hidden rounded-[12px]">
               <Image
                 // src={
                 //   image
