@@ -81,6 +81,7 @@ const HotelPage = ({
         roomPrices={roomPrices}
         stat={stat}
         allRooms={data?.rooms ? data?.rooms : []}
+        slug={searchParams.slug}
       />
       <div className="flex flex-col gap-[24px] overflow-x-hidden px-[16px] pb-[32px] pt-[80px] sm:px-[50px] md:px-[72px] lg:gap-[48px] lg:px-[60px]  xl:px-[100px] 2xl:px-[150px]">
         <div className="grid grid-cols-1 gap-[24px] lg:grid-cols-5 lg:gap-[20px]">

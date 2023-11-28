@@ -38,6 +38,8 @@ const config: Config = {
         'spin-slow': 'spin 5s linear infinite',
         'to-left': 'to-left 5s linear',
         open: 'open 0.5s ease-in-out',
+        openColapse: 'openColapse 0.5s ease-in-out',
+
         openSearch: 'openSearch 0.5s ease-in-out',
 
         close: 'close 0.5s ease-in-out',
@@ -99,6 +101,14 @@ const config: Config = {
           },
           to: {
             height: '159px',
+          },
+        },
+        openColapse: {
+          '0%': {
+            height: '41px',
+          },
+          to: {
+            height: '300px',
           },
         },
         openSearch: {

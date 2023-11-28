@@ -7,9 +7,10 @@ interface Props {
   roomPrices: number[];
   stat: string;
   allRooms: roomData.room[];
+  slug: string;
 }
 
-export default function Dialogs({ roomPrices, stat, allRooms }: Props) {
+export default function Dialogs({ roomPrices, stat, allRooms, slug }: Props) {
   const searchParams = useSearchParams();
   const room = searchParams.get('room');
   const roomSelect = searchParams.get('roomSelect');
@@ -29,7 +30,7 @@ export default function Dialogs({ roomPrices, stat, allRooms }: Props) {
 
       {stat === 'online' || stat === 'pending' ? (
         !roomSelect && roomSelect !== 'open' && !dateStart && !calendar ? (
-          <OrderDialog roomPrices={roomPrices} allRooms={allRooms} />
+          <OrderDialog roomPrices={roomPrices} allRooms={allRooms} slug={slug}/>
         ) : null
       ) : null}
     </div>

@@ -1,11 +1,10 @@
 'use client'
 import HeaderVariants from '@/components/common/headerVariants';
-import { fetchDataSearch } from '@/utils';
+import GeneralInfo from '@/components/reservationPage/generalInfo';
+import OrderInfo from '@/components/reservationPage/orderInfo';
+import { fetchDataHotel, fetchDataSearch } from '@/utils';
 import { useRequest } from 'ahooks';
 import React from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 
 
 const ReservationPage = ({
@@ -20,67 +19,31 @@ const ReservationPage = ({
   //   );
   //   const data = await res.json();
 const { data } = useRequest(() => {
-  return fetchDataSearch();
+  return fetchDataHotel(searchParams.slug);
 });
 
-  const sliderRef = React.useRef<Slider>(null);
-  const settings = {
-    infinite: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    speed: 1000,
-    autoplaySpeed: 3000,
-
-    cssEase: 'fade',
-  };
-
-
-  const test = [
-    {
-      id: 'Тэрэлж',
-      mn: 'Тэрэлж',
-      en: 'Terelj',
-      delay: 0,
-    },
-    {
-      id: 'Улаанбаатар',
-      mn: 'Улаанбаатар',
-      en: 'Ulaanbaatar',
-      delay: 3000,
-    },
-    {
-      id: 'Хөвсгөл',
-      mn: 'Хөвсгөл',
-      en: 'Khuvsgul',
-      delay: 6000,
-    },
-  ];
-
+console.log(data)
 // console.log(data)
   return (
     <div>
-      {/* <HeaderVariants
-        ver={'reservation'}
+      <HeaderVariants
+        ver={'hotel'}
         hotelData={[]}
         placesData={[]}
         campsData={[]}
         destData={[]}
-      /> */}
-      a
-      <div className='mb-[200px] max-w-[120px] h-[200px]'>
-        <Slider {...settings} ref={sliderRef}>
-          {test.map((index, i) => (
-            <p
-              key={i}
-              className={` text-[12px] w-full leading-[12px] 2xs:text-[13px] 2xs:leading-[13px] sm:text-[14px] sm:leading-[14px] lg:text-[12px] lg:leading-[12px] xl:text-[14px] xl:leading-[14px]`}
-            >
-              &ldquo;
-              {searchParams.lang === 'en' ? index.en : index.mn}
-              &rdquo;
-            </p>
-          ))}
-        </Slider>
+      />
+      <div className="flex w-full flex-col gap-[20px] px-[16px] pb-[32px] pt-[72px] sm:px-[50px] md:px-[72px] lg:gap-[48px] lg:px-[60px]  xl:px-[100px] 2xl:px-[150px]">
+        <GeneralInfo
+          name={data ? data.hotel.name : null}
+          nameEn={data ? data.hotel.nameEn : null}
+          image={data ? data.hotel.coverPhoto : null}
+          address={data ? data.hotel.address : null}
+          addressEn={data ? data.hotel.addressEn : null}
+          phone={data ? data.hotel.phone : null}
+          email={data ? data.hotel.email : null}
+        />
+        <OrderInfo rooms={data ? data.rooms : []} dollarRate={data ? data.rate : null}/>
       </div>
     </div>
   );

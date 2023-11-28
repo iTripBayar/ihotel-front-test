@@ -1,12 +1,13 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { addDays, format } from 'date-fns';
-
+import Link from 'next/link';
 interface Props {
   roomPrices: number[];
   allRooms: roomData.room[];
+  slug: string
 }
-export default function OrderDialog({ roomPrices, allRooms }: Props) {
+export default function OrderDialog({ roomPrices, allRooms, slug }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const lang = searchParams.get('lang');
@@ -249,9 +250,9 @@ export default function OrderDialog({ roomPrices, allRooms }: Props) {
           </h3>
         </div>
         {/* orderBtn */}
-        <div className="rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]">
+        <Link href={{query:{slug: slug, dateFrom: dateFrom, dateTo: dateTo,days: days, cart: cart}, pathname: '/reservation'}} className="rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]">
           {lang === 'en' ? 'Order' : 'Захиалах'}
-        </div>
+        </Link>
       </div>
     </div>
   );

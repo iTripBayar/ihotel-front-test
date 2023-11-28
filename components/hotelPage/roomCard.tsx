@@ -297,7 +297,7 @@ const RoomCard = ({ data }: Props) => {
               {sampleRooms.map((index, i) => (
                 <div
                   key={i}
-                  className=" flex min-h-[34px] items-center justify-center border-b border-b-primary-blue/50"
+                  className=" flex min-h-[34px] items-center justify-center border-b border-b-primary-blue/50 cursor-pointer"
                   onClick={() => {
                     router.push(
                       `/hotel/?${multipleCreateQueryString(
