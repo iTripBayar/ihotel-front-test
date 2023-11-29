@@ -2,6 +2,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import RoomCard from './roomCard';
 import { useCallback } from 'react';
 import { addDays, format } from 'date-fns';
+import Link from 'next/link';
 
 interface Props {
   data: roomData.room[] | undefined;
@@ -15,6 +16,8 @@ const router = useRouter();
 const dateFrom = searchParams.get('dateFrom');
 const dateTo = searchParams.get('dateTo');
 const days = searchParams.get('days');
+const slug = searchParams.get('slug');
+
 
 
 const createQueryString = useCallback(
@@ -204,6 +207,7 @@ if (!dateFrom && !dateTo) {
         </div>
       </div>
       <div className="relative grid grid-cols-1 gap-[24px] md:grid-cols-2 lg:grid-cols-6 lg:gap-[24px]">
+        {/* roomCards */}
         <div className=" flex flex-col gap-[24px] md:col-span-2 md:grid md:grid-cols-2 lg:col-span-4 lg:grid lg:grid-cols-2">
           {data && data.map((index, i) => <RoomCard data={index} key={i} />)}
         </div>
@@ -248,7 +252,7 @@ if (!dateFrom && !dateTo) {
                             totalPrice * parseInt(`${days ? days : 1}`)
                           ).toLocaleString()
                         : (
-                            (0) * parseInt(`${days ? days : 1}`)
+                            0 * parseInt(`${days ? days : 1}`)
                           ).toLocaleString()}{' '}
                       {lang === 'en' ? '$' : '₮'}
                     </h3>
@@ -341,9 +345,25 @@ if (!dateFrom && !dateTo) {
                   ))}
               </div>
             ) : null}
-            <div className="flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white">
+
+            {/* <div className="flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white">
               {lang === 'en' ? 'Order' : 'Захиалах'}
-            </div>
+            </div> */}
+            <Link
+              href={{
+                query: {
+                  slug: slug,
+                  dateFrom: dateFrom,
+                  dateTo: dateTo,
+                  days: days,
+                  cart: cart,
+                },
+                pathname: '/reservation',
+              }}
+              className="flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white"
+            >
+              {lang === 'en' ? 'Order' : 'Захиалах'}
+            </Link>
           </div>
         </div>
       </div>

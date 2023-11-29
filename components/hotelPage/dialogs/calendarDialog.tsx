@@ -1,5 +1,5 @@
 import {useState, useCallback,useRef} from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { addDays, format } from 'date-fns';
 import {
   DateRange,
@@ -26,6 +26,9 @@ export default function CalendarDialog({ver}:Props) {
   const lang = searchParams.get('lang')
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
+  const days = searchParams.get('days');
+
+  const pathname = usePathname()
 const pastMonth = new Date(
   year,
   (!dateFrom && !dateTo
@@ -35,23 +38,30 @@ const pastMonth = new Date(
     ? date
     : parseInt(dateFrom ? dateFrom?.split('|')[0].split('/')[1] : '0'),
 );
-  const [startDate, setStartDate] = useState(new Date());
+  // const defaultSelected: DateRange = {
+  //   from: pastMonth,
+  //   to: addDays(
+  //     pastMonth,
+  //     !dateFrom && !dateTo
+  //       ? 1
+  //       : parseInt(
+  //           dateFrom && dateTo
+  //             ? `${
+  //                 parseInt(dateTo?.split('|')[0].split('/')[1]) -
+  //                 parseInt(dateFrom?.split('|')[0].split('/')[1])
+  //               }`
+  //             : '0',
+  //         ),
+  //   ),
+  // };
   const defaultSelected: DateRange = {
     from: pastMonth,
-    to: addDays(
-      pastMonth,
-      !dateFrom && !dateTo
-        ? 1
-        : parseInt(
-            dateFrom && dateTo
-              ? `${
-                  parseInt(dateTo?.split('|')[0].split('/')[1]) -
-                  parseInt(dateFrom?.split('|')[0].split('/')[1])
-                }`
-              : '0',
-          ),
-    ),
+    to: addDays(pastMonth, days !== null ? parseInt(days) : 1),
   };
+
+  if(dateFrom && dateTo){
+    console.log(dateFrom.split('|')[0], dateTo.split('|')[0])
+  }
 
 
 
@@ -117,7 +127,7 @@ if(ver === 'mobile')
       <div
         className="absolute right-[16px] top-[16px] text-primary-blue"
         onClick={() => {
-          router.push(`/hotel/?${createQueryString('calendar', null)}`);
+          router.push(`${pathname}/?${createQueryString('calendar', null)}`);
         }}
       >
         <svg
@@ -162,7 +172,7 @@ if(ver === 'mobile')
         onClick={() => {
           if (range?.from && range.to) {
             router.push(
-              `/hotel/?${multipleCreateQueryString(
+              `${pathname}/?${multipleCreateQueryString(
                 'dateFrom',
                 `${range?.from?.toLocaleDateString()}|${range?.from
                   ?.toDateString()
@@ -200,7 +210,7 @@ if(ver === 'mobile')
      <div
        className="absolute right-[10px] top-[10px] text-primary-blue"
        onClick={() => {
-         router.push(`/hotel/?${createQueryString('calendar', null)}`);
+         router.push(`${pathname}/?${createQueryString('calendar', null)}`);
        }}
      >
        <svg
@@ -222,7 +232,7 @@ if(ver === 'mobile')
      <DayPicker
        id="test"
        mode="range"
-       defaultMonth={pastMonth}
+       defaultMonth={range ? range.from :pastMonth}
        selected={range}
        // footer={footer}
        onSelect={setRange}
@@ -247,7 +257,7 @@ if(ver === 'mobile')
        onClick={() => {
          if (range?.from && range.to) {
            router.push(
-             `/hotel/?${multipleCreateQueryString(
+             `${pathname}/?${multipleCreateQueryString(
                'dateFrom',
                `${range?.from?.toLocaleDateString()}|${range?.from
                  ?.toDateString()

@@ -30,6 +30,8 @@ export default function Home({
     return fetchData();
   });
 
+  console.log(data)
+
   useEffect(() => {
     const options = {
       root: null,

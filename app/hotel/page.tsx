@@ -19,12 +19,13 @@ import OrderDialog from '@/components/hotelPage/dialogs/orderDialog';
 import RoomSelection from '@/components/hotelPage/dialogs/roomSelection';
 import Dialogs from '@/components/hotelPage/dialogs';
 import CalendarDialog from '@/components/hotelPage/dialogs/calendarDialog';
+import Link from 'next/link';
 
 
 const HotelPage = ({
   searchParams,
 }: {
-  searchParams: { slug: string; lang: string; calendar: string };
+  searchParams: { slug: string; lang: string; calendar: string, dateFrom: string, dateTo: string; days: string, cart: string[] };
 }) => {
   const { data } = useRequest(() => {
     return fetchDataHotel(searchParams.slug);
@@ -73,9 +74,11 @@ const HotelPage = ({
         campsData={[]}
         destData={[]}
       />
-      {searchParams.calendar === 'open' ? <div className="fixed left-[50%] top-[60px] z-[900] hidden h-[425px] lg:w-[60vw] xl:w-[50vw] translate-x-[-50%] lg:flex">
-        <CalendarDialog ver={'web'} />
-      </div> : null}
+      {searchParams.calendar === 'open' ? (
+        <div className="fixed left-[50%] top-[60px] z-[900] hidden h-[425px] translate-x-[-50%] lg:flex lg:w-[60vw] xl:w-[50vw]">
+          <CalendarDialog ver={'web'} />
+        </div>
+      ) : null}
       <BurgerMenu phone={data ? data.phoneNumber : ''} ver={'search'} />
       <Dialogs
         roomPrices={roomPrices}
@@ -193,15 +196,29 @@ const HotelPage = ({
               ) : null}
               <div className="text-main-textflex flex items-center justify-between rounded-[16px] bg-black/[.07] px-[20px] py-[10px] text-[20px]">
                 <p>
-                  200,000 {searchParams.lang === 'en' ? '$' : '₮'}{' '}
+                  {roomPrices && roomPrices[0] ? roomPrices[0].toLocaleString() : `200,000`}{' '}
+                  {searchParams.lang === 'en' ? '$' : '₮'}{' '}
                   <span className="text-[14px]">
                     {' '}
                     / {searchParams.lang === 'en' ? 'days' : 'хоног'}
                   </span>
                 </p>
-                <div className="flex items-center justify-center rounded-[16px] bg-main-online px-[16px] py-[6px] font-medium text-white">
+                
+                <Link
+                  href={{
+                    query: {
+                      slug: searchParams.slug,
+                      dateFrom: searchParams.dateFrom,
+                      dateTo: searchParams.dateTo,
+                      days: searchParams.days,
+                      cart: searchParams.cart,
+                    },
+                    pathname: '/reservation',
+                  }}
+                  className="flex items-center justify-center rounded-[16px] bg-main-online px-[16px] py-[6px] font-medium text-white"
+                >
                   {searchParams.lang === 'en' ? 'Order' : 'Захиалах'}
-                </div>
+                </Link>
               </div>
             </div>
             {/* map & orderCount */}

@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface Props {
   data: roomData.room;
@@ -14,6 +15,10 @@ const RoomCard = ({ data }: Props) => {
   const roomSelect = searchParams.get('roomSelect');
   const room = searchParams.get('room')
   const cart = searchParams.getAll('cart');
+  const slug = searchParams.get('slug')
+  const dateFrom = searchParams.get('dateFrom')
+  const dateTo = searchParams.get('dateTo');
+  const days = searchParams.get('days')
 
 
   const [openDesc, setOpenDesc] = useState(false);
@@ -249,7 +254,9 @@ const RoomCard = ({ data }: Props) => {
         {/* room select section */}
         <div
           className={`relative flex w-full ${
-            room === data.id.toString() ? ' lg:justify-end justify-between' : 'justify-between'
+            room === data.id.toString()
+              ? ' justify-between lg:justify-end'
+              : 'justify-between'
           }`}
         >
           <div
@@ -263,7 +270,8 @@ const RoomCard = ({ data }: Props) => {
                   'open',
                   'room',
                   data.id.toString(),
-                  'null', null
+                  'null',
+                  null,
                 )}`,
                 {
                   scroll: false,
@@ -292,12 +300,12 @@ const RoomCard = ({ data }: Props) => {
             </div>
           </div>
           {/* web roomSelect dropdown */}
-          {roomSelect === 'open' &&  room === data.id.toString() ? (
-            <div className=" hidden lg:flex min-w-[90px] scrollHidden absolute left-0 z-50 max-h-[166px] flex-col overflow-y-auto rounded-[8px] border-[2px] border-primary-blue/50 bg-white px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px]">
+          {roomSelect === 'open' && room === data.id.toString() ? (
+            <div className=" scrollHidden absolute left-0 z-50 hidden max-h-[166px] min-w-[90px] flex-col overflow-y-auto rounded-[8px] border-[2px] border-primary-blue/50 bg-white px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px] lg:flex">
               {sampleRooms.map((index, i) => (
                 <div
                   key={i}
-                  className=" flex min-h-[34px] items-center justify-center border-b border-b-primary-blue/50 cursor-pointer"
+                  className=" flex min-h-[34px] cursor-pointer items-center justify-center border-b border-b-primary-blue/50"
                   onClick={() => {
                     router.push(
                       `/hotel/?${multipleCreateQueryString(
@@ -306,8 +314,7 @@ const RoomCard = ({ data }: Props) => {
                         'roomSelect',
                         null,
                         'room',
-                        null
-                        
+                        null,
                       )}`,
                       { scroll: false },
                     );
@@ -344,7 +351,8 @@ const RoomCard = ({ data }: Props) => {
                     updatedAmount,
                     'roomSelect',
                     null,
-                    'room', null
+                    'room',
+                    null,
                   )}`,
                   { scroll: false },
                 );
@@ -355,9 +363,24 @@ const RoomCard = ({ data }: Props) => {
           </div>
         </div>
         {/* order btn */}
-        <div className="flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white">
+        {/* <div className="flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white">
           {lang === 'en' ? 'Order' : 'Захиалах'}
-        </div>
+        </div> */}
+        <Link
+          href={{
+            query: {
+              slug: slug,
+              dateFrom: dateFrom,
+              dateTo: dateTo,
+              days: days,
+              cart: cart,
+            },
+            pathname: '/reservation',
+          }}
+          className="flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white"
+        >
+          {lang === 'en' ? 'Order' : 'Захиалах'}
+        </Link>
       </div>
     </div>
   );
