@@ -4,7 +4,7 @@ import Link from 'next/link';
 interface Props {
   roomPrices: number[];
   allRooms: roomData.room[];
-  slug: string
+  slug: string;
 }
 export default function OrderDialog({ roomPrices, allRooms, slug }: Props) {
   const searchParams = useSearchParams();
@@ -13,16 +13,13 @@ export default function OrderDialog({ roomPrices, allRooms, slug }: Props) {
   const cart = searchParams.getAll('cart');
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
-  const days = searchParams.get('days')
+  const days = searchParams.get('days');
 
-
-
-  const createQueryString =
-    (name: string, index: number) => {
-      const params = new URLSearchParams(searchParams);
-      params.delete(name, cart[index]);
-      return params.toString();
-    }
+  const createQueryString = (name: string, index: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.delete(name, cart[index]);
+    return params.toString();
+  };
 
   let totalPrice = 0;
 
@@ -56,71 +53,73 @@ export default function OrderDialog({ roomPrices, allRooms, slug }: Props) {
       month: `${nextDay.toDateString().split(' ')[1]}`,
       date: `${nextDay.toDateString().split(' ')[2]}`,
     },
-    
   };
-  let displayDate = {mn: '', en: '', days: '',}
-  if(!dateFrom && !dateTo){
-    if(formattedDate.from.month === formattedDate.to.month){
+  let displayDate = { mn: '', en: '', days: '' };
+  if (!dateFrom && !dateTo) {
+    if (formattedDate.from.month === formattedDate.to.month) {
       displayDate = {
         mn: `${formattedDate.from.month}-р сар ${formattedDate.from.date}-${formattedDate.to.date}`,
         en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.date}`,
         days: `${
           parseInt(formattedDate.toEn.date) -
-          parseInt(formattedDate.fromEn.date) + 1
+          parseInt(formattedDate.fromEn.date) +
+          1
         }`,
       };
-    }else{
-       displayDate = {
-         mn: `${formattedDate.from.month}.${formattedDate.from.date}-${formattedDate.to.month}.${formattedDate.to.date}`,
-         en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.month} ${formattedDate.toEn.date}`,
-         days: `${
-           parseInt(formattedDate.toEn.date) -
-           parseInt(formattedDate.fromEn.date) + 1
-         }`,
-       };
+    } else {
+      displayDate = {
+        mn: `${formattedDate.from.month}.${formattedDate.from.date}-${formattedDate.to.month}.${formattedDate.to.date}`,
+        en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.month} ${formattedDate.toEn.date}`,
+        days: `${
+          parseInt(formattedDate.toEn.date) -
+          parseInt(formattedDate.fromEn.date) +
+          1
+        }`,
       };
+    }
+  } else {
+    let mnDate = {
+      from: {
+        month: dateFrom?.split('|')[0].split('/')[0],
+        date: dateFrom?.split('|')[0].split('/')[1],
+      },
+      to: {
+        month: dateTo?.split('|')[0].split('/')[0],
+        date: dateTo?.split('|')[0].split('/')[1],
+      },
+    };
+    let enDate = {
+      from: {
+        month: dateFrom?.split('|')[1].split('-')[0],
+        date: dateFrom?.split('|')[1].split('-')[1],
+      },
+      to: {
+        month: dateTo?.split('|')[1].split('-')[0],
+        date: dateTo?.split('|')[1].split('-')[1],
+      },
+    };
+    if (mnDate.from.month === mnDate.to.month) {
+      displayDate = {
+        mn: `${mnDate.from.month}-р сар ${mnDate.from.date}-${mnDate.to.date}`,
+        en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.date}`,
+        days: `${
+          parseInt(mnDate.to.date ? mnDate.to.date : '0') -
+          parseInt(mnDate.from.date ? mnDate.from.date : '0') +
+          1
+        }`,
+      };
+    } else {
+      displayDate = {
+        mn: `${mnDate.from.month}.${mnDate.from.date}-${mnDate.to.month}.${mnDate.to.date}`,
+        en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.month} ${enDate.to.date}`,
+        days: `${
+          parseInt(mnDate.to.date ? mnDate.to.date : '0') -
+          parseInt(mnDate.from.date ? mnDate.from.date : '0') +
+          1
+        }`,
+      };
+    }
   }
-  else{
-      let mnDate = {
-        from: {
-          month: dateFrom?.split('|')[0].split('/')[0],
-          date: dateFrom?.split('|')[0].split('/')[1],
-        },
-        to: {
-          month: dateTo?.split('|')[0].split('/')[0],
-          date: dateTo?.split('|')[0].split('/')[1],
-        },
-      };
-      let enDate = {
-        from: {
-          month: dateFrom?.split('|')[1].split('-')[0],
-          date: dateFrom?.split('|')[1].split('-')[1],
-        },
-        to: {
-          month: dateTo?.split('|')[1].split('-')[0],
-          date: dateTo?.split('|')[1].split('-')[1],
-        },
-      };
-      if(mnDate.from.month === mnDate.to.month){
-        displayDate = {
-          mn: `${mnDate.from.month}-р сар ${mnDate.from.date}-${mnDate.to.date}`,
-          en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.date}`,
-          days: `${
-            parseInt(mnDate.to.date ? mnDate.to.date : '0') -
-            parseInt(mnDate.from.date ? mnDate.from.date : '0') + 1
-          }`,
-        };
-      } else{
-        displayDate = {
-          mn: `${mnDate.from.month}.${mnDate.from.date}-${mnDate.to.month}.${mnDate.to.date}`,
-          en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.month} ${enDate.to.date}`,
-          days: `${
-            parseInt(mnDate.to.date ? mnDate.to.date : '0') -
-            parseInt(mnDate.from.date ? mnDate.from.date : '0') + 1
-          }`,
-        };
-      }
-}
 
   return (
     <div className="flex w-full flex-col rounded-t-[30px] bg-white px-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px]">
@@ -229,7 +228,7 @@ export default function OrderDialog({ roomPrices, allRooms, slug }: Props) {
               : `${displayDate.mn} (${days ? days : 1} хоног)`}
           </p>
           <h3 className="text-[20px] font-medium leading-[20px] text-main-text 2xs:text-[24px] 2xs:leading-[24px] 2xs:tracking-wide">
-            {cart && cart.length > 0 
+            {cart && cart.length > 0
               ? (totalPrice * parseInt(`${days ? days : 1}`)).toLocaleString()
               : (
                   roomPrices[0] * parseInt(`${days ? days : 1}`)
@@ -238,7 +237,19 @@ export default function OrderDialog({ roomPrices, allRooms, slug }: Props) {
           </h3>
         </div>
         {/* orderBtn */}
-        <Link href={{query:{slug: slug, dateFrom: dateFrom, dateTo: dateTo,days: days, cart: cart}, pathname: '/reservation'}} className="rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]">
+        <Link
+          href={{
+            query: {
+              slug: slug,
+              dateFrom: dateFrom,
+              dateTo: dateTo,
+              days: days,
+              cart: cart,
+            },
+            pathname: '/reservation',
+          }}
+          className="rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]"
+        >
           {lang === 'en' ? 'Order' : 'Захиалах'}
         </Link>
       </div>

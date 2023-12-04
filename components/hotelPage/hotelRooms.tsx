@@ -11,155 +11,150 @@ const HotelRooms = ({ data }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const cart = searchParams.getAll('cart');
-const router = useRouter();
-const dateFrom = searchParams.get('dateFrom');
-const dateTo = searchParams.get('dateTo');
-const days = searchParams.get('days');
-const slug = searchParams.get('slug');
+  const router = useRouter();
+  const dateFrom = searchParams.get('dateFrom');
+  const dateTo = searchParams.get('dateTo');
+  const days = searchParams.get('days');
+  const slug = searchParams.get('slug');
 
-
-
-const createQueryString =
-  (name: string, index: number) => {
+  const createQueryString = (name: string, index: number) => {
     const params = new URLSearchParams(searchParams);
     params.delete(name, cart[index]);
     return params.toString();
   };
 
   let totalPrice = 0;
-if (cart && cart.length > 0 && data) {
-  for (let i = 0; i < data.length; i++) {
-    for (let j = 0; j < cart.length; j++) {
-      if (data[i].id === parseInt(cart[j].split('$')[0])) {
-        totalPrice =
-          totalPrice +
-          data[i].priceDayUse * parseInt(cart[j].split('$')[1]);
+  if (cart && cart.length > 0 && data) {
+    for (let i = 0; i < data.length; i++) {
+      for (let j = 0; j < cart.length; j++) {
+        if (data[i].id === parseInt(cart[j].split('$')[0])) {
+          totalPrice =
+            totalPrice + data[i].priceDayUse * parseInt(cart[j].split('$')[1]);
+        }
       }
     }
   }
 
-}
-
   let newDate = new Date();
   let nextDay = addDays(newDate, 1);
-   let date = newDate.getDate();
-   let month = newDate.getMonth() + 1;
-   let year = newDate.getFullYear();
-   
-let formattedDate = {
-  from: {
-    year: `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`,
-    month: `${format(newDate, 'yyyy-MM-dd').split('-')[1]}`,
-    date: `${format(newDate, 'yyyy-MM-dd').split('-')[2]}`,
-  },
-  to: {
-    year: `${format(nextDay, 'yyyy-MM-dd').split('-')[0]}`,
-    month: `${format(nextDay, 'yyyy-MM-dd').split('-')[1]}`,
-    date: `${format(nextDay, 'yyyy-MM-dd').split('-')[2]}`,
-  },
-  fromEn: {
-    year: `${newDate.toDateString().split(' ')[3]}`,
-    month: `${newDate.toDateString().split(' ')[1]}`,
-    date: `${newDate.toDateString().split(' ')[2]}`,
-  },
-  toEn: {
-    year: `${nextDay.toDateString().split(' ')[3]}`,
-    month: `${nextDay.toDateString().split(' ')[1]}`,
-    date: `${nextDay.toDateString().split(' ')[2]}`,
-  },
-};
-if(dateFrom && dateTo){
-  formattedDate = {
+  let date = newDate.getDate();
+  let month = newDate.getMonth() + 1;
+  let year = newDate.getFullYear();
+
+  let formattedDate = {
     from: {
-      year: `${dateFrom.split('|')[0].split('/')[2]}`,
-      month: `${dateFrom.split('|')[0].split('/')[0]}`,
-      date: `${dateFrom.split('|')[0].split('/')[1]}`,
+      year: `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`,
+      month: `${format(newDate, 'yyyy-MM-dd').split('-')[1]}`,
+      date: `${format(newDate, 'yyyy-MM-dd').split('-')[2]}`,
     },
     to: {
-      year: `${dateTo.split('|')[0].split('/')[2]}`,
-      month: `${dateTo.split('|')[0].split('/')[0]}`,
-      date: `${dateTo.split('|')[0].split('/')[1]}`,
+      year: `${format(nextDay, 'yyyy-MM-dd').split('-')[0]}`,
+      month: `${format(nextDay, 'yyyy-MM-dd').split('-')[1]}`,
+      date: `${format(nextDay, 'yyyy-MM-dd').split('-')[2]}`,
     },
     fromEn: {
-      year: `${dateFrom.split('|')[1].split('-')[2]}`,
-      month: `${dateFrom.split('|')[1].split('-')[0]}`,
-      date: `${dateFrom.split('|')[1].split('-')[1]}`,
+      year: `${newDate.toDateString().split(' ')[3]}`,
+      month: `${newDate.toDateString().split(' ')[1]}`,
+      date: `${newDate.toDateString().split(' ')[2]}`,
     },
     toEn: {
-      year: `${dateTo.split('|')[1].split('-')[2]}`,
-      month: `${dateTo.split('|')[1].split('-')[0]}`,
-      date: `${dateTo.split('|')[1].split('-')[1]}`,
+      year: `${nextDay.toDateString().split(' ')[3]}`,
+      month: `${nextDay.toDateString().split(' ')[1]}`,
+      date: `${nextDay.toDateString().split(' ')[2]}`,
     },
   };
-}
+  if (dateFrom && dateTo) {
+    formattedDate = {
+      from: {
+        year: `${dateFrom.split('|')[0].split('/')[2]}`,
+        month: `${dateFrom.split('|')[0].split('/')[0]}`,
+        date: `${dateFrom.split('|')[0].split('/')[1]}`,
+      },
+      to: {
+        year: `${dateTo.split('|')[0].split('/')[2]}`,
+        month: `${dateTo.split('|')[0].split('/')[0]}`,
+        date: `${dateTo.split('|')[0].split('/')[1]}`,
+      },
+      fromEn: {
+        year: `${dateFrom.split('|')[1].split('-')[2]}`,
+        month: `${dateFrom.split('|')[1].split('-')[0]}`,
+        date: `${dateFrom.split('|')[1].split('-')[1]}`,
+      },
+      toEn: {
+        year: `${dateTo.split('|')[1].split('-')[2]}`,
+        month: `${dateTo.split('|')[1].split('-')[0]}`,
+        date: `${dateTo.split('|')[1].split('-')[1]}`,
+      },
+    };
+  }
 
   let displayDate = { mn: '', en: '', days: '' };
 
-if (!dateFrom && !dateTo) {
-  if (formattedDate.from.month === formattedDate.to.month) {
-    displayDate = {
-      mn: `${formattedDate.from.month}-р сар ${formattedDate.from.date}-${formattedDate.to.date}`,
-      en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.date}`,
-      days: `${
-        parseInt(formattedDate.toEn.date) -
-        parseInt(formattedDate.fromEn.date) +
-        1
-      }`,
-    };
+  if (!dateFrom && !dateTo) {
+    if (formattedDate.from.month === formattedDate.to.month) {
+      displayDate = {
+        mn: `${formattedDate.from.month}-р сар ${formattedDate.from.date}-${formattedDate.to.date}`,
+        en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.date}`,
+        days: `${
+          parseInt(formattedDate.toEn.date) -
+          parseInt(formattedDate.fromEn.date) +
+          1
+        }`,
+      };
+    } else {
+      displayDate = {
+        mn: `${formattedDate.from.month}.${formattedDate.from.date}-${formattedDate.to.month}.${formattedDate.to.date}`,
+        en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.month} ${formattedDate.toEn.date}`,
+        days: `${
+          parseInt(formattedDate.toEn.date) -
+          parseInt(formattedDate.fromEn.date) +
+          1
+        }`,
+      };
+    }
   } else {
-    displayDate = {
-      mn: `${formattedDate.from.month}.${formattedDate.from.date}-${formattedDate.to.month}.${formattedDate.to.date}`,
-      en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.month} ${formattedDate.toEn.date}`,
-      days: `${
-        parseInt(formattedDate.toEn.date) -
-        parseInt(formattedDate.fromEn.date) +
-        1
-      }`,
+    let mnDate = {
+      from: {
+        month: dateFrom?.split('|')[0].split('/')[0],
+        date: dateFrom?.split('|')[0].split('/')[1],
+      },
+      to: {
+        month: dateTo?.split('|')[0].split('/')[0],
+        date: dateTo?.split('|')[0].split('/')[1],
+      },
     };
+    let enDate = {
+      from: {
+        month: dateFrom?.split('|')[1].split('-')[0],
+        date: dateFrom?.split('|')[1].split('-')[1],
+      },
+      to: {
+        month: dateTo?.split('|')[1].split('-')[0],
+        date: dateTo?.split('|')[1].split('-')[1],
+      },
+    };
+    if (mnDate.from.month === mnDate.to.month) {
+      displayDate = {
+        mn: `${mnDate.from.month}-р сар ${mnDate.from.date}-${mnDate.to.date}`,
+        en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.date}`,
+        days: `${
+          parseInt(mnDate.to.date ? mnDate.to.date : '0') -
+          parseInt(mnDate.from.date ? mnDate.from.date : '0') +
+          1
+        }`,
+      };
+    } else {
+      displayDate = {
+        mn: `${mnDate.from.month}.${mnDate.from.date}-${mnDate.to.month}.${mnDate.to.date}`,
+        en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.month} ${enDate.to.date}`,
+        days: `${
+          parseInt(mnDate.to.date ? mnDate.to.date : '0') -
+          parseInt(mnDate.from.date ? mnDate.from.date : '0') +
+          1
+        }`,
+      };
+    }
   }
-} else {
-  let mnDate = {
-    from: {
-      month: dateFrom?.split('|')[0].split('/')[0],
-      date: dateFrom?.split('|')[0].split('/')[1],
-    },
-    to: {
-      month: dateTo?.split('|')[0].split('/')[0],
-      date: dateTo?.split('|')[0].split('/')[1],
-    },
-  };
-  let enDate = {
-    from: {
-      month: dateFrom?.split('|')[1].split('-')[0],
-      date: dateFrom?.split('|')[1].split('-')[1],
-    },
-    to: {
-      month: dateTo?.split('|')[1].split('-')[0],
-      date: dateTo?.split('|')[1].split('-')[1],
-    },
-  };
-  if (mnDate.from.month === mnDate.to.month) {
-    displayDate = {
-      mn: `${mnDate.from.month}-р сар ${mnDate.from.date}-${mnDate.to.date}`,
-      en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.date}`,
-      days: `${
-        parseInt(mnDate.to.date ? mnDate.to.date : '0') -
-        parseInt(mnDate.from.date ? mnDate.from.date : '0') +
-        1
-      }`,
-    };
-  } else {
-    displayDate = {
-      mn: `${mnDate.from.month}.${mnDate.from.date}-${mnDate.to.month}.${mnDate.to.date}`,
-      en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.month} ${enDate.to.date}`,
-      days: `${
-        parseInt(mnDate.to.date ? mnDate.to.date : '0') -
-        parseInt(mnDate.from.date ? mnDate.from.date : '0') +
-        1
-      }`,
-    };
-  }
-}
 
   return (
     <div className="flex flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] text-main-text lg:gap-[32px] lg:pt-[32px]">

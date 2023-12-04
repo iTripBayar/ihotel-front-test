@@ -27,7 +27,7 @@ const SearchPage = () => {
   });
   const { appState, dispatch } = useAppCtx();
 
-console.log(searchData);
+  console.log(searchData);
   return (
     <main
       className={`relative flex h-screen w-full flex-col gap-[20px] overflow-y-auto`}

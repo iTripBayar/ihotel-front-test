@@ -1,29 +1,28 @@
-import React, {useState} from 'react'
-import { useSearchParams } from 'next/navigation'
-import { useAppCtx } from '@/contexts/app'
-import Image from 'next/image'
+import React, { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useAppCtx } from '@/contexts/app';
+import Image from 'next/image';
 
-interface Props{
-}
+interface Props {}
 
 export default function LogOrSign() {
-    const searchParams = useSearchParams()
-    const lang = searchParams.get('lang')
-    const {appState, dispatch} = useAppCtx()
-    const [show, setShow] = useState(false)
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
+  const { appState, dispatch } = useAppCtx();
+  const [show, setShow] = useState(false);
 
-    const close = ()=>{
-        dispatch({
-          type: 'CHANGE_APP_STATE',
-          payload: { logOrSign: '' },
-        });
+  const close = () => {
+    dispatch({
+      type: 'CHANGE_APP_STATE',
+      payload: { logOrSign: '' },
+    });
+  };
+  const handleClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains('bg-black/[.35]')) {
+      close();
     }
-    const handleClick = (e: React.MouseEvent) =>{
-        const target = e.target as HTMLElement;
-        if(target.classList.contains('bg-black/[.35]')){
-            close()
-        }
-    }
+  };
 
   return (
     <div

@@ -14,18 +14,17 @@ const BottomSection = ({ ver }: iProps) => {
   // const map = searchParams.get('map');
   const btnRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const {appState, dispatch} = useAppCtx()
+  const { appState, dispatch } = useAppCtx();
 
-  const createQueryString = 
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value !== null) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      return params.toString();
-    };
+  const createQueryString = (name: string, value: string | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (value !== null) {
+      params.set(name, value);
+    } else {
+      params.delete(name);
+    }
+    return params.toString();
+  };
 
   const handleScrollToTop = () => {
     btnRef.current?.classList.add('animate-bounce');
@@ -138,13 +137,15 @@ const BottomSection = ({ ver }: iProps) => {
         </div>
         {/* map with arrow when closed */}
         {ver === 'search' && appState.map === '' ? (
-          <div className="hidden h-[40px] min-w-[40px] items-center justify-center gap-[4px] rounded-full border-2 border-white bg-primary-blue px-[12px] lg:flex"
-          onClick={()=>{
-            dispatch({
-              type: 'CHANGE_APP_STATE',
-              payload: { map: 'open' },
-            });
-          }}>
+          <div
+            className="hidden h-[40px] min-w-[40px] items-center justify-center gap-[4px] rounded-full border-2 border-white bg-primary-blue px-[12px] lg:flex"
+            onClick={() => {
+              dispatch({
+                type: 'CHANGE_APP_STATE',
+                payload: { map: 'open' },
+              });
+            }}
+          >
             {/* arrow */}
             <svg
               xmlns="http://www.w3.org/2000/svg"

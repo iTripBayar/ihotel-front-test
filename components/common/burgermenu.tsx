@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
 
-interface iProps {
-}
+interface iProps {}
 
 const BurgerMenu = () => {
   const [closeAnimation, setCloseAnimation] = useState(false);
@@ -12,38 +11,36 @@ const BurgerMenu = () => {
   const router = useRouter();
   const pathname = usePathname();
   const lang = searchParams.get('lang');
-  const {appState, dispatch} = useAppCtx()
+  const { appState, dispatch } = useAppCtx();
 
-  const createQueryString = 
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value !== null) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-
-      return params.toString();
-    };
-
-    const close = ()=>{
-      setCloseAnimation(true);
-      setTimeout(() => {
-        dispatch({
-          type: 'CHANGE_APP_STATE',
-          payload: { menu: '' },
-        });
-      }, 500);
+  const createQueryString = (name: string, value: string | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (value !== null) {
+      params.set(name, value);
+    } else {
+      params.delete(name);
     }
+
+    return params.toString();
+  };
+
+  const close = () => {
+    setCloseAnimation(true);
+    setTimeout(() => {
+      dispatch({
+        type: 'CHANGE_APP_STATE',
+        payload: { menu: '' },
+      });
+    }, 500);
+  };
 
   const handleClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement; // Cast event.target to HTMLElement
     // Check if the click target is not the white div
     if (target.classList.contains('bg-black/50')) {
-      close()
+      close();
     }
   };
-
 
   return (
     <div

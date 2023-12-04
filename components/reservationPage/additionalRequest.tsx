@@ -2,12 +2,11 @@ import { Collapse, Button, useDisclosure } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-
 export default function AdditionalRequest() {
-  const searchParams = useSearchParams()
-  const lang = searchParams.get('lang')
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
   const { isOpen, onToggle } = useDisclosure();
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState('');
 
   return (
     <div className="flex h-auto w-full flex-col rounded-[20px] px-[20px]  shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] lg:px-0 lg:shadow-none">
@@ -27,7 +26,7 @@ export default function AdditionalRequest() {
               ? 'Write your order request here'
               : 'Захиалгын хүсэлтээ энд бичнэ үү'
           }
-          className="h-[150px] rounded-[20px] xl:h-[175px] border-black/[.15] text-main-text  placeholder:text-[16px] placeholder:text-main-text/50 focus:outline-none focus:ring-0 "
+          className="h-[150px] rounded-[20px] border-black/[.15] text-main-text placeholder:text-[16px]  placeholder:text-main-text/50 focus:outline-none focus:ring-0 xl:h-[175px] "
         ></textarea>
       </div>
       <div className="flex flex-col lg:hidden">

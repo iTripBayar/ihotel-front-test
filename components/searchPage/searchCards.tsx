@@ -4,19 +4,19 @@ import { useSearchParams } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
-  data: HotelData.Hotel[]
+  data: HotelData.Hotel[];
 }
 
 const SearchCards = ({ data }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   // const map = searchParams.get('map');
-  const searchValue = searchParams.get('searchValue')
-  const toggle = searchParams.get('toggle')
-  const type = searchParams.get('type')
-  const {appState, dispatch}= useAppCtx()
-  
-  const totalLength = data.length
+  const searchValue = searchParams.get('searchValue');
+  const toggle = searchParams.get('toggle');
+  const type = searchParams.get('type');
+  const { appState, dispatch } = useAppCtx();
+
+  const totalLength = data.length;
   const divRef = useRef<HTMLDivElement>(null);
 
   divRef.current?.addEventListener('scroll', (e) => {
@@ -34,16 +34,14 @@ const SearchCards = ({ data }: iProps) => {
     >
       <div
         className={`grid grid-cols-1 gap-[22px] px-[16px] pt-[16px] sm:grid-cols-2 sm:px-[42px] md:px-[72px] lg:px-0 ${
-          appState.map === '' ? 'lg:grid-cols-3 2xl:grid-cols-4' : '2xl:grid-cols-3'
+          appState.map === ''
+            ? 'lg:grid-cols-3 2xl:grid-cols-4'
+            : '2xl:grid-cols-3'
         }`}
       >
         {data.length > 0
           ? data.map((data, i: number) => (
-              <HotelCard
-                data={data}
-                key={i}
-                fromMap={false}
-              />
+              <HotelCard data={data} key={i} fromMap={false} />
             ))
           : null}
       </div>

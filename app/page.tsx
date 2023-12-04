@@ -16,28 +16,27 @@ import CardsContainer from '@/components/homePage/cardsContainer';
 import { useAppCtx } from '@/contexts/app';
 import LogOrSign from '@/components/common/logOrSign';
 
-const Home =()=> {
+const Home = () => {
   const [headerVer, setHeaderVer] = useState('default');
   const searchBoxRef = useRef(null);
   const { data, loading, error } = useRequest(() => {
     return fetchData();
   });
 
-  const searchData = useRequest(()=>{
-    return fetchDataSearch()
-  })
+  const searchData = useRequest(() => {
+    return fetchDataSearch();
+  });
 
   const { appState, dispatch } = useAppCtx();
 
-
-  useEffect(()=>{
-     if (data) {
-       dispatch({
-         type: 'CHANGE_APP_STATE',
-         payload: { phone: data.phoneNumber, dollarRate: data.dollarRate },
-       });
-     }
-  }, [loading === false])
+  useEffect(() => {
+    if (data) {
+      dispatch({
+        type: 'CHANGE_APP_STATE',
+        payload: { phone: data.phoneNumber, dollarRate: data.dollarRate },
+      });
+    }
+  }, [loading === false]);
 
   useEffect(() => {
     const options = {
@@ -79,9 +78,7 @@ const Home =()=> {
         />
       ) : null}
       {appState.logOrSign !== '' ? <LogOrSign /> : ''}
-      {appState.menu === 'open' ? 
-      <BurgerMenu />
-      : null}
+      {appState.menu === 'open' ? <BurgerMenu /> : null}
       <BottomSection ver={headerVer} />
       <HeroCategory data={data ? data.propertyTypes : []} />
       <div ref={searchBoxRef}>
@@ -99,21 +96,12 @@ const Home =()=> {
         data={data ? data.destCategories : []}
         destinations={data ? data.topDestinations : []}
       />
-      <CardsContainer
-        title={'cheap'}
-        data={data ? data.cheapHotels : []}
-      />
-      <CardsContainer
-        title={'hotels'}
-        data={data ? data.hotels : []}
-      />
-      <CardsContainer
-        title={'camps'}
-        data={data ? data.camps : []}
-      />
+      <CardsContainer title={'cheap'} data={data ? data.cheapHotels : []} />
+      <CardsContainer title={'hotels'} data={data ? data.hotels : []} />
+      <CardsContainer title={'camps'} data={data ? data.camps : []} />
       <News data={data ? data.posts : []} />
       <Footer />
     </main>
   );
-}
-export default Home
+};
+export default Home;

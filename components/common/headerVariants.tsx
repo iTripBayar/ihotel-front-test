@@ -23,7 +23,7 @@ const HeaderVariants = ({
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const menu = searchParams.get('menu');
-  const {appState, dispatch} = useAppCtx()
+  const { appState, dispatch } = useAppCtx();
 
   const createQueryString = (name: string, value: string | null) => {
     const params = new URLSearchParams(searchParams);
@@ -98,7 +98,7 @@ const HeaderVariants = ({
           ver={ver}
         />
       </div>
-      
+
       <div className="flex items-center justify-end">
         {/* lang btn for reservationPage */}
         {ver === 'reservation' ? (
@@ -109,7 +109,7 @@ const HeaderVariants = ({
           onClick={() => {
             dispatch({
               type: 'CHANGE_APP_STATE',
-              payload: {menu: 'open'},
+              payload: { menu: 'open' },
             });
           }}
           className="relative flex h-[16px] w-[24px] flex-col items-center "

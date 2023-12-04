@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import './globals.css';
 import { Montserrat } from 'next/font/google';
 import { AppCtxProvider } from '@/contexts/app';
@@ -14,8 +14,7 @@ const inter = Montserrat({ subsets: ['latin'] });
 // import type { Metadata } from 'next';
 
 // export default async function RootLayout({
-export default async function RootLayout({
-
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;

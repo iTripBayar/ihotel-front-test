@@ -13,7 +13,7 @@ const HotelCard = ({ data, fromMap }: iProps) => {
   const [fav, setFav] = useState(false);
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const {appState} = useAppCtx()
+  const { appState } = useAppCtx();
 
   let stat = '';
   if (data.isOnline == 1 && data.isOffline == 0) {
@@ -26,12 +26,11 @@ const HotelCard = ({ data, fromMap }: iProps) => {
     stat = 'data';
   }
 
-
-  let displayPrice = []
-  for(let i = 0; i< data?.roomTypes?.length; i++){
-    displayPrice.push(data.roomTypes[i].priceDayUse)
+  let displayPrice = [];
+  for (let i = 0; i < data?.roomTypes?.length; i++) {
+    displayPrice.push(data.roomTypes[i].priceDayUse);
   }
-  displayPrice.sort((a, b)=>b - a)
+  displayPrice.sort((a, b) => b - a);
 
   return (
     <Link

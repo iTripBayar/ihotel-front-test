@@ -15,9 +15,9 @@ import useWindowSize from '@/hooks/windowSize';
 import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
-  data: HotelData.Hotel[]
-  lat: number  | undefined
-  lng: number | undefined
+  data: HotelData.Hotel[];
+  lat: number | undefined;
+  lng: number | undefined;
 }
 
 const MapContainer = ({ data, lat, lng }: iProps) => {
@@ -27,18 +27,17 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
   const router = useRouter();
   // const map = searchParams.get('map');
   const size = useWindowSize();
-  const {appState, dispatch} = useAppCtx()
+  const { appState, dispatch } = useAppCtx();
 
-  const createQueryString =
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value !== null) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      return params.toString();
-    };
+  const createQueryString = (name: string, value: string | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (value !== null) {
+      params.set(name, value);
+    } else {
+      params.delete(name);
+    }
+    return params.toString();
+  };
   useEffect(() => {
     if (size.width && size.width >= 1024) {
       dispatch({
@@ -52,8 +51,6 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
       });
     }
     return;
-    
-            
   }, [size.width]);
 
   const divRef = useRef<HTMLDivElement>(null);
@@ -133,8 +130,7 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
 
   const cardData = [...data].filter(
     (index) =>
-      index.lat === selectedHotel.lat &&
-      index.lng === selectedHotel.lng,
+      index.lat === selectedHotel.lat && index.lng === selectedHotel.lng,
   );
 
   const [viewPort, setViewPort] = useState({
@@ -162,7 +158,9 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
             properties: {
               cluster: false,
               pointId: data.id,
-              price: data.roomTypes.sort((a, b)=> b.priceDayUse - a.priceDayUse)[0].priceDayUse,
+              price: data.roomTypes.sort(
+                (a, b) => b.priceDayUse - a.priceDayUse,
+              )[0].priceDayUse,
             },
             geometry: {
               type: 'Point',

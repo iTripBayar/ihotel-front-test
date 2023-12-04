@@ -10,9 +10,9 @@ const FilterOptions = () => {
   const minVal = searchParams.get('minVal');
   const maxVal = searchParams.get('maxVal');
   const additionalVal = searchParams.getAll('additionalVal');
-const router = useRouter();
+  const router = useRouter();
 
-const sampleCat = [
+  const sampleCat = [
     { id: 0, desc: 'Зочид буудал' },
     { id: 1, desc: 'Гэст хаус' },
     { id: 2, desc: 'Амралтын газар' },
@@ -38,37 +38,43 @@ const sampleCat = [
     { id: 18, desc: 'Элсний волейбол' },
     { id: 19, desc: 'Дотоод аялал' },
   ];
- 
-const createAdditionalQueryString =(name: string, value: string | null, name1: string, value1: string | null, name2: string, value2: string | null)=>{
-  const params = new URLSearchParams(searchParams)
-  if(value !== null && !params.get(name)){
-    params.set(name, value)
-  } else if(value !== null && params.get(name)){
-    if(additionalVal.includes(value)){
-      for (let i = 0; i < additionalVal.length; i++) {
-        if (additionalVal[i] === value) {
-          params.delete(name, additionalVal[i]);
-        }
-      }
-    }else{
-    params.append(name, value);
 
+  const createAdditionalQueryString = (
+    name: string,
+    value: string | null,
+    name1: string,
+    value1: string | null,
+    name2: string,
+    value2: string | null,
+  ) => {
+    const params = new URLSearchParams(searchParams);
+    if (value !== null && !params.get(name)) {
+      params.set(name, value);
+    } else if (value !== null && params.get(name)) {
+      if (additionalVal.includes(value)) {
+        for (let i = 0; i < additionalVal.length; i++) {
+          if (additionalVal[i] === value) {
+            params.delete(name, additionalVal[i]);
+          }
+        }
+      } else {
+        params.append(name, value);
+      }
+    } else {
+      params.delete(name);
     }
-  } else{
-    params.delete(name)
-  }
-   if (value1 !== null) {
-     params.set(name1, value1);
-   } else {
-     params.delete(name1);
-   }
-   if (value2 !== null) {
-     params.set(name2, value2);
-   } else {
-     params.delete(name2);
-   }
-  return params.toString()
-}
+    if (value1 !== null) {
+      params.set(name1, value1);
+    } else {
+      params.delete(name1);
+    }
+    if (value2 !== null) {
+      params.set(name2, value2);
+    } else {
+      params.delete(name2);
+    }
+    return params.toString();
+  };
   const [open, setOpen] = useState('category');
   // Animation durations
   const colapseDuration = 700;
@@ -90,7 +96,6 @@ const createAdditionalQueryString =(name: string, value: string | null, name1: s
               <div className="grid w-full grid-cols-2 gap-[8px] text-[15px] text-sub-text">
                 {sampleCat.map((index) => (
                   <div
-                    
                     onClick={() => {
                       router.replace(
                         `/search/?${createAdditionalQueryString(
@@ -134,7 +139,6 @@ const createAdditionalQueryString =(name: string, value: string | null, name1: s
               <div className="grid w-full grid-cols-1 gap-[8px] text-[15px] text-sub-text">
                 {samplePrice.map((index) => (
                   <div
-                    
                     onClick={() => {
                       router.replace(
                         `/search/?${createAdditionalQueryString(
@@ -166,8 +170,7 @@ const createAdditionalQueryString =(name: string, value: string | null, name1: s
                         document.getElementById(`${index.id}`)?.click();
                       }}
                     >
-                      {index.min.toLocaleString()}{' '}
-                      {lang === 'en' ? '$' : '₮'}
+                      {index.min.toLocaleString()} {lang === 'en' ? '$' : '₮'}
                       {index.max !== 0 ? '-' : null}{' '}
                       {index.max !== 0 ? (
                         index.max.toLocaleString()
@@ -229,7 +232,6 @@ const createAdditionalQueryString =(name: string, value: string | null, name1: s
           </div>
           {/* search Btn */}
           <div
-           
             onClick={() => {
               router.replace(
                 `/search/?${createAdditionalQueryString(
@@ -304,12 +306,15 @@ const createAdditionalQueryString =(name: string, value: string | null, name1: s
               <div
                 onClick={() => {
                   router.replace(
-                    `/search/?${createAdditionalQueryString('null', null,
+                    `/search/?${createAdditionalQueryString(
+                      'null',
+                      null,
                       'catVal',
                       index.desc,
                       'null',
                       null,
-                    )}`, {scroll: false}
+                    )}`,
+                    { scroll: false },
                   );
                 }}
                 key={index.id}
@@ -382,7 +387,9 @@ const createAdditionalQueryString =(name: string, value: string | null, name1: s
               <div
                 onClick={() => {
                   router.replace(
-                    `/search/?${createAdditionalQueryString('null', null,
+                    `/search/?${createAdditionalQueryString(
+                      'null',
+                      null,
                       'minVal',
                       index.min.toString(),
                       'maxVal',
@@ -409,8 +416,7 @@ const createAdditionalQueryString =(name: string, value: string | null, name1: s
                     document.getElementById(`${index.id}`)?.click();
                   }}
                 >
-                  {index.min.toLocaleString()}{' '}
-                  {lang === 'en' ? '$' : '₮'}
+                  {index.min.toLocaleString()} {lang === 'en' ? '$' : '₮'}
                   {index.max !== 0 ? '-' : null}{' '}
                   {index.max !== 0 ? (
                     index.max.toLocaleString()
@@ -473,8 +479,13 @@ const createAdditionalQueryString =(name: string, value: string | null, name1: s
                   router.replace(
                     `/search/?${createAdditionalQueryString(
                       'additionalVal',
-                      index.desc, 'null', null, 'null', null
-                    )}`, {scroll: false}
+                      index.desc,
+                      'null',
+                      null,
+                      'null',
+                      null,
+                    )}`,
+                    { scroll: false },
                   );
                   // console.log(additionalVal)
                 }}
@@ -486,9 +497,7 @@ const createAdditionalQueryString =(name: string, value: string | null, name1: s
                   id={`${index.id}`}
                   type="checkBox"
                   value={index.desc}
-                  checked={
-                   additionalVal.includes(index.desc)
-                  }
+                  checked={additionalVal.includes(index.desc)}
                   readOnly
                   className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 "
                 />
@@ -505,10 +514,19 @@ const createAdditionalQueryString =(name: string, value: string | null, name1: s
           </div>
         </div>
         <div
-          onClick={()=>{
-            router.replace(`/search/?${createAdditionalQueryString('null', null, 'filter', 'on', 'null', null)}`, {scroll: false})
+          onClick={() => {
+            router.replace(
+              `/search/?${createAdditionalQueryString(
+                'null',
+                null,
+                'filter',
+                'on',
+                'null',
+                null,
+              )}`,
+              { scroll: false },
+            );
           }}
-
           className="flex min-h-[40px] w-auto min-w-[90px] items-center justify-center self-center rounded-full bg-primary-blue px-[12px] pt-[2px] text-[16px] font-medium uppercase tracking-wider text-white"
         >
           {lang === 'en' ? 'Filter' : 'Шүүх'}

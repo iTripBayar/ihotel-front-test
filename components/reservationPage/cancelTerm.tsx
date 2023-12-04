@@ -1,9 +1,9 @@
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation';
 import { Collapse, Button, useDisclosure } from '@chakra-ui/react';
 
 export default function CancelTerm() {
-  const searchParams = useSearchParams()
-  const lang = searchParams.get('lang')
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
   const { isOpen, onToggle } = useDisclosure();
 
   return (

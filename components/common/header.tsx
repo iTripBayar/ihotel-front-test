@@ -13,17 +13,17 @@ const Header = ({ phone }: iProps) => {
   const menu = searchParams.get('menu');
   const lang = searchParams.get('lang');
   const addHotel = searchParams.get('addHotel');
-  const {appState, dispatch} = useAppCtx()
-  const createQueryString = 
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value !== null) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      return params.toString();
-    };
+  const { appState, dispatch } = useAppCtx();
+
+  const createQueryString = (name: string, value: string | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (value !== null) {
+      params.set(name, value);
+    } else {
+      params.delete(name);
+    }
+    return params.toString();
+  };
 
   return (
     <header

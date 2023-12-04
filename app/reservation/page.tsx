@@ -22,7 +22,7 @@ const ReservationPage = () => {
   const slug = searchParams.get('slug');
   const lang = searchParams.get('lang');
   const calendar = searchParams.get('calendar');
-  const {appState, dispatch}=useAppCtx()
+  const { appState, dispatch } = useAppCtx();
 
   const { data } = useRequest(() => {
     if (slug) return fetchDataHotel(slug);

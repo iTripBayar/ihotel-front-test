@@ -4,7 +4,6 @@ import HeaderVariants from '@/components/common/headerVariants';
 import HotelImages from '@/components/hotelPage/hotelImages';
 import { useRequest } from 'ahooks';
 import { fetchDataHotel } from '@/utils';
-import { useEffect, useState } from 'react';
 import HotelInfo from '@/components/hotelPage/hotelInfo';
 import Amenity from '@/components/hotelPage/amenity';
 import Review from '@/components/hotelPage/review';
@@ -32,7 +31,7 @@ const HotelPage = () => {
   const dateTo = searchParams.get('dateTo');
   const days = searchParams.get('days');
   const cart = searchParams.get('cart');
-  const {appState, dispatch} = useAppCtx()
+  const { appState } = useAppCtx();
 
   const { data } = useRequest(() => {
     if (slug) return fetchDataHotel(slug);
@@ -229,7 +228,18 @@ const HotelPage = () => {
             </div>
             {/* map & orderCount */}
             <div className="flex flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] lg:border-none lg:pt-0">
-              <HotelMap lat={data?.hotel.location.lat ? data?.hotel.location.lat : 47.91823102891307} lng={data?.hotel.location.lng ? data?.hotel.location.lng :106.92059918835042} />
+              <HotelMap
+                lat={
+                  data?.hotel.location.lat
+                    ? data?.hotel.location.lat
+                    : 47.91823102891307
+                }
+                lng={
+                  data?.hotel.location.lng
+                    ? data?.hotel.location.lng
+                    : 106.92059918835042
+                }
+              />
               <OrderCount count={783} />
             </div>
           </div>

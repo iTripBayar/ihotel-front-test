@@ -62,27 +62,22 @@ const SearchBox = ({
     },
   ];
 
-
   for (let i = 0; i < hotelData.length; i++) {
-    sample.push(
-      {
-        key: hotelData[i].id,
-        name: hotelData[i].name,
-        nameEn: hotelData[i].nameEn ? hotelData[i].nameEn : '',
-        type: 'name',
-      },
-    );
+    sample.push({
+      key: hotelData[i].id,
+      name: hotelData[i].name,
+      nameEn: hotelData[i].nameEn ? hotelData[i].nameEn : '',
+      type: 'name',
+    });
   }
 
   for (let i = 0; i < campsData.length; i++) {
-    sample.push(
-      {
-        key: campsData[i].id,
-        name: campsData[i].name,
-        nameEn: campsData[i].nameEn ? campsData[i].nameEn : '',
-        type: 'camp',
-      },
-    );
+    sample.push({
+      key: campsData[i].id,
+      name: campsData[i].name,
+      nameEn: campsData[i].nameEn ? campsData[i].nameEn : '',
+      type: 'camp',
+    });
   }
   for (let i = 0; i < placesData.length; i++) {
     sample.push({
@@ -100,7 +95,6 @@ const SearchBox = ({
       type: 'city',
     });
   }
-
 
   const filteredDataValue =
     query === ''

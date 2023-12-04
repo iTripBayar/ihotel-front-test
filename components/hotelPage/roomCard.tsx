@@ -13,87 +13,84 @@ const RoomCard = ({ data }: Props) => {
   const router = useRouter();
   const roomAmount = searchParams.getAll('roomAmount');
   const roomSelect = searchParams.get('roomSelect');
-  const room = searchParams.get('room')
+  const room = searchParams.get('room');
   const cart = searchParams.getAll('cart');
-  const slug = searchParams.get('slug')
-  const dateFrom = searchParams.get('dateFrom')
+  const slug = searchParams.get('slug');
+  const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
-  const days = searchParams.get('days')
-
+  const days = searchParams.get('days');
 
   const [openDesc, setOpenDesc] = useState(false);
 
-  const createQueryString =
-    (
-      name: string,
-      value: string | null,
-      name1: string,
-      value1: string | null,
-      name2: string,
-      value2: string | null,
-    ) => {
-      const params = new URLSearchParams(searchParams);
-      if (value !== null) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      if (value1 !== null) {
-        params.set(name1, value1);
-      } else {
-        params.delete(name1);
-      }
-      if (value2 !== null) {
-        params.set(name2, value2);
-      } else {
-        params.delete(name2);
-      }
-      return params.toString();
-    };
-  const multipleCreateQueryString = 
-    (
-      name: string,
-      value: string | null,
-      name1: string,
-      value1: string | null,
-      name2: string,
-      value2: string | null,
-    ) => {
-      const params = new URLSearchParams(searchParams);
+  const createQueryString = (
+    name: string,
+    value: string | null,
+    name1: string,
+    value1: string | null,
+    name2: string,
+    value2: string | null,
+  ) => {
+    const params = new URLSearchParams(searchParams);
+    if (value !== null) {
+      params.set(name, value);
+    } else {
+      params.delete(name);
+    }
+    if (value1 !== null) {
+      params.set(name1, value1);
+    } else {
+      params.delete(name1);
+    }
+    if (value2 !== null) {
+      params.set(name2, value2);
+    } else {
+      params.delete(name2);
+    }
+    return params.toString();
+  };
+  const multipleCreateQueryString = (
+    name: string,
+    value: string | null,
+    name1: string,
+    value1: string | null,
+    name2: string,
+    value2: string | null,
+  ) => {
+    const params = new URLSearchParams(searchParams);
 
-      if (value !== null && !params.get(name)) {
-        params.set(name, value);
-      } else if (value !== null && params.get(name)) {
-        if (value.split('$')[1] !== '0') {
-          for (let i = 0; i < cart.length; i++) {
-            if (cart[i].split('$')[0] === data.id.toString()) {
-              params.delete(name, cart[i]);
-            } 
-          }
-          params.append(name, value);
-        } else {
-          for (let i = 0; i < cart.length; i++) {
-            if (roomAmount[i].split('$')[0] === data.id.toString()) {
-              params.delete(name, cart[i]);
-            }
+    if (value !== null && !params.get(name)) {
+      params.set(name, value);
+    } else if (value !== null && params.get(name)) {
+      if (value.split('$')[1] !== '0') {
+        for (let i = 0; i < cart.length; i++) {
+          if (cart[i].split('$')[0] === data.id.toString()) {
+            params.delete(name, cart[i]);
           }
         }
+        params.append(name, value);
       } else {
-        params.delete(name);
+        for (let i = 0; i < cart.length; i++) {
+          if (roomAmount[i].split('$')[0] === data.id.toString()) {
+            params.delete(name, cart[i]);
+          }
+        }
       }
-      if (value1 !== null) {
-        params.set(name1, value1);
-      } else {
-        params.delete(name1);
-      }
-      if (value2 !== null) {
-        params.set(name2, value2);
-      } else {
-        params.delete(name2);
-      }
+    } else {
+      params.delete(name);
+    }
+    if (value1 !== null) {
+      params.set(name1, value1);
+    } else {
+      params.delete(name1);
+    }
+    if (value2 !== null) {
+      params.set(name2, value2);
+    } else {
+      params.delete(name2);
+    }
 
-      return params.toString();
-    };
+    return params.toString();
+  };
 
   let updatedAmount = '';
   if (roomAmount && roomAmount.length > 0) {
@@ -103,17 +100,17 @@ const RoomCard = ({ data }: Props) => {
       }
     }
   }
-   const sampleRooms = [
-     { id: data?.id, amount: 0 },
-     { id: data?.id, amount: 1 },
-     { id: data?.id, amount: 2 },
-     { id: data?.id, amount: 3 },
-     { id: data?.id, amount: 4 },
-     { id: data?.id, amount: 5 },
-     { id: data?.id, amount: 6 },
-     { id: data?.id, amount: 7 },
-     { id: data?.id, amount: 8 },
-   ];
+  const sampleRooms = [
+    { id: data?.id, amount: 0 },
+    { id: data?.id, amount: 1 },
+    { id: data?.id, amount: 2 },
+    { id: data?.id, amount: 3 },
+    { id: data?.id, amount: 4 },
+    { id: data?.id, amount: 5 },
+    { id: data?.id, amount: 6 },
+    { id: data?.id, amount: 7 },
+    { id: data?.id, amount: 8 },
+  ];
 
   return (
     <div className="flex flex-col rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]">

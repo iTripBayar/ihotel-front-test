@@ -3,8 +3,7 @@ import Image from 'next/image';
 import { Collapse, Button, useDisclosure } from '@chakra-ui/react';
 import useWindowSize from '@/hooks/windowSize';
 
-
-interface Props{
+interface Props {
   name: string | null;
   nameEn: string | null;
   image: string | null;
@@ -14,17 +13,24 @@ interface Props{
   email: string | null;
 }
 
-export default function GeneralInfo({name, nameEn, image, address, addressEn, phone, email}:Props) {
-  const searchParams = useSearchParams()
-  const lang = searchParams.get('lang')
+export default function GeneralInfo({
+  name,
+  nameEn,
+  image,
+  address,
+  addressEn,
+  phone,
+  email,
+}: Props) {
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
-  const pathname = usePathname()
-  const router = useRouter()
+  const pathname = usePathname();
+  const router = useRouter();
   const { isOpen, onToggle } = useDisclosure();
-  const size = useWindowSize()
-const createQueryString = 
-  (name: string, value: string | null) => {
+  const size = useWindowSize();
+  const createQueryString = (name: string, value: string | null) => {
     const params = new URLSearchParams(searchParams);
     if (value !== null) {
       params.set(name, value);
@@ -95,7 +101,7 @@ const createQueryString =
             </div>
           </div>
           <div
-            className="relative flex min-h-[42px] w-full items-center lg:justify-self-end justify-center rounded-full lg:max-w-[165px]  bg-primary-blue px-[20px] text-[16px] font-medium text-white sm:min-h-[46px] sm:text-[18px] lg:col-span-2 lg:min-h-[20px] lg:justify-between lg:px-[16px] lg:py-[12px] lg:text-[15px] lg:leading-[14px]"
+            className="relative flex min-h-[42px] w-full items-center justify-center rounded-full bg-primary-blue px-[20px]  text-[16px] font-medium text-white sm:min-h-[46px] sm:text-[18px] lg:col-span-2 lg:min-h-[20px] lg:max-w-[165px] lg:justify-between lg:justify-self-end lg:px-[16px] lg:py-[12px] lg:text-[15px] lg:leading-[14px]"
             onClick={() => {
               router.replace(
                 `${pathname}?${createQueryString('calendar', 'open')}`,
@@ -125,7 +131,9 @@ const createQueryString =
           </div>
         </div>
         {size.width && size.width >= 1024 ? (
-          <p className="text-[18px] font-medium leading-[18px] text-sub-text lg:mb-[-12px]">{lang === 'en' ? 'Order information' : 'Захиалгийн мэдээлэл'}</p>
+          <p className="text-[18px] font-medium leading-[18px] text-sub-text lg:mb-[-12px]">
+            {lang === 'en' ? 'Order information' : 'Захиалгийн мэдээлэл'}
+          </p>
         ) : null}
         {/* hotelInfo */}
         {size.width && size.width < 1024 ? (
@@ -248,7 +256,7 @@ const createQueryString =
           </div>
         ) : (
           <div className="lg:grid lg:grid-cols-5 lg:gap-[24px]">
-            <div className="relative col-span-3 h-[200px] xl:h-[250px] w-full overflow-hidden rounded-[8px]">
+            <div className="relative col-span-3 h-[200px] w-full overflow-hidden rounded-[8px] xl:h-[250px]">
               <Image
                 src={
                   image
@@ -325,4 +333,3 @@ const createQueryString =
     </div>
   );
 }
-

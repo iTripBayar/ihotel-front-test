@@ -13,15 +13,15 @@ const HotelMap = ({ lat, lng }: Props) => {
     zoom: 13,
   });
   const mapRef = useRef<any>();
-setTimeout(() => {
-  mapRef?.current?.flyTo({
-    center: [lng, lat],
-    zoom: 13,
-    duration: 1000,
-    speed: 0.5,
-    curve: 2,
-  });
-}, 1000);
+  setTimeout(() => {
+    mapRef?.current?.flyTo({
+      center: [lng, lat],
+      zoom: 13,
+      duration: 1000,
+      speed: 0.5,
+      curve: 2,
+    });
+  }, 1000);
   return (
     <div className="h-[225px] w-full sm:h-[300px] lg:h-[225px]">
       <ReactMapGL

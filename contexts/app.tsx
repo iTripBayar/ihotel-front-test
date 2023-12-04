@@ -6,8 +6,9 @@ export type AppCtxState = {
   logOrSign: string;
   menu: string;
   map: string;
-  selectedRoom: number | null
-  selectedAmount: number | null
+  selectedRoom: number | null;
+  selectedAmount: number | null;
+  test: string;
 };
 
 type Action =
@@ -27,7 +28,8 @@ const defaultValue: AppCtxProps = {
     menu: '',
     map: '',
     selectedRoom: null,
-    selectedAmount: null
+    selectedAmount: null,
+    test: '',
   },
   dispatch: () => {
     /**/

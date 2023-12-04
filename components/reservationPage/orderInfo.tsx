@@ -1,27 +1,21 @@
-
-import {
-  Collapse,
-  Button,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Collapse, Button, useDisclosure } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 
-interface Props{
-rooms: roomData.room[]
-dollarRate: string | null
+interface Props {
+  rooms: roomData.room[];
+  dollarRate: string | null;
 }
 
-export default function OrderInfo({rooms, dollarRate}:Props) {
+export default function OrderInfo({ rooms, dollarRate }: Props) {
   const { isOpen, onToggle } = useDisclosure();
-  const searchParams = useSearchParams()
-  const lang = searchParams.get('lang')
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang');
   const days = searchParams.get('days');
   const cart = searchParams.getAll('cart');
 
-
-  let totalPrice = 0
+  let totalPrice = 0;
   for (let i = 0; i < cart.length; i++) {
-    if(cart[i]){
+    if (cart[i]) {
       for (let j = 0; j < rooms.length; j++) {
         if (parseInt(cart[i].split('$')[0]) === rooms[j].id) {
           totalPrice =
@@ -31,11 +25,10 @@ export default function OrderInfo({rooms, dollarRate}:Props) {
     }
   }
 
-
   return (
-    <div className="flex h-auto w-full flex-col lg:mt-[-20px]  rounded-[20px] px-[20px] lg:px-0 shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] lg:shadow-none">
+    <div className="flex h-auto w-full flex-col rounded-[20px]  px-[20px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] lg:mt-[-20px] lg:px-0 lg:shadow-none">
       {/* title */}
-      <div className="hidden w-full gap-[24px] lg:flex-col lg:flex">
+      <div className="hidden w-full gap-[24px] lg:flex lg:flex-col">
         {cart.map((index, i) => (
           <div
             className="flex w-full flex-col gap-[10px] border-b border-b-black/[.15] pb-[16px]"
