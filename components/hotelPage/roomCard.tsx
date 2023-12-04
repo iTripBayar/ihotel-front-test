@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -23,7 +23,7 @@ const RoomCard = ({ data }: Props) => {
 
   const [openDesc, setOpenDesc] = useState(false);
 
-  const createQueryString = useCallback(
+  const createQueryString =
     (
       name: string,
       value: string | null,
@@ -49,10 +49,8 @@ const RoomCard = ({ data }: Props) => {
         params.delete(name2);
       }
       return params.toString();
-    },
-    [searchParams],
-  );
-  const multipleCreateQueryString = useCallback(
+    };
+  const multipleCreateQueryString = 
     (
       name: string,
       value: string | null,
@@ -95,9 +93,7 @@ const RoomCard = ({ data }: Props) => {
       }
 
       return params.toString();
-    },
-    [searchParams],
-  );
+    };
 
   let updatedAmount = '';
   if (roomAmount && roomAmount.length > 0) {
@@ -107,7 +103,6 @@ const RoomCard = ({ data }: Props) => {
       }
     }
   }
-
    const sampleRooms = [
      { id: data?.id, amount: 0 },
      { id: data?.id, amount: 1 },
@@ -264,7 +259,7 @@ const RoomCard = ({ data }: Props) => {
               room !== data.id.toString() ? 'lg:max-h-[38px]' : ' lg:hidden'
             }`}
             onClick={() => {
-              router.push(
+              router.replace(
                 `/hotel/?${createQueryString(
                   'roomSelect',
                   'open',
@@ -307,7 +302,7 @@ const RoomCard = ({ data }: Props) => {
                   key={i}
                   className=" flex min-h-[34px] cursor-pointer items-center justify-center border-b border-b-primary-blue/50"
                   onClick={() => {
-                    router.push(
+                    router.replace(
                       `/hotel/?${multipleCreateQueryString(
                         'roomAmount',
                         `${room}$${sampleRooms.indexOf(index).toString()}`,
@@ -345,7 +340,7 @@ const RoomCard = ({ data }: Props) => {
             className="flex h-[38px] items-center justify-center rounded-[8px] border-[2px] border-primary-blue px-[12px] text-[14px] font-medium text-primary-blue 2xs:px-[16px] 2xs:text-[18px] md:px-[8px] md:text-[16px]"
             onClick={() => {
               if (updatedAmount.length > 2) {
-                router.push(
+                router.replace(
                   `/hotel/?${multipleCreateQueryString(
                     'cart',
                     updatedAmount,
@@ -362,10 +357,6 @@ const RoomCard = ({ data }: Props) => {
             {lang === 'en' ? 'Add to cart' : 'Сангсанд нэмэх'}
           </div>
         </div>
-        {/* order btn */}
-        {/* <div className="flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white">
-          {lang === 'en' ? 'Order' : 'Захиалах'}
-        </div> */}
         <Link
           href={{
             query: {

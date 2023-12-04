@@ -1,5 +1,5 @@
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 
 const FilterOptions = () => {
   // searchParams
@@ -39,7 +39,7 @@ const sampleCat = [
     { id: 19, desc: 'Дотоод аялал' },
   ];
  
-const createAdditionalQueryString = useCallback((name: string, value: string | null, name1: string, value1: string | null, name2: string, value2: string | null)=>{
+const createAdditionalQueryString =(name: string, value: string | null, name1: string, value1: string | null, name2: string, value2: string | null)=>{
   const params = new URLSearchParams(searchParams)
   if(value !== null && !params.get(name)){
     params.set(name, value)
@@ -68,7 +68,7 @@ const createAdditionalQueryString = useCallback((name: string, value: string | n
      params.delete(name2);
    }
   return params.toString()
-}, [searchParams])
+}
   const [open, setOpen] = useState('category');
   // Animation durations
   const colapseDuration = 700;
@@ -92,7 +92,7 @@ const createAdditionalQueryString = useCallback((name: string, value: string | n
                   <div
                     
                     onClick={() => {
-                      router.push(
+                      router.replace(
                         `/search/?${createAdditionalQueryString(
                           'null',
                           null,
@@ -136,7 +136,7 @@ const createAdditionalQueryString = useCallback((name: string, value: string | n
                   <div
                     
                     onClick={() => {
-                      router.push(
+                      router.replace(
                         `/search/?${createAdditionalQueryString(
                           'null',
                           null,
@@ -189,7 +189,7 @@ const createAdditionalQueryString = useCallback((name: string, value: string | n
                 {sampleAdditional.map((index) => (
                   <div
                     onClick={() => {
-                      router.push(
+                      router.replace(
                         `/search/?${createAdditionalQueryString(
                           'additionalVal',
                           index.desc,
@@ -231,7 +231,7 @@ const createAdditionalQueryString = useCallback((name: string, value: string | n
           <div
            
             onClick={() => {
-              router.push(
+              router.replace(
                 `/search/?${createAdditionalQueryString(
                   'null',
                   null,
@@ -303,7 +303,7 @@ const createAdditionalQueryString = useCallback((name: string, value: string | n
             {sampleCat.map((index) => (
               <div
                 onClick={() => {
-                  router.push(
+                  router.replace(
                     `/search/?${createAdditionalQueryString('null', null,
                       'catVal',
                       index.desc,
@@ -381,7 +381,7 @@ const createAdditionalQueryString = useCallback((name: string, value: string | n
             {samplePrice.map((index) => (
               <div
                 onClick={() => {
-                  router.push(
+                  router.replace(
                     `/search/?${createAdditionalQueryString('null', null,
                       'minVal',
                       index.min.toString(),
@@ -470,7 +470,7 @@ const createAdditionalQueryString = useCallback((name: string, value: string | n
             {sampleAdditional.map((index) => (
               <div
                 onClick={() => {
-                  router.push(
+                  router.replace(
                     `/search/?${createAdditionalQueryString(
                       'additionalVal',
                       index.desc, 'null', null, 'null', null
@@ -506,7 +506,7 @@ const createAdditionalQueryString = useCallback((name: string, value: string | n
         </div>
         <div
           onClick={()=>{
-            router.push(`/search/?${createAdditionalQueryString('null', null, 'filter', 'on', 'null', null)}`, {scroll: false})
+            router.replace(`/search/?${createAdditionalQueryString('null', null, 'filter', 'on', 'null', null)}`, {scroll: false})
           }}
 
           className="flex min-h-[40px] w-auto min-w-[90px] items-center justify-center self-center rounded-full bg-primary-blue px-[12px] pt-[2px] text-[16px] font-medium uppercase tracking-wider text-white"

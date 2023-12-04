@@ -29,8 +29,6 @@ const SearchPage = ({
     return fetchData();
   });
 
-  // console.log(data)
-
   return (
     <main
       className={`relative flex h-screen w-full flex-col gap-[20px] overflow-y-auto`}
@@ -47,11 +45,6 @@ const SearchPage = ({
       {searchParams.signUpState ? <SignUp /> : null}
       <BurgerMenu phone={data ? data.phoneNumber : ''} ver={'search'} />
       <BottomSection ver={'search'} />
-      {/* {searchParams.filter === 'webFilter' ? (
-        <div className="absolute left-[50%] top-[55px] z-[200] translate-x-[-50%]">
-          <Filter />
-        </div>
-      ) : null} */}
       <div
         className={`${
           searchParams.filter === 'webFilter'
@@ -61,8 +54,6 @@ const SearchPage = ({
       >
         <FilterOptions />
       </div>
-      {/* size?.width && size?.width < 1024 &&  */}
-
       <div
         className={`lg:hidden ${
           searchParams.filter === 'mobile' ? 'flex flex-col gap-[24px]' : ''
@@ -92,13 +83,6 @@ const SearchPage = ({
             campsData={data ? data.camps : []}
             dollarRate={data ? data.dollarRate : ''}
           />
-          {/* {map !== '' ? (
-            <MapContainer
-              changeMap={mapFunction}
-              hotelData={data ? data.hotels : []}
-              campsData={data ? data.camps : []}
-            />
-          ) : null} */}
         </div>
       ) : null}
     </main>

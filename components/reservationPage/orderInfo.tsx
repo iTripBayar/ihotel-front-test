@@ -19,8 +19,6 @@ export default function OrderInfo({rooms, dollarRate}:Props) {
   const cart = searchParams.getAll('cart');
 
 
-  // console.log(days, cart)
-
   let totalPrice = 0
   for (let i = 0; i < cart.length; i++) {
     if(cart[i]){

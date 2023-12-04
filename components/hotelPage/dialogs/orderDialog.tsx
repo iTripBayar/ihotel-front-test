@@ -1,5 +1,4 @@
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useCallback } from 'react';
 import { addDays, format } from 'date-fns';
 import Link from 'next/link';
 interface Props {
@@ -18,14 +17,12 @@ export default function OrderDialog({ roomPrices, allRooms, slug }: Props) {
 
 
 
-  const createQueryString = useCallback(
+  const createQueryString =
     (name: string, index: number) => {
       const params = new URLSearchParams(searchParams);
       params.delete(name, cart[index]);
       return params.toString();
-    },
-    [searchParams],
-  );
+    }
 
   let totalPrice = 0;
 
@@ -193,14 +190,13 @@ export default function OrderDialog({ roomPrices, allRooms, slug }: Props) {
                 <div
                   className="flex h-[36px] w-[36px] items-center justify-center"
                   onClick={() => {
-                    router.push(
+                    router.replace(
                       `/hotel/?${createQueryString(
                         'cart',
                         cart.indexOf(index),
                       )}`,
                       { scroll: false },
                     );
-                    // console.log(cart.indexOf(index));
                   }}
                 >
                   <svg
@@ -228,14 +224,6 @@ export default function OrderDialog({ roomPrices, allRooms, slug }: Props) {
         {/* date & price */}
         <div className="flex flex-col justify-between gap-[8px]">
           <p className="text-[12px] font-medium leading-[13px] text-sub-text/75 2xs:text-[14px] 2xs:leading-[15px] 2xs:tracking-wide">
-            {/* {lang === 'en' ? '' : '9-p cap 20-21 (хоног)'} */}
-            {/* {!dateFrom && !dateTo
-              ? `${
-                  lang === 'en'
-                    ? `${displayDate.en} (${displayDate.days} days)`
-                    : `${displayDate.mn} (${displayDate.days} хоног)`
-                }`
-              : ''} */}
             {lang === 'en'
               ? `${displayDate.en} (${days ? days : 1} days)`
               : `${displayDate.mn} (${days ? days : 1} хоног)`}

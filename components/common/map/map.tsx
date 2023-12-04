@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, {
   GeolocateControl,
@@ -27,7 +27,7 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
   const map = searchParams.get('map');
   const size = useWindowSize();
 
-  const createQueryString = useCallback(
+  const createQueryString =
     (name: string, value: string | null) => {
       const params = new URLSearchParams(searchParams);
       if (value !== null) {
@@ -36,19 +36,17 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
         params.delete(name);
       }
       return params.toString();
-    },
-    [searchParams],
-  );
+    };
   useEffect(() => {
     if (size.width && size.width >= 1024) {
       // setMap('open');
       let nextMap = 'open';
 
-      router.push(`/search/?${createQueryString('map', nextMap)}`, {
+      router.replace(`/search/?${createQueryString('map', nextMap)}`, {
         scroll: false,
       });
     } else {
-      router.push(`/search/?${createQueryString('map', null)}`, {
+      router.replace(`/search/?${createQueryString('map', null)}`, {
         scroll: false,
       });
     }
@@ -377,7 +375,7 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
         <div
           className="flex h-[40px] max-w-[220px] cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue px-[16px] font-medium text-white"
           onClick={() => {
-            router.push(`${pathname}?${createQueryString('map', null)}`, {
+            router.replace(`${pathname}?${createQueryString('map', null)}`, {
               scroll: false,
             });
           }}

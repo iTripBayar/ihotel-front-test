@@ -1,13 +1,12 @@
 import useWindowSize from '@/hooks/windowSize';
 import HotelCard from '../common/hotelCard';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 interface iProps {
   title: string;
-  data: any[];
-  dollarRate: string | null
+  data: HotelData.Hotel[];
+  dollarRate: string | null;
 }
 
 const CardsContainer = ({
@@ -18,22 +17,8 @@ const CardsContainer = ({
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const size = useWindowSize();
-  const router = useRouter();
-  const createQueryString = useCallback(
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value !== null) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      return params.toString();
-    },
-    [searchParams],
-  );
 
   let cap = 6;
-
   if (title === 'cheap') {
     if (size.width && size.width <= 1280 && size.width >= 576) {
       cap = 2;
@@ -41,11 +26,9 @@ const CardsContainer = ({
       cap = 3;
     }
   }
-
   if (cap != 0) {
     data = data.slice(0, cap);
   }
-
 
   return (
     <div
@@ -90,28 +73,8 @@ const CardsContainer = ({
           ))}
         </div>
         {data.length > 0 ? (
-          // <Link
-          //   href={{
-          //     pathname: '/search',
-          //     query: {
-          //       lang: lang,
-          //       searchValue: searchValue,
-          //       toggle: toggle,
-          //       type: title,
-          //     }, // the data
-          //   }}
-          //   className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white"
-          // >
-          //   <p className="flex gap-[4px]">
-          //     {/* {state.language === 'mn' ? 'Цааш үзэх' : 'More'}{' '} */}
-          //     {lang === 'en' ? 'More' : 'Цааш үзэх'}
-          //     <span>({data.length}+)</span>
-          //   </p>
-          // </Link>
-          <div
-            onClick={() => {
-              router.push(`/search/?${createQueryString('title', title)}`);
-            }}
+          <Link
+          href={{query: {'title': title}, pathname: '/search'}}
             className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white"
           >
             <p className="flex gap-[4px]">
@@ -119,7 +82,7 @@ const CardsContainer = ({
               {lang === 'en' ? 'More' : 'Цааш үзэх'}
               <span>({data.length}+)</span>
             </p>
-          </div>
+          </Link>
         ) : null}
       </div>
     </div>

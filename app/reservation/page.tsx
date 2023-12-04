@@ -18,12 +18,6 @@ const ReservationPage = ({
 }: {
   searchParams: { name: string; slug: string; lang: string, calendar: string };
 }) => {
-  //   const res = await fetch(
-  //     `https://sandbox.api.myhotel.mn:9443/ihotel/hotel/${searchParams.slug}`,
-  //     { cache: 'no-store' },
-  //     // {next: {revalidate: 10}}
-  //   );
-  //   const data = await res.json();
 const { data } = useRequest(() => {
   return fetchDataHotel(searchParams.slug);
 });

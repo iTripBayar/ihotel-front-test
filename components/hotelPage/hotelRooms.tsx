@@ -1,6 +1,5 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import RoomCard from './roomCard';
-import { useCallback } from 'react';
 import { addDays, format } from 'date-fns';
 import Link from 'next/link';
 
@@ -20,17 +19,12 @@ const slug = searchParams.get('slug');
 
 
 
-const createQueryString = useCallback(
+const createQueryString =
   (name: string, index: number) => {
     const params = new URLSearchParams(searchParams);
     params.delete(name, cart[index]);
     return params.toString();
-  },
-  [searchParams],
-);
-
-  // let newDate = new Date();
- 
+  };
 
   let totalPrice = 0;
 if (cart && cart.length > 0 && data) {
@@ -75,7 +69,6 @@ let formattedDate = {
   },
 };
 if(dateFrom && dateTo){
-  // console.log(dateFrom, dateTo)
   formattedDate = {
     from: {
       year: `${dateFrom.split('|')[0].split('/')[2]}`,
@@ -99,12 +92,6 @@ if(dateFrom && dateTo){
     },
   };
 }
-let testDates: { from: Date; to: Date; fromEn: any; toEn: any } = {
-  from: new Date(11 / 27 / 2023),
-  to: new Date(11 / 27 / 2023),
-  fromEn: '',
-  toEn: '',
-};
 
   let displayDate = { mn: '', en: '', days: '' };
 
@@ -197,7 +184,6 @@ if (!dateFrom && !dateTo) {
             />
           </svg>
           <p className="text-sub-text">
-            {/* {`${month}/${date}/${year}`} - {`${month}/${date + 1}/${year}`} */}
             {`${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year} - ${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}`}
           </p>
         </div>
@@ -274,23 +260,10 @@ if (!dateFrom && !dateTo) {
                                 )[0].name
                               : null}
                           </h3>
-                          {/* <p className="flex gap-[4px] text-[16px] leading-[16px] text-sub-text/75">
-                            {cart.length > 1 && data
-                              ? `${data
-                                  .filter(
-                                    (room) =>
-                                      room.id === parseInt(index.split('$')[0]),
-                                  )[0]
-                                  .priceDayUse.toLocaleString()}${
-                                  lang === 'en' ? '$' : '₮'
-                                }`
-                              : ''}
-                            <span>x{index.split('$')[1]}</span>
-                          </p> */}
                           <div
                             className="flex h-[36px] w-[36px] items-center justify-end"
                             onClick={() => {
-                              router.push(
+                              router.replace(
                                 `/hotel/?${createQueryString(
                                   'cart',
                                   cart.indexOf(index),
@@ -345,10 +318,6 @@ if (!dateFrom && !dateTo) {
                   ))}
               </div>
             ) : null}
-
-            {/* <div className="flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white">
-              {lang === 'en' ? 'Order' : 'Захиалах'}
-            </div> */}
             <Link
               href={{
                 query: {

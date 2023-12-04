@@ -15,13 +15,6 @@ const SearchCards = ({ hotelData, campsData, dollarRate }: iProps) => {
   const searchValue = searchParams.get('searchValue')
   const toggle = searchParams.get('toggle')
   const type = searchParams.get('type')
-  const topDestinations = searchParams.get('topDestinations')
-  const title = searchParams.get('title')
-  const filter = searchParams.get('filter')
-  const catVal = searchParams.get('catVal');
-  const minVal = searchParams.get('minVal');
-  const maxVal = searchParams.get('maxVal');
-  const additionalVal = searchParams.getAll('additionalVal');
   
   let data = [];
   data = [...hotelData, ...campsData];
@@ -44,20 +37,6 @@ const SearchCards = ({ hotelData, campsData, dollarRate }: iProps) => {
   if(type){
     data = data.filter((index) => index.hotelType.id === parseInt(type));
   }
-
-  // console.log(data)
-
-
-  // let stat = '';
-  // if (data.isOnline == 1 && data.isOffline == 0) {
-  //   stat = 'online';
-  // } else if (data.isOnline == 0 && data.isOffline == 0) {
-  //   stat = 'pending';
-  // } else if (data.isOnline == 0 && data.isOffline == 1 && data.phone != null) {
-  //   stat = 'offline';
-  // } else if (data.isOnline == 0 && data.isOffline == 1 && data.phone == null) {
-  //   stat = 'data';
-  // }
 
   return (
     <div

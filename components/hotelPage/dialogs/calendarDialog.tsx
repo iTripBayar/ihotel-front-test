@@ -1,12 +1,9 @@
-import {useState, useCallback,useRef} from 'react';
+import {useState} from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { addDays, format } from 'date-fns';
 import {
   DateRange,
   DayPicker,
-  ClassNames,
-  Row,
-  RowProps,
 } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 
@@ -38,22 +35,6 @@ const pastMonth = new Date(
     ? date
     : parseInt(dateFrom ? dateFrom?.split('|')[0].split('/')[1] : '0'),
 );
-  // const defaultSelected: DateRange = {
-  //   from: pastMonth,
-  //   to: addDays(
-  //     pastMonth,
-  //     !dateFrom && !dateTo
-  //       ? 1
-  //       : parseInt(
-  //           dateFrom && dateTo
-  //             ? `${
-  //                 parseInt(dateTo?.split('|')[0].split('/')[1]) -
-  //                 parseInt(dateFrom?.split('|')[0].split('/')[1])
-  //               }`
-  //             : '0',
-  //         ),
-  //   ),
-  // };
   const defaultSelected: DateRange = {
     from: pastMonth,
     to: addDays(pastMonth, days !== null ? parseInt(days) : 1),
@@ -66,7 +47,7 @@ const pastMonth = new Date(
 
 
   const [range, setRange] = useState<DateRange | undefined>(defaultSelected);
-const createQueryString = useCallback(
+const createQueryString =
   (name: string, value: string | null) => {
     const params = new URLSearchParams(searchParams);
     if (value !== null) {
@@ -75,10 +56,8 @@ const createQueryString = useCallback(
       params.delete(name);
     }
     return params.toString();
-  },
-  [searchParams],
-);
-const multipleCreateQueryString = useCallback(
+  }
+const multipleCreateQueryString = 
   (
     name: string,
     value: string | null,
@@ -111,14 +90,7 @@ const multipleCreateQueryString = useCallback(
       params.delete(name3);
     }
     return params.toString();
-  },
-  [searchParams],
-);
-// if(range && range.to && range.from){
-// console.log(
-//   (range?.to?.getTime() - range?.from?.getTime()) / (1000 * 3600 * 24),
-// );
-// }
+  }
 if(ver === 'mobile')
   return (
     <div
@@ -127,7 +99,7 @@ if(ver === 'mobile')
       <div
         className="absolute right-[16px] top-[16px] text-primary-blue"
         onClick={() => {
-          router.push(`${pathname}/?${createQueryString('calendar', null)}`);
+          router.replace(`${pathname}/?${createQueryString('calendar', null)}`);
         }}
       >
         <svg
@@ -171,7 +143,7 @@ if(ver === 'mobile')
         className="flex max-w-[150px] items-center justify-center rounded-full bg-primary-blue px-[16px] py-[10px] text-[14px] font-medium uppercase text-white"
         onClick={() => {
           if (range?.from && range.to) {
-            router.push(
+            router.replace(
               `${pathname}/?${multipleCreateQueryString(
                 'dateFrom',
                 `${range?.from?.toLocaleDateString()}|${range?.from
@@ -197,7 +169,6 @@ if(ver === 'mobile')
             );
           }
         }}
-        // range?.from?.toDateString().split(' ')[1]
       >
         {lang === 'en' ? 'Allow' : 'Зөвшөөрөх'}
       </div>
@@ -210,7 +181,7 @@ if(ver === 'mobile')
      <div
        className="absolute right-[10px] top-[10px] text-primary-blue"
        onClick={() => {
-         router.push(`${pathname}/?${createQueryString('calendar', null)}`);
+         router.replace(`${pathname}/?${createQueryString('calendar', null)}`);
        }}
      >
        <svg
@@ -234,12 +205,8 @@ if(ver === 'mobile')
        mode="range"
        defaultMonth={range ? range.from :pastMonth}
        selected={range}
-       // footer={footer}
        onSelect={setRange}
        numberOfMonths={2}
-       // fromDate={new Date()}
-       // components={{ Row: OnlyFutureRow }}
-       // hidden={isPastDate}
        showOutsideDays
        style={{
          width: '100%',
@@ -256,7 +223,7 @@ if(ver === 'mobile')
        className="flex max-w-[150px] items-center justify-center rounded-full bg-primary-blue px-[16px] py-[10px] text-[14px] font-medium uppercase text-white"
        onClick={() => {
          if (range?.from && range.to) {
-           router.push(
+           router.replace(
              `${pathname}/?${multipleCreateQueryString(
                'dateFrom',
                `${range?.from?.toLocaleDateString()}|${range?.from
@@ -282,7 +249,6 @@ if(ver === 'mobile')
            );
          }
        }}
-       // range?.from?.toDateString().split(' ')[1]
      >
        {lang === 'en' ? 'Allow' : 'Зөвшөөрөх'}
      </div>

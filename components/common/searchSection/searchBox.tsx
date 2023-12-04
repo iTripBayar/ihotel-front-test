@@ -10,6 +10,8 @@ interface iProps {
   campsData: any[];
   destData: any[];
   ver: string;
+  changeSearchValue: (e: string)=>void
+  value: string
 }
 
 const SearchBox = ({
@@ -17,7 +19,9 @@ const SearchBox = ({
   placesData,
   campsData,
   destData,
-  ver, 
+  ver,
+  changeSearchValue,
+  value
 }: iProps) => {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(false);
@@ -30,7 +34,7 @@ const SearchBox = ({
   const filter = searchParams.get('filter');
   const router = useRouter();
 
-  const createQueryString = useCallback(
+  const createQueryString =
     (name: string, value: string | null) => {
       const params = new URLSearchParams(searchParams);
       if (value !== null) {
@@ -39,9 +43,19 @@ const SearchBox = ({
         params.delete(name);
       }
       return params.toString();
-    },
-    [searchParams],
-  );
+    };
+  //  const createQueryString = useCallback(
+  //    (name: string, value: string | null) => {
+  //      const params = new URLSearchParams(searchParams);
+  //      if (value !== null) {
+  //        params.set(name, value);
+  //      } else {
+  //        params.delete(name);
+  //      }
+  //      return params.toString();
+  //    },
+  //    [searchParams],
+  //  );
 
   const sample = [];
   const suggestion = [
@@ -49,22 +63,19 @@ const SearchBox = ({
       id: 'Тэрэлж',
       mn: 'Тэрэлж',
       en: 'Terelj',
-      delay: 0,
     },
     {
       id: 'Улаанбаатар',
       mn: 'Улаанбаатар',
       en: 'Ulaanbaatar',
-      delay: 3000,
     },
     {
       id: 'Хөвсгөл',
       mn: 'Хөвсгөл',
       en: 'Khuvsgul',
-      delay: 6000,
     },
   ];
-  
+
   for (let i = 0; i < hotelData.length; i++) {
     sample.push(
       {
@@ -119,7 +130,6 @@ const SearchBox = ({
         type: 'district',
       },
     );
-   
   }
 
   const filteredDataValue =
@@ -207,13 +217,19 @@ const SearchBox = ({
             onChange={(event) => {
               setQuery(event.target.value);
               setSelected(false);
+              // if (
+              //   searchValue &&
+              //   event.target.value.length < searchValue.length
+              // ) {
+                // router.push(
+                //   `${pathname}?${createQueryString('searchValue', null)}`,
+                // );
+              // }
               if (
-                searchValue &&
-                event.target.value.length < searchValue.length
+                value &&
+                event.target.value.length < value.length
               ) {
-                router.push(
-                  `${pathname}?${createQueryString('searchValue', null)}`,
-                );
+                changeSearchValue('');
               }
             }}
             onLoad={(e) => {
@@ -312,15 +328,16 @@ const SearchBox = ({
             <div
               onClick={() => {
                 let nextSearchValue = `${data.name}$${data.type}`;
-                router.push(
-                  `${pathname}?${createQueryString(
-                    'searchValue',
-                    nextSearchValue,
-                  )}`,
-                  {
-                    scroll: false,
-                  },
-                );
+                // router.push(
+                //   `${pathname}?${createQueryString(
+                //     'searchValue',
+                //     nextSearchValue,
+                //   )}`,
+                //   {
+                //     scroll: false,
+                //   },
+                // );
+                changeSearchValue(nextSearchValue);
                 setQuery(data.name);
                 setSelected(true);
               }}

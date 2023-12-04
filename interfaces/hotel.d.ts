@@ -1,4 +1,4 @@
-declare namespace hotelData {
+declare namespace HotelData {
   interface full {
     activities: [];
     average: number;
@@ -24,7 +24,7 @@ declare namespace hotelData {
     startdate: string;
     things: number;
   }
-  interface hotel {
+  interface Hotel {
     address: string;
     addressEn: string | null;
     ageChild: number;

@@ -1,5 +1,4 @@
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useCallback } from 'react';
 interface Props {
   roomData: roomData.room;
 }
@@ -10,7 +9,7 @@ export default function RoomSelection({ roomData }: Props) {
   const room = searchParams.get('room');
   const roomAmount = searchParams.getAll('roomAmount');
 
-  const createQueryString = useCallback(
+  const createQueryString = 
     (
       name: string,
       value: string | null,
@@ -45,9 +44,7 @@ export default function RoomSelection({ roomData }: Props) {
         params.delete(name1);
       }
       return params.toString();
-    },
-    [searchParams],
-  );
+    };
   const sampleRooms = [
     { id: roomData?.id, hotelId: 0 },
     { id: roomData?.id, hotelId: 1 },
@@ -67,7 +64,6 @@ export default function RoomSelection({ roomData }: Props) {
         updatedAmount = parseInt(roomAmount[i].split('$')[1]);
       }
     }
-    // console.log(roomAmount);
   }
   return (
     <div
@@ -78,7 +74,7 @@ export default function RoomSelection({ roomData }: Props) {
         <div
           key={i}
           onClick={() => {
-            router.push(
+            router.replace(
               `/hotel/?${createQueryString(
                 'roomAmount',
                 `${room}$${sampleRooms.indexOf(index).toString()}`,

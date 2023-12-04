@@ -28,24 +28,13 @@ const HotelImages = ({ images, image, coverPhoto }: Props) => {
     <div className="flex w-full flex-col gap-[4px] overflow-hidden rounded-b-[6px] rounded-t-[12px]">
       <div className="relative h-[200px] w-full sm:h-[250px] md:h-[350px] lg:h-[400px] xl:h-[425px]">
         <Image
-          // src={
-          //   image
-          //     ? `https://sandbox.api.myhotel.mn/image?path=${image}`
-          //     : '/samples/camp.png'
-          // }
-          // `https://sandbox.api.myhotel.mn:9443/${data?.coverPhoto}`
           src={coverPhoto ? `https://sandbox.api.myhotel.mn:9443/${coverPhoto}` : '/samples/camp.png'}
-          // src={'/samples/camp.png'}
           alt="/hotel"
           fill={true}
-          //   priority
           quality={100}
           loading="lazy"
           sizes="50vw"
           placeholder="blur"
-          // blurDataURL={
-          //   image !== null ? `"_next/image/?url=${image}"` : '/samples/camp.png'
-          // }
           blurDataURL="/samples/camp.png"
           className="absolute h-auto w-auto select-none object-cover"
           draggable={false}
@@ -79,7 +68,6 @@ const HotelImages = ({ images, image, coverPhoto }: Props) => {
                   src="/samples/camp.png"
                   alt="/hotel"
                   fill={true}
-                  //   priority
                   quality={75}
                   loading="lazy"
                   sizes="50vw"

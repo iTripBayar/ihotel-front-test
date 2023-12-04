@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { useCallback } from 'react';
 
 interface iProps {
   phone: string;
@@ -19,7 +18,7 @@ const BurgerMenu = ({ phone, ver }: iProps) => {
   const logIn = searchParams.get('logIn');
   const signUp = searchParams.get('signUp');
 
-  const createQueryString = useCallback(
+  const createQueryString = 
     (name: string, value: string | null) => {
       const params = new URLSearchParams(searchParams);
       if (value !== null) {
@@ -29,9 +28,7 @@ const BurgerMenu = ({ phone, ver }: iProps) => {
       }
 
       return params.toString();
-    },
-    [searchParams],
-  );
+    };
 
   const handleClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement; // Cast event.target to HTMLElement
@@ -39,7 +36,7 @@ const BurgerMenu = ({ phone, ver }: iProps) => {
     if (target.classList.contains('bg-black/50')) {
       setCloseAnimation(true);
       let nextMenu = menu !== 'open' ? 'open' : null;
-      router.push(`${pathname}?${createQueryString('menu', nextMenu)}`);
+      router.replace(`${pathname}?${createQueryString('menu', nextMenu)}`);
     }
   };
 
@@ -65,7 +62,7 @@ const BurgerMenu = ({ phone, ver }: iProps) => {
           onClick={() => {
             setCloseAnimation(true);
             let nextMenu = menu !== 'open' ? 'open' : null;
-            router.push(`${pathname}?${createQueryString('menu', nextMenu)}`);
+            router.replace(`${pathname}?${createQueryString('menu', nextMenu)}`);
           }}
         >
           <path
@@ -83,7 +80,7 @@ const BurgerMenu = ({ phone, ver }: iProps) => {
             onClick={() => {
               setCloseAnimation(true);
               let nextLogIn = logIn !== 'open' ? 'open' : null;
-              router.push(
+              router.replace(
                 `${pathname}?${createQueryString('logIn', nextLogIn)}`,
               );
             }}
@@ -97,7 +94,7 @@ const BurgerMenu = ({ phone, ver }: iProps) => {
             onClick={() => {
               setCloseAnimation(true);
               let nextSignUp = signUp !== 'open' ? 'open' : null;
-              router.push(`${pathname}?${createQueryString('signUp', signUp)}`);
+              router.replace(`${pathname}?${createQueryString('signUp', signUp)}`);
             }}
           >
             {/* {state.language === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'} */}

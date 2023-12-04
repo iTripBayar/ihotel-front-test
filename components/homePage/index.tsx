@@ -5,7 +5,6 @@ import { useSearchParams } from 'next/navigation';
 interface iProps {
   data: any[];
 }
-
 const News = ({ data }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
@@ -17,7 +16,6 @@ const News = ({ data }: iProps) => {
   if (cap != 0) {
     data = data.slice(0, cap);
   }
-
   return (
     <div className="w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]">
       <div

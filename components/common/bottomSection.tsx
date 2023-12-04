@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
@@ -14,7 +14,7 @@ const BottomSection = ({ ver }: iProps) => {
   const btnRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  const createQueryString = useCallback(
+  const createQueryString = 
     (name: string, value: string | null) => {
       const params = new URLSearchParams(searchParams);
       if (value !== null) {
@@ -23,9 +23,8 @@ const BottomSection = ({ ver }: iProps) => {
         params.delete(name);
       }
       return params.toString();
-    },
-    [searchParams],
-  );
+    };
+
   const handleScrollToTop = () => {
     btnRef.current?.classList.add('animate-bounce');
     setTimeout(() => {
@@ -36,8 +35,8 @@ const BottomSection = ({ ver }: iProps) => {
       behavior: 'smooth',
     });
   };
-  const [delay, setDelay] = useState(false);
 
+  const [delay, setDelay] = useState(false);
   setTimeout(() => {
     setDelay(true);
   }, 1500);
@@ -62,7 +61,7 @@ const BottomSection = ({ ver }: iProps) => {
           }`}
           onClick={() => {
             let nextMap = map !== 'open' ? 'open' : null;
-            router.push(`/search/?${createQueryString('map', nextMap)}`);
+            router.replace(`/search/?${createQueryString('map', nextMap)}`);
           }}
         >
           <svg

@@ -3,7 +3,6 @@ import Image from 'next/image';
 import SearchSection from './searchSection';
 import Link from 'next/link';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-import { useCallback } from 'react';
 
 interface iProps {
   ver: string;
@@ -25,7 +24,7 @@ const HeaderVariants = ({
   const pathname = usePathname();
   const menu = searchParams.get('menu');
 
-  const createQueryString = useCallback(
+  const createQueryString = 
     (name: string, value: string | null) => {
       const params = new URLSearchParams(searchParams);
       if (value !== null) {
@@ -34,9 +33,7 @@ const HeaderVariants = ({
         params.delete(name);
       }
       return params.toString();
-    },
-    [searchParams],
-  );
+    };
 
   return (
     <header
@@ -110,7 +107,7 @@ const HeaderVariants = ({
         <div
           onClick={() => {
             const nextMenu = menu !== 'open' ? 'open' : null;
-            router.push(`${pathname}?${createQueryString('menu', nextMenu)}`, {
+            router.replace(`${pathname}?${createQueryString('menu', nextMenu)}`, {
               scroll: false,
             });
           }}

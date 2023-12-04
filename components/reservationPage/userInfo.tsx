@@ -10,41 +10,11 @@ interface Props{
 export default function UserInfo({ver, stat}:Props) {
   const searchParams = useSearchParams()
   const lang = searchParams.get('lang')
-  // const [user, setUser] = useState({firstName: '', familyName: '', email: '', phone: '', nationality: '' })
 
-  let user = [{firstName: '', familyName: '', email: '', phone: '', nationality: '' }]
   const [test, setTest] = useState([
     { firstName: '', familyName: '', email: '', phone: '', nationality: '' },
   ]);
- const [inputValue, setInputValue] = useState('');
 
-//  const handleInputChange = (
-//    firstName: React.ChangeEvent<HTMLInputElement> | null,
-//    lastName: React.ChangeEvent<HTMLInputElement> | null,
-//    email: React.ChangeEvent<HTMLInputElement> | null,
-//    phone: React.ChangeEvent<HTMLInputElement> | null,
-//    nationality: React.ChangeEvent<HTMLInputElement> | null,
-//  ) => {
-//    const value = firstName ? firstName.target.value : null;
-
-//    // Check if the input consists only of letters
-//    if ((value && /^[A-Za-z]+$/.test(value)) || (value && value === '')) {
-//      setInputValue(value);
-//      if (user[0].familyName === '') {
-//        user = [
-//          {
-//            firstName: value,
-//            familyName: '',
-//            email: '',
-//            phone: '',
-//            nationality: '',
-//          },
-//        ];
-//      } else {
-
-//      }
-//    }
-//  };
 if(ver === 'mobile'){
   return (
     <div className="flex w-full flex-col gap-[16px] rounded-[20px] bg-white px-[16px] py-[12px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] sm:gap-[20px] sm:py-[16px]">

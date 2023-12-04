@@ -60,23 +60,12 @@ const Services = ({ services }: Props) => {
             <div className="relative h-[125px] w-full overflow-hidden sm:h-[150px] md:h-[160px] lg:h-[180px]">
               <Image
                 src={'/samples/camp.png'}
-                // src={
-                //   data.image !== null && data.image !== ''
-                //     ? `https://sandbox.api.myhotel.mn/image?path=${data.image}`
-                //     : '/samples/camp.png'
-                // }
                 alt="/hotel"
                 fill={true}
-                //   priority
                 quality={75}
                 loading="lazy"
                 sizes="50vw"
                 placeholder="blur"
-                // blurDataURL={
-                //   data.image !== null
-                //     ? `"_next/image/?url=${data.image}"`
-                //     : '/samples/camp.png'
-                // }
                 blurDataURL="/samples/camp.png"
                 className="absolute h-auto w-auto select-none object-cover duration-700 hover:scale-110"
                 draggable={false}

@@ -35,7 +35,7 @@ const HotelCard = ({ data, fromMap, dollarRate }: iProps) => {
     <Link
       href={{
         pathname: '/hotel',
-        query: { slug: data.slug }, // the data
+        query: { slug: data.slug }
       }}
       target="blank"
       className={`flex  flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] bg-white shadow-[0px_2px_12px_2px_rgb(0,0,0,0.20)] xl:gap-[20px] ${
@@ -66,11 +66,6 @@ const HotelCard = ({ data, fromMap, dollarRate }: iProps) => {
         </svg>
         {/* data?.images !== null ? data?.images[0] : 'no' */}
         <Image
-          // src={
-          //   data.image !== null && data.image !== ''
-          //     ? `https://sandbox.api.myhotel.mn/image?path=${data.images}`
-          //     : '/samples/camp.png'
-          // }
           src={
             data?.images !== null && data?.images !== ''
               ? `https://sandbox.api.myhotel.mn:9443/${data?.coverPhoto}`

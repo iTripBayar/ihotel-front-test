@@ -1,7 +1,6 @@
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { Collapse, Button, useDisclosure } from '@chakra-ui/react';
-import { useCallback } from 'react';
 import useWindowSize from '@/hooks/windowSize';
 
 
@@ -20,12 +19,11 @@ export default function GeneralInfo({name, nameEn, image, address, addressEn, ph
   const lang = searchParams.get('lang')
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
-  const days = searchParams.get('days');
   const pathname = usePathname()
   const router = useRouter()
   const { isOpen, onToggle } = useDisclosure();
   const size = useWindowSize()
-const createQueryString = useCallback(
+const createQueryString = 
   (name: string, value: string | null) => {
     const params = new URLSearchParams(searchParams);
     if (value !== null) {
@@ -34,9 +32,7 @@ const createQueryString = useCallback(
       params.delete(name);
     }
     return params.toString();
-  },
-  [searchParams],
-);
+  };
   const displayDate = {
     from: `${dateFrom?.split('|')[0].split('/')[2]}-${dateFrom
       ?.split('|')[0]
@@ -101,7 +97,7 @@ const createQueryString = useCallback(
           <div
             className="relative flex min-h-[42px] w-full items-center lg:justify-self-end justify-center rounded-full lg:max-w-[165px]  bg-primary-blue px-[20px] text-[16px] font-medium text-white sm:min-h-[46px] sm:text-[18px] lg:col-span-2 lg:min-h-[20px] lg:justify-between lg:px-[16px] lg:py-[12px] lg:text-[15px] lg:leading-[14px]"
             onClick={() => {
-              router.push(
+              router.replace(
                 `${pathname}?${createQueryString('calendar', 'open')}`,
                 { scroll: false },
               );
@@ -254,21 +250,13 @@ const createQueryString = useCallback(
           <div className="lg:grid lg:grid-cols-5 lg:gap-[24px]">
             <div className="relative col-span-3 h-[200px] xl:h-[250px] w-full overflow-hidden rounded-[8px]">
               <Image
-                // src={
-                //   image
-                //     ? `https://sandbox.api.myhotel.mn/image?path=${image}`
-                //     : '/samples/camp.png'
-                // }
-                // `https://sandbox.api.myhotel.mn:9443/${data?.coverPhoto}`
                 src={
                   image
                     ? `https://sandbox.api.myhotel.mn:9443/${image}`
                     : '/samples/camp.png'
                 }
-                // src={'/samples/camp.png'}
                 alt="/hotel"
                 fill={true}
-                //   priority
                 quality={100}
                 loading="lazy"
                 sizes="50vw"

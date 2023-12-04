@@ -3,7 +3,7 @@ import SearchBox from './searchBox';
 import OnlineToggle from './onlineToggle';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { addDays, format } from 'date-fns';
 
 interface iProps {
@@ -23,13 +23,27 @@ const SearchSection = ({
 }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const toggle = searchParams.get('toggle');
-  const searchValue = searchParams.get('searchValue');
   const filter = searchParams.get('filter');
   const router = useRouter();
   const pathname = usePathname();
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
+
+  const [toggle, setToggle]= useState(false);
+  const [searchValue, setSearchValue] = useState('');
+
+
+  const changeToggle = useCallback(() => {
+    setToggle(!toggle);
+    console.log(toggle);
+  }, [toggle]);
+  const changeSearchValue = useCallback(
+    (e: string) => {
+      setSearchValue(e);
+      console.log(e);
+    },
+    [searchValue],
+  );
 
   const createQueryString = useCallback(
     (name: string, value: string | null) => {
@@ -43,7 +57,7 @@ const SearchSection = ({
     },
     [searchParams],
   );
-  const multipleCreateQueryString = useCallback(
+  const multipleCreateQueryString = 
     (
       name: string | null,
       value: string | null,
@@ -76,13 +90,47 @@ const SearchSection = ({
            params.delete(name3);
          }
       return params.toString();
-    },
-    [searchParams],
-  );
+    };
+  // const multipleCreateQueryString = useCallback(
+  //   (
+  //     name: string | null,
+  //     value: string | null,
+  //     name1: string | null,
+  //     value1: string | null,
+  //     name2: string | null,
+  //     value2: string | null,
+  //     name3: string | null,
+  //     value3: string | null,
+  //   ) => {
+  //     const params = new URLSearchParams(searchParams);
+  //     if (value !== null && name !== null) {
+  //       params.set(name, value);
+  //     } else if (value !== null && name) {
+  //       params.delete(name);
+  //     }
+  //     if (value1 !== null && name1 !== null) {
+  //       params.set(name1, value1);
+  //     } else if (value1 !== null && name1) {
+  //       params.delete(name1);
+  //     }
+  //     if (value2 !== null && name2 !== null) {
+  //       params.set(name2, value2);
+  //     } else if (value2 !== null && name2) {
+  //       params.delete(name2);
+  //     }
+  //     if (value3 !== null && name3 !== null) {
+  //       params.set(name3, value3);
+  //     } else if (value3 !== null && name3) {
+  //       params.delete(name3);
+  //     }
+  //     return params.toString();
+  //   },
+  //   [searchParams],
+  // );
   
   let newDate = new Date();
   let nextDay = addDays(newDate, 1);
-   let formattedDate = {
+  let formattedDate = {
      from: {
        year: !dateFrom
          ? `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`
@@ -105,7 +153,7 @@ const SearchSection = ({
          ? `${format(nextDay, 'yyyy-MM-dd').split('-')[2]}`
          : dateTo.split('|')[0].split('/')[1],
      },
-   };
+  };
 
   return (
     <div
@@ -141,24 +189,26 @@ const SearchSection = ({
             campsData={campsData}
             destData={destData}
             ver={ver}
+            changeSearchValue={changeSearchValue}
+            value={searchValue}
           />
-          <OnlineToggle ver={ver} />
+          <OnlineToggle ver={ver} changeToggle={changeToggle} value={toggle} />
           {filter !== 'mobile' ? (
             <div
-             onClick={()=>{
-              router.push(
-                `/search/?${multipleCreateQueryString(
-                  `${lang ? 'lang' : null}`,
-                  lang,
-                  `${searchValue ? 'searchValue' : null}`,
-                  searchValue,
-                  `${toggle ? 'toggle' : null}`,
-                  toggle,
-                  `${filter ? 'filter' : null}`,
-                  filter,
-                )}`,
-              );
-             }}
+              onClick={() => {
+                router.push(
+                  `/search/?${multipleCreateQueryString(
+                    'lang',
+                    lang,
+                    'searchValue',
+                    searchValue !== '' ? searchValue : null,
+                    'toggle',
+                    toggle == true ? 'true' : null,
+                    'filter',
+                    filter,
+                  )}`,
+                );
+              }}
               className={`flex cursor-pointer items-center justify-center pt-[2px] font-medium  uppercase lg:max-w-[130px] ${
                 ver === 'normal'
                   ? 'h-[46px] w-full rounded-[8px] bg-primary-blue text-[16px] leading-[16px] text-white'
@@ -185,12 +235,14 @@ const SearchSection = ({
               campsData={campsData}
               destData={destData}
               ver={ver}
+              changeSearchValue={changeSearchValue}
+              value={searchValue}
             />
           </div>
           <div
             className="flex h-[36px] items-center justify-center gap-[12px] rounded-full bg-white px-[8px] text-[15px] font-medium leading-[1px] text-primary-blue 2xs:px-[16px] xl:min-w-[250px]"
             onClick={() => {
-              router.push(
+              router.replace(
                 `${pathname}?${createQueryString('calendar', 'open')}`,
                 { scroll: false },
               );

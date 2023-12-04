@@ -1,40 +1,26 @@
 'use client';
 import Image from 'next/image';
-import React, { useState, useCallback } from 'react';
+import {useRef} from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import NextBtn from './nextBtn';
 import PrevBtn from './prevBtn';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 interface iProps {
-  data: any[];
-  destinations: any[];
+  data: HomeData.DestCategories[];
+  destinations: HomeData.TopDestinations[];
 }
 
 const CommonLocation = ({ data, destinations }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const router = useRouter();
-  const createQueryString = useCallback(
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value !== null) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      return params.toString();
-    },
-    [searchParams],
-  );
-
-  const sliderRef = React.useRef<Slider>(null);
+  const sliderRef = useRef<Slider>(null);
 
   function SampleNextArrow(props: any) {
     const { onClick } = props;
-
     return <NextBtn onClick={onClick} />;
   }
 
@@ -43,7 +29,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
     return <PrevBtn onClick={onClick} />;
   }
 
-  const [activeIndex, setActive] = useState<any>(0);
+  // const [activeIndex, setActive] = useState<any>(0);
 
   const settings = {
     className: 'center',
@@ -55,7 +41,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
     speed: 500,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
-    afterChange: (current: number) => setActive({ current }),
+    // afterChange: (current: number) => setActive({ current }),
   };
   return (
     <div className="flex w-full flex-col gap-[20px]">
@@ -73,11 +59,9 @@ const CommonLocation = ({ data, destinations }: iProps) => {
               src={`https://ihotel.mn/${index.coverPhoto}`}
               alt="/commonLocs"
               fill={true}
-              // priority
+              priority
               quality={100}
-              // sizes="100vw"
-              loading="lazy"
-              // sizes="100vw"
+              // loading="lazy"
               sizes="100vw"
               placeholder="blur"
               blurDataURL={`"_next/image/?url=${index.coverPhoto}"`}
@@ -85,11 +69,9 @@ const CommonLocation = ({ data, destinations }: iProps) => {
             />
             <div className="absolute bottom-0 z-[1] flex h-[50px] w-full flex-col items-center justify-center gap-[2px] bg-black/50 md:h-[75px] md:gap-[4px]">
               <h3 className="text-[16px] font-medium leading-[14px] md:text-[18px] md:leading-[18px]">
-                {/* {state.language === 'mn' ? index.name : ''} */}
                 {lang === 'en' ? '' : index.name}
               </h3>
               <p className="text-[12px] md:text-[14px]">
-                {/* {state.language === 'mn' ? index.subtitle : ''} */}
                 {lang === 'en' ? '' : index.subtitle}
               </p>
               {index.author !== null && index.author !== '' ? (
@@ -113,16 +95,13 @@ const CommonLocation = ({ data, destinations }: iProps) => {
         ))}
       </Slider>
       <div className=" grid w-full gap-[20px] px-[24px] text-white sm:grid-cols-2 sm:px-[38px] md:px-[68px] lg:grid-cols-4 lg:px-[140px] xl:px-[150px] 2xl:px-[200px]">
-        {destinations.map((data) => (
-          <div
-            key={data.id}
+        {destinations.map((data, i) => (
+          <Link
+            href={{ query: { topDestination: data.id }, pathname: '/search' }}
+            key={i}
             className="group relative h-[150px] w-full cursor-pointer overflow-hidden rounded-[10px]  md:h-[200px] md:rounded-[16px] lg:rounded-[16px]"
-            onClick={() => {
-              router.push(`/search/?${createQueryString('topDestination', data.id)}`);
-            }}
           >
             <Image
-              // src={data.img}
               src={
                 data.thumbnail !== null && data.thumbnail !== ''
                   ? `https://sandbox.api.myhotel.mn:9443/${data.thumbnail}`
@@ -130,21 +109,22 @@ const CommonLocation = ({ data, destinations }: iProps) => {
               }
               alt="/commonLocs"
               fill={true}
-              priority
+              priority={false}
               quality={75}
+              placeholder="blur"
+              blurDataURL={`"_next/image/?url=${data.thumbnail}"`}
               sizes="(max-width: 576px) 50vw, (max-width: 768px) 40vw, 50vw"
               className="h-auto w-full object-fill duration-500 group-hover:scale-110"
             />
             <div className="absolute z-10 flex h-full w-full flex-col items-start justify-end gap-[4px] bg-gradient-to-t from-black/60 to-transparent px-[16px] py-[12px] lg:gap-[6px]">
               <h3 className="text-[18px] font-medium leading-[18px] md:text-[20px] lg:text-[18px]">
-                {/* {state.language === 'mn' ? data.name : data.nameEn} */}
                 {lang === 'en' ? data.nameEn : data.name}
               </h3>
               <p className="text-[14px] leading-[14px] md:text-[16px] lg:w-[80%] lg:text-[14px] lg:leading-[16px]">
                 {data.description}
               </p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

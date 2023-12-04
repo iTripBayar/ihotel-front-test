@@ -1,36 +1,18 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import React, { useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 import { Switch } from '@headlessui/react';
 type iProps = {
   ver: string;
-  // onlineToggleState: (value: boolean) => void;
+  changeToggle: ()=>void;
+  value: boolean;
 };
 
-const OnlineToggle = ({
-  ver, //  onlineToggleState
-}: iProps) => {
-  const [enabled, setEnabled] = useState(false);
-  const pathname = usePathname();
+const OnlineToggle = ({ ver, changeToggle, value }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const toggle = searchParams.get('toggle');
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
-
-  const createQueryString = useCallback(
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value !== null) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      return params.toString();
-    },
-    [searchParams],
-  );
   return (
     <div
       className={`relative flex w-full items-center justify-center overflow-hidden bg-white text-[12px] leading-[12px] text-main-text 2xs:text-[13px] 2xs:leading-[13px] sm:text-[14px] sm:leading-[14px] lg:text-[12px] lg:leading-[12px]  xl:text-[14px] xl:leading-[14px] ${
@@ -95,85 +77,44 @@ const OnlineToggle = ({
             />
           </svg>
           <p>
-            {/* {state.language === 'mn'
-              ? 'Шууд баталгаажих газрууд'
-              : 'Online order confirmation'} */}
             {lang === 'en'
               ? 'Online order confirmation'
               : 'Шууд баталгаажих газрууд'}
           </p>
         </div>
         {/* switch */}
-        <div
-          // href={{
-          //   pathname: `${pathname}`,
-          //   query:
-          //     toggle === 'true'
-          //       ? {
-          //           toggle: false,
-          //           searchValue: searchValue,
-          //           type: type,
-          //           filter: filter,
-          //           lang: lang,
-          //         }
-          //       : {
-          //           toggle: true,
-          //           searchValue: searchValue,
-          //           type: type,
-          //           filter: filter,
-          //           lang: lang,
-          //         },
-          // }}
-          // scroll={false}
-          onClick={() => {
-            let nextToggle = !toggle ? 'true' : null;
-            router.push(
-              `${pathname}?${createQueryString('toggle', nextToggle)}`,
-              {
-                scroll: false,
-              },
-            );
+        <Switch
+          id="onlineToggle"
+          // checked={enabled}
+          // checked={toggle === 'true'}
+          checked={value}
+          onChange={() => {
+            changeToggle();
+            // setEnabled(e)
           }}
-          id="toggleLink"
+          // onChange={(e) => {
+          //   setEnabled(e);
+          //   document.getElementById('toggleLink')?.click();
+          // }}
+          className={`${
+            value === true ? 'bg-main-online' : ' bg-black/[.03]'
+          } relative  inline-flex h-[24px] w-[40px] items-center rounded-full border border-black/10 2xs:w-[44px] lg:w-[40px] xl:w-[44px]`}
         >
-          <Switch
-            id="onlineToggle"
-            // checked={enabled}
-            checked={toggle === 'true'}
-            // onChange={setEnabled}
-            // onLoad={(e) => {
-            //   e.preventDefault();
-            // }}
-            onChange={(e) => {
-              setEnabled(e);
-              document.getElementById('toggleLink')?.click();
-
-              // dispatch({
-              //   type: 'TOGGLE_ONLINETOGGLE',
-              //   payload: e,
-              // });
-              //  onlineToggleState(e);
-            }}
+          <div
             className={`${
-              toggle === 'true' ? 'bg-main-online' : ' bg-black/[.03]'
-            } relative  inline-flex h-[24px] w-[40px] items-center rounded-full border border-black/10 2xs:w-[44px] lg:w-[40px] xl:w-[44px]`}
-          >
-            <div
-              className={`${
-                toggle === 'true'
-                  ? 'absolute left-[4px] h-[8px] w-[8px] rounded-full border border-white bg-white/[0.1] shadow-[inset_0_-2px_2px_rgba(0,0,0,0.15)] 2xs:left-[6px] 2xs:h-[10px] 2xs:w-[10px] lg:left-[4px] xl:left-[6px]'
-                  : 'absolute right-[4px] h-[4px] w-[10px] rounded-full bg-white shadow-[inset_0_-2px_2px_rgba(0,0,0,0.15)] 2xs:right-[6px] lg:right-[4px] xl:right-[6px]'
-              }`}
-            ></div>
-            <span
-              className={`${
-                toggle === 'true'
-                  ? 'translate-x-[18px] rotate-[-90deg] 2xs:translate-x-[22px] lg:translate-x-[18px] xl:translate-x-[22px]'
-                  : 'translate-x-[2px] rotate-90 2xs:translate-x-1 lg:translate-x-[3px] xl:translate-x-1'
-              } relative inline-block h-[18px] w-[18px] transform rounded-full bg-white shadow-[inset_0_-2px_6px_rgba(0,0,0,0.25)] transition`}
-            />
-          </Switch>
-        </div>
+              value === true
+                ? 'absolute left-[4px] h-[8px] w-[8px] rounded-full border border-white bg-white/[0.1] shadow-[inset_0_-2px_2px_rgba(0,0,0,0.15)] 2xs:left-[6px] 2xs:h-[10px] 2xs:w-[10px] lg:left-[4px] xl:left-[6px]'
+                : 'absolute right-[4px] h-[4px] w-[10px] rounded-full bg-white shadow-[inset_0_-2px_2px_rgba(0,0,0,0.15)] 2xs:right-[6px] lg:right-[4px] xl:right-[6px]'
+            }`}
+          ></div>
+          <span
+            className={`${
+              value === true
+                ? 'translate-x-[18px] rotate-[-90deg] 2xs:translate-x-[22px] lg:translate-x-[18px] xl:translate-x-[22px]'
+                : 'translate-x-[2px] rotate-90 2xs:translate-x-1 lg:translate-x-[3px] xl:translate-x-1'
+            } relative inline-block h-[18px] w-[18px] transform rounded-full bg-white shadow-[inset_0_-2px_6px_rgba(0,0,0,0.25)] transition`}
+          />
+        </Switch>
       </div>
     </div>
   );

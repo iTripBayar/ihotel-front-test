@@ -1,5 +1,4 @@
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import useWindowSize from '@/hooks/windowSize';
 interface Props {
@@ -11,7 +10,6 @@ const Review = ({ ver, data }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const size = useWindowSize();
-  const [open, setOpen] = useState(false);
 
   let sample = [
     {
@@ -98,8 +96,6 @@ const Review = ({ ver, data }: Props) => {
                 <div className="absolute right-[12px] top-[10px] z-10 flex h-[30px] w-[40px] items-center justify-center rounded-[6px] bg-primary-blue font-medium text-white 2xs:w-[50px] sm:right-[16px]  ">
                   {'9.6'}
                 </div>
-                {/* <div className="absolute right-0 top-[16px] z-0 h-[30px] w-[40px] translate-x-[40%] translate-y-[50%] rotate-[-45deg] bg-[#1C49BF]"></div> */}
-
                 {/* user info */}
                 <div className="flex items-center gap-[8px]">
                   <div className="flex h-[28px] w-[28px] items-center justify-center rounded-full bg-primary-blue/[.45] text-primary-blue">
@@ -157,8 +153,6 @@ const Review = ({ ver, data }: Props) => {
               <div className="absolute right-[12px] top-[10px] z-10 flex h-[30px] w-[40px] items-center justify-center rounded-[6px] bg-primary-blue font-medium text-white 2xs:w-[50px] sm:right-[16px]  ">
                 {'9.6'}
               </div>
-              {/* <div className="absolute right-0 top-[16px] z-0 h-[30px] w-[40px] translate-x-[40%] translate-y-[50%] rotate-[-45deg] bg-[#1C49BF]"></div> */}
-
               {/* user info */}
               <div className="flex items-center gap-[8px]">
                 <div className="flex h-[28px] w-[28px] items-center justify-center rounded-full bg-primary-blue/[.45] text-primary-blue">
@@ -198,7 +192,6 @@ const Review = ({ ver, data }: Props) => {
               <p
                 className={` relative line-clamp-3 text-justify text-sub-text/50`}
               >
-                {/* {sample.slice(0, open === false ? 67 : sample.length)} */}
                 {index.desc}
               </p>
 
