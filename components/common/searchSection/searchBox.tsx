@@ -1,27 +1,27 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 interface iProps {
-  hotelData: any[];
-  placesData: any[];
-  campsData: any[];
-  destData: any[];
+  hotelData: HotelData.Hotel[];
+  campsData: HotelData.Hotel[];
+  placesData: SearchData.Places[];
+  cityData: SearchData.Cities[];
   ver: string;
-  changeSearchValue: (e: string)=>void
-  value: string
+  changeSearchValue: (e: string) => void;
+  value: string;
 }
 
 const SearchBox = ({
   hotelData,
   placesData,
   campsData,
-  destData,
+  cityData,
   ver,
   changeSearchValue,
-  value
+  value,
 }: iProps) => {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(false);
@@ -34,29 +34,15 @@ const SearchBox = ({
   const filter = searchParams.get('filter');
   const router = useRouter();
 
-  const createQueryString =
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value !== null) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      return params.toString();
-    };
-  //  const createQueryString = useCallback(
-  //    (name: string, value: string | null) => {
-  //      const params = new URLSearchParams(searchParams);
-  //      if (value !== null) {
-  //        params.set(name, value);
-  //      } else {
-  //        params.delete(name);
-  //      }
-  //      return params.toString();
-  //    },
-  //    [searchParams],
-  //  );
-
+  const createQueryString = (name: string, value: string | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (value !== null) {
+      params.set(name, value);
+    } else {
+      params.delete(name);
+    }
+    return params.toString();
+  };
   const sample = [];
   const suggestion = [
     {
@@ -76,6 +62,7 @@ const SearchBox = ({
     },
   ];
 
+
   for (let i = 0; i < hotelData.length; i++) {
     sample.push(
       {
@@ -84,34 +71,8 @@ const SearchBox = ({
         nameEn: hotelData[i].nameEn ? hotelData[i].nameEn : '',
         type: 'name',
       },
-      {
-        key: hotelData[i].id,
-        name: hotelData[i].district.name,
-        nameEn: hotelData[i].district.international
-          ? hotelData[i].district.international
-          : '',
-        type: 'district',
-      },
     );
   }
-
-  // for (let i = 0; i < placesData.length; i++) {
-  //   sample.push({
-  //     key: placesData[i].districtId,
-  //     name: placesData[i].name,
-  //     nameEn: placesData[i].nameEn ? placesData[i].nameEn : '',
-  //     type: 'place',
-  //   });
-  // }
-
-  // for (let i = 0; i < destData.length; i++) {
-  //   sample.push({
-  //     key: destData[i].id,
-  //     name: destData[i].name,
-  //     nameEn: destData[i].nameEn ? destData[i].nameEn : '',
-  //     type: 'dest',
-  //   });
-  // }
 
   for (let i = 0; i < campsData.length; i++) {
     sample.push(
@@ -121,16 +82,25 @@ const SearchBox = ({
         nameEn: campsData[i].nameEn ? campsData[i].nameEn : '',
         type: 'camp',
       },
-      {
-        key: campsData[i].id,
-        name: campsData[i].district.name,
-        nameEn: campsData[i].district.international
-          ? campsData[i].district.international
-          : '',
-        type: 'district',
-      },
     );
   }
+  for (let i = 0; i < placesData.length; i++) {
+    sample.push({
+      key: placesData[i].id,
+      name: placesData[i].name,
+      nameEn: placesData[i].nameEn ? placesData[i].nameEn : '',
+      type: 'place',
+    });
+  }
+  for (let i = 0; i < cityData.length; i++) {
+    sample.push({
+      key: cityData[i].id,
+      name: cityData[i].name,
+      nameEn: cityData[i].nameEn ? cityData[i].nameEn : '',
+      type: 'city',
+    });
+  }
+
 
   const filteredDataValue =
     query === ''
@@ -160,8 +130,6 @@ const SearchBox = ({
     autoplaySpeed: 3000,
     cssEase: 'fade',
   };
-
-  // console.log(placesData)
 
   return (
     <div
@@ -221,14 +189,11 @@ const SearchBox = ({
               //   searchValue &&
               //   event.target.value.length < searchValue.length
               // ) {
-                // router.push(
-                //   `${pathname}?${createQueryString('searchValue', null)}`,
-                // );
+              // router.push(
+              //   `${pathname}?${createQueryString('searchValue', null)}`,
+              // );
               // }
-              if (
-                value &&
-                event.target.value.length < value.length
-              ) {
+              if (value && event.target.value.length < value.length) {
                 changeSearchValue('');
               }
             }}
@@ -344,7 +309,7 @@ const SearchBox = ({
               key={data.key}
               className=" flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
             >
-              {data.type === 'location' ? (
+              {data.type === 'place' ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

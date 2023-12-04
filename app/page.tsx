@@ -8,29 +8,36 @@ import BurgerMenu from '@/components/common/burgermenu';
 import { useState, useRef, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import HeaderVariants from '@/components/common/headerVariants';
-import { fetchData } from '@/utils';
+import { fetchData, fetchDataSearch } from '@/utils';
 import SearchSection from '@/components/common/searchSection';
 import Header from '@/components/common/header';
 import BottomSection from '@/components/common/bottomSection';
 import CardsContainer from '@/components/homePage/cardsContainer';
-import LogIn from '@/components/common/log&signUp/logIn';
-import SignUp from '@/components/common/log&signUp/signUp';
+import { useAppCtx } from '@/contexts/app';
+import LogOrSign from '@/components/common/logOrSign';
 
-export default function Home({
-  searchParams,
-}: {
-  searchParams: {
-    logInState: string | null;
-    signUpState: string | null;
-  };
-}) {
+const Home =()=> {
   const [headerVer, setHeaderVer] = useState('default');
   const searchBoxRef = useRef(null);
-  const { data } = useRequest(() => {
+  const { data, loading, error } = useRequest(() => {
     return fetchData();
   });
 
-  console.log(data)
+  const searchData = useRequest(()=>{
+    return fetchDataSearch()
+  })
+
+  const { appState, dispatch } = useAppCtx();
+
+
+  useEffect(()=>{
+     if (data) {
+       dispatch({
+         type: 'CHANGE_APP_STATE',
+         payload: { phone: data.phoneNumber, dollarRate: data.dollarRate },
+       });
+     }
+  }, [loading === false])
 
   useEffect(() => {
     const options = {
@@ -61,24 +68,21 @@ export default function Home({
   }, []);
   return (
     <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
-      {/* fixed components */}
+      <Header phone={data ? data.phoneNumber : ''} />
       {headerVer === 'fixed' ? (
         <HeaderVariants
           ver={headerVer}
           hotelData={data ? data.hotels : []}
-          placesData={data ? data.places : []}
           campsData={data ? data.camps : []}
-          destData={data ? data.destCategories : []}
+          placesData={data ? data.places : []}
+          cityData={data ? data.cities : []}
         />
       ) : null}
-      {/* {searchParams.logInState ||
-        (searchParams.signUpState ? <LogSign /> : null)} */}
-      {searchParams.logInState ? <LogIn /> : null}
-      {searchParams.signUpState ? <SignUp /> : null}
-      <BurgerMenu phone={data ? data.phoneNumber : ''} ver={'normal'} />
+      {appState.logOrSign !== '' ? <LogOrSign /> : ''}
+      {appState.menu === 'open' ? 
+      <BurgerMenu />
+      : null}
       <BottomSection ver={headerVer} />
-      {/* end of fixed components */}
-      <Header phone={data ? data.phoneNumber : ''} />
       <HeroCategory data={data ? data.propertyTypes : []} />
       <div ref={searchBoxRef}>
         {headerVer !== 'fixed' ? (
@@ -86,7 +90,7 @@ export default function Home({
             hotelData={data ? data.hotels : []}
             placesData={data ? data.places : []}
             campsData={data ? data.camps : []}
-            destData={data ? data.destCategories : []}
+            cityData={data ? data.cities : []}
             ver={'normal'}
           />
         ) : null}
@@ -98,20 +102,18 @@ export default function Home({
       <CardsContainer
         title={'cheap'}
         data={data ? data.cheapHotels : []}
-        dollarRate={data ? data.dollarRate : null}
       />
       <CardsContainer
         title={'hotels'}
         data={data ? data.hotels : []}
-        dollarRate={data ? data.dollarRate : null}
       />
       <CardsContainer
         title={'camps'}
         data={data ? data.camps : []}
-        dollarRate={data ? data.dollarRate : null}
       />
       <News data={data ? data.posts : []} />
       <Footer />
     </main>
   );
 }
+export default Home

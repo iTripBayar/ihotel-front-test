@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useCallback } from 'react';
+import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
   phone: string;
@@ -13,9 +13,8 @@ const Header = ({ phone }: iProps) => {
   const menu = searchParams.get('menu');
   const lang = searchParams.get('lang');
   const addHotel = searchParams.get('addHotel');
-  const signUpState = searchParams.get('signUpState');
-  const logInState = searchParams.get('logInState');
-  const createQueryString = useCallback(
+  const {appState, dispatch} = useAppCtx()
+  const createQueryString = 
     (name: string, value: string | null) => {
       const params = new URLSearchParams(searchParams);
       if (value !== null) {
@@ -24,9 +23,7 @@ const Header = ({ phone }: iProps) => {
         params.delete(name);
       }
       return params.toString();
-    },
-    [searchParams],
-  );
+    };
 
   return (
     <header
@@ -52,12 +49,13 @@ const Header = ({ phone }: iProps) => {
           {/* log in */}
           <div
             className="group relative flex h-[32px] cursor-pointer items-center"
-            // onClick={() => {
-            //   logIn('logIn');
-            // }}
             onClick={() => {
-              const nextLogIn = logInState !== 'open' ? 'open' : null;
-              router.push(`/?${createQueryString('logInState', nextLogIn)}`);
+              dispatch({
+                type: 'CHANGE_APP_STATE',
+                payload: {
+                  logOrSign: appState.logOrSign !== 'log' ? 'log' : '',
+                },
+              });
             }}
           >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
@@ -71,8 +69,12 @@ const Header = ({ phone }: iProps) => {
             //   logIn('signUp');
             // }}
             onClick={() => {
-              const nextSignUp = signUpState !== 'open' ? 'open' : null;
-              router.push(`/?${createQueryString('signUpState', nextSignUp)}`);
+              dispatch({
+                type: 'CHANGE_APP_STATE',
+                payload: {
+                  logOrSign: appState.logOrSign !== 'sign' ? 'sign' : '',
+                },
+              });
             }}
           >
             <span className="ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full"></span>
@@ -159,8 +161,10 @@ const Header = ({ phone }: iProps) => {
         <div
           className="relative flex h-[16px] w-[24px] flex-col items-center lg:hidden"
           onClick={() => {
-            const nextMenu = menu !== 'open' ? 'open' : null;
-            router.push(`/?${createQueryString('menu', nextMenu)}`);
+            dispatch({
+              type: 'CHANGE_APP_STATE',
+              payload: { menu: appState.menu !== '' ? 'open' : '' },
+            });
           }}
         >
           <div className="absolute top-[50%] h-[2px] w-[24px] translate-y-[-50%] animate-burger-top rounded-full bg-white"></div>

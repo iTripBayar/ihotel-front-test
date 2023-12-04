@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useAppCtx } from '@/contexts/app';
 
 type iProps = {
   ver: string;
@@ -10,9 +11,10 @@ const BottomSection = ({ ver }: iProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const lang = searchParams.get('lang');
-  const map = searchParams.get('map');
+  // const map = searchParams.get('map');
   const btnRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const {appState, dispatch} = useAppCtx()
 
   const createQueryString = 
     (name: string, value: string | null) => {
@@ -46,7 +48,7 @@ const BottomSection = ({ ver }: iProps) => {
       className={` fixed  z-[899] flex animate-fade  items-stretch gap-[16px] text-white  ${
         ver === 'search'
           ? `bottom-[24px] right-[0%] w-full flex-row justify-between px-[16px] sm:px-[42px] sm:pl-[39px] md:px-[32px] lg:bottom-[12px] ${
-              map !== '' ? 'lg:right-[50px]' : ' lg:right-[24px]'
+              appState.map !== '' ? 'lg:right-[50px]' : ' lg:right-[24px]'
             } lg:w-auto lg:px-0`
           : ver === 'fixed'
           ? 'bottom-[4%] right-[3.4%] flex-col'
@@ -54,14 +56,18 @@ const BottomSection = ({ ver }: iProps) => {
       }  `}
     >
       {/* map */}
-      {ver === 'search' && !map ? (
+      {ver === 'search' && appState.map === '' ? (
         <div
           className={`relative flex h-[40px] animate-fade items-center  justify-center gap-[10px] self-end rounded-full border-2 border-white bg-primary-blue px-[8px] text-white duration-700 lg:hidden lg:h-[45px] ${
             delay == true ? 'w-[40px] lg:w-[45px] ' : 'w-[171px]'
           }`}
           onClick={() => {
-            let nextMap = map !== 'open' ? 'open' : null;
-            router.replace(`/search/?${createQueryString('map', nextMap)}`);
+            // let nextMap = map !== 'open' ? 'open' : null;
+            // router.replace(`/search/?${createQueryString('map', nextMap)}`);
+            dispatch({
+              type: 'CHANGE_APP_STATE',
+              payload: { map: 'open' },
+            });
           }}
         >
           <svg
@@ -95,9 +101,9 @@ const BottomSection = ({ ver }: iProps) => {
       {/* right section*/}
       <div
         className={`flex flex-col gap-[16px] ${
-          ver === 'search' && map === ''
+          ver === 'search' && appState.map === ''
             ? 'lg:items-end'
-            : ver === 'search' && map === 'open'
+            : ver === 'search' && appState.map === 'open'
             ? 'hidden '
             : ''
         }`}
@@ -120,9 +126,6 @@ const BottomSection = ({ ver }: iProps) => {
               lang === 'en'
                 ? '/images/mongolian-flag.png'
                 : '/images/uk-flag.png'
-              // state.language === 'mn'
-              //   ? '/images/uk-flag.png'
-              //   : '/images/mongolian-flag.png'
             }
             alt="/lang"
             width={28}
@@ -134,8 +137,14 @@ const BottomSection = ({ ver }: iProps) => {
           />
         </div>
         {/* map with arrow when closed */}
-        {ver === 'search' && map === '' ? (
-          <div className="hidden h-[40px] min-w-[40px] items-center justify-center gap-[4px] rounded-full border-2 border-white bg-primary-blue px-[12px] lg:flex">
+        {ver === 'search' && appState.map === '' ? (
+          <div className="hidden h-[40px] min-w-[40px] items-center justify-center gap-[4px] rounded-full border-2 border-white bg-primary-blue px-[12px] lg:flex"
+          onClick={()=>{
+            dispatch({
+              type: 'CHANGE_APP_STATE',
+              payload: { map: 'open' },
+            });
+          }}>
             {/* arrow */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +175,7 @@ const BottomSection = ({ ver }: iProps) => {
           </div>
         ) : null}
         {/* scrollToTop btn */}
-        {map !== 'open' ? (
+        {appState.map !== 'open' ? (
           <div
             className={`relative flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue ${
               ver === 'search' ? 'lg:hidden' : ''

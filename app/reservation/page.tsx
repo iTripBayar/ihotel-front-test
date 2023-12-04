@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import HeaderVariants from '@/components/common/headerVariants';
 import CalendarDialog from '@/components/hotelPage/dialogs/calendarDialog';
 import AdditionalRequest from '@/components/reservationPage/additionalRequest';
@@ -11,37 +12,42 @@ import { fetchDataHotel } from '@/utils';
 import { useRequest } from 'ahooks';
 import Footer from '@/components/common/footer';
 import BurgerMenu from '@/components/common/burgermenu';
+import { useSearchParams } from 'next/navigation';
+import { useAppCtx } from '@/contexts/app';
+import LogOrSign from '@/components/common/logOrSign';
 
+const ReservationPage = () => {
+  const searchParams = useSearchParams();
+  const name = searchParams.get('name');
+  const slug = searchParams.get('slug');
+  const lang = searchParams.get('lang');
+  const calendar = searchParams.get('calendar');
+  const {appState, dispatch}=useAppCtx()
 
-const ReservationPage = ({
-  searchParams,
-}: {
-  searchParams: { name: string; slug: string; lang: string, calendar: string };
-}) => {
-const { data } = useRequest(() => {
-  return fetchDataHotel(searchParams.slug);
-});
+  const { data } = useRequest(() => {
+    if (slug) return fetchDataHotel(slug);
+    return fetchDataHotel('');
+  });
 
-let stat = '';
-if (data?.hotel.isOnline == 1 && data?.hotel.isOffline == 0) {
-  stat = 'online';
-} else if (data?.hotel.isOnline == 0 && data?.hotel.isOffline == 0) {
-  stat = 'pending';
-} else if (
-  data?.hotel.isOnline == 0 &&
-  data?.hotel.isOffline == 1 &&
-  data?.hotel.phone != null
-) {
-  stat = 'offline';
-} else if (
-  data?.hotel.isOnline == 0 &&
-  data?.hotel.isOffline == 1 &&
-  data?.hotel.phone == null
-) {
-  stat = 'data';
-}
+  let stat = '';
+  if (data?.hotel.isOnline == 1 && data?.hotel.isOffline == 0) {
+    stat = 'online';
+  } else if (data?.hotel.isOnline == 0 && data?.hotel.isOffline == 0) {
+    stat = 'pending';
+  } else if (
+    data?.hotel.isOnline == 0 &&
+    data?.hotel.isOffline == 1 &&
+    data?.hotel.phone != null
+  ) {
+    stat = 'offline';
+  } else if (
+    data?.hotel.isOnline == 0 &&
+    data?.hotel.isOffline == 1 &&
+    data?.hotel.phone == null
+  ) {
+    stat = 'data';
+  }
 
-console.log(data)
   return (
     <div>
       <HeaderVariants
@@ -49,12 +55,12 @@ console.log(data)
         hotelData={[]}
         placesData={[]}
         campsData={[]}
-        destData={[]}
+        cityData={[]}
       />
-      <BurgerMenu phone={data ? data.phoneNumber : ''} ver={'normal'} />
-
+      {appState.logOrSign !== '' ? <LogOrSign /> : ''}
+      {appState.menu === 'open' ? <BurgerMenu /> : null}
       <div className="fixed bottom-0 z-[800] w-full sm:px-[50px] md:px-[72px] lg:hidden ">
-        {searchParams.calendar && searchParams.calendar === 'open' ? (
+        {calendar && calendar === 'open' ? (
           <CalendarDialog ver={'mobile'} />
         ) : (
           <BottomDialog stat={stat} />
@@ -81,7 +87,7 @@ console.log(data)
           <CancelTerm />
           <AdditionalRequest />
           <div className="w-full rounded-[8px] border border-primary-blue/50 px-[20px] py-[12px] text-[12px] font-medium leading-[20px] text-primary-blue 2xs:text-[14px] lg:hidden">
-            {searchParams.lang === 'en'
+            {lang === 'en'
               ? 'We will contact you shortly after confirming your order request.'
               : 'Бид захиалах хүсэлт хүлээн авсны дараа таны захиалгыг шалгаад эргээд тантай холбогдох болно.'}
           </div>
@@ -97,11 +103,7 @@ console.log(data)
                 fill="#3C76FE"
               />
             </svg>
-            <>
-              {searchParams.lang === 'en'
-                ? 'Go back'
-                : 'Өмнөх хуудас руу буцах'}
-            </>
+            <>{lang === 'en' ? 'Go back' : 'Өмнөх хуудас руу буцах'}</>
           </div>
         </div>
         <div className="relative hidden h-full w-full lg:col-span-2 lg:flex">

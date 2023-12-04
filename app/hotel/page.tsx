@@ -1,4 +1,5 @@
 'use client';
+
 import HeaderVariants from '@/components/common/headerVariants';
 import HotelImages from '@/components/hotelPage/hotelImages';
 import { useRequest } from 'ahooks';
@@ -15,27 +16,29 @@ import BurgerMenu from '@/components/common/burgermenu';
 import Description from '@/components/hotelPage/description';
 import HotelCard from '@/components/common/hotelCard';
 import Footer from '@/components/common/footer';
-import OrderDialog from '@/components/hotelPage/dialogs/orderDialog';
-import RoomSelection from '@/components/hotelPage/dialogs/roomSelection';
 import Dialogs from '@/components/hotelPage/dialogs';
 import CalendarDialog from '@/components/hotelPage/dialogs/calendarDialog';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import LogOrSign from '@/components/common/logOrSign';
+import { useAppCtx } from '@/contexts/app';
 
+const HotelPage = () => {
+  const searchParams = useSearchParams();
+  const slug = searchParams.get('slug');
+  const calendar = searchParams.get('calendar');
+  const lang = searchParams.get('lang');
+  const dateFrom = searchParams.get('dateFrom');
+  const dateTo = searchParams.get('dateTo');
+  const days = searchParams.get('days');
+  const cart = searchParams.get('cart');
+  const {appState, dispatch} = useAppCtx()
 
-const HotelPage = ({
-  searchParams,
-}: {
-  searchParams: { slug: string; lang: string; calendar: string, dateFrom: string, dateTo: string; days: string, cart: string[] };
-}) => {
   const { data } = useRequest(() => {
-    return fetchDataHotel(searchParams.slug);
+    if (slug) return fetchDataHotel(slug);
+    return fetchDataHotel('');
   });
-  // const res = await fetch(
-  //   `https://sandbox.api.myhotel.mn:9443/ihotel/hotel/${searchParams.slug}`,
-  //   { cache: 'no-store' },
-  //   // {next: {revalidate: 10}}
-  // );
-  // const data = await res.json();
+
   let stat = '';
   if (data?.hotel.isOnline == 1 && data?.hotel.isOffline == 0) {
     stat = 'online';
@@ -72,19 +75,20 @@ const HotelPage = ({
         hotelData={[]}
         placesData={[]}
         campsData={[]}
-        destData={[]}
+        cityData={[]}
       />
-      {searchParams.calendar === 'open' ? (
+      {calendar === 'open' ? (
         <div className="fixed left-[50%] top-[60px] z-[900] hidden h-[425px] translate-x-[-50%] lg:flex lg:w-[60vw] xl:w-[50vw]">
           <CalendarDialog ver={'web'} />
         </div>
       ) : null}
-      <BurgerMenu phone={data ? data.phoneNumber : ''} ver={'search'} />
+      {appState.logOrSign !== '' ? <LogOrSign /> : ''}
+      {appState.menu === 'open' ? <BurgerMenu /> : null}
       <Dialogs
         roomPrices={roomPrices}
         stat={stat}
         allRooms={data?.rooms ? data?.rooms : []}
-        slug={searchParams.slug}
+        slug={slug ? slug : ''}
       />
       <div className="flex flex-col gap-[24px] overflow-x-hidden px-[16px] pb-[32px] pt-[80px] sm:px-[50px] md:px-[72px] lg:gap-[48px] lg:px-[60px]  xl:px-[100px] 2xl:px-[150px]">
         <div className="grid grid-cols-1 gap-[24px] lg:grid-cols-5 lg:gap-[20px]">
@@ -165,7 +169,7 @@ const HotelPage = ({
                       : 'bg-main-offline px-[16px]'
                   }`}
                 >
-                  {searchParams.lang === 'en' ? (
+                  {lang === 'en' ? (
                     <p>
                       {stat === 'online'
                         ? 'Instant confirmation'
@@ -196,34 +200,36 @@ const HotelPage = ({
               ) : null}
               <div className="text-main-textflex flex items-center justify-between rounded-[16px] bg-black/[.07] px-[20px] py-[10px] text-[20px]">
                 <p>
-                  {roomPrices && roomPrices[0] ? roomPrices[0].toLocaleString() : `200,000`}{' '}
-                  {searchParams.lang === 'en' ? '$' : '₮'}{' '}
+                  {roomPrices && roomPrices[0]
+                    ? roomPrices[0].toLocaleString()
+                    : `200,000`}{' '}
+                  {lang === 'en' ? '$' : '₮'}{' '}
                   <span className="text-[14px]">
                     {' '}
-                    / {searchParams.lang === 'en' ? 'days' : 'хоног'}
+                    / {lang === 'en' ? 'days' : 'хоног'}
                   </span>
                 </p>
-                
+
                 <Link
                   href={{
                     query: {
-                      slug: searchParams.slug,
-                      dateFrom: searchParams.dateFrom,
-                      dateTo: searchParams.dateTo,
-                      days: searchParams.days,
-                      cart: searchParams.cart,
+                      slug: slug,
+                      dateFrom: dateFrom,
+                      dateTo: dateTo,
+                      days: days,
+                      cart: cart,
                     },
                     pathname: '/reservation',
                   }}
                   className="flex items-center justify-center rounded-[16px] bg-main-online px-[16px] py-[6px] font-medium text-white"
                 >
-                  {searchParams.lang === 'en' ? 'Order' : 'Захиалах'}
+                  {lang === 'en' ? 'Order' : 'Захиалах'}
                 </Link>
               </div>
             </div>
             {/* map & orderCount */}
             <div className="flex flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] lg:border-none lg:pt-0">
-              <HotelMap lat={47.91823102891307} lng={106.92059918835042} />
+              <HotelMap lat={data?.hotel.location.lat ? data?.hotel.location.lat : 47.91823102891307} lng={data?.hotel.location.lng ? data?.hotel.location.lng :106.92059918835042} />
               <OrderCount count={783} />
             </div>
           </div>
@@ -240,17 +246,12 @@ const HotelPage = ({
         {/* recommended places */}
         <div className="flex w-full flex-col gap-[24px] border-t-[1px] border-black/[.15] pt-[24px] lg:gap-[32px] lg:pt-[32px]">
           <p className="text-[20px] font-medium leading-[20px] text-main-text">
-            {searchParams.lang === 'en' ? 'Recommended' : 'Санал болгох'}
+            {lang === 'en' ? 'Recommended' : 'Санал болгох'}
           </p>
           <div className="grid w-full grid-cols-1 gap-[24px] sm:grid-cols-2 lg:grid-cols-3 lg:gap-[32px]">
             {data?.offerHotels &&
               data?.offerHotels.map((index, i) => (
-                <HotelCard
-                  data={index}
-                  key={i}
-                  fromMap={false}
-                  dollarRate={null}
-                />
+                <HotelCard data={index} key={i} fromMap={false} />
               ))}
           </div>
         </div>

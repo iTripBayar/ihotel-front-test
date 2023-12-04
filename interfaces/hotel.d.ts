@@ -73,8 +73,8 @@ declare namespace HotelData {
     isTest: boolean;
     isTop: number;
     isVatpayer: boolean;
-    lat: string | null;
-    lng: string | null;
+    lat: string;
+    lng: string;
     location: string[];
     maxTime: number;
     name: string;
@@ -96,7 +96,7 @@ declare namespace HotelData {
     resPhone: string;
     reservations: [];
     roomNumber: number;
-    roomTypes: any[];
+    roomTypes: RoomTypes[];
     rooms: any[];
     services: any[];
     shortAddress: string | null;
@@ -111,5 +111,50 @@ declare namespace HotelData {
     workingDate: string;
     wubookLcode: string | null;
     zipCode: string | null;
+  }
+  interface RoomTypes {
+    bedNumber: number;
+    bedTypeId: number | null;
+    byPerson: boolean;
+    createdAt: string;
+    days: number | null;
+    defaultPrice: number;
+    description: string | null;
+    discountPercent: number | null;
+    endDate: string | null;
+    extraBeds: null;
+    floorSize: number | null;
+    groupCode: number | null;
+    hasExtraBed: boolean;
+    hasTime: boolean;
+    hotelId: number;
+    id: number;
+    images: string[];
+    introductionEn: string | null;
+    isOnline: boolean;
+    isPriority: number;
+    isResRequest: boolean;
+    name: string;
+    nameEn: string | null;
+    number: number;
+    occupancy: number;
+    occupancyChildren: number;
+    peopleNumber: number;
+    photos: string;
+    priceDayUse: number;
+    priceOp: number | null;
+    priceTime: number;
+    priceTimeCount: number;
+    saleQuantity: number | null;
+    sales: [];
+    shortName: string;
+    size: number;
+    startDate: string | null;
+    syncId: number | null;
+    totalPeople: number | null;
+    translate: string | null;
+    updatedAt: string;
+    updatedAtIsPriority: number | null;
+    window: number;
   }
 }

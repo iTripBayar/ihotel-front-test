@@ -1,4 +1,3 @@
-'use client';
 import SearchBox from './searchBox';
 import OnlineToggle from './onlineToggle';
 import Link from 'next/link';
@@ -7,10 +6,10 @@ import { useCallback, useState } from 'react';
 import { addDays, format } from 'date-fns';
 
 interface iProps {
-  hotelData: any[];
-  placesData: any[];
-  campsData: any[];
-  destData: any[];
+  hotelData: HotelData.Hotel[];
+  placesData: SearchData.Places[];
+  campsData: HotelData.Hotel[];
+  cityData: SearchData.Cities[];
   ver: string;
 }
 
@@ -18,7 +17,7 @@ const SearchSection = ({
   hotelData,
   placesData,
   campsData,
-  destData,
+  cityData,
   ver,
 }: iProps) => {
   const searchParams = useSearchParams();
@@ -29,130 +28,87 @@ const SearchSection = ({
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
 
-  const [toggle, setToggle]= useState(false);
+  const [toggle, setToggle] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-
 
   const changeToggle = useCallback(() => {
     setToggle(!toggle);
-    console.log(toggle);
   }, [toggle]);
   const changeSearchValue = useCallback(
     (e: string) => {
       setSearchValue(e);
-      console.log(e);
     },
     [searchValue],
   );
 
-  const createQueryString = useCallback(
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value !== null) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      return params.toString();
-    },
-    [searchParams],
-  );
-  const multipleCreateQueryString = 
-    (
-      name: string | null,
-      value: string | null,
-      name1: string | null,
-      value1: string | null,
-      name2: string | null,
-      value2: string | null,
-      name3: string | null,
-      value3: string | null,
-    ) => {
-      const params = new URLSearchParams(searchParams);
-      if (value !== null && name !== null) {
-        params.set(name, value);
-      } else if(value !== null && name) {
-        params.delete(name);
-      }
-       if (value1 !== null && name1 !== null) {
-         params.set(name1, value1);
-       } else if (value1 !== null && name1) {
-         params.delete(name1);
-       }
-        if (value2 !== null && name2 !== null) {
-          params.set(name2, value2);
-        } else if (value2 !== null && name2) {
-          params.delete(name2);
-        }
-         if (value3 !== null && name3 !== null) {
-           params.set(name3, value3);
-         } else if (value3 !== null && name3) {
-           params.delete(name3);
-         }
-      return params.toString();
-    };
-  // const multipleCreateQueryString = useCallback(
-  //   (
-  //     name: string | null,
-  //     value: string | null,
-  //     name1: string | null,
-  //     value1: string | null,
-  //     name2: string | null,
-  //     value2: string | null,
-  //     name3: string | null,
-  //     value3: string | null,
-  //   ) => {
-  //     const params = new URLSearchParams(searchParams);
-  //     if (value !== null && name !== null) {
-  //       params.set(name, value);
-  //     } else if (value !== null && name) {
-  //       params.delete(name);
-  //     }
-  //     if (value1 !== null && name1 !== null) {
-  //       params.set(name1, value1);
-  //     } else if (value1 !== null && name1) {
-  //       params.delete(name1);
-  //     }
-  //     if (value2 !== null && name2 !== null) {
-  //       params.set(name2, value2);
-  //     } else if (value2 !== null && name2) {
-  //       params.delete(name2);
-  //     }
-  //     if (value3 !== null && name3 !== null) {
-  //       params.set(name3, value3);
-  //     } else if (value3 !== null && name3) {
-  //       params.delete(name3);
-  //     }
-  //     return params.toString();
-  //   },
-  //   [searchParams],
-  // );
-  
+  const createQueryString = (name: string, value: string | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (value !== null) {
+      params.set(name, value);
+    } else {
+      params.delete(name);
+    }
+    return params.toString();
+  };
+  const multipleCreateQueryString = (
+    name: string | null,
+    value: string | null,
+    name1: string | null,
+    value1: string | null,
+    name2: string | null,
+    value2: string | null,
+    name3: string | null,
+    value3: string | null,
+  ) => {
+    const params = new URLSearchParams(searchParams);
+    if (value !== null && name !== null) {
+      params.set(name, value);
+    } else if (value !== null && name) {
+      params.delete(name);
+    }
+    if (value1 !== null && name1 !== null) {
+      params.set(name1, value1);
+    } else if (value1 !== null && name1) {
+      params.delete(name1);
+    }
+    if (value2 !== null && name2 !== null) {
+      params.set(name2, value2);
+    } else if (value2 !== null && name2) {
+      params.delete(name2);
+    }
+    if (value3 !== null && name3 !== null) {
+      params.set(name3, value3);
+    } else if (value3 !== null && name3) {
+      params.delete(name3);
+    }
+    return params.toString();
+  };
+
   let newDate = new Date();
   let nextDay = addDays(newDate, 1);
   let formattedDate = {
-     from: {
-       year: !dateFrom
-         ? `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`
-         : dateFrom.split('|')[0].split('/')[2],
-       month: !dateFrom
-         ? `${format(newDate, 'yyyy-MM-dd').split('-')[1]}`
-         : dateFrom.split('|')[0].split('/')[0],
-       date: !dateFrom
-         ? `${format(newDate, 'yyyy-MM-dd').split('-')[2]}`
-         : dateFrom.split('|')[0].split('/')[1],
-     },
-     to: {
-       year: !dateTo
-         ? `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`
-         : dateTo.split('|')[0].split('/')[2],
-       month: !dateTo
-         ? `${format(nextDay, 'yyyy-MM-dd').split('-')[1]}`
-         : dateTo.split('|')[0].split('/')[0],
-       date: !dateTo
-         ? `${format(nextDay, 'yyyy-MM-dd').split('-')[2]}`
-         : dateTo.split('|')[0].split('/')[1],
-     },
+    from: {
+      year: !dateFrom
+        ? `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`
+        : dateFrom.split('|')[0].split('/')[2],
+      month: !dateFrom
+        ? `${format(newDate, 'yyyy-MM-dd').split('-')[1]}`
+        : dateFrom.split('|')[0].split('/')[0],
+      date: !dateFrom
+        ? `${format(newDate, 'yyyy-MM-dd').split('-')[2]}`
+        : dateFrom.split('|')[0].split('/')[1],
+    },
+    to: {
+      year: !dateTo
+        ? `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`
+        : dateTo.split('|')[0].split('/')[2],
+      month: !dateTo
+        ? `${format(nextDay, 'yyyy-MM-dd').split('-')[1]}`
+        : dateTo.split('|')[0].split('/')[0],
+      date: !dateTo
+        ? `${format(nextDay, 'yyyy-MM-dd').split('-')[2]}`
+        : dateTo.split('|')[0].split('/')[1],
+    },
   };
 
   return (
@@ -187,7 +143,7 @@ const SearchSection = ({
             hotelData={hotelData}
             placesData={placesData}
             campsData={campsData}
-            destData={destData}
+            cityData={cityData}
             ver={ver}
             changeSearchValue={changeSearchValue}
             value={searchValue}
@@ -233,7 +189,7 @@ const SearchSection = ({
               hotelData={hotelData}
               placesData={placesData}
               campsData={campsData}
-              destData={destData}
+              cityData={cityData}
               ver={ver}
               changeSearchValue={changeSearchValue}
               value={searchValue}

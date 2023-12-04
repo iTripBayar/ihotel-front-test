@@ -1,6 +1,6 @@
 import ReactMapGL, { Marker } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 interface Props {
   lat: number;
   lng: number;
@@ -8,17 +8,28 @@ interface Props {
 
 const HotelMap = ({ lat, lng }: Props) => {
   const [viewPort, setViewPort] = useState({
-    lng: 106.91744615540313,
-    lat: 47.91768064540636,
+    lng: lng,
+    lat: lat,
     zoom: 13,
   });
+  const mapRef = useRef<any>();
+setTimeout(() => {
+  mapRef?.current?.flyTo({
+    center: [lng, lat],
+    zoom: 13,
+    duration: 1000,
+    speed: 0.5,
+    curve: 2,
+  });
+}, 1000);
   return (
     <div className="h-[225px] w-full sm:h-[300px] lg:h-[225px]">
       <ReactMapGL
+        ref={mapRef}
         mapboxAccessToken="pk.eyJ1IjoiaWhvdGVsLWRldiIsImEiOiJjbG53eG4xM2cwOGdqMnFwZWZodmxyYWgwIn0.NKP_FGb_Ad26fu4wSqnJ7Q"
         initialViewState={{
-          longitude: viewPort.lng,
-          latitude: viewPort.lat,
+          longitude: lng,
+          latitude: lat,
           zoom: viewPort.zoom,
         }}
         style={{
@@ -30,13 +41,6 @@ const HotelMap = ({ lat, lng }: Props) => {
         }}
         id="mapBox"
         mapStyle="mapbox://styles/ihotel-dev/clnwysb8a005b01qx38a9hgh0"
-        onMove={(e) => {
-          setViewPort({
-            lng: e.viewState.longitude,
-            lat: e.viewState.latitude,
-            zoom: e.viewState.zoom,
-          });
-        }}
       >
         <Marker
           key={'hotel'}

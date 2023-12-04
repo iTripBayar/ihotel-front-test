@@ -1,15 +1,15 @@
-'use client';
 import Image from 'next/image';
 import SearchSection from './searchSection';
 import Link from 'next/link';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
   ver: string;
-  hotelData: any[];
-  placesData: any[];
-  campsData: any[];
-  destData: any[];
+  hotelData: HotelData.Hotel[];
+  placesData: SearchData.Places[];
+  campsData: HotelData.Hotel[];
+  cityData: SearchData.Cities[];
 }
 
 const HeaderVariants = ({
@@ -17,23 +17,23 @@ const HeaderVariants = ({
   hotelData,
   placesData,
   campsData,
-  destData,
+  cityData,
 }: iProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const menu = searchParams.get('menu');
+  const {appState, dispatch} = useAppCtx()
 
-  const createQueryString = 
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value !== null) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-      return params.toString();
-    };
+  const createQueryString = (name: string, value: string | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (value !== null) {
+      params.set(name, value);
+    } else {
+      params.delete(name);
+    }
+    return params.toString();
+  };
 
   return (
     <header
@@ -82,7 +82,7 @@ const HeaderVariants = ({
           priority
           quality={100}
           sizes="20vw"
-          className="absolute max-w-[114px] cursor-pointer object-cover"
+          className="absolute max-h-[32.42px] max-w-[114px] cursor-pointer object-cover"
         />
       </Link>
       <div
@@ -94,10 +94,11 @@ const HeaderVariants = ({
           hotelData={hotelData}
           placesData={placesData}
           campsData={campsData}
-          destData={destData}
+          cityData={cityData}
           ver={ver}
         />
       </div>
+      
       <div className="flex items-center justify-end">
         {/* lang btn for reservationPage */}
         {ver === 'reservation' ? (
@@ -106,9 +107,9 @@ const HeaderVariants = ({
         {/* burger menu (animated) */}
         <div
           onClick={() => {
-            const nextMenu = menu !== 'open' ? 'open' : null;
-            router.replace(`${pathname}?${createQueryString('menu', nextMenu)}`, {
-              scroll: false,
+            dispatch({
+              type: 'CHANGE_APP_STATE',
+              payload: {menu: 'open'},
             });
           }}
           className="relative flex h-[16px] w-[24px] flex-col items-center "

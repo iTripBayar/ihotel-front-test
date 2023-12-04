@@ -194,9 +194,11 @@ const config: Config = {
         'slide-right': {
           '0%': {
             transform: 'translateX(0)',
+            opacity: '100%',
           },
           to: {
-            transform: 'translateX(200px)',
+            transform: 'translateX(240px)',
+            opacity: '0%',
           },
         },
         'slide-bottom': {

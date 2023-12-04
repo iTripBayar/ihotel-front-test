@@ -12,20 +12,22 @@ import useSupercluster from 'use-supercluster';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import HotelCard from '../hotelCard';
 import useWindowSize from '@/hooks/windowSize';
+import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
-  hotelData: any[];
-  campsData: any[];
-  dollarRate: string
+  data: HotelData.Hotel[]
+  lat: number  | undefined
+  lng: number | undefined
 }
 
-const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
+const MapContainer = ({ data, lat, lng }: iProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const router = useRouter();
-  const map = searchParams.get('map');
+  // const map = searchParams.get('map');
   const size = useWindowSize();
+  const {appState, dispatch} = useAppCtx()
 
   const createQueryString =
     (name: string, value: string | null) => {
@@ -39,18 +41,19 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
     };
   useEffect(() => {
     if (size.width && size.width >= 1024) {
-      // setMap('open');
-      let nextMap = 'open';
-
-      router.replace(`/search/?${createQueryString('map', nextMap)}`, {
-        scroll: false,
+      dispatch({
+        type: 'CHANGE_APP_STATE',
+        payload: { map: 'open' },
       });
     } else {
-      router.replace(`/search/?${createQueryString('map', null)}`, {
-        scroll: false,
+      dispatch({
+        type: 'CHANGE_APP_STATE',
+        payload: { map: '' },
       });
     }
     return;
+    
+            
   }, [size.width]);
 
   const divRef = useRef<HTMLDivElement>(null);
@@ -128,15 +131,15 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
     },
   ];
 
-  const cardData = [...hotelData, ...campsData].filter(
+  const cardData = [...data].filter(
     (index) =>
-      index.location.lat === selectedHotel.lat &&
-      index.location.lng === selectedHotel.lng,
+      index.lat === selectedHotel.lat &&
+      index.lng === selectedHotel.lng,
   );
 
   const [viewPort, setViewPort] = useState({
-    lng: 106.91744615540313,
-    lat: 47.91768064540636,
+    lng: lng ? lng : 106.91744615540313,
+    lat: lat ? lat : 47.91768064540636,
     zoom: 12,
   });
   const mapRef = useRef<any>();
@@ -144,7 +147,7 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
   const samplePrice = 70000;
 
   const points =
-    hotelData.length === 0 && campsData.length === 0
+    data.length === 0
       ? defaultMarkers.map((data) => ({
           type: 'Sample',
           properties: { cluster: false, pointId: data.key, price: data.price },
@@ -154,28 +157,16 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
           },
         }))
       : [
-          ...hotelData.map((data) => ({
+          ...data.map((data) => ({
             type: 'Feature',
             properties: {
               cluster: false,
               pointId: data.id,
-              price: data.includedPrice,
+              price: data.roomTypes.sort((a, b)=> b.priceDayUse - a.priceDayUse)[0].priceDayUse,
             },
             geometry: {
               type: 'Point',
-              coordinates: [data.location.lng, data.location.lat],
-            },
-          })),
-          ...campsData.map((data) => ({
-            type: 'Feature',
-            properties: {
-              cluster: false,
-              pointId: data.id,
-              price: data.includedPrice,
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: [data.location.lng, data.location.lat],
+              coordinates: [data.lng, data.lat],
             },
           })),
         ];
@@ -192,8 +183,8 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
 
   return (
     <div
-      className={`sticky h-screen w-full flex-col items-center justify-start gap-[24px] bg-white px-[16px] pb-[24px]  sm:px-[42px] md:px-[72px] lg:h-[calc(100vh-60px)] lg:px-0 lg:pb-[24px]  lg:pt-[16px] ${
-        map || map !== '' ? 'flex lg:col-span-2' : ' hidden '
+      className={`sticky h-[calc(100vh-260px)] w-full flex-col items-center justify-start gap-[24px] bg-white px-[16px] pb-[24px]  sm:px-[42px] md:px-[72px] lg:h-[calc(100vh-60px)] lg:px-0 lg:pb-[24px]  lg:pt-[16px] ${
+        appState.map !== '' ? 'flex lg:col-span-2' : ' hidden '
       }`}
       ref={divRef}
     >
@@ -207,7 +198,7 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
         ref={mapRef}
         style={{
           width: '100%',
-          height: '100vh',
+          height: '100%',
           borderRadius: 20,
           border: 'solid 1px rgb(0,0,0,0.25)',
         }}
@@ -315,7 +306,7 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
                 {`${
                   cluster.properties.price >= 0 &&
                   cluster.properties.price !== null
-                    ? cluster.properties.price
+                    ? cluster.properties.price.toLocaleString()
                     : samplePrice.toLocaleString()
                 }${
                   // state.language === 'mn' ? '₮' : '$'
@@ -329,8 +320,8 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
         {cardData.length > 0 ? (
           <Marker
             key={cardData[0].id}
-            latitude={cardData[0].location.lat}
-            longitude={cardData[0].location.lng}
+            latitude={parseInt(cardData[0].lat)}
+            longitude={parseInt(cardData[0].lng)}
             style={{
               zIndex: 998,
               position: 'absolute',
@@ -360,11 +351,7 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
               </svg>
             </div>
 
-            <HotelCard
-              data={cardData[0]}
-              fromMap={true}
-              dollarRate={dollarRate}
-            />
+            <HotelCard data={cardData[0]} fromMap={true} />
           </Marker>
         ) : null}
         <FullscreenControl />
@@ -375,8 +362,12 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
         <div
           className="flex h-[40px] max-w-[220px] cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue px-[16px] font-medium text-white"
           onClick={() => {
-            router.replace(`${pathname}?${createQueryString('map', null)}`, {
-              scroll: false,
+            // router.replace(`${pathname}?${createQueryString('map', null)}`, {
+            //   scroll: false,
+            // });
+            dispatch({
+              type: 'CHANGE_APP_STATE',
+              payload: { map: '' },
             });
           }}
         >
@@ -397,7 +388,7 @@ const MapContainer = ({ hotelData, campsData, dollarRate }: iProps) => {
             />
           </svg>
         </div>
-        {map === 'open' ? (
+        {appState.map === 'open' ? (
           <div
             onClick={() => {
               let nextLang = lang === 'en' ? 'mn' : 'en';

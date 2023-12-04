@@ -6,13 +6,11 @@ import { useSearchParams } from 'next/navigation';
 interface iProps {
   title: string;
   data: HotelData.Hotel[];
-  dollarRate: string | null;
 }
 
 const CardsContainer = ({
   title,
   data,
-  dollarRate
 }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
@@ -68,7 +66,6 @@ const CardsContainer = ({
               data={data}
               key={i}
               fromMap={false}
-              dollarRate={dollarRate}
             />
           ))}
         </div>

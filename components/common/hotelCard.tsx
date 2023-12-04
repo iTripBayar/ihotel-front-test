@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useAppCtx } from '@/contexts/app';
 
 type iProps = {
-  data: any;
+  data: HotelData.Hotel;
   fromMap: boolean;
-  dollarRate: string | null
 };
 
-const HotelCard = ({ data, fromMap, dollarRate }: iProps) => {
+const HotelCard = ({ data, fromMap }: iProps) => {
   const [fav, setFav] = useState(false);
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const {appState} = useAppCtx()
 
   let stat = '';
   if (data.isOnline == 1 && data.isOffline == 0) {
@@ -25,17 +26,18 @@ const HotelCard = ({ data, fromMap, dollarRate }: iProps) => {
     stat = 'data';
   }
 
-  // const handleHotelSelect = (hotel: string) => {
-  //   // const newLanguage = state.language === 'mn' ? 'en' : 'mn';
-  //   dispatch({ type: 'SET_HOTEL', payload: hotel });
-  // };
-  // console.log(data?.images !== null ? data?.images[0] : 'no');
-  // console.log(data);
+
+  let displayPrice = []
+  for(let i = 0; i< data?.roomTypes?.length; i++){
+    displayPrice.push(data.roomTypes[i].priceDayUse)
+  }
+  displayPrice.sort((a, b)=>b - a)
+
   return (
     <Link
       href={{
         pathname: '/hotel',
-        query: { slug: data.slug }
+        query: { slug: data.slug },
       }}
       target="blank"
       className={`flex  flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] bg-white shadow-[0px_2px_12px_2px_rgb(0,0,0,0.20)] xl:gap-[20px] ${
@@ -67,7 +69,7 @@ const HotelCard = ({ data, fromMap, dollarRate }: iProps) => {
         {/* data?.images !== null ? data?.images[0] : 'no' */}
         <Image
           src={
-            data?.images !== null && data?.images !== ''
+            data?.coverPhoto !== null && data?.coverPhoto !== ''
               ? `https://sandbox.api.myhotel.mn:9443/${data?.coverPhoto}`
               : '/samples/camp.png'
           }
@@ -103,13 +105,7 @@ const HotelCard = ({ data, fromMap, dollarRate }: iProps) => {
             {lang === 'en' ? data.nameEn : data.name}
           </p>
           <p className="text-[12px] leading-[12px] text-sub-text/60 2xs:text-[14px] 2xs:leading-[14px]">
-            {lang === 'en'
-              ? data?.district?.international
-              : data?.district?.name}
-            ,&nbsp;
-            {lang === 'en'
-              ? data?.province?.name
-              : data?.province?.international}
+            {lang === 'en' ? data?.addressEn : data?.address}
           </p>
         </div>
         {/* review & stat */}
@@ -192,20 +188,20 @@ const HotelCard = ({ data, fromMap, dollarRate }: iProps) => {
                 {/* {lang === 'en' ? '$' : '₮'} */}
                 {lang === 'en'
                   ? `${
-                      dollarRate
+                      appState.dollarRate
                         ? `${
-                            data.includedPrice
+                            displayPrice.length > 0
                               ? (
-                                  data.includedPrice.slice(0, 10) /
-                                  parseInt(dollarRate)
+                                  displayPrice[0] /
+                                  parseInt(appState.dollarRate)
                                 ).toLocaleString()
-                              : 70000 / parseInt(dollarRate)
+                              : 70000 / parseInt(appState.dollarRate)
                           } $`
                         : `${(70000).toLocaleString()}`
                     } $`
                   : `${
-                      data.includedPrice
-                        ? data.includedPrice.slice(0, 10).toLocaleString()
+                      displayPrice.length > 0
+                        ? displayPrice[0].toLocaleString()
                         : (70000).toLocaleString()
                     }₮`}
                 <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
@@ -230,20 +226,21 @@ const HotelCard = ({ data, fromMap, dollarRate }: iProps) => {
 
               {lang === 'en'
                 ? `${
-                    dollarRate
+                    appState.dollarRate
                       ? `${
-                          data.includedPrice
+                          displayPrice.length > 0
                             ? (
-                                data.includedPrice.slice(0, 10) /
-                                parseInt(dollarRate)
+                                displayPrice[0] / parseInt(appState.dollarRate)
                               ).toLocaleString()
-                            : (70000 / parseInt(dollarRate)).toLocaleString()
+                            : (
+                                70000 / parseInt(appState.dollarRate)
+                              ).toLocaleString()
                         } $`
                       : `${(70000).toLocaleString()} $`
                   } `
                 : `${
-                    data.includedPrice
-                      ? data.includedPrice.slice(0, 10).toLocaleString()
+                    displayPrice.length > 0
+                      ? displayPrice[0].toLocaleString()
                       : (70000).toLocaleString()
                   }₮`}
 

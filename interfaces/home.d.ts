@@ -2,13 +2,13 @@ declare namespace HomeData {
   interface Home {
     camps: HotelData.Hotel[];
     cheapHotels: HotelData.Hotel[];
-    cities: [];
+    cities: SearchData.Cities[];
     destCategories: DestCategories[];
     dollarRate: string;
     events: [];
     hotels: HotelData.Hotel[];
     phoneNumber: string;
-    places: Places[];
+    places: SearchData.Places[];
     posts: Posts[];
     propertyTypes: PropertyTypes[];
     recommendedPlaces: [];
@@ -25,23 +25,7 @@ declare namespace HomeData {
     subtitle: string;
     urlSrc: string;
   }
-  interface Places {
-    coverPhoto: string | null;
-    createdAt: string;
-    description: string;
-    districtId: number;
-    id: number;
-    image: string | null;
-    isRecommended: number;
-    isSearch: number;
-    longitudeLatitude: string | null;
-    name: string;
-    nameEn: string;
-    placeKey: number;
-    slug: string;
-    thumbnail: string;
-    updatedAt: string;
-  }
+  
   interface Posts {
     excerpt: string;
     id: number;

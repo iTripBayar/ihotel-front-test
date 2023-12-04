@@ -40,12 +40,6 @@ const pastMonth = new Date(
     to: addDays(pastMonth, days !== null ? parseInt(days) : 1),
   };
 
-  if(dateFrom && dateTo){
-    console.log(dateFrom.split('|')[0], dateTo.split('|')[0])
-  }
-
-
-
   const [range, setRange] = useState<DateRange | undefined>(defaultSelected);
 const createQueryString =
   (name: string, value: string | null) => {
