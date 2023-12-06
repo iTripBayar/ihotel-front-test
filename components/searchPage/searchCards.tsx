@@ -10,11 +10,7 @@ interface iProps {
 const SearchCards = ({ data }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  // const map = searchParams.get('map');
-  const searchValue = searchParams.get('searchValue');
-  const toggle = searchParams.get('toggle');
-  const type = searchParams.get('type');
-  const { appState, dispatch } = useAppCtx();
+  const { appState } = useAppCtx();
 
   const totalLength = data.length;
   const divRef = useRef<HTMLDivElement>(null);
@@ -48,7 +44,6 @@ const SearchCards = ({ data }: iProps) => {
       {data.length > 8 ? (
         <div className="flex max-w-[171px] cursor-pointer items-center  justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
           <p className="flex gap-[4px]">
-            {/* {state.language === 'mn' ? 'Цааш үзэх' : 'More'} */}
             {lang === 'en' ? 'More' : 'Цааш үзэх'}
             <span>({totalLength - data.length}+)</span>
           </p>

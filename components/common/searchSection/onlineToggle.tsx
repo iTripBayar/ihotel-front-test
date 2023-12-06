@@ -15,7 +15,8 @@ const OnlineToggle = ({ ver, changeToggle, value }: iProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   return (
     <div
-      className={`relative flex w-full items-center justify-center overflow-hidden bg-white text-[12px] leading-[12px] text-main-text 2xs:text-[13px] 2xs:leading-[13px] sm:text-[14px] sm:leading-[14px] lg:text-[12px] lg:leading-[12px]  xl:text-[14px] xl:leading-[14px] ${
+      className={`relative flex w-full items-center justify-center overflow-hidden bg-white text-[12px] leading-[12px]
+       text-main-text 2xs:text-[13px] 2xs:leading-[13px] sm:text-[14px] sm:leading-[14px] lg:text-[12px] lg:leading-[12px]  xl:text-[14px] xl:leading-[14px] ${
         ver === 'normal'
           ? 'h-[46px] rounded-[8px] border border-black/[.25] lg:max-w-[280px] xl:max-w-[320px]'
           : ver === 'fixed'
@@ -65,7 +66,8 @@ const OnlineToggle = ({ ver, changeToggle, value }: iProps) => {
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="m12 0c-5.00156 0-9 3.99844-9 9 0 1.7297.51563 3.0656 1.41094 4.4203l6.64216 10.0781c.2016.3047.5485.5016.9469.5016s.75-.2016.9469-.5016l6.6422-10.0781c.8953-1.3547 1.4109-2.6906 1.4109-4.4203 0-5.00156-3.9984-9-9-9zm0 14.376c-2.76094 0-5.388-2.6197-5.388-5.38537 0-2.76563 2.62706-5.39063 5.388-5.39063 2.7609 0 5.388 2.625 5.388 5.39063 0 2.76567-2.6271 5.38537-5.388 5.38537z"
+              d="m12 0c-5.00156 0-9 3.99844-9 9 0 1.7297.51563 3.0656 1.41094 4.4203l6.64216 10.0781c.2016.3047.5485.5016.9469.5016s.75-.2016.9469-.5016l6.6422-10.0781c.8953-1.3547
+               1.4109-2.6906 1.4109-4.4203 0-5.00156-3.9984-9-9-9zm0 14.376c-2.76094 0-5.388-2.6197-5.388-5.38537 0-2.76563 2.62706-5.39063 5.388-5.39063 2.7609 0 5.388 2.625 5.388 5.39063 0 2.76567-2.6271 5.38537-5.388 5.38537z"
               fill="#0fbb50"
             />
             <path
@@ -85,17 +87,10 @@ const OnlineToggle = ({ ver, changeToggle, value }: iProps) => {
         {/* switch */}
         <Switch
           id="onlineToggle"
-          // checked={enabled}
-          // checked={toggle === 'true'}
           checked={value}
           onChange={() => {
             changeToggle();
-            // setEnabled(e)
           }}
-          // onChange={(e) => {
-          //   setEnabled(e);
-          //   document.getElementById('toggleLink')?.click();
-          // }}
           className={`${
             value === true ? 'bg-main-online' : ' bg-black/[.03]'
           } relative  inline-flex h-[24px] w-[40px] items-center rounded-full border border-black/10 2xs:w-[44px] lg:w-[40px] xl:w-[44px]`}

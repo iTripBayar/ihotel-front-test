@@ -74,8 +74,6 @@ const HotelCard = ({ data, fromMap }: iProps) => {
           }
           alt="/hotel"
           fill={true}
-          //   priority
-          quality={75}
           loading="lazy"
           sizes=" 60vw"
           placeholder="blur"

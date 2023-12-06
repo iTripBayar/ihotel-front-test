@@ -1,4 +1,3 @@
-'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, {
@@ -25,7 +24,6 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const router = useRouter();
-  // const map = searchParams.get('map');
   const size = useWindowSize();
   const { appState, dispatch } = useAppCtx();
 
@@ -209,10 +207,6 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
             zoom: e.viewState.zoom,
           });
         }}
-
-        // onViewportChange={(newViewport) => {
-        //   setViewport({ ...newViewport });
-        // }}
       >
         {clusters.map((cluster) => {
           // every cluster point has coordinates
@@ -244,10 +238,6 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
               >
                 <div
                   className="relative flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-primary-blue text-[14px] font-medium text-white ring-2 ring-white "
-                  // style={{
-                  //   width: `${10 + (pointCount / points.length) * 20}px`,
-                  //   height: `${10 + (pointCount / points.length) * 20}px`,
-                  // }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -271,8 +261,6 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
               </Marker>
             );
           }
-
-          // we have a single point (crime) to render
           return (
             <Marker
               key={`crime-${cluster.properties.pointId}`}
@@ -307,7 +295,6 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
                     ? cluster.properties.price.toLocaleString()
                     : samplePrice.toLocaleString()
                 }${
-                  // state.language === 'mn' ? '₮' : '$'
                   lang === 'en' ? '$' : '₮'
                 }`}
                 {}
@@ -360,16 +347,12 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
         <div
           className="flex h-[40px] max-w-[220px] cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue px-[16px] font-medium text-white"
           onClick={() => {
-            // router.replace(`${pathname}?${createQueryString('map', null)}`, {
-            //   scroll: false,
-            // });
             dispatch({
               type: 'CHANGE_APP_STATE',
               payload: { map: '' },
             });
           }}
         >
-          {/* {state.language === 'mn' ? 'Газрын зураг хаах' : 'Close map'} */}
           {lang === 'en' ? 'Close map' : 'Газрын зураг хаах'}
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -408,9 +391,7 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
               alt="/lang"
               width={28}
               height={28}
-              priority
-              quality={100}
-              sizes="20vw"
+              sizes="10vw"
               className="h-[30px] w-[30px] cursor-pointer object-cover"
             />
           </div>

@@ -8,7 +8,7 @@ import BurgerMenu from '@/components/common/burgermenu';
 import { useState, useRef, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import HeaderVariants from '@/components/common/headerVariants';
-import { fetchData, fetchDataSearch } from '@/utils';
+import { fetchData, fetchDataSearch, fetchUserData } from '@/utils';
 import SearchSection from '@/components/common/searchSection';
 import Header from '@/components/common/header';
 import BottomSection from '@/components/common/bottomSection';
@@ -26,6 +26,11 @@ const Home = () => {
   const searchData = useRequest(() => {
     return fetchDataSearch();
   });
+
+  // const userData = useRequest(()=>{
+  //   return fetchUserData();
+  // })
+  // console.log(userData)
 
   const { appState, dispatch } = useAppCtx();
 
@@ -65,6 +70,26 @@ const Home = () => {
       }
     };
   }, []);
+  useEffect(() => {
+    if (appState.logOrSign !== '') {
+      dispatch({
+        type: 'CHANGE_APP_STATE',
+        payload: { menu: '', filter: '' },
+      });
+    }
+    if (appState.menu !== '') {
+      dispatch({
+        type: 'CHANGE_APP_STATE',
+        payload: { logOrSign: '', filter: '' },
+      });
+    }
+    if (appState.filter !== '') {
+      dispatch({
+        type: 'CHANGE_APP_STATE',
+        payload: { logOrSign: '', menu: '' },
+      });
+    }
+  }, [appState]);
   return (
     <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
       <Header phone={data ? data.phoneNumber : ''} />

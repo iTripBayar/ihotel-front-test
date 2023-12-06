@@ -33,9 +33,8 @@ const HeroCategory = ({ data }: iProps) => {
               priority
               placeholder="blur"
               blurDataURL={`"_next/image/?url=${data.image}"`}
-              quality={75}
               sizes="25vw"
-              className="h-auto w-full object-cover duration-500 hover:scale-110"
+              className="h-auto w-full object-fit duration-500 hover:scale-110"
             />
           </div>
           <p className="lg:text-[16px]] text-center text-[11px] xs:text-[12px] sm:text-[13px] md:text-[14px] xl:text-[18px]">

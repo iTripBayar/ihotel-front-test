@@ -35,7 +35,7 @@ const HotelImages = ({ images, image, coverPhoto }: Props) => {
           }
           alt="/hotel"
           fill={true}
-          quality={100}
+          quality={90}
           loading="lazy"
           sizes="50vw"
           placeholder="blur"
@@ -55,8 +55,6 @@ const HotelImages = ({ images, image, coverPhoto }: Props) => {
                   src={`https://sandbox.api.myhotel.mn/image?path=${index}`}
                   alt="/hotel"
                   fill={true}
-                  //   priority
-                  quality={75}
                   loading="lazy"
                   sizes="50vw"
                   placeholder="blur"
@@ -75,7 +73,6 @@ const HotelImages = ({ images, image, coverPhoto }: Props) => {
                   src="/samples/camp.png"
                   alt="/hotel"
                   fill={true}
-                  quality={75}
                   loading="lazy"
                   sizes="50vw"
                   placeholder="blur"

@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import SearchSection from './searchSection';
 import Link from 'next/link';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
@@ -19,22 +18,7 @@ const HeaderVariants = ({
   campsData,
   cityData,
 }: iProps) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const menu = searchParams.get('menu');
-  const { appState, dispatch } = useAppCtx();
-
-  const createQueryString = (name: string, value: string | null) => {
-    const params = new URLSearchParams(searchParams);
-    if (value !== null) {
-      params.set(name, value);
-    } else {
-      params.delete(name);
-    }
-    return params.toString();
-  };
-
+  const { dispatch } = useAppCtx();
   return (
     <header
       className={`fixed z-[100] flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white sm:px-[50px] ${
@@ -67,7 +51,7 @@ const HeaderVariants = ({
       {/* original logo */}
       <Link
         href="/"
-        className={`relative h-[36.5px] w-[114px]  xl:flex ${
+        className={`relative h-[36.5px] w-[114px] min-h-[36.5px] min-w-[114px]  xl:flex ${
           ver === 'hotel' || ver === 'reservation'
             ? 'hidden lg:flex'
             : 'lg:hidden'
@@ -76,13 +60,11 @@ const HeaderVariants = ({
         <Image
           src="/images/logo-white.png"
           alt="/logo"
-          // fill
-          width={128}
-          height={36.5}
+          fill
           priority
           quality={100}
           sizes="20vw"
-          className="absolute max-h-[32.42px] max-w-[114px] cursor-pointer object-cover"
+          className="absolute cursor-pointer object-contain"
         />
       </Link>
       <div
@@ -109,7 +91,7 @@ const HeaderVariants = ({
           onClick={() => {
             dispatch({
               type: 'CHANGE_APP_STATE',
-              payload: { menu: 'open' },
+              payload: { menu: 'open', filter: '', logOrSign: '' },
             });
           }}
           className="relative flex h-[16px] w-[24px] flex-col items-center "

@@ -34,13 +34,11 @@ const Header = ({ phone }: iProps) => {
         <Image
           src="/images/logo-white.png"
           alt="/logo"
-          // fill
-          width={128}
-          height={36.5}
+          fill
           priority
           quality={100}
           sizes="20vw"
-          className="absolute max-h-[32.42px] max-w-[114px] cursor-pointer object-cover"
+          className="absolute cursor-pointer object-contain"
         />
       </Link>
 
@@ -150,9 +148,7 @@ const Header = ({ phone }: iProps) => {
               alt="/lang"
               width={22}
               height={22}
-              priority
-              quality={100}
-              sizes="20vw"
+              sizes="10vw"
               className="object-fit max-h-[22px] max-w-[22px] cursor-pointer"
             />
             {lang === 'en' ? 'MN' : 'EN'}
@@ -163,7 +159,7 @@ const Header = ({ phone }: iProps) => {
           onClick={() => {
             dispatch({
               type: 'CHANGE_APP_STATE',
-              payload: { menu: appState.menu !== '' ? 'open' : '' },
+              payload: { menu: 'open' },
             });
           }}
         >

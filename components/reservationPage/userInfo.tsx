@@ -266,8 +266,6 @@ export default function UserInfo({ ver, stat }: Props) {
                       // src={'/samples/camp.png'}
                       alt="/hotel"
                       fill={true}
-                      //   priority
-                      quality={100}
                       loading="lazy"
                       sizes="50vw"
                       placeholder="blur"
@@ -292,8 +290,6 @@ export default function UserInfo({ ver, stat }: Props) {
                       // src={'/samples/camp.png'}
                       alt="/hotel"
                       fill={true}
-                      //   priority
-                      quality={100}
                       loading="lazy"
                       sizes="50vw"
                       placeholder="blur"

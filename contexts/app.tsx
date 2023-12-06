@@ -6,6 +6,7 @@ export type AppCtxState = {
   logOrSign: string;
   menu: string;
   map: string;
+  filter: string;
   selectedRoom: number | null;
   selectedAmount: number | null;
   test: string;
@@ -27,6 +28,7 @@ const defaultValue: AppCtxProps = {
     logOrSign: '',
     menu: '',
     map: '',
+    filter: '',
     selectedRoom: null,
     selectedAmount: null,
     test: '',

@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
   hotelData: HotelData.Hotel[];
@@ -27,12 +28,10 @@ const SearchBox = ({
   const [selected, setSelected] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const searchValue = searchParams.get('searchValue');
-  const filter = searchParams.get('filter');
-  const router = useRouter();
+  const { appState, dispatch } = useAppCtx();
 
   const createQueryString = (name: string, value: string | null) => {
     const params = new URLSearchParams(searchParams);
@@ -43,7 +42,7 @@ const SearchBox = ({
     }
     return params.toString();
   };
-  const sample = [];
+  const sample: any[] = [];
   const suggestion = [
     {
       id: 'Тэрэлж',
@@ -64,7 +63,7 @@ const SearchBox = ({
 
   for (let i = 0; i < hotelData.length; i++) {
     sample.push({
-      key: hotelData[i].id,
+      id: hotelData[i].id,
       name: hotelData[i].name,
       nameEn: hotelData[i].nameEn ? hotelData[i].nameEn : '',
       type: 'name',
@@ -73,7 +72,7 @@ const SearchBox = ({
 
   for (let i = 0; i < campsData.length; i++) {
     sample.push({
-      key: campsData[i].id,
+      id: campsData[i].id,
       name: campsData[i].name,
       nameEn: campsData[i].nameEn ? campsData[i].nameEn : '',
       type: 'camp',
@@ -81,7 +80,7 @@ const SearchBox = ({
   }
   for (let i = 0; i < placesData.length; i++) {
     sample.push({
-      key: placesData[i].id,
+      id: placesData[i].id,
       name: placesData[i].name,
       nameEn: placesData[i].nameEn ? placesData[i].nameEn : '',
       type: 'place',
@@ -89,7 +88,7 @@ const SearchBox = ({
   }
   for (let i = 0; i < cityData.length; i++) {
     sample.push({
-      key: cityData[i].id,
+      id: cityData[i].id,
       name: cityData[i].name,
       nameEn: cityData[i].nameEn ? cityData[i].nameEn : '',
       type: 'city',
@@ -179,14 +178,6 @@ const SearchBox = ({
             onChange={(event) => {
               setQuery(event.target.value);
               setSelected(false);
-              // if (
-              //   searchValue &&
-              //   event.target.value.length < searchValue.length
-              // ) {
-              // router.push(
-              //   `${pathname}?${createQueryString('searchValue', null)}`,
-              // );
-              // }
               if (value && event.target.value.length < value.length) {
                 changeSearchValue('');
               }
@@ -211,17 +202,22 @@ const SearchBox = ({
           <div
             onClick={() => {
               let nextFilter =
-                filter === '' || !filter || filter === 'on'
+                appState.filter === ''
                   ? `${ver === 'search' ? 'webFilter' : 'mobile'}`
-                  : null;
-              router.push(
-                `${pathname}?${createQueryString('filter', nextFilter)}`,
-              );
+                  : '';
+              dispatch({
+                type: 'CHANGE_APP_STATE',
+                payload: {
+                  filter: nextFilter,
+                  logOrSign: '',
+                  menu: '',
+                },
+              });
             }}
             className={`flex h-full cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue ${
               ver === 'headerSearch' ? 'px-[8px]' : 'px-[12px]'
             } text-[13px] font-medium text-white ring-1 ring-primary-blue xl:px-[14px] xl:text-[14px] ${
-              query !== '' || (filter && filter !== 'on')
+              query !== '' || appState.filter !== ''
                 ? 'w-[46px]'
                 : 'min-w-[100px]'
             }`}
@@ -245,10 +241,11 @@ const SearchBox = ({
               />
             </svg>
             {query === '' ? (
-              // <p className={`${filter === '' ? '' : 'hidden'}`}>
               <p
                 className={`${
-                  !filter || filter === '' || filter === 'on' ? '' : 'hidden'
+                  appState.filter === 'on' || appState.filter === ''
+                    ? ''
+                    : 'hidden'
                 }`}
               >
                 {lang === 'en' ? 'Filter' : 'Шүүлтүүр'}
@@ -281,26 +278,18 @@ const SearchBox = ({
       </div>
       {query !== '' && selected == false ? (
         <div
-          className={` flex h-[150px] w-full flex-col justify-start gap-[12px] overflow-x-hidden overflow-y-scroll rounded-[8px] border border-black/20 bg-white px-[12px] text-main-text md:grid md:grid-cols-2 md:grid-rows-[auto] md:gap-[24px] md:px-[20px] lg:absolute lg:top-[50px] lg:h-[250px] lg:min-w-[400px] lg:grid-rows-[auto] lg:gap-[16px] lg:px-[10px] xl:gap-[24px] xl:px-[20px] lg:max-w-[${searchRef.current?.clientWidth}px] lg:z-50`}
+          className={` flex h-[150px] w-full flex-col justify-start gap-[12px] overflow-x-hidden overflow-y-scroll
+           rounded-[8px] border border-black/20 bg-white px-[12px] text-main-text md:grid md:grid-cols-2 md:grid-rows-[auto] md:gap-[24px] md:px-[20px] lg:absolute lg:top-[50px] lg:h-[250px] lg:min-w-[400px] lg:grid-rows-[auto] lg:gap-[16px] lg:px-[10px] xl:gap-[24px] xl:px-[20px] lg:max-w-[${searchRef.current?.clientWidth}px] lg:z-50`}
         >
-          {uniqueData.map((data) => (
+          {uniqueData.map((data, i) => (
             <div
               onClick={() => {
-                let nextSearchValue = `${data.name}$${data.type}`;
-                // router.push(
-                //   `${pathname}?${createQueryString(
-                //     'searchValue',
-                //     nextSearchValue,
-                //   )}`,
-                //   {
-                //     scroll: false,
-                //   },
-                // );
-                changeSearchValue(nextSearchValue);
+                let nextSearchValue = `${data.name}$${data.type}$${data.id}`;
                 setQuery(data.name);
+                changeSearchValue(nextSearchValue);
                 setSelected(true);
               }}
-              key={data.key}
+              key={i}
               className=" flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
             >
               {data.type === 'place' ? (
@@ -350,7 +339,8 @@ const SearchBox = ({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+                    d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 
+                    01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
                   />
                 </svg>
               )}

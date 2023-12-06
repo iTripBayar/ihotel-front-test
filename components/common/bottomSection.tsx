@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
@@ -11,7 +11,6 @@ const BottomSection = ({ ver }: iProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const lang = searchParams.get('lang');
-  // const map = searchParams.get('map');
   const btnRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { appState, dispatch } = useAppCtx();
@@ -61,8 +60,6 @@ const BottomSection = ({ ver }: iProps) => {
             delay == true ? 'w-[40px] lg:w-[45px] ' : 'w-[171px]'
           }`}
           onClick={() => {
-            // let nextMap = map !== 'open' ? 'open' : null;
-            // router.replace(`/search/?${createQueryString('map', nextMap)}`);
             dispatch({
               type: 'CHANGE_APP_STATE',
               payload: { map: 'open' },
@@ -82,7 +79,6 @@ const BottomSection = ({ ver }: iProps) => {
             />
           </svg>
           {delay == false ? (
-            // <p>{state.language === 'mn' ? 'Газрын зураг' : 'Map'}</p>
             <p>{lang === 'en' ? 'Map' : 'Газрын зураг'}</p>
           ) : null}
           {delay == true ? (
@@ -91,7 +87,6 @@ const BottomSection = ({ ver }: iProps) => {
                 lang === 'en' ? 'max-w-[45px] duration-500' : ''
               }`}
             >
-              {/* {state.language === 'mn' ? 'Газрын зураг' : 'Map'} */}
               {lang === 'en' ? 'Map' : 'Газрын зураг'}
             </div>
           ) : null}
@@ -116,9 +111,6 @@ const BottomSection = ({ ver }: iProps) => {
             });
           }}
           className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue"
-          // onClick={() => {
-          //   handleDay();
-          // }}
         >
           <Image
             src={
@@ -129,10 +121,8 @@ const BottomSection = ({ ver }: iProps) => {
             alt="/lang"
             width={28}
             height={28}
-            priority
-            quality={100}
-            sizes="20vw"
-            className="h-[30px] w-[30px] cursor-pointer object-cover"
+            sizes="10vw"
+            className="h-[30px] w-[30px] cursor-pointer object-contain"
           />
         </div>
         {/* map with arrow when closed */}

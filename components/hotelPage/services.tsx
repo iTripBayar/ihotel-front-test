@@ -62,7 +62,6 @@ const Services = ({ services }: Props) => {
                 src={'/samples/camp.png'}
                 alt="/hotel"
                 fill={true}
-                quality={75}
                 loading="lazy"
                 sizes="50vw"
                 placeholder="blur"

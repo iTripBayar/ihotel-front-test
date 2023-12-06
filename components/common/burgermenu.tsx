@@ -150,9 +150,7 @@ const BurgerMenu = () => {
               alt="/lang"
               width={22}
               height={22}
-              priority
-              quality={100}
-              sizes="20vw"
+              sizes="10vw"
               className="object-fit max-h-[22px] max-w-[22px] cursor-pointer"
             />
             {lang === 'en' ? 'MN' : 'EN'}

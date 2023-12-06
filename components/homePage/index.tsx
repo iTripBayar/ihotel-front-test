@@ -44,10 +44,9 @@ const News = ({ data }: iProps) => {
                   src={`https://ihotel.mn/${data.photos.match(/"([^"]+)"/)[1]}`}
                   alt="/posts"
                   fill={true}
-                  priority
                   quality={75}
                   sizes="50vw"
-                  className="h-auto w-full object-cover duration-700 hover:scale-110"
+                  className="object-cover duration-700 hover:scale-110"
                 />
               </div>
               {/* bottom section */}

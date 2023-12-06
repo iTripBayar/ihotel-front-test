@@ -186,10 +186,8 @@ export default function GeneralInfo({
                       ? `https://sandbox.api.myhotel.mn:9443/${image}`
                       : '/samples/camp.png'
                   }
-                  // src={'/samples/camp.png'}
                   alt="/hotel"
                   fill={true}
-                  //   priority
                   quality={100}
                   loading="lazy"
                   sizes="50vw"

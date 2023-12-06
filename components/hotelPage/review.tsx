@@ -120,8 +120,6 @@ const Review = ({ ver, data }: Props) => {
                       alt="/lang"
                       width={28}
                       height={28}
-                      priority
-                      quality={100}
                       sizes="20vw"
                       className="absolute left-0 top-0 translate-y-[-30%] scale-[110%] cursor-pointer object-fill"
                     />
@@ -177,8 +175,6 @@ const Review = ({ ver, data }: Props) => {
                     alt="/lang"
                     width={28}
                     height={28}
-                    priority
-                    quality={100}
                     sizes="20vw"
                     className="absolute left-0 top-0 translate-y-[-30%] scale-[110%] cursor-pointer object-fill"
                   />
