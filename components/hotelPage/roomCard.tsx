@@ -2,12 +2,14 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useAppCtx } from '@/contexts/app';
 
 interface Props {
   data: roomData.room;
+  handleScrollToRooms: () => void;
 }
 
-const RoomCard = ({ data }: Props) => {
+const RoomCard = ({ data, handleScrollToRooms }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const router = useRouter();
@@ -19,6 +21,7 @@ const RoomCard = ({ data }: Props) => {
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
   const days = searchParams.get('days');
+  const { appState, dispatch } = useAppCtx();
 
   const [openDesc, setOpenDesc] = useState(false);
 
@@ -70,7 +73,7 @@ const RoomCard = ({ data }: Props) => {
         params.append(name, value);
       } else {
         for (let i = 0; i < cart.length; i++) {
-          if (roomAmount[i].split('$')[0] === data.id.toString()) {
+          if (appState.selectedAmount[i].split('$')[0] === data.id.toString()) {
             params.delete(name, cart[i]);
           }
         }
@@ -93,10 +96,17 @@ const RoomCard = ({ data }: Props) => {
   };
 
   let updatedAmount = '';
-  if (roomAmount && roomAmount.length > 0) {
-    for (let i = 0; i < roomAmount.length; i++) {
-      if (roomAmount[i].split('$')[0] === data.id.toString()) {
-        updatedAmount = roomAmount[i];
+  // if (roomAmount && roomAmount.length > 0) {
+  //   for (let i = 0; i < roomAmount.length; i++) {
+  //     if (roomAmount[i].split('$')[0] === data.id.toString()) {
+  //       updatedAmount = roomAmount[i];
+  //     }
+  //   }
+  // }
+  if (appState.selectedAmount.length > 0) {
+    for (let i = 0; i < appState.selectedAmount.length; i++) {
+      if (appState.selectedAmount[i].split('$')[0] === data.id.toString()) {
+        updatedAmount = appState.selectedAmount[i];
       }
     }
   }
@@ -112,30 +122,28 @@ const RoomCard = ({ data }: Props) => {
     { id: data?.id, amount: 8 },
   ];
 
+  console.log(appState.selectedAmount);
+
   return (
     <div className="flex flex-col rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]">
       <div className="relative h-[225px] w-full overflow-hidden rounded-t-[16px] bg-sky-500 2xs:h-[260px] sm:h-[300px] ">
         <Image
-          //   src={
-          //     data.photos !== null
-          //       ? `https://sandbox.api.myhotel.mn/image?path=${
-          //           data.photos.split('"')[1]
-          //         }`
-          //       : '/samples/camp.png'
-          //   }
-          src={'/samples/camp.png'}
+          src={
+            data.photos !== null
+              ? `https://sandbox.api.myhotel.mn:9443/${data.images[0]}`
+              : '/samples/camp.png'
+          }
           alt="/hotel"
           fill={true}
           quality={75}
           loading="lazy"
           sizes="50vw"
           placeholder="blur"
-          //   blurDataURL={
-          //     data.photos !== null
-          //       ? `"_next/image/?url=${data.photos}"`
-          //       : '/samples/camp.png'
-          //   }
-          blurDataURL="/samples/camp.png"
+          blurDataURL={
+            data.images.length > 0
+              ? `"_next/image/?url=${data.images[0]}"`
+              : '/samples/camp.png'
+          }
           className="absolute h-auto w-auto select-none object-cover duration-700 hover:scale-110"
           draggable={false}
         />
@@ -247,29 +255,37 @@ const RoomCard = ({ data }: Props) => {
         {/* room select section */}
         <div
           className={`relative flex w-full ${
-            room === data.id.toString()
+            appState.selectedRoom === data.id.toString()
               ? ' justify-between lg:justify-end'
               : 'justify-between'
           }`}
         >
           <div
             className={`overflow-hidden rounded-[8px] border-[2px] border-primary-blue/50 px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px] ${
-              room !== data.id.toString() ? 'lg:max-h-[38px]' : ' lg:hidden'
+              appState.selectedRoom !== data.id.toString()
+                ? 'lg:max-h-[38px]'
+                : ' lg:hidden'
             }`}
             onClick={() => {
-              router.replace(
-                `/hotel/?${createQueryString(
-                  'roomSelect',
-                  'open',
-                  'room',
-                  data.id.toString(),
-                  'null',
-                  null,
-                )}`,
-                {
-                  scroll: false,
+              // router.replace(
+              //   `/hotel/?${createQueryString(
+              //     'roomSelect',
+              //     'open',
+              //     'room',
+              //     data.id.toString(),
+              //     'null',
+              //     null,
+              //   )}`,
+              //   {
+              //     scroll: false,
+              //   },
+              // );
+              dispatch({
+                type: 'CHANGE_APP_STATE',
+                payload: {
+                  selectedRoom: data.id.toString(),
                 },
-              );
+              });
             }}
           >
             <div
@@ -277,6 +293,7 @@ const RoomCard = ({ data }: Props) => {
             >
               <p>
                 {updatedAmount.length > 2 ? updatedAmount.split('$')[1] : 0}
+
                 {lang === 'en' ? ' rooms' : ' өрөө'}
               </p>
               <svg
@@ -293,24 +310,69 @@ const RoomCard = ({ data }: Props) => {
             </div>
           </div>
           {/* web roomSelect dropdown */}
-          {roomSelect === 'open' && room === data.id.toString() ? (
+          {appState.selectedRoom === data.id.toString() ? (
             <div className=" scrollHidden absolute left-0 z-50 hidden max-h-[166px] min-w-[90px] flex-col overflow-y-auto rounded-[8px] border-[2px] border-primary-blue/50 bg-white px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px] lg:flex">
               {sampleRooms.map((index, i) => (
                 <div
                   key={i}
                   className=" flex min-h-[34px] cursor-pointer items-center justify-center border-b border-b-primary-blue/50"
                   onClick={() => {
-                    router.replace(
-                      `/hotel/?${multipleCreateQueryString(
-                        'roomAmount',
-                        `${room}$${sampleRooms.indexOf(index).toString()}`,
-                        'roomSelect',
-                        null,
-                        'room',
-                        null,
-                      )}`,
-                      { scroll: false },
-                    );
+                    // router.replace(
+                    //   `/hotel/?${multipleCreateQueryString(
+                    //     'roomAmount',
+                    //     `${room}$${sampleRooms.indexOf(index).toString()}`,
+                    //     'roomSelect',
+                    //     null,
+                    //     'room',
+                    //     null,
+                    //   )}`,
+                    //   { scroll: false },
+                    // );
+                    dispatch({
+                      type: 'CHANGE_APP_STATE',
+                      payload: {
+                        selectedRoom: '',
+                        selectedAmount: (() => {
+                          const newValue = `${data.id}$${sampleRooms
+                            .indexOf(index)
+                            .toString()}`;
+                          const indexOfId = appState.selectedAmount.findIndex(
+                            (existingValue) => {
+                              const [existingId] = existingValue.split('$');
+                              return existingId === `${data.id}`;
+                            },
+                          );
+
+                          // Check if the value already exists in the array
+                          const updatedAmount = appState.selectedAmount.map(
+                            (existingValue, idx) => {
+                              const [existingId] = existingValue.split('$');
+                              if (existingId === `${data.id}`) {
+                                // If the ID matches, update the existing value
+                                return newValue;
+                              }
+                              return existingValue;
+                            },
+                          );
+
+                          // If the ID doesn't exist, add the new value to the array
+                          if (
+                            indexOfId === -1 &&
+                            !updatedAmount.includes(newValue)
+                          ) {
+                            updatedAmount.push(newValue);
+                          } else if (
+                            indexOfId !== -1 &&
+                            sampleRooms.indexOf(index) === 0
+                          ) {
+                            // If the ID exists and sampleRooms.indexOf(index) is 0, remove the value
+                            updatedAmount.splice(indexOfId, 1);
+                          }
+
+                          return updatedAmount;
+                        })(),
+                      },
+                    });
                   }}
                 >
                   {index.amount} {lang === 'en' ? 'rooms' : 'өрөө'}{' '}
@@ -355,21 +417,30 @@ const RoomCard = ({ data }: Props) => {
             {lang === 'en' ? 'Add to cart' : 'Сангсанд нэмэх'}
           </div>
         </div>
-        <Link
-          href={{
-            query: {
-              slug: slug,
-              dateFrom: dateFrom,
-              dateTo: dateTo,
-              days: days,
-              cart: cart,
-            },
-            pathname: '/reservation',
-          }}
-          className="flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white"
-        >
-          {lang === 'en' ? 'Order' : 'Захиалах'}
-        </Link>
+        {cart.length < 1 ? (
+          <div
+            onClick={handleScrollToRooms}
+            className="flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white"
+          >
+            {lang === 'en' ? 'Order' : 'Захиалах'}
+          </div>
+        ) : (
+          <Link
+            href={{
+              query: {
+                slug: slug,
+                dateFrom: dateFrom,
+                dateTo: dateTo,
+                days: days,
+                cart: cart,
+              },
+              pathname: '/reservation',
+            }}
+            className="flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white"
+          >
+            {lang === 'en' ? 'Order' : 'Захиалах'}
+          </Link>
+        )}
       </div>
     </div>
   );

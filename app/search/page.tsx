@@ -1,5 +1,4 @@
 'use client';
-
 import { useRequest } from 'ahooks';
 import { fetchDataSearch, fetchCheckHotel } from '@/utils';
 import HeaderVariants from '@/components/common/headerVariants';
@@ -12,20 +11,28 @@ import FilterOptions from '@/components/common/searchSection/filter/filterOption
 import { useAppCtx } from '@/contexts/app';
 import LogOrSign from '@/components/common/logOrSign';
 import { useEffect } from 'react';
+import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 
 const SearchPage = () => {
-
   const { data, loading, error } = useRequest(() => {
     return fetchCheckHotel();
   });
+  const searchData = useRequest(
+    () => {
+      return fetchDataSearch();
+    },
+    {
+      manual: true,
+      onSuccess: (res) => {
+        console.log(res);
+      },
+    },
+  );
+  useEffect(() => {
+    searchData.run();
+  }, []);
 
-  const searchData = useRequest(() => {
-    return fetchDataSearch();
-  },{manual: true, onSuccess: (res)=>{console.log(res)}});
-
-  useEffect(()=>{
-searchData.run();
-  },[])
   const { appState } = useAppCtx();
   return (
     <main
@@ -83,18 +90,29 @@ searchData.run();
           />
         ) : null}
       </div>
-      {appState.filter !== 'mobile' ? (
-        <div
-          className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:h-screen lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
-        >
-          <SearchCards data={data ? data.data : []} />
-          <MapContainer
-            data={data ? data.data : []}
-            lat={searchData.data?.mapCenter.lat}
-            lng={searchData.data?.mapCenter.lng}
-          />
-        </div>
-      ) : null}
+
+      {loading === true ? (
+        <ChakraProvider>
+          <div className="flex h-full w-full items-center justify-center pb-[100px]">
+            <CircularProgress isIndeterminate={true} color="#3C76FE" />
+          </div>
+        </ChakraProvider>
+      ) : (
+        <>
+          {appState.filter !== 'mobile' ? (
+            <div
+              className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:h-screen lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
+            >
+              <SearchCards data={data ? data.data : []} />
+              <MapContainer
+                data={data ? data.data : []}
+                lat={searchData.data?.mapCenter.lat}
+                lng={searchData.data?.mapCenter.lng}
+              />
+            </div>
+          ) : null}
+        </>
+      )}
     </main>
   );
 };

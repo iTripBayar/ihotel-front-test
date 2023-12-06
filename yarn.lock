@@ -2313,6 +2313,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/php-serialize@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "@types/php-serialize@npm:3.0.4"
+  dependencies:
+    "@types/node": "*"
+  checksum: 0408fbb9d8e588179821b8de33f7a446a5be3e8730d7fdf1e2fa89e2c657d3843c43abc396d0c4b65b1b344069ee15f89c93dca7f11f6fcf329c7516b34b0a5a
+  languageName: node
+  linkType: hard
+
 "@types/prop-types@npm:*":
   version: 15.7.8
   resolution: "@types/prop-types@npm:15.7.8"
@@ -5028,6 +5037,7 @@ __metadata:
     "@next/eslint-plugin-next": 13.5.4
     "@tailwindcss/forms": 0.5.6
     "@types/node": ^20
+    "@types/php-serialize": ^3.0.4
     "@types/react": ^18
     "@types/react-dom": ^18
     "@types/react-slick": ^0.23.10
@@ -5037,6 +5047,7 @@ __metadata:
     axios: ^1.5.1
     date-fns: ^2.30.0
     depcheck: ^1.4.7
+    encoding: ^0.1.13
     eslint: ^8
     eslint-config-next: 13.5.4
     eslint-config-prettier: 9.0.0
@@ -5046,6 +5057,7 @@ __metadata:
     lint-staged: ^14.0.1
     mapbox-gl: ^2.15.0
     next: 13.5.4
+    php-unserialize: latest
     postcss: ^8
     prettier: 3.0.3
     prettier-plugin-tailwindcss: 0.5.5
@@ -5055,6 +5067,7 @@ __metadata:
     react-dom: ^18
     react-map-gl: ^7.1.6
     react-slick: ^0.29.0
+    serialize-php: ^1.1.2
     slick-carousel: ^1.8.1
     supercluster: ^8.0.1
     tailwindcss: ^3
@@ -6552,6 +6565,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"php-unserialize@npm:latest":
+  version: 0.0.1
+  resolution: "php-unserialize@npm:0.0.1"
+  checksum: 3edba007446313906c5c4f6516119ea0a1a9bc4a3b22795cb54d2d9ef0f812eb7664b8d9038e96f637ba99fd507bc09f41711dea3793a0de180f13009e92a287
+  languageName: node
+  linkType: hard
+
 "picocolors@npm:^1.0.0":
   version: 1.0.0
   resolution: "picocolors@npm:1.0.0"
@@ -7386,6 +7406,13 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 12d8ad952fa353b0995bf180cdac205a4068b759a140e5d3c608317098b3575ac2f1e09182206bf2eb26120e1c0ed8fb92c48c592f6099680de56bb071423ca3
+  languageName: node
+  linkType: hard
+
+"serialize-php@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "serialize-php@npm:1.1.2"
+  checksum: 6add20e3c66dbe66cc810c1ed962dc44c7595989996674e2e25871bb19ebdd07c86572c316f232cc12bce98788c4de21faf16e6bdacb7a2d7bfd2b94b331836d
   languageName: node
   linkType: hard
 

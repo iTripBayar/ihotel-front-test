@@ -8,7 +8,7 @@ declare namespace HotelData {
     enddate: string;
     fresh: number;
     hasPage: number;
-    hotel: hotel;
+    hotel: Hotel;
     isClosed: number;
     location: number;
     offerHotels: hotel[];

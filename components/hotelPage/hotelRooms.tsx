@@ -2,12 +2,14 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import RoomCard from './roomCard';
 import { addDays, format } from 'date-fns';
 import Link from 'next/link';
+import { useAppCtx } from '@/contexts/app';
 
 interface Props {
   data: roomData.room[] | undefined;
+  handleScrollToRooms: () => void;
 }
 
-const HotelRooms = ({ data }: Props) => {
+const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const cart = searchParams.getAll('cart');
@@ -16,6 +18,7 @@ const HotelRooms = ({ data }: Props) => {
   const dateTo = searchParams.get('dateTo');
   const days = searchParams.get('days');
   const slug = searchParams.get('slug');
+  const { appState, dispatch } = useAppCtx();
 
   const createQueryString = (name: string, index: number) => {
     const params = new URLSearchParams(searchParams);
@@ -125,8 +128,8 @@ const HotelRooms = ({ data }: Props) => {
     };
     let enDate = {
       from: {
-        month: dateFrom?.split('|')[1].split('-')[0],
-        date: dateFrom?.split('|')[1].split('-')[1],
+        month: dateFrom?.split('|')[1]?.split('-')[0],
+        date: dateFrom?.split('|')[1]?.split('-')[1],
       },
       to: {
         month: dateTo?.split('|')[1].split('-')[0],
@@ -190,11 +193,31 @@ const HotelRooms = ({ data }: Props) => {
       <div className="relative grid grid-cols-1 gap-[24px] md:grid-cols-2 lg:grid-cols-6 lg:gap-[24px]">
         {/* roomCards */}
         <div className=" flex flex-col gap-[24px] md:col-span-2 md:grid md:grid-cols-2 lg:col-span-4 lg:grid lg:grid-cols-2">
-          {data && data.map((index, i) => <RoomCard data={index} key={i} />)}
+          {data &&
+            data.map((index, i) => (
+              <RoomCard
+                data={index}
+                key={i}
+                handleScrollToRooms={handleScrollToRooms}
+              />
+            ))}
         </div>
         {/* side order & calendar */}
         <div className="hidden flex-col items-center justify-start lg:sticky lg:col-span-2 lg:flex">
-          <div className=" flex h-[46px] items-center justify-between gap-[16px] rounded-t-[12px] border border-b-0 border-black/[.15] px-[16px] text-[12px] font-medium leading-[1px] text-primary-blue 2xs:text-[15px]">
+          <div
+            onClick={() => {
+              dispatch({
+                type: 'CHANGE_APP_STATE',
+                payload: {
+                  menu: '',
+                  filter: '',
+                  logOrSign: '',
+                  calendar: 'open',
+                },
+              });
+            }}
+            className="flex h-[46px] items-center justify-between gap-[16px] rounded-t-[12px] border border-b-0 border-black/[.15] px-[16px] text-[12px] font-medium leading-[1px] text-primary-blue 2xs:text-[15px]"
+          >
             <div className="flex items-center gap-[12px]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -313,21 +336,30 @@ const HotelRooms = ({ data }: Props) => {
                   ))}
               </div>
             ) : null}
-            <Link
-              href={{
-                query: {
-                  slug: slug,
-                  dateFrom: dateFrom,
-                  dateTo: dateTo,
-                  days: days,
-                  cart: cart,
-                },
-                pathname: '/reservation',
-              }}
-              className="flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white"
-            >
-              {lang === 'en' ? 'Order' : 'Захиалах'}
-            </Link>
+            {cart.length < 1 ? (
+              <div
+                onClick={handleScrollToRooms}
+                className="flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white"
+              >
+                {lang === 'en' ? 'Order' : 'Захиалах'}
+              </div>
+            ) : (
+              <Link
+                href={{
+                  query: {
+                    slug: slug,
+                    dateFrom: dateFrom,
+                    dateTo: dateTo,
+                    days: days,
+                    cart: cart,
+                  },
+                  pathname: '/reservation',
+                }}
+                className="flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white"
+              >
+                {lang === 'en' ? 'Order' : 'Захиалах'}
+              </Link>
+            )}
           </div>
         </div>
       </div>

@@ -1,5 +1,4 @@
 'use client';
-
 import HeaderVariants from '@/components/common/headerVariants';
 import HotelImages from '@/components/hotelPage/hotelImages';
 import { useRequest } from 'ahooks';
@@ -17,21 +16,19 @@ import HotelCard from '@/components/common/hotelCard';
 import Footer from '@/components/common/footer';
 import Dialogs from '@/components/hotelPage/dialogs';
 import CalendarDialog from '@/components/hotelPage/dialogs/calendarDialog';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import LogOrSign from '@/components/common/logOrSign';
 import { useAppCtx } from '@/contexts/app';
+import { useRef, useState } from 'react';
+import CartAlert from '@/components/hotelPage/cartAlert';
 
 const HotelPage = () => {
   const searchParams = useSearchParams();
   const slug = searchParams.get('slug');
-  const calendar = searchParams.get('calendar');
   const lang = searchParams.get('lang');
-  const dateFrom = searchParams.get('dateFrom');
-  const dateTo = searchParams.get('dateTo');
-  const days = searchParams.get('days');
-  const cart = searchParams.get('cart');
   const { appState } = useAppCtx();
+  const roomsContainer = useRef<HTMLDivElement>(null)
+  const [showAlert, setShowAlert] = useState(false)
 
   const { data } = useRequest(() => {
     if (slug) return fetchDataHotel(slug);
@@ -65,7 +62,27 @@ const HotelPage = () => {
   }
   roomPrices.sort((a, b) => b - a);
 
-  // console.log(data);
+ const handleScrollToRooms = () => {
+  console.log('s')
+
+   setShowAlert(true);
+   setTimeout(() => {
+      setShowAlert(false);
+   }, 5000);
+   // Get the DOM element from the ref
+   const container = roomsContainer.current;
+
+   if (container) {
+     // Get the position of the element relative to the viewport
+     const rect = container.getBoundingClientRect();
+
+     // Scroll to the top of the element with smooth behavior
+     window.scrollTo({
+       top: rect.top + window.scrollY,
+       behavior: 'smooth',
+     });
+   }
+ };
 
   return (
     <main className="relative">
@@ -76,7 +93,10 @@ const HotelPage = () => {
         campsData={[]}
         cityData={[]}
       />
-      {calendar === 'open' ? (
+      {showAlert === true ? (
+        <CartAlert close={() => setShowAlert(false)} />
+      ) : null}
+      {appState.calendar === 'open' ? (
         <div className="fixed left-[50%] top-[60px] z-[900] hidden h-[425px] translate-x-[-50%] lg:flex lg:w-[60vw] xl:w-[50vw]">
           <CalendarDialog ver={'web'} />
         </div>
@@ -88,6 +108,7 @@ const HotelPage = () => {
         stat={stat}
         allRooms={data?.rooms ? data?.rooms : []}
         slug={slug ? slug : ''}
+        handleScrollToRooms={handleScrollToRooms}
       />
       <div className="flex flex-col gap-[24px] overflow-x-hidden px-[16px] pb-[32px] pt-[80px] sm:px-[50px] md:px-[72px] lg:gap-[48px] lg:px-[60px]  xl:px-[100px] 2xl:px-[150px]">
         <div className="grid grid-cols-1 gap-[24px] lg:grid-cols-5 lg:gap-[20px]">
@@ -208,35 +229,25 @@ const HotelPage = () => {
                     / {lang === 'en' ? 'days' : 'хоног'}
                   </span>
                 </p>
-
-                <Link
-                  href={{
-                    query: {
-                      slug: slug,
-                      dateFrom: dateFrom,
-                      dateTo: dateTo,
-                      days: days,
-                      cart: cart,
-                    },
-                    pathname: '/reservation',
-                  }}
+                <div
+                  onClick={() => handleScrollToRooms()}
                   className="flex items-center justify-center rounded-[16px] bg-main-online px-[16px] py-[6px] font-medium text-white"
                 >
                   {lang === 'en' ? 'Order' : 'Захиалах'}
-                </Link>
+                </div>
               </div>
             </div>
             {/* map & orderCount */}
             <div className="flex flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] lg:border-none lg:pt-0">
               <HotelMap
                 lat={
-                  data?.hotel.location.lat
-                    ? data?.hotel.location.lat
+                  data?.hotel.lat
+                    ? parseInt(data?.hotel.lat)
                     : 47.91823102891307
                 }
                 lng={
-                  data?.hotel.location.lng
-                    ? data?.hotel.location.lng
+                  data?.hotel.lng
+                    ? parseInt(data?.hotel.lng)
                     : 106.92059918835042
                 }
               />
@@ -247,7 +258,12 @@ const HotelPage = () => {
         <Services
           services={data?.specialServices ? data?.specialServices : []}
         />
-        <HotelRooms data={data?.rooms} />
+        <div ref={roomsContainer}>
+          <HotelRooms
+            data={data?.rooms}
+            handleScrollToRooms={handleScrollToRooms}
+          />
+        </div>
         <Description
           introduction={data?.hotel.introduction}
           introductionEn={data?.hotel.introductionEn}

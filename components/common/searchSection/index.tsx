@@ -1,8 +1,9 @@
 import SearchBox from './searchBox';
 import OnlineToggle from './onlineToggle';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { addDays, format } from 'date-fns';
+import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
   hotelData: HotelData.Hotel[];
@@ -26,6 +27,9 @@ const SearchSection = ({
   const pathname = usePathname();
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
+  const days = searchParams.get('days');
+  const {appState, dispatch} = useAppCtx()
+
 
   const [toggle, setToggle] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -40,12 +44,29 @@ const SearchSection = ({
     [searchValue],
   );
 
-  const createQueryString = (name: string, value: string | null) => {
+  const createQueryString = (
+    name: string,
+    value: string | null,
+    name1: string,
+    value1: string | null,
+    name2: string,
+    value2: string | null,
+  ) => {
     const params = new URLSearchParams(searchParams);
     if (value !== null) {
       params.set(name, value);
     } else {
       params.delete(name);
+    }
+    if (value1 !== null) {
+      params.set(name1, value1);
+    } else {
+      params.delete(name1);
+    }
+    if (value2 !== null) {
+      params.set(name2, value2);
+    } else {
+      params.delete(name2);
     }
     return params.toString();
   };
@@ -97,6 +118,17 @@ const SearchSection = ({
         ? `${format(newDate, 'yyyy-MM-dd').split('-')[2]}`
         : dateFrom.split('|')[0].split('/')[1],
     },
+    fromEn: {
+      year: !dateFrom
+        ? `${format(newDate, 'MMM-dd-yyyy').split('-')[2]}`
+        : dateFrom?.split('|')[1]?.split('-')[2],
+      month: !dateFrom
+        ? `${format(newDate, 'MMM-dd-yyyy').split('-')[0]}`
+        : dateFrom?.split('|')[1]?.split('-')[0],
+      date: !dateFrom
+        ? `${format(newDate, 'MMM-dd-yyyy').split('-')[1]}`
+        : dateFrom?.split('|')[1]?.split('-')[1],
+    },
     to: {
       year: !dateTo
         ? `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`
@@ -108,7 +140,33 @@ const SearchSection = ({
         ? `${format(nextDay, 'yyyy-MM-dd').split('-')[2]}`
         : dateTo.split('|')[0].split('/')[1],
     },
+    toEn: {
+      year: !dateTo
+        ? `${format(nextDay, 'MMM-dd-yyyy').split('-')[2]}`
+        : dateTo.split('|')[1].split('-')[2],
+      month: !dateTo
+        ? `${format(nextDay, 'MMM-dd-yyyy').split('-')[0]}`
+        : dateTo.split('|')[1].split('-')[0],
+      date: !dateTo
+        ? `${format(nextDay, 'MMM-dd-yyyy').split('-')[1]}`
+        : dateTo.split('|')[1].split('-')[1],
+    },
   };
+useEffect(()=>{
+  if (!dateFrom && !dateTo && ver ==='hotel') {
+    router.replace(
+      `${pathname}?${createQueryString(
+        'dateFrom',
+        `${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year}|${formattedDate.fromEn.month}-${formattedDate.fromEn.date}-${formattedDate.fromEn.year}`,
+        'dateTo',
+        `${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}|${formattedDate.toEn.month}-${formattedDate.toEn.date}-${formattedDate.toEn.year}`,
+        'days',
+        '1',
+      )}`,
+      { scroll: false },
+    );
+  }
+}, [ver === 'hotel'])
 
   return (
     <div
@@ -197,10 +255,19 @@ const SearchSection = ({
           <div
             className="flex h-[36px] items-center justify-center gap-[12px] rounded-full bg-white px-[8px] text-[15px] font-medium leading-[1px] text-primary-blue 2xs:px-[16px] xl:min-w-[250px]"
             onClick={() => {
-              router.replace(
-                `${pathname}?${createQueryString('calendar', 'open')}`,
-                { scroll: false },
-              );
+              // router.replace(
+              //   `${pathname}?${createQueryString('calendar', 'open', '', null, '', null)}`,
+              //   { scroll: false },
+              // );
+              dispatch({
+                type: 'CHANGE_APP_STATE',
+                payload: {
+                  menu: '',
+                  filter: '',
+                  logOrSign: '',
+                  calendar: 'open',
+                },
+              });
             }}
           >
             <svg

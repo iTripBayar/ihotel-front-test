@@ -7,9 +7,9 @@ export type AppCtxState = {
   menu: string;
   map: string;
   filter: string;
-  selectedRoom: number | null;
-  selectedAmount: number | null;
-  test: string;
+  selectedRoom: string;
+  selectedAmount: string[];
+  calendar: string;
 };
 
 type Action =
@@ -29,9 +29,9 @@ const defaultValue: AppCtxProps = {
     menu: '',
     map: '',
     filter: '',
-    selectedRoom: null,
-    selectedAmount: null,
-    test: '',
+    selectedRoom: '',
+    selectedAmount: [],
+    calendar: '',
   },
   dispatch: () => {
     /**/

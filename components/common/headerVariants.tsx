@@ -91,7 +91,7 @@ const HeaderVariants = ({
           onClick={() => {
             dispatch({
               type: 'CHANGE_APP_STATE',
-              payload: { menu: 'open', filter: '', logOrSign: '' },
+              payload: { menu: 'open', filter: '', logOrSign: '', calendar: '' },
             });
           }}
           className="relative flex h-[16px] w-[24px] flex-col items-center "

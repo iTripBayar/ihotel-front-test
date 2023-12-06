@@ -1,10 +1,54 @@
 import { useSearchParams } from 'next/navigation';
 import { Collapse, Button, useDisclosure } from '@chakra-ui/react';
+import format from 'date-fns/format';
+import toDate from 'date-fns/toDate';
+import { parseISO } from 'date-fns';
 
-export default function CancelTerm() {
+
+interface Props {
+  data: {day: string, fee: string}[] | undefined;
+  rooms: roomData.room[];
+  dollarRate: string | null;
+}
+export default function CancelTerm({ data, rooms, dollarRate}: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const cart = searchParams.getAll('cart')
+  const dateFrom = searchParams.get('dateFrom');
+  const dateTo = searchParams.get('dateTo');
+  const days = searchParams.get('days');
+
   const { isOpen, onToggle } = useDisclosure();
+
+  let totalPrice = 0;
+  for (let i = 0; i < cart.length; i++) {
+    if (cart[i]) {
+      for (let j = 0; j < rooms.length; j++) {
+        if (parseInt(cart[i].split('$')[0]) === rooms[j].id) {
+          totalPrice =
+            totalPrice + rooms[j].priceDayUse * parseInt(cart[i].split('$')[1]);
+        }
+      }
+    }
+  }
+
+let newDate = new Date();
+let date = newDate.getDate();
+let month = newDate.getMonth() + 1;
+let year = newDate.getFullYear();
+
+const displayDate1 = new Date(
+  year,
+  (!dateFrom && !dateTo
+    ? month
+    : parseInt(dateFrom ? dateFrom?.split('|')[0].split('/')[0] : '0')) - 1,
+  dateFrom && dateTo && days && data && data[0].day
+    ? parseInt(dateFrom ? dateFrom?.split('|')[0].split('/')[1] : '0') +
+      parseInt(days) -
+      parseInt(data[0].day)
+    : date,
+);
+console.log(format(displayDate1, 'yyyy-MM-dd'));
 
   return (
     <div className="flex h-auto w-full flex-col  rounded-[20px] px-[20px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] lg:rounded-none lg:border-t lg:border-dashed lg:border-t-black/[.15] lg:px-0 lg:pt-[32px] lg:shadow-none">
@@ -32,31 +76,17 @@ export default function CancelTerm() {
                 </tr>
               </thead>
               <tbody>
-                <tr className="h-[60px]">
-                  <td>
-                    {lang === 'en' ? 'Until Nov 10 2023' : '2023-10-28 хүртэл'}
-                  </td>
-                  <td>0%</td>
-                  <td>{lang === 'en' ? 'No fees' : 'Торгуульгүй'}</td>
-                </tr>
-                <tr className="h-[60px]">
-                  <td>
-                    {lang === 'en'
-                      ? 'Between Nov 10 2023 & Nov 20 2023'
-                      : '2023-10-28 - 2023-10-31 хооронд'}
-                  </td>
-                  <td>10%</td>
-                  <td>10,000₮</td>
-                </tr>
-                <tr className="h-[60px]">
-                  <td>
-                    {lang === 'en'
-                      ? 'Between Nov 20 2023 & Nov 30 2023'
-                      : '2023-11-02 - 2023-11-50 хооронд'}
-                  </td>
-                  <td>20%</td>
-                  <td>20,000₮</td>
-                </tr>
+                {data ?data.map((index, i) => (
+                  <tr className="h-[60px]" key={i}>
+                    <td>
+                      {lang === 'en'
+                        ? `Until ${format(displayDate1, 'MMM dd yyyy')}`
+                        : `${format(displayDate1, 'yyyy-MM-dd')} хүртэл`}
+                    </td>
+                    <td>{index.fee}%</td>
+                    <td>{(totalPrice / 100) * parseInt(index.fee)}</td>
+                  </tr>
+                )) : null}
               </tbody>
             </table>
           </div>
@@ -119,7 +149,7 @@ export default function CancelTerm() {
               <tbody>
                 <tr className="h-[47px]">
                   <td>
-                    {lang === 'en' ? 'Until Nov 10 2023' : '2023-10-28 хүртэл'}
+                    {lang === 'en' ? 'Until ### ## 2023' : '2023-##-## хүртэл'}
                   </td>
                   <td>0%</td>
                   <td>{lang === 'en' ? 'No fees' : 'Торгуульгүй'}</td>

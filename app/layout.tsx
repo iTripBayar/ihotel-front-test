@@ -21,18 +21,18 @@ export default function RootLayout({
 }) {
   return (
     <AppCtxProvider>
-      <html lang="en">
-        <head>
-          <link rel="icon" type="image/x-icon" href="/favicon.png"></link>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=1"
-          ></meta>
-        </head>
-        <body className={`relative overscroll-none ${inter.className}`}>
-          {children}
-        </body>
-      </html>
+        <html lang="en">
+          <head>
+            <link rel="icon" type="image/x-icon" href="/favicon.png"></link>
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1, maximum-scale=1"
+            ></meta>
+          </head>
+          <body className={`relative overscroll-none ${inter.className}`}>
+            {children}
+          </body>
+        </html>
     </AppCtxProvider>
   );
 }

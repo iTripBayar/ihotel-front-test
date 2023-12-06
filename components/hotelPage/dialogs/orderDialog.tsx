@@ -5,8 +5,14 @@ interface Props {
   roomPrices: number[];
   allRooms: roomData.room[];
   slug: string;
+  handleScrollToRooms: () => void;
 }
-export default function OrderDialog({ roomPrices, allRooms, slug }: Props) {
+export default function OrderDialog({
+  roomPrices,
+  allRooms,
+  slug,
+  handleScrollToRooms,
+}: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const lang = searchParams.get('lang');
@@ -90,8 +96,8 @@ export default function OrderDialog({ roomPrices, allRooms, slug }: Props) {
     };
     let enDate = {
       from: {
-        month: dateFrom?.split('|')[1].split('-')[0],
-        date: dateFrom?.split('|')[1].split('-')[1],
+        month: dateFrom?.split('|')[1]?.split('-')[0],
+        date: dateFrom?.split('|')[1]?.split('-')[1],
       },
       to: {
         month: dateTo?.split('|')[1].split('-')[0],
@@ -237,21 +243,30 @@ export default function OrderDialog({ roomPrices, allRooms, slug }: Props) {
           </h3>
         </div>
         {/* orderBtn */}
-        <Link
-          href={{
-            query: {
-              slug: slug,
-              dateFrom: dateFrom,
-              dateTo: dateTo,
-              days: days,
-              cart: cart,
-            },
-            pathname: '/reservation',
-          }}
-          className="rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]"
-        >
-          {lang === 'en' ? 'Order' : 'Захиалах'}
-        </Link>
+        {cart.length < 1 ? (
+          <div
+            onClick={() => handleScrollToRooms()}
+            className="rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]"
+          >
+            {lang === 'en' ? 'Order' : 'Захиалах'}
+          </div>
+        ) : (
+          <Link
+            href={{
+              query: {
+                slug: slug,
+                dateFrom: dateFrom,
+                dateTo: dateTo,
+                days: days,
+                cart: cart,
+              },
+              pathname: '/reservation',
+            }}
+            className="rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]"
+          >
+            {lang === 'en' ? 'Order' : 'Захиалах'}
+          </Link>
+        )}
       </div>
     </div>
   );

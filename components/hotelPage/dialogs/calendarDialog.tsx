@@ -3,6 +3,7 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { addDays, format } from 'date-fns';
 import { DateRange, DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
+import { useAppCtx } from '@/contexts/app';
 
 let newDate = new Date();
 let date = newDate.getDate();
@@ -20,6 +21,7 @@ export default function CalendarDialog({ ver }: Props) {
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
   const days = searchParams.get('days');
+  const {appState, dispatch} = useAppCtx()
 
   const pathname = usePathname();
   const pastMonth = new Date(
@@ -79,6 +81,7 @@ export default function CalendarDialog({ ver }: Props) {
     }
     return params.toString();
   };
+
   if (ver === 'mobile')
     return (
       <div
@@ -87,9 +90,12 @@ export default function CalendarDialog({ ver }: Props) {
         <div
           className="absolute right-[16px] top-[16px] text-primary-blue"
           onClick={() => {
-            router.replace(
-              `${pathname}/?${createQueryString('calendar', null)}`,
-            );
+            dispatch({
+              type: 'CHANGE_APP_STATE',
+              payload: {
+                calendar: '',
+              },
+            });
           }}
         >
           <svg
@@ -154,11 +160,16 @@ export default function CalendarDialog({ ver }: Props) {
                     (range?.to?.getTime() - range?.from?.getTime()) /
                     (1000 * 3600 * 24)
                   }`,
-                  'calendar',
-                  null,
+                  '', null
                 )}`,
                 { scroll: false },
               );
+              dispatch({
+                type: 'CHANGE_APP_STATE',
+                payload: {
+                  calendar: '',
+                },
+              });
             }
           }}
         >
@@ -173,7 +184,12 @@ export default function CalendarDialog({ ver }: Props) {
       <div
         className="absolute right-[10px] top-[10px] text-primary-blue"
         onClick={() => {
-          router.replace(`${pathname}/?${createQueryString('calendar', null)}`);
+          dispatch({
+            type: 'CHANGE_APP_STATE',
+            payload: {
+              calendar: '',
+            },
+          });
         }}
       >
         <svg
@@ -233,11 +249,17 @@ export default function CalendarDialog({ ver }: Props) {
                   (range?.to?.getTime() - range?.from?.getTime()) /
                   (1000 * 3600 * 24)
                 }`,
-                'calendar',
+                '',
                 null,
               )}`,
               { scroll: false },
             );
+            dispatch({
+              type: 'CHANGE_APP_STATE',
+              payload: {
+                calendar: '',
+              },
+            });
           }
         }}
       >

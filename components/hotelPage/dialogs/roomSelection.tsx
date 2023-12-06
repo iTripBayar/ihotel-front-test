@@ -1,50 +1,13 @@
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useAppCtx } from '@/contexts/app';
 interface Props {
   roomData: roomData.room;
 }
 export default function RoomSelection({ roomData }: Props) {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const lang = searchParams.get('lang');
-  const room = searchParams.get('room');
-  const roomAmount = searchParams.getAll('roomAmount');
+  const {appState, dispatch} = useAppCtx()
 
-  const createQueryString = 
-    (
-      name: string,
-      value: string | null,
-      name1: string,
-      value1: string | null,
-    ) => {
-      const params = new URLSearchParams(searchParams);
-
-      if (value !== null && !params.get(name)) {
-        params.set(name, value);
-      } else if (value !== null && params.get(name)) {
-        if (value.split('$')[1] !== '0') {
-          for (let i = 0; i < roomAmount.length; i++) {
-            if (roomAmount[i].split('$')[0] === roomData.id.toString()) {
-              params.delete(name, roomAmount[i]);
-            }
-          }
-          params.append(name, value);
-        } else {
-          for (let i = 0; i < roomAmount.length; i++) {
-            if (roomAmount[i].split('$')[0] === roomData.id.toString()) {
-              params.delete(name, roomAmount[i]);
-            }
-          }
-        }
-      } else {
-        params.delete(name);
-      }
-      if (value1 !== null) {
-        params.set(name1, value1);
-      } else {
-        params.delete(name1);
-      }
-      return params.toString();
-    };
   const sampleRooms = [
     { id: roomData?.id, hotelId: 0 },
     { id: roomData?.id, hotelId: 1 },
@@ -58,10 +21,10 @@ export default function RoomSelection({ roomData }: Props) {
   ];
 
   let updatedAmount = 0;
-  if (roomAmount.length > 0) {
-    for (let i = 0; i < roomAmount.length; i++) {
-      if (roomAmount[i].split('$')[0] === roomData?.id.toString()) {
-        updatedAmount = parseInt(roomAmount[i].split('$')[1]);
+  if (appState.selectedAmount.length > 0) {
+    for (let i = 0; i < appState.selectedAmount.length; i++) {
+      if(appState.selectedAmount[i].split('$')[0] === appState.selectedRoom){
+      updatedAmount = parseInt(appState.selectedAmount[i].split('$')[1]);
       }
     }
   }
@@ -74,15 +37,48 @@ export default function RoomSelection({ roomData }: Props) {
         <div
           key={i}
           onClick={() => {
-            router.replace(
-              `/hotel/?${createQueryString(
-                'roomAmount',
-                `${room}$${sampleRooms.indexOf(index).toString()}`,
-                'roomSelect',
-                null,
-              )}`,
-              { scroll: false },
-            );
+            dispatch({
+              type: 'CHANGE_APP_STATE',
+              payload: {
+                selectedRoom: '',
+                selectedAmount: (() => {
+                  const newValue = `${appState.selectedRoom}$${sampleRooms
+                    .indexOf(index)
+                    .toString()}`;
+                  const indexOfId = appState.selectedAmount.findIndex(
+                    (existingValue) => {
+                      const [existingId] = existingValue.split('$');
+                      return existingId === `${appState.selectedRoom}`;
+                    },
+                  );
+
+                  // Check if the value already exists in the array
+                  const updatedAmount = appState.selectedAmount.map(
+                    (existingValue, idx) => {
+                      const [existingId] = existingValue.split('$');
+                      if (existingId === `${appState.selectedRoom}`) {
+                        // If the ID matches, update the existing value
+                        return newValue;
+                      }
+                      return existingValue;
+                    },
+                  );
+
+                  // If the ID doesn't exist, add the new value to the array
+                  if (indexOfId === -1 && !updatedAmount.includes(newValue)) {
+                    updatedAmount.push(newValue);
+                  } else if (
+                    indexOfId !== -1 &&
+                    sampleRooms.indexOf(index) === 0
+                  ) {
+                    // If the ID exists and sampleRooms.indexOf(index) is 0, remove the value
+                    updatedAmount.splice(indexOfId, 1);
+                  }
+
+                  return updatedAmount;
+                })(),
+              },
+            });
           }}
           className="leading relative flex min-h-[50px] w-full items-center  justify-center border-b border-b-black/[.15] text-[20px] font-medium text-main-text"
         >
