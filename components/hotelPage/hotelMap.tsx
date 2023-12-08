@@ -1,6 +1,6 @@
 import ReactMapGL, { Marker } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 interface Props {
   lat: number;
   lng: number;

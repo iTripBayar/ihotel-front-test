@@ -26,7 +26,7 @@ const HotelCard = ({ data, fromMap }: iProps) => {
     stat = 'data';
   }
 
-  let displayPrice = [];
+  const displayPrice = [];
   for (let i = 0; i < data?.roomTypes?.length; i++) {
     displayPrice.push(data.roomTypes[i].priceDayUse);
   }

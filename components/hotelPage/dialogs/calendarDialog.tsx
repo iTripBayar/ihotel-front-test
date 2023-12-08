@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { addDays, format } from 'date-fns';
+import { addDays } from 'date-fns';
 import { DateRange, DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { useAppCtx } from '@/contexts/app';
 
-let newDate = new Date();
-let date = newDate.getDate();
-let month = newDate.getMonth() + 1;
-let year = newDate.getFullYear();
+const newDate = new Date();
+const date = newDate.getDate();
+const month = newDate.getMonth() + 1;
+const year = newDate.getFullYear();
 
 interface Props {
   ver: string;
@@ -21,7 +21,7 @@ export default function CalendarDialog({ ver }: Props) {
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
   const days = searchParams.get('days');
-  const {appState, dispatch} = useAppCtx()
+  const { dispatch } = useAppCtx();
 
   const pathname = usePathname();
   const pastMonth = new Date(
@@ -39,15 +39,6 @@ export default function CalendarDialog({ ver }: Props) {
   };
 
   const [range, setRange] = useState<DateRange | undefined>(defaultSelected);
-  const createQueryString = (name: string, value: string | null) => {
-    const params = new URLSearchParams(searchParams);
-    if (value !== null) {
-      params.set(name, value);
-    } else {
-      params.delete(name);
-    }
-    return params.toString();
-  };
   const multipleCreateQueryString = (
     name: string,
     value: string | null,
@@ -88,7 +79,7 @@ export default function CalendarDialog({ ver }: Props) {
         className={`relative flex h-[90vh] w-full flex-col  items-center justify-start rounded-t-[30px] bg-white pt-[24px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px]`}
       >
         <div
-          className="absolute right-[16px] top-[16px] text-primary-blue"
+          className='absolute right-[16px] top-[16px] text-primary-blue'
           onClick={() => {
             dispatch({
               type: 'CHANGE_APP_STATE',
@@ -99,24 +90,24 @@ export default function CalendarDialog({ ver }: Props) {
           }}
         >
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
             strokeWidth={1.75}
-            stroke="currentColor"
-            className="max-h-[30px] min-h-[30px] min-w-[30px] max-w-[30px]"
+            stroke='currentColor'
+            className='max-h-[30px] min-h-[30px] min-w-[30px] max-w-[30px]'
           >
             <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M6 18L18 6M6 6l12 12'
             />
           </svg>
         </div>
 
         <DayPicker
-          id="test"
-          mode="range"
+          id='test'
+          mode='range'
           defaultMonth={pastMonth}
           selected={range}
           // footer={footer}
@@ -136,7 +127,7 @@ export default function CalendarDialog({ ver }: Props) {
           }}
         />
         <div
-          className="flex max-w-[150px] items-center justify-center rounded-full bg-primary-blue px-[16px] py-[10px] text-[14px] font-medium uppercase text-white"
+          className='flex max-w-[150px] items-center justify-center rounded-full bg-primary-blue px-[16px] py-[10px] text-[14px] font-medium uppercase text-white'
           onClick={() => {
             if (range?.from && range.to) {
               router.replace(
@@ -160,7 +151,8 @@ export default function CalendarDialog({ ver }: Props) {
                     (range?.to?.getTime() - range?.from?.getTime()) /
                     (1000 * 3600 * 24)
                   }`,
-                  '', null
+                  '',
+                  null,
                 )}`,
                 { scroll: false },
               );
@@ -182,7 +174,7 @@ export default function CalendarDialog({ ver }: Props) {
       className={`relative flex h-full w-full flex-col items-center justify-start rounded-[20px] bg-white pt-[24px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px] lg:justify-center lg:pb-[16px]`}
     >
       <div
-        className="absolute right-[10px] top-[10px] text-primary-blue"
+        className='absolute right-[10px] top-[10px] text-primary-blue'
         onClick={() => {
           dispatch({
             type: 'CHANGE_APP_STATE',
@@ -193,24 +185,24 @@ export default function CalendarDialog({ ver }: Props) {
         }}
       >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
+          xmlns='http://www.w3.org/2000/svg'
+          fill='none'
+          viewBox='0 0 24 24'
           strokeWidth={1.75}
-          stroke="currentColor"
-          className="max-h-[30px] min-h-[30px] min-w-[30px] max-w-[30px]"
+          stroke='currentColor'
+          className='max-h-[30px] min-h-[30px] min-w-[30px] max-w-[30px]'
         >
           <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M6 18L18 6M6 6l12 12"
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            d='M6 18L18 6M6 6l12 12'
           />
         </svg>
       </div>
 
       <DayPicker
-        id="test"
-        mode="range"
+        id='test'
+        mode='range'
         defaultMonth={range ? range.from : pastMonth}
         selected={range}
         onSelect={setRange}
@@ -227,7 +219,7 @@ export default function CalendarDialog({ ver }: Props) {
         }}
       />
       <div
-        className="flex max-w-[150px] items-center justify-center rounded-full bg-primary-blue px-[16px] py-[10px] text-[14px] font-medium uppercase text-white"
+        className='flex max-w-[150px] items-center justify-center rounded-full bg-primary-blue px-[16px] py-[10px] text-[14px] font-medium uppercase text-white'
         onClick={() => {
           if (range?.from && range.to) {
             router.replace(

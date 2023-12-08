@@ -13,44 +13,14 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const router = useRouter();
-  const roomAmount = searchParams.getAll('roomAmount');
-  const roomSelect = searchParams.get('roomSelect');
-  const room = searchParams.get('room');
   const cart = searchParams.getAll('cart');
   const slug = searchParams.get('slug');
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
   const days = searchParams.get('days');
   const { appState, dispatch } = useAppCtx();
-
   const [openDesc, setOpenDesc] = useState(false);
 
-  const createQueryString = (
-    name: string,
-    value: string | null,
-    name1: string,
-    value1: string | null,
-    name2: string,
-    value2: string | null,
-  ) => {
-    const params = new URLSearchParams(searchParams);
-    if (value !== null) {
-      params.set(name, value);
-    } else {
-      params.delete(name);
-    }
-    if (value1 !== null) {
-      params.set(name1, value1);
-    } else {
-      params.delete(name1);
-    }
-    if (value2 !== null) {
-      params.set(name2, value2);
-    } else {
-      params.delete(name2);
-    }
-    return params.toString();
-  };
   const multipleCreateQueryString = (
     name: string,
     value: string | null,
@@ -231,7 +201,9 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
               className="max-h-[20px] min-h-[20px] min-w-[20px] max-w-[20px] text-primary-blue 2xs:max-h-[24px] 2xs:min-h-[24px] 2xs:min-w-[24px] 2xs:max-w-[24px]"
             >
               <path
-                d="M7 0C7.92826 0 8.8185 0.368749 9.47487 1.02513C10.1313 1.6815 10.5 2.57174 10.5 3.5C10.5 4.42826 10.1313 5.3185 9.47487 5.97487C8.8185 6.63125 7.92826 7 7 7C6.07174 7 5.1815 6.63125 4.52513 5.97487C3.86875 5.3185 3.5 4.42826 3.5 3.5C3.5 2.57174 3.86875 1.6815 4.52513 1.02513C5.1815 0.368749 6.07174 0 7 0ZM7 8.75C10.8675 8.75 14 10.3162 14 12.25V14H0V12.25C0 10.3162 3.1325 8.75 7 8.75Z"
+                d="M7 0C7.92826 0 8.8185 0.368749 9.47487 1.02513C10.1313 1.6815 10.5 2.57174 10.5 3.5C10.5 4.42826 10.1313 5.3185 9.47487 5.97487C8.8185 6.63125 7.92826
+                 7 7 7C6.07174 7 5.1815 6.63125 4.52513 5.97487C3.86875 5.3185 3.5 4.42826 3.5 3.5C3.5 2.57174 3.86875 1.6815 4.52513 1.02513C5.1815 0.368749 
+                 6.07174 0 7 0ZM7 8.75C10.8675 8.75 14 10.3162 14 12.25V14H0V12.25C0 10.3162 3.1325 8.75 7 8.75Z"
                 fill="currentColor"
               />
             </svg>
@@ -345,7 +317,7 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
 
                           // Check if the value already exists in the array
                           const updatedAmount = appState.selectedAmount.map(
-                            (existingValue, idx) => {
+                            (existingValue) => {
                               const [existingId] = existingValue.split('$');
                               if (existingId === `${data.id}`) {
                                 // If the ID matches, update the existing value

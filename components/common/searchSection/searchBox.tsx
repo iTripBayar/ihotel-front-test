@@ -33,15 +33,6 @@ const SearchBox = ({
   const searchValue = searchParams.get('searchValue');
   const { appState, dispatch } = useAppCtx();
 
-  const createQueryString = (name: string, value: string | null) => {
-    const params = new URLSearchParams(searchParams);
-    if (value !== null) {
-      params.set(name, value);
-    } else {
-      params.delete(name);
-    }
-    return params.toString();
-  };
   const sample: any[] = [];
   const suggestion = [
     {
@@ -201,7 +192,7 @@ const SearchBox = ({
         {ver === 'search' || ver === 'headerSearch' ? (
           <div
             onClick={() => {
-              let nextFilter =
+              const nextFilter =
                 appState.filter === ''
                   ? `${ver === 'search' ? 'webFilter' : 'mobile'}`
                   : '';
@@ -284,7 +275,7 @@ const SearchBox = ({
           {uniqueData.map((data, i) => (
             <div
               onClick={() => {
-                let nextSearchValue = `${data.name}$${data.type}$${data.id}`;
+                const nextSearchValue = `${data.name}$${data.type}$${data.id}`;
                 setQuery(data.name);
                 changeSearchValue(nextSearchValue);
                 setSelected(true);

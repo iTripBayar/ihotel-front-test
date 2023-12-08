@@ -27,9 +27,7 @@ const SearchSection = ({
   const pathname = usePathname();
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
-  const days = searchParams.get('days');
-  const {appState, dispatch} = useAppCtx()
-
+  const { dispatch } = useAppCtx();
 
   const [toggle, setToggle] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -104,9 +102,9 @@ const SearchSection = ({
     return params.toString();
   };
 
-  let newDate = new Date();
-  let nextDay = addDays(newDate, 1);
-  let formattedDate = {
+  const newDate = new Date();
+  const nextDay = addDays(newDate, 1);
+  const formattedDate = {
     from: {
       year: !dateFrom
         ? `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`
@@ -152,21 +150,21 @@ const SearchSection = ({
         : dateTo.split('|')[1].split('-')[1],
     },
   };
-useEffect(()=>{
-  if (!dateFrom && !dateTo && ver ==='hotel') {
-    router.replace(
-      `${pathname}?${createQueryString(
-        'dateFrom',
-        `${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year}|${formattedDate.fromEn.month}-${formattedDate.fromEn.date}-${formattedDate.fromEn.year}`,
-        'dateTo',
-        `${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}|${formattedDate.toEn.month}-${formattedDate.toEn.date}-${formattedDate.toEn.year}`,
-        'days',
-        '1',
-      )}`,
-      { scroll: false },
-    );
-  }
-}, [ver === 'hotel'])
+  useEffect(() => {
+    if (!dateFrom && !dateTo && ver === 'hotel') {
+      router.replace(
+        `${pathname}?${createQueryString(
+          'dateFrom',
+          `${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year}|${formattedDate.fromEn.month}-${formattedDate.fromEn.date}-${formattedDate.fromEn.year}`,
+          'dateTo',
+          `${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}|${formattedDate.toEn.month}-${formattedDate.toEn.date}-${formattedDate.toEn.year}`,
+          'days',
+          '1',
+        )}`,
+        { scroll: false },
+      );
+    }
+  }, [ver === 'hotel']);
 
   return (
     <div
@@ -240,8 +238,8 @@ useEffect(()=>{
         </div>
       ) : null}
       {ver === 'hotel' ? (
-        <div className="flex gap-[24px]">
-          <div className="hidden lg:flex">
+        <div className='flex gap-[24px]'>
+          <div className='hidden lg:flex'>
             <SearchBox
               hotelData={hotelData}
               placesData={placesData}
@@ -253,7 +251,7 @@ useEffect(()=>{
             />
           </div>
           <div
-            className="flex h-[36px] items-center justify-center gap-[12px] rounded-full bg-white px-[8px] text-[15px] font-medium leading-[1px] text-primary-blue 2xs:px-[16px] xl:min-w-[250px]"
+            className='flex h-[36px] items-center justify-center gap-[12px] rounded-full bg-white px-[8px] text-[15px] font-medium leading-[1px] text-primary-blue 2xs:px-[16px] xl:min-w-[250px]'
             onClick={() => {
               // router.replace(
               //   `${pathname}?${createQueryString('calendar', 'open', '', null, '', null)}`,
@@ -271,19 +269,19 @@ useEffect(()=>{
             }}
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
               strokeWidth={2}
-              stroke="currentColor"
-              className="max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px]"
+              stroke='currentColor'
+              className='max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px]'
             >
               <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25
                  2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0
-                  2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
+                  2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z'
               />
             </svg>
             <p>

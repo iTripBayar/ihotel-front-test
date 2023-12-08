@@ -162,7 +162,7 @@ const FilterOptions = ({ categories, services }: Props) => {
       setServices(`${e}`);
     } else {
       if (serv.split(',').includes(e)) {
-        let indexValue = serv.split(',').indexOf(e);
+        const indexValue = serv.split(',').indexOf(e);
         setServices(serv.split(',').toSpliced(indexValue, 1).join());
       } else {
         setServices(`${serv},${e}`);

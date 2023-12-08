@@ -8,7 +8,7 @@ import BurgerMenu from '@/components/common/burgermenu';
 import { useState, useRef, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import HeaderVariants from '@/components/common/headerVariants';
-import { fetchData, fetchDataSearch, fetchUserData } from '@/utils';
+import { fetchData, fetchDataSearch } from '@/utils';
 import SearchSection from '@/components/common/searchSection';
 import Header from '@/components/common/header';
 import BottomSection from '@/components/common/bottomSection';
@@ -40,6 +40,7 @@ const Home = () => {
         type: 'CHANGE_APP_STATE',
         payload: { phone: data.phoneNumber, dollarRate: data.dollarRate },
       });
+      ``;
     }
   }, [loading === false]);
 
@@ -90,43 +91,58 @@ const Home = () => {
   //     });
   //   }
   // }, [appState]);
-  return (
-    <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
-      <Header phone={data ? data.phoneNumber : ''} />
-      {headerVer === 'fixed' ? (
-        <HeaderVariants
-          ver={headerVer}
-          hotelData={data ? data.hotels : []}
-          campsData={data ? data.camps : []}
-          placesData={data ? data.places : []}
-          cityData={data ? data.cities : []}
-        />
-      ) : null}
-      {appState.logOrSign !== '' ? <LogOrSign /> : ''}
-      {appState.menu === 'open' ? <BurgerMenu /> : null}
-      <BottomSection ver={headerVer} />
-      <HeroCategory data={data ? data.propertyTypes : []} />
-      <div ref={searchBoxRef}>
-        {headerVer !== 'fixed' ? (
-          <SearchSection
+
+  console.log(error);
+  if (!error)
+    return (
+      <main className='relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]'>
+        <Header />
+        {headerVer === 'fixed' ? (
+          <HeaderVariants
+            ver={headerVer}
             hotelData={data ? data.hotels : []}
-            placesData={data ? data.places : []}
             campsData={data ? data.camps : []}
+            placesData={data ? data.places : []}
             cityData={data ? data.cities : []}
-            ver={'normal'}
           />
         ) : null}
+        {appState.logOrSign !== '' ? <LogOrSign /> : ''}
+        {appState.menu === 'open' ? <BurgerMenu /> : null}
+        <BottomSection ver={headerVer} />
+        <HeroCategory data={data ? data.propertyTypes : []} />
+        <div ref={searchBoxRef}>
+          {headerVer !== 'fixed' ? (
+            <SearchSection
+              hotelData={data ? data.hotels : []}
+              placesData={data ? data.places : []}
+              campsData={data ? data.camps : []}
+              cityData={data ? data.cities : []}
+              ver={'normal'}
+            />
+          ) : null}
+        </div>
+        <CommonLocation
+          data={data ? data.destCategories : []}
+          destinations={data ? data.topDestinations : []}
+        />
+        <CardsContainer title={'cheap'} data={data ? data.cheapHotels : []} />
+        <CardsContainer title={'hotels'} data={data ? data.hotels : []} />
+        <CardsContainer title={'camps'} data={data ? data.camps : []} />
+        <News data={data ? data.posts : []} />
+        <Footer />
+      </main>
+    );
+  return (
+    <div className='flex h-screen w-full flex-col justify-between'>
+      <Header />
+      <div className='flex h-full w-full flex-col items-center justify-center text-[128px] font-medium leading-[128px] text-sub-text'>
+        <h1>404</h1>
+        <p className='text-[32px] font-normal leading-[32px]'>
+          Cannot connect to server
+        </p>
       </div>
-      <CommonLocation
-        data={data ? data.destCategories : []}
-        destinations={data ? data.topDestinations : []}
-      />
-      <CardsContainer title={'cheap'} data={data ? data.cheapHotels : []} />
-      <CardsContainer title={'hotels'} data={data ? data.hotels : []} />
-      <CardsContainer title={'camps'} data={data ? data.camps : []} />
-      <News data={data ? data.posts : []} />
       <Footer />
-    </main>
+    </div>
   );
 };
 export default Home;

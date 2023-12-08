@@ -6,7 +6,7 @@ interface Props {
 export default function RoomSelection({ roomData }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const {appState, dispatch} = useAppCtx()
+  const { appState, dispatch } = useAppCtx();
 
   const sampleRooms = [
     { id: roomData?.id, hotelId: 0 },
@@ -23,15 +23,15 @@ export default function RoomSelection({ roomData }: Props) {
   let updatedAmount = 0;
   if (appState.selectedAmount.length > 0) {
     for (let i = 0; i < appState.selectedAmount.length; i++) {
-      if(appState.selectedAmount[i].split('$')[0] === appState.selectedRoom){
-      updatedAmount = parseInt(appState.selectedAmount[i].split('$')[1]);
+      if (appState.selectedAmount[i].split('$')[0] === appState.selectedRoom) {
+        updatedAmount = parseInt(appState.selectedAmount[i].split('$')[1]);
       }
     }
   }
   return (
     <div
-      className="flex max-h-[420px] min-h-[50px] flex-col overflow-y-auto rounded-t-[30px] bg-white px-[36px] pb-[50px] pt-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]"
-      id="container"
+      className='flex max-h-[420px] min-h-[50px] flex-col overflow-y-auto rounded-t-[30px] bg-white px-[36px] pb-[50px] pt-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]'
+      id='container'
     >
       {sampleRooms.map((index, i) => (
         <div
@@ -54,7 +54,7 @@ export default function RoomSelection({ roomData }: Props) {
 
                   // Check if the value already exists in the array
                   const updatedAmount = appState.selectedAmount.map(
-                    (existingValue, idx) => {
+                    (existingValue) => {
                       const [existingId] = existingValue.split('$');
                       if (existingId === `${appState.selectedRoom}`) {
                         // If the ID matches, update the existing value
@@ -80,22 +80,22 @@ export default function RoomSelection({ roomData }: Props) {
               },
             });
           }}
-          className="leading relative flex min-h-[50px] w-full items-center  justify-center border-b border-b-black/[.15] text-[20px] font-medium text-main-text"
+          className='leading relative flex min-h-[50px] w-full items-center  justify-center border-b border-b-black/[.15] text-[20px] font-medium text-main-text'
         >
           {sampleRooms.indexOf(index)} {lang === 'en' ? 'rooms' : 'өрөө'}
           {sampleRooms.indexOf(index) === updatedAmount ? (
             <svg
-              viewBox="0 0 19 14"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="absolute right-0 top-[50%] max-h-[14px] min-h-[14px] min-w-[20px] max-w-[20px] translate-y-[-50%] text-primary-blue"
+              viewBox='0 0 19 14'
+              fill='none'
+              xmlns='http://www.w3.org/2000/svg'
+              className='absolute right-0 top-[50%] max-h-[14px] min-h-[14px] min-w-[20px] max-w-[20px] translate-y-[-50%] text-primary-blue'
             >
               <path
-                d="M17 2L7 12L2 7"
-                stroke="#3C76FE"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                d='M17 2L7 12L2 7'
+                stroke='#3C76FE'
+                strokeWidth='2.5'
+                strokeLinecap='round'
+                strokeLinejoin='round'
               />
             </svg>
           ) : null}

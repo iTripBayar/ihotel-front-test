@@ -40,9 +40,9 @@ export default function OrderDialog({
       }
     }
   }
-  let newDate = new Date();
-  let nextDay = addDays(newDate, 1);
-  let formattedDate = {
+  const newDate = new Date();
+  const nextDay = addDays(newDate, 1);
+  const formattedDate = {
     from: {
       month: `${format(newDate, 'yyyy-MM-dd').split('-')[1]}`,
       date: `${format(newDate, 'yyyy-MM-dd').split('-')[2]}`,
@@ -84,7 +84,7 @@ export default function OrderDialog({
       };
     }
   } else {
-    let mnDate = {
+    const mnDate = {
       from: {
         month: dateFrom?.split('|')[0].split('/')[0],
         date: dateFrom?.split('|')[0].split('/')[1],
@@ -94,7 +94,7 @@ export default function OrderDialog({
         date: dateTo?.split('|')[0].split('/')[1],
       },
     };
-    let enDate = {
+    const enDate = {
       from: {
         month: dateFrom?.split('|')[1]?.split('-')[0],
         date: dateFrom?.split('|')[1]?.split('-')[1],

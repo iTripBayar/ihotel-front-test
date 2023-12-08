@@ -11,7 +11,7 @@ const Review = ({ ver, data }: Props) => {
   const lang = searchParams.get('lang');
   const size = useWindowSize();
 
-  let sample = [
+  const sample = [
     {
       key: 0,
       desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur magni corporis, at earum officiis possimus fugiat cupiditate iure provident illo!',
@@ -30,7 +30,7 @@ const Review = ({ ver, data }: Props) => {
     },
   ];
 
-  let sampleGraphs = [
+  const sampleGraphs = [
     {
       key: 10,
       title: 'Буудлын ажилчид',
