@@ -1,7 +1,8 @@
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Collapse, Button, useDisclosure } from '@chakra-ui/react';
 import useWindowSize from '@/hooks/windowSize';
+import { useAppCtx } from '@/contexts/app';
 
 interface Props {
   name: string | null;
@@ -26,19 +27,10 @@ export default function GeneralInfo({
   const lang = searchParams.get('lang');
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
-  const pathname = usePathname();
-  const router = useRouter();
   const { isOpen, onToggle } = useDisclosure();
   const size = useWindowSize();
-  const createQueryString = (name: string, value: string | null) => {
-    const params = new URLSearchParams(searchParams);
-    if (value !== null) {
-      params.set(name, value);
-    } else {
-      params.delete(name);
-    }
-    return params.toString();
-  };
+  const {dispatch} = useAppCtx()
+  
   const displayDate = {
     from: `${dateFrom?.split('|')[0].split('/')[2]}-${dateFrom
       ?.split('|')[0]
@@ -61,7 +53,6 @@ export default function GeneralInfo({
       </h3>
       <div className="flex w-full flex-col gap-[24px] lg:flex-col-reverse ">
         {/* calendar */}
-
         <div className="flex w-full flex-col gap-[24px] lg:grid lg:grid-cols-6 lg:items-center">
           <div className="flex w-full items-center justify-between gap-[20px] rounded-[20px] bg-white px-[16px] py-[12px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] 2xs:gap-[36px] lg:col-span-4 lg:px-0 lg:shadow-none">
             {/* dateFrom */}
@@ -103,10 +94,10 @@ export default function GeneralInfo({
           <div
             className="relative flex min-h-[42px] w-full items-center justify-center rounded-full bg-primary-blue px-[20px]  text-[16px] font-medium text-white sm:min-h-[46px] sm:text-[18px] lg:col-span-2 lg:min-h-[20px] lg:max-w-[165px] lg:justify-between lg:justify-self-end lg:px-[16px] lg:py-[12px] lg:text-[15px] lg:leading-[14px]"
             onClick={() => {
-              router.replace(
-                `${pathname}?${createQueryString('calendar', 'open')}`,
-                { scroll: false },
-              );
+              dispatch({
+                type: 'CHANGE_APP_STATE',
+                payload: { calendar: 'open' },
+              });
             }}
           >
             <p className="justify-self-center">
@@ -175,12 +166,6 @@ export default function GeneralInfo({
             >
               <div className="relative h-[200px] w-full overflow-hidden rounded-[12px] sm:h-[250px]">
                 <Image
-                  // src={
-                  //   image
-                  //     ? `https://sandbox.api.myhotel.mn/image?path=${image}`
-                  //     : '/samples/camp.png'
-                  // }
-                  // `https://sandbox.api.myhotel.mn:9443/${data?.coverPhoto}`
                   src={
                     image
                       ? `https://sandbox.api.myhotel.mn:9443/${image}`

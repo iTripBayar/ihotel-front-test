@@ -14,17 +14,15 @@ import Footer from '@/components/common/footer';
 import BurgerMenu from '@/components/common/burgermenu';
 import { useSearchParams } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
-import LogOrSign from '@/components/common/logOrSign';
+import LogOrSign from '@/components/common/signIn/signIn';
 import { unserialize } from 'serialize-php';
 import Header from '@/components/common/header';
 import { CircularProgress, ChakraProvider } from '@chakra-ui/react';
 
 const ReservationPage = () => {
   const searchParams = useSearchParams();
-  const name = searchParams.get('name');
   const slug = searchParams.get('slug');
   const lang = searchParams.get('lang');
-  const calendar = searchParams.get('calendar');
   const { appState } = useAppCtx();
 
   const { data, loading } = useRequest(() => {
@@ -74,15 +72,19 @@ const ReservationPage = () => {
           cityData={[]}
         />
       )}
+      <div className="fixed top-[72px] left-[50%] translate-x-[-50%] z-[900] hidden h-auto w-auto lg:flex">
+        {appState.calendar === 'open' ? <CalendarDialog ver={'web'} /> : null}
+      </div>
       {appState.logOrSign !== '' ? <LogOrSign /> : ''}
       {appState.menu === 'open' ? <BurgerMenu /> : null}
       <div className="fixed bottom-0 z-[800] w-full sm:px-[50px] md:px-[72px] lg:hidden ">
-        {calendar && calendar === 'open' ? (
+        {appState.calendar === 'open' ? (
           <CalendarDialog ver={'mobile'} />
         ) : (
           <BottomDialog stat={stat} />
         )}
       </div>
+
       {loading === true ? (
         <ChakraProvider>
           <div className="flex h-full w-full items-center justify-center pb-[100px]">

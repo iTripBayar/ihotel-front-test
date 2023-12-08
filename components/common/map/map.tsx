@@ -177,6 +177,8 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
     options: { radius: 75, maxZoom: 20 },
   });
 
+  console.log(data)
+
   return (
     <div
       className={`sticky h-[calc(100vh-260px)] w-full flex-col items-center justify-start gap-[24px] bg-white px-[16px] pb-[24px]  sm:px-[42px] md:px-[72px] lg:h-[calc(100vh-60px)] lg:px-0 lg:pb-[24px]  lg:pt-[16px] ${
@@ -193,10 +195,12 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
         }}
         ref={mapRef}
         style={{
+          // width: '100%',
           width: '100%',
           height: '100%',
           borderRadius: 20,
           border: 'solid 1px rgb(0,0,0,0.25)',
+
         }}
         id="mapBox"
         mapStyle="mapbox://styles/ihotel-dev/clnwysb8a005b01qx38a9hgh0"
@@ -308,10 +312,10 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
             latitude={parseInt(cardData[0].lat)}
             longitude={parseInt(cardData[0].lng)}
             style={{
-              zIndex: 998,
-              position: 'absolute',
+              // zIndex: 998,
+              position: 'relative',
               width: '75%',
-              marginLeft: '-20px',
+              // marginLeft: '-20px',
             }}
           >
             <div

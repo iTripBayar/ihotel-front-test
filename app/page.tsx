@@ -14,7 +14,7 @@ import Header from '@/components/common/header';
 import BottomSection from '@/components/common/bottomSection';
 import CardsContainer from '@/components/homePage/cardsContainer';
 import { useAppCtx } from '@/contexts/app';
-import LogOrSign from '@/components/common/logOrSign';
+import LogOrSign from '@/components/common/signIn/signIn';
 
 const Home = () => {
   const [headerVer, setHeaderVer] = useState('default');
@@ -70,26 +70,26 @@ const Home = () => {
       }
     };
   }, []);
-  useEffect(() => {
-    if (appState.logOrSign !== '') {
-      dispatch({
-        type: 'CHANGE_APP_STATE',
-        payload: { menu: '', filter: '' },
-      });
-    }
-    if (appState.menu !== '') {
-      dispatch({
-        type: 'CHANGE_APP_STATE',
-        payload: { logOrSign: '', filter: '' },
-      });
-    }
-    if (appState.filter !== '') {
-      dispatch({
-        type: 'CHANGE_APP_STATE',
-        payload: { logOrSign: '', menu: '' },
-      });
-    }
-  }, [appState]);
+  // useEffect(() => {
+  //   if (appState.logOrSign !== '') {
+  //     dispatch({
+  //       type: 'CHANGE_APP_STATE',
+  //       payload: { menu: '', filter: '' },
+  //     });
+  //   }
+  //   if (appState.menu !== '') {
+  //     dispatch({
+  //       type: 'CHANGE_APP_STATE',
+  //       payload: { logOrSign: '', filter: '' },
+  //     });
+  //   }
+  //   if (appState.filter !== '') {
+  //     dispatch({
+  //       type: 'CHANGE_APP_STATE',
+  //       payload: { logOrSign: '', menu: '' },
+  //     });
+  //   }
+  // }, [appState]);
   return (
     <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
       <Header phone={data ? data.phoneNumber : ''} />

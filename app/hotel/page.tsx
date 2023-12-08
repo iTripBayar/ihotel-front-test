@@ -17,7 +17,7 @@ import Footer from '@/components/common/footer';
 import Dialogs from '@/components/hotelPage/dialogs';
 import CalendarDialog from '@/components/hotelPage/dialogs/calendarDialog';
 import { useSearchParams } from 'next/navigation';
-import LogOrSign from '@/components/common/logOrSign';
+import LogOrSign from '@/components/common/signIn/signIn';
 import { useAppCtx } from '@/contexts/app';
 import { useRef, useState } from 'react';
 import CartAlert from '@/components/hotelPage/cartAlert';

@@ -72,6 +72,7 @@ export default function LogOrSign() {
           </svg>
         </div>
         {/* inputs */}
+        <button onClick={() => checkUser()}> test </button>
         <div className="flex w-full flex-col gap-[16px] pt-[8px]">
           <div className="flex w-full flex-col gap-[20px]">
             <div className="flex w-full flex-col gap-[20px]">
@@ -160,10 +161,7 @@ export default function LogOrSign() {
               lang === 'en' ? 'min-w-[100px] px-[14px]' : ''
             }`}
           >
-            {lang === 'en'
-                ? 'Log In'
-                : 'Нэвтрэх'
-              }
+            {lang === 'en' ? 'Log In' : 'Нэвтрэх'}
           </div>
           <p
             className="justify-self-end text-[13px] text-primary-blue 2xs:text-[14px]"
@@ -174,10 +172,7 @@ export default function LogOrSign() {
               });
             }}
           >
-            { lang === 'en'
-                ? 'Sign Up'
-                : 'Бүртгүүлэх'
-              }
+            {lang === 'en' ? 'Sign Up' : 'Бүртгүүлэх'}
           </p>
         </div>
       </div>

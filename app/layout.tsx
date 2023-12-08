@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AppCtxProvider>
+      <AppCtxProvider>
         <html lang="en">
           <head>
             <link rel="icon" type="image/x-icon" href="/favicon.png"></link>
@@ -33,6 +33,6 @@ export default function RootLayout({
             {children}
           </body>
         </html>
-    </AppCtxProvider>
+      </AppCtxProvider>
   );
 }
