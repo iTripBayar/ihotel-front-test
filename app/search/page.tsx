@@ -9,32 +9,51 @@ import SearchCards from '@/components/searchPage/searchCards';
 import MapContainer from '@/components/common/map/map';
 import FilterOptions from '@/components/common/searchSection/filter/filterOptions';
 import { useAppCtx } from '@/contexts/app';
-// import LogOrSign from '@/components/common/signIn/signIn';
-import LogOrSign from '@/components/common/signIn/signIn';
-import { useEffect } from 'react';
 import { CircularProgress } from '@chakra-ui/react';
 import { ChakraProvider } from '@chakra-ui/react';
 import Header from '@/components/common/header';
 import { Footer } from 'react-day-picker';
+import LogIn from '@/components/common/signIn/logIn';
+import SignUp from '@/components/common/signIn/signUp';
+import { useSearchParams } from 'next/navigation';
 
 const SearchPage = () => {
-  const { data, loading, error } = useRequest(() => {
-    return fetchCheckHotel();
-  });
-  const searchData = useRequest(
+  const searchParams = useSearchParams();
+  // const city = searchParams.get('city');
+  // const hotel = searchParams.get('hotel');
+  // const place = searchParams.get('place');
+  // const camp = searchParams.get('camp');
+  const searchValue = searchParams.get('searchValue');
+  const destination = searchParams.get('destination');
+  const category = searchParams.get('category');
+  const page = searchParams.get('page');
+  // console.log(hotel)
+
+  const hotel = searchValue?.split('$')[1] === 'hotel' ? searchValue?.split('$')[2] : null;
+  const city =
+    searchValue?.split('$')[1] === 'city' ? searchValue?.split('$')[2] : null;
+  const place =
+    searchValue?.split('$')[1] === 'place' ? searchValue?.split('$')[2] : null;
+  const camp =
+    searchValue?.split('$')[1] === 'camp' ? searchValue?.split('$')[2] : null;
+
+  const { data, loading, error } = useRequest(
     () => {
-      return fetchDataSearch();
+      return fetchCheckHotel({
+        hotel: hotel,
+        city: city,
+        category: category,
+        place: place,
+        destination: destination,
+        camp: camp,
+      });
     },
-    {
-      manual: true,
-      onSuccess: (res) => {
-        console.log(res);
-      },
-    },
+    { refreshDeps: [searchValue] },
   );
-  useEffect(() => {
-    searchData.run();
-  }, []);
+
+  const { data: searchData } = useRequest(() => {
+    return fetchDataSearch();
+  });
 
   const { appState } = useAppCtx();
   if (!error)
@@ -46,11 +65,12 @@ const SearchPage = () => {
         <HeaderVariants
           ver={'search'}
           hotelData={data ? data.data : []}
-          placesData={searchData.data ? searchData.data.places : []}
+          placesData={searchData ? searchData.places : []}
           campsData={[]}
-          cityData={searchData.data ? searchData.data.cities : []}
+          cityData={searchData ? searchData.cities : []}
         />
-        {appState.logOrSign !== '' ? <LogOrSign /> : ''}
+        {appState.logOrSign === 'log' ? <LogIn /> : ''}
+        {appState.logOrSign === 'sign' ? <SignUp /> : ''}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
         <BottomSection ver={'search'} />
         <div
@@ -61,14 +81,8 @@ const SearchPage = () => {
           }`}
         >
           <FilterOptions
-            categories={
-              searchData.data?.categories ? searchData.data?.categories : []
-            }
-            services={
-              searchData.data?.hotelServices
-                ? searchData.data.hotelServices
-                : []
-            }
+            categories={searchData?.categories ? searchData?.categories : []}
+            services={searchData?.hotelServices ? searchData.hotelServices : []}
           />
         </div>
         <div
@@ -79,19 +93,15 @@ const SearchPage = () => {
           <SearchSection
             ver={'headerSearch'}
             hotelData={data ? data.data : []}
-            placesData={searchData.data ? searchData.data.places : []}
+            placesData={searchData ? searchData.places : []}
             campsData={[]}
-            cityData={searchData.data ? searchData.data.cities : []}
+            cityData={searchData ? searchData.cities : []}
           />
           {appState.filter === 'mobile' ? (
             <FilterOptions
-              categories={
-                searchData.data?.categories ? searchData.data?.categories : []
-              }
+              categories={searchData?.categories ? searchData?.categories : []}
               services={
-                searchData.data?.hotelServices
-                  ? searchData.data.hotelServices
-                  : []
+                searchData?.hotelServices ? searchData.hotelServices : []
               }
             />
           ) : null}
@@ -112,8 +122,8 @@ const SearchPage = () => {
                 <SearchCards data={data ? data.data : []} />
                 <MapContainer
                   data={data ? data.data : []}
-                  lat={searchData.data?.mapCenter.lat}
-                  lng={searchData.data?.mapCenter.lng}
+                  lat={searchData?.mapCenter.lat}
+                  lng={searchData?.mapCenter.lng}
                 />
               </div>
             ) : null}

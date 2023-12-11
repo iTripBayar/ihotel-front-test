@@ -1,5 +1,4 @@
 'use client';
-
 import HeaderVariants from '@/components/common/headerVariants';
 import CalendarDialog from '@/components/hotelPage/dialogs/calendarDialog';
 import AdditionalRequest from '@/components/reservationPage/additionalRequest';
@@ -14,10 +13,11 @@ import Footer from '@/components/common/footer';
 import BurgerMenu from '@/components/common/burgermenu';
 import { useSearchParams } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
-import LogOrSign from '@/components/common/signIn/signIn';
 import { unserialize } from 'serialize-php';
 import Header from '@/components/common/header';
 import { CircularProgress, ChakraProvider } from '@chakra-ui/react';
+import LogIn from '@/components/common/signIn/logIn';
+import SignUp from '@/components/common/signIn/signUp';
 
 const ReservationPage = () => {
   const searchParams = useSearchParams();
@@ -53,10 +53,8 @@ const ReservationPage = () => {
   let unserializedData: { day: string; fee: string }[] = [{ day: '', fee: '' }];
 
   if (serializedData) {
-    // Unserialize the PHP serialized string
     unserializedData = unserialize(serializedData);
     console.log(unserializedData);
-    // Now, unserializedData contains the unserialized JavaScript object
   }
 
   return (
@@ -75,7 +73,8 @@ const ReservationPage = () => {
       <div className='fixed left-[50%] top-[72px] z-[900] hidden h-auto w-auto translate-x-[-50%] lg:flex'>
         {appState.calendar === 'open' ? <CalendarDialog ver={'web'} /> : null}
       </div>
-      {appState.logOrSign !== '' ? <LogOrSign /> : ''}
+      {appState.logOrSign === 'log' ? <LogIn /> : ''}
+      {appState.logOrSign === 'sign' ? <SignUp /> : ''}
       {appState.menu === 'open' ? <BurgerMenu /> : null}
       <div className='fixed bottom-0 z-[800] w-full sm:px-[50px] md:px-[72px] lg:hidden '>
         {appState.calendar === 'open' ? (
@@ -84,7 +83,6 @@ const ReservationPage = () => {
           <BottomDialog stat={stat} />
         )}
       </div>
-
       {loading === true ? (
         <ChakraProvider>
           <div className='flex h-full w-full items-center justify-center pb-[100px]'>

@@ -1,7 +1,9 @@
 'use client';
+
 import './globals.css';
 import { Montserrat } from 'next/font/google';
 import { AppCtxProvider } from '@/contexts/app';
+import AuthProvider from '@/contexts/auth';
 // import type { Metadata } from 'next';
 
 // export const metadata: Metadata = {
@@ -20,19 +22,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-      <AppCtxProvider>
-        <html lang="en">
+    <AppCtxProvider>
+      <AuthProvider>
+        <html lang='en'>
           <head>
-            <link rel="icon" type="image/x-icon" href="/favicon.png"></link>
+            <link rel='icon' type='image/x-icon' href='/favicon.png'></link>
             <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1, maximum-scale=1"
+              name='viewport'
+              content='width=device-width, initial-scale=1, maximum-scale=1'
             ></meta>
           </head>
           <body className={`relative overscroll-none ${inter.className}`}>
             {children}
           </body>
         </html>
-      </AppCtxProvider>
+      </AuthProvider>
+    </AppCtxProvider>
   );
 }

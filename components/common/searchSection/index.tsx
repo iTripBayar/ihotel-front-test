@@ -41,6 +41,9 @@ const SearchSection = ({
     },
     [searchValue],
   );
+  useEffect(() => {
+    console.log(searchValue);
+  }, [searchValue]);
 
   const createQueryString = (
     name: string,
@@ -211,12 +214,12 @@ const SearchSection = ({
                   `/search/?${multipleCreateQueryString(
                     'lang',
                     lang,
-                    'searchValue',
-                    searchValue !== '' ? searchValue : null,
                     'toggle',
                     toggle == true ? 'true' : null,
                     'filter',
                     filter,
+                    'searchValue',
+                    searchValue !== '' ? searchValue : null,
                   )}`,
                 );
               }}

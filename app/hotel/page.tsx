@@ -17,10 +17,11 @@ import Footer from '@/components/common/footer';
 import Dialogs from '@/components/hotelPage/dialogs';
 import CalendarDialog from '@/components/hotelPage/dialogs/calendarDialog';
 import { useSearchParams } from 'next/navigation';
-import LogOrSign from '@/components/common/signIn/signIn';
 import { useAppCtx } from '@/contexts/app';
 import { useRef, useState } from 'react';
 import CartAlert from '@/components/hotelPage/cartAlert';
+import LogIn from '@/components/common/signIn/logIn';
+import SignUp from '@/components/common/signIn/signUp';
 
 const HotelPage = () => {
   const searchParams = useSearchParams();
@@ -101,7 +102,8 @@ const HotelPage = () => {
           <CalendarDialog ver={'web'} />
         </div>
       ) : null}
-      {appState.logOrSign !== '' ? <LogOrSign /> : ''}
+      {appState.logOrSign === 'log' ? <LogIn /> : ''}
+      {appState.logOrSign === 'sign' ? <SignUp /> : ''}
       {appState.menu === 'open' ? <BurgerMenu /> : null}
       <Dialogs
         roomPrices={roomPrices}

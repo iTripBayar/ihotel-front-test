@@ -1,4 +1,5 @@
 'use client';
+
 import HeroCategory from '@/components/homePage/heroCategory';
 import '../app/globals.css';
 import CommonLocation from '@/components/homePage/commonLocation';
@@ -14,7 +15,8 @@ import Header from '@/components/common/header';
 import BottomSection from '@/components/common/bottomSection';
 import CardsContainer from '@/components/homePage/cardsContainer';
 import { useAppCtx } from '@/contexts/app';
-import LogOrSign from '@/components/common/signIn/signIn';
+import LogIn from '@/components/common/signIn/logIn';
+import SignUp from '@/components/common/signIn/signUp';
 
 const Home = () => {
   const [headerVer, setHeaderVer] = useState('default');
@@ -23,14 +25,10 @@ const Home = () => {
     return fetchData();
   });
 
-  const searchData = useRequest(() => {
+  
+  const { data: searchData } = useRequest(() => {
     return fetchDataSearch();
   });
-
-  // const userData = useRequest(()=>{
-  //   return fetchUserData();
-  // })
-  // console.log(userData)
 
   const { appState, dispatch } = useAppCtx();
 
@@ -71,28 +69,7 @@ const Home = () => {
       }
     };
   }, []);
-  // useEffect(() => {
-  //   if (appState.logOrSign !== '') {
-  //     dispatch({
-  //       type: 'CHANGE_APP_STATE',
-  //       payload: { menu: '', filter: '' },
-  //     });
-  //   }
-  //   if (appState.menu !== '') {
-  //     dispatch({
-  //       type: 'CHANGE_APP_STATE',
-  //       payload: { logOrSign: '', filter: '' },
-  //     });
-  //   }
-  //   if (appState.filter !== '') {
-  //     dispatch({
-  //       type: 'CHANGE_APP_STATE',
-  //       payload: { logOrSign: '', menu: '' },
-  //     });
-  //   }
-  // }, [appState]);
 
-  console.log(error);
   if (!error)
     return (
       <main className='relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]'>
@@ -102,11 +79,12 @@ const Home = () => {
             ver={headerVer}
             hotelData={data ? data.hotels : []}
             campsData={data ? data.camps : []}
-            placesData={data ? data.places : []}
-            cityData={data ? data.cities : []}
+            placesData={searchData ? searchData.places : []}
+            cityData={searchData ? searchData.cities : []}
           />
         ) : null}
-        {appState.logOrSign !== '' ? <LogOrSign /> : ''}
+        {appState.logOrSign === 'log' ? <LogIn /> : ''}
+        {appState.logOrSign === 'sign' ? <SignUp /> : ''}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
         <BottomSection ver={headerVer} />
         <HeroCategory data={data ? data.propertyTypes : []} />
@@ -114,9 +92,9 @@ const Home = () => {
           {headerVer !== 'fixed' ? (
             <SearchSection
               hotelData={data ? data.hotels : []}
-              placesData={data ? data.places : []}
+              placesData={searchData ? searchData.places : []}
               campsData={data ? data.camps : []}
-              cityData={data ? data.cities : []}
+              cityData={searchData ? searchData.cities : []}
               ver={'normal'}
             />
           ) : null}

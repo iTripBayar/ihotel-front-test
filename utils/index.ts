@@ -1,11 +1,13 @@
 export async function fetchData(): Promise<HomeData.Home> {
-  const response = await fetch('https://sandbox.api.myhotel.mn:9443/ihotel',{cache: 'force-cache'});
+  const response = await fetch('https://sandbox.api.myhotel.mn:9443/ihotel', {
+    cache: 'force-cache',
+  });
   const result = await response.json();
 
   return result;
 }
 
-export async function fetchDataSearch():Promise<SearchData.Data> {
+export async function fetchDataSearch(): Promise<SearchData.Data> {
   const response = await fetch(
     'https://sandbox.api.myhotel.mn:9443/ihotel/search',
     { cache: 'force-cache' },
@@ -15,32 +17,21 @@ export async function fetchDataSearch():Promise<SearchData.Data> {
   return result;
 }
 
-export async function fetchUserData(e:{email: string, password: string}) {
-  // const response = await fetch(
-  //   'https://sandbox.api.myhotel.mn:9443/api/login',
-  //   {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       // email: 'orgil@ihotel.mn',
-  //       email: e.email,
-  //       // password: 'Wave920110@',
-  //       password: e.password,
-  //     }),
-  //   },
-  // )
-  // const result = await response.json();
-  // return result;
+export async function fetchUserData(e: {
+  email: string | undefined;
+  password: string | undefined;
+}) {
   try {
-    const response = await fetch('https://sandbox.api.myhotel.mn:9443/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      'https://sandbox.api.myhotel.mn:9443/api/login',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: e.email, password: e.password }),
       },
-      body: JSON.stringify({ email: e.email, password: e.password }),
-    });
+    );
 
     if (!response.ok) {
       // If the response status is not OK (e.g., 404 Not Found, 500 Internal Server Error), throw an error
@@ -56,24 +47,29 @@ export async function fetchUserData(e:{email: string, password: string}) {
     } else {
       console.error('Error fetching user data:', error.message);
     }
-
     // Rethrow the error for further handling if needed
     throw error;
   }
 }
 
-// fetch('/api/route-name', {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-//   body: JSON.stringify(objectWithData),
-// });
-
-export async function fetchCheckHotel(): Promise<CheckHotels.Data> {
+export async function fetchCheckHotel(e: {
+  hotel: string | null;
+  city: string | null;
+  category: string | null;
+  place: string | null;
+  destination: string | null;
+  camp: string | null;
+}): Promise<CheckHotels.Data> {
+  let query = `?${e.hotel !== null ? `hotel=${e.hotel}` : ''}${
+    e.city !== null ? `&city=${e.city}` : ''
+  }${e.category !== null ? `&category=${e.category}` : ''}${
+    e.place !== null ? `&place=${e.place}` : ''
+  }${e.destination !== null ? `&destination=${e.destination}` : ''}${
+    e.camp !== null ? `&camp=${e.camp}` : ''
+  }`;
   const response = await fetch(
-    'https://sandbox.api.myhotel.mn:9443/ihotel/checkhotels',
-    { cache: 'force-cache' },
+    `https://sandbox.api.myhotel.mn:9443/ihotel/checkhotels${query}`,
+    // { cache: 'force-cache' },
   );
   const result = await response.json();
 
@@ -85,9 +81,7 @@ export async function fetchDataHotel(slug: string): Promise<HotelData.full> {
     `https://sandbox.api.myhotel.mn:9443/ihotel/hotel/${slug}`,
     { cache: 'force-cache' },
   );
-  const result : HotelData.full = await response.json();
+  const result: HotelData.full = await response.json();
 
   return result;
 }
-
-// `https://sandbox.api.myhotel.mn:9443/ihotel/hotel/${searchParams.slug}`;
