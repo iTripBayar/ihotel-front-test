@@ -170,7 +170,7 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
         {appState.map === 'open' ? (
           <div
             onClick={() => {
-              let nextLang = lang === 'en' ? 'mn' : 'en';
+              const nextLang = lang === 'en' ? 'mn' : 'en';
               router.push(
                 `${pathname}?${createQueryString('lang', nextLang)}`,
                 {

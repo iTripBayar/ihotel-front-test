@@ -81,7 +81,11 @@ export default function CancelTerm({ data, rooms, dollarRate }: Props) {
                             : `${format(displayDate1, 'yyyy-MM-dd')} хүртэл`}
                         </td>
                         <td>{index.fee}%</td>
-                        <td>{(totalPrice / 100) * parseInt(index.fee)}</td>
+                        <td>
+                          {lang === 'en' && dollarRate
+                            ? totalPrice / parseInt(dollarRate) / 100
+                            : (totalPrice / 100) * parseInt(index.fee)}
+                        </td>
                       </tr>
                     ))
                   : null}

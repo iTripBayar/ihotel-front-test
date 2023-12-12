@@ -1,7 +1,7 @@
 export async function fetchData(): Promise<HomeData.Home> {
-  const response = await fetch('https://sandbox.api.myhotel.mn:9443/ihotel', {
-    cache: 'force-cache',
-  });
+  const response = await fetch('https://sandbox.api.myhotel.mn:9443/ihotel', 
+  // { cache: 'force-cache',}
+  );
   const result = await response.json();
 
   return result;
@@ -10,7 +10,7 @@ export async function fetchData(): Promise<HomeData.Home> {
 export async function fetchDataSearch(): Promise<SearchData.Data> {
   const response = await fetch(
     'https://sandbox.api.myhotel.mn:9443/ihotel/search',
-    { cache: 'force-cache' },
+    // { cache: 'force-cache' },
   );
   const result = await response.json();
 
@@ -79,7 +79,7 @@ export async function fetchCheckHotel(e: {
   const query = `?hotel=${e.hotel !== null ? e.hotel : ''}&place=${e.place !== null ? e.place : ''}&city=${e.city !== null ? e.city : ''}&checkin=${e.checkin}&checkout=${e.checkout}&isClosed=${e.isClosed !== null ? e.isClosed : ''}&page=${e.page}&prices=${e.prices !== null ? e.prices : ''}&filterstar=${e.filterstar !== null ? e.filterstar : ''}&rating1=${e.rating1 !== null ? e.rating1 : ''}&rating2=${e.rating2 !== null?e.rating2 : ''}&hotelServices=${e.hotelServices !== null ? e.hotelServices : ''}&roomServices=${e.roomServices !== null ? e.roomServices : ''}&categories=${e.categories !== null ? e.categories : ''}`;
   const response = await fetch(
     `https://sandbox.api.myhotel.mn:9443/ihotel/checkhotels${query}`,
-    { cache: 'force-cache' },
+    // { cache: 'force-cache' },
   );
   const result = await response.json();
 
@@ -89,7 +89,7 @@ export async function fetchCheckHotel(e: {
 export async function fetchDataHotel(slug: string): Promise<HotelData.full> {
   const response = await fetch(
     `https://sandbox.api.myhotel.mn:9443/ihotel/hotel/${slug}`,
-    { cache: 'force-cache' },
+    // { cache: 'force-cache' },
   );
   const result: HotelData.full = await response.json();
 

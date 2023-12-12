@@ -17,6 +17,8 @@ import CardsContainer from '@/components/homePage/cardsContainer';
 import { useAppCtx } from '@/contexts/app';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
+import { ChakraProvider, CircularProgress } from '@chakra-ui/react';
+import ErrorComponent from '@/components/common/404';
 
 const Home = () => {
   const [headerVer, setHeaderVer] = useState('default');
@@ -25,7 +27,6 @@ const Home = () => {
     return fetchData();
   });
 
-  
   const { data: searchData } = useRequest(() => {
     return fetchDataSearch();
   });
@@ -87,7 +88,16 @@ const Home = () => {
         {appState.logOrSign === 'sign' ? <SignUp /> : ''}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
         <BottomSection ver={headerVer} />
-        <HeroCategory data={data ? data.propertyTypes : []} />
+        {loading ? (
+          <ChakraProvider>
+            <div className='flex h-[111px] w-full items-center justify-center 2xs:h-[100px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[225px] 2xl:h-[250px]'>
+              <CircularProgress isIndeterminate={true} color='#3C76FE' />
+            </div>
+          </ChakraProvider>
+        ) : (
+          <HeroCategory data={data ? data.propertyTypes : []} />
+        )}
+
         <div ref={searchBoxRef}>
           {headerVer !== 'fixed' ? (
             <SearchSection
@@ -99,28 +109,33 @@ const Home = () => {
             />
           ) : null}
         </div>
-        <CommonLocation
-          data={data ? data.destCategories : []}
-          destinations={data ? data.topDestinations : []}
-        />
-        <CardsContainer title={'cheap'} data={data ? data.cheapHotels : []} />
-        <CardsContainer title={'hotels'} data={data ? data.hotels : []} />
-        <CardsContainer title={'camps'} data={data ? data.camps : []} />
-        <News data={data ? data.posts : []} />
+        {loading ? (
+          <ChakraProvider>
+            <div className='flex h-[500px] w-full items-center justify-center'>
+              <CircularProgress isIndeterminate={true} color='#3C76FE' />
+            </div>
+          </ChakraProvider>
+        ) : (
+          <CommonLocation
+            data={data ? data.destCategories : []}
+            destinations={data ? data.topDestinations : []}
+          />
+        )}
+        {loading ? null : (
+          <CardsContainer title={'cheap'} data={data ? data.cheapHotels : []} />
+        )}
+        {loading ? null : (
+          <CardsContainer title={'hotels'} data={data ? data.hotels : []} />
+        )}
+        {loading ? null : (
+          <CardsContainer title={'camps'} data={data ? data.camps : []} />
+        )}
+        {loading ? null : <News data={data ? data.posts : []} />}
         <Footer />
       </main>
     );
   return (
-    <div className='flex h-screen w-full flex-col justify-between'>
-      <Header />
-      <div className='flex h-full w-full flex-col items-center justify-center text-[128px] font-medium leading-[128px] text-sub-text'>
-        <h1>404</h1>
-        <p className='text-[32px] font-normal leading-[32px]'>
-          Cannot connect to server
-        </p>
-      </div>
-      <Footer />
-    </div>
+   <ErrorComponent />
   );
 };
 export default Home;

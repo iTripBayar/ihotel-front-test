@@ -9,14 +9,12 @@ import SearchCards from '@/components/searchPage/searchCards';
 import MapContainer from '@/components/common/map/map';
 import FilterOptions from '@/components/common/searchSection/filter/filterOptions';
 import { useAppCtx } from '@/contexts/app';
-import { CircularProgress } from '@chakra-ui/react';
-import { ChakraProvider } from '@chakra-ui/react';
-import Header from '@/components/common/header';
+import { CircularProgress, ChakraProvider } from '@chakra-ui/react';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
 import { useSearchParams } from 'next/navigation';
-import Footer from '@/components/common/footer';
 import { addDays, format } from 'date-fns';
+import ErrorComponent from '@/components/common/404';
 
 const SearchPage = () => {
   const searchParams = useSearchParams();
@@ -36,9 +34,7 @@ const SearchPage = () => {
     searchValue?.split('$')[1] === 'city' ? searchValue?.split('$')[2] : null;
   const place =
     searchValue?.split('$')[1] === 'place' ? searchValue?.split('$')[2] : null;
-  const camp =
-    searchValue?.split('$')[1] === 'camp' ? searchValue?.split('$')[2] : null;
-    
+
   const { data, loading, error } = useRequest(
     () => {
       return fetchCheckHotel({
@@ -139,18 +135,7 @@ const SearchPage = () => {
         ) : null}
       </main>
     );
-  return (
-    <div className='flex flex-col justify-between w-full h-screen'>
-      <Header />
-      <div className='flex h-full w-full flex-col items-center justify-center text-[128px] font-medium leading-[128px] text-sub-text'>
-        <h1>404</h1>
-        <p className='text-[32px] font-normal leading-[32px]'>
-          Cannot connect to server
-        </p>
-      </div>
-      <Footer />
-    </div>
-  );
+  return <ErrorComponent />;
 };
 
 export default SearchPage;

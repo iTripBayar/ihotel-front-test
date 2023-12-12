@@ -3,7 +3,6 @@ import type { Config } from 'tailwindcss';
 const config: Config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    // content: ["./pages/*.{html,js,jsx}"],
     './pages/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
@@ -20,9 +19,10 @@ const config: Config = {
         'main-pending': '#FFD93D',
         'main-offline': '#F5754A',
         'main-data': '#D9D9D9',
-        footer: '#343A40',
+        'payment-black': '#242833',
+        'pass-green': '#25E46A',
+        'footer': '#343A40',
       },
-
       animation: {
         'slide-left':
           'slide-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940)   both',
@@ -30,35 +30,23 @@ const config: Config = {
           'slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940)   both',
         'slide-bottom':
           'slide-bottom 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940)   both',
-        'slide-top':
-          'slide-top 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940)   both',
-        fade: 'fadeIn 0.3s ease-in-out',
-        fade500: 'fadeIn500 0.5s ease-in',
-        fadeOut300: 'fadeOut300 0.3s ease-out',
-        'spin-slow': 'spin 5s linear infinite',
-        'to-left': 'to-left 5s linear',
-        open: 'open 0.5s ease-in-out',
-        openColapse: 'openColapse 0.5s ease-in-out',
-
-        openSearch: 'openSearch 0.5s ease-in-out',
-
-        close: 'close 0.5s ease-in-out',
-        closeSearch: 'closeSearch 0.5s ease-in-out',
+        'fade': 'fadeIn 0.3s ease-in-out',
+        'fade500': 'fadeIn500 0.5s ease-in',
         'burger-top':
           'burger-top 8s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite',
         'burger-top1':
           'burger-top1 8s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite',
         'burger-top2':
           'burger-top2 8s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite',
-        brotate: 'brotate 7s linear infinite',
+        'brotate': 'brotate 7s linear infinite',
       },
       keyframes: {
-        brotate: {
+        'brotate': {
           '0%': {
             transform: 'rotate(0)',
           },
 
-          to: {
+          'to': {
             transform: 'rotate(360deg)',
           },
         },
@@ -69,7 +57,7 @@ const config: Config = {
           '90%': {
             transform: 'translateY(-6px)',
           },
-          to: {
+          'to': {
             transform: 'translateY(-50%)',
           },
         },
@@ -80,7 +68,7 @@ const config: Config = {
           '90%': {
             transform: 'translateY(-5px)',
           },
-          to: {
+          'to': {
             transform: 'translateY(0px)',
           },
         },
@@ -91,103 +79,31 @@ const config: Config = {
           '90%': {
             transform: 'translateY(-5px)',
           },
-          to: {
+          'to': {
             transform: 'translateY(0px)',
           },
         },
-        open: {
-          '0%': {
-            height: '45px',
-          },
-          to: {
-            height: '159px',
-          },
-        },
-        openColapse: {
-          '0%': {
-            height: '41px',
-          },
-          to: {
-            height: '300px',
-          },
-        },
-        openSearch: {
-          '0%': {
-            height: '33px',
-          },
-          to: {
-            height: '149px',
-          },
-        },
-        openFilter: {
-          '0%': {
-            height: '42px',
-          },
-          to: {
-            height: '149px',
-          },
-        },
-        closeSearch: {
-          '0%': {
-            height: '149px',
-          },
-          to: {
-            height: '40px',
-          },
-        },
-        closeFilter: {
-          '0%': {
-            height: '149px',
-          },
-          to: {
-            height: '42px',
-          },
-        },
-        close: {
-          '0%': {
-            height: '159px',
-          },
-          to: {
-            height: '45px',
-          },
-        },
-        fadeIn: {
+        'fadeIn': {
           '0%': {
             opacity: '0%',
           },
-          to: {
+          'to': {
             opacity: '100%',
           },
         },
-        fadeIn500: {
+        'fadeIn500': {
           '0%': {
             opacity: '0%',
           },
-          to: {
+          'to': {
             opacity: '100%',
-          },
-        },
-        fadeOut300: {
-          '0%': {
-            opacity: '100%',
-          },
-          to: {
-            opacity: '0%',
-          },
-        },
-        'to-left': {
-          '50%': {
-            transform: 'translateX(0)',
-          },
-          to: {
-            transform: 'translateX(-100px)',
           },
         },
         'slide-left': {
           '0%': {
             transform: 'translateX(100px)',
           },
-          to: {
+          'to': {
             transform: 'translateX(0)',
           },
         },
@@ -196,7 +112,7 @@ const config: Config = {
             transform: 'translateX(0)',
             opacity: '100%',
           },
-          to: {
+          'to': {
             transform: 'translateX(240px)',
             opacity: '0%',
           },
@@ -205,27 +121,19 @@ const config: Config = {
           '0%': {
             transform: 'translateY(-50px)',
           },
-          to: {
-            transform: 'translateY(0)',
-          },
-        },
-        'slide-top': {
-          '0%': {
-            transform: 'translateY(-50px)',
-          },
-          to: {
+          'to': {
             transform: 'translateY(0)',
           },
         },
       },
     },
     screens: {
-      xs: '320px', // => @media (min-width: 320px) { ... }
-      '2xs': '360px',
-      sm: '576px', // => @media (min-width: 5760px) { ... }
-      md: '768px', // => @media (min-width: 768px) { ... }
-      lg: '1024px', // => @media (min-width: 1024px) { ... }
-      xl: '1280px', // => @media (min-width: 1280px) { ... }
+      'xs': '320px', // => @media (min-width: 320px) { ... }
+      '2xs': '360px', // => @media (min-width: 360px){ ... }
+      'sm': '576px', // => @media (min-width: 5760px) { ... }
+      'md': '768px', // => @media (min-width: 768px) { ... }
+      'lg': '1024px', // => @media (min-width: 1024px) { ... }
+      'xl': '1280px', // => @media (min-width: 1280px) { ... }
       '2xl': '1536px', // => @media (min-width: 1536px) { ... }
     },
   },

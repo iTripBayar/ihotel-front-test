@@ -1,17 +1,12 @@
 import ReactMapGL, { Marker } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 interface Props {
   lat: number;
   lng: number;
 }
 
 const HotelMap = ({ lat, lng }: Props) => {
-  const [viewPort, setViewPort] = useState({
-    lng: lng,
-    lat: lat,
-    zoom: 13,
-  });
   const mapRef = useRef<any>();
   setTimeout(() => {
     mapRef?.current?.flyTo({
@@ -30,7 +25,7 @@ const HotelMap = ({ lat, lng }: Props) => {
         initialViewState={{
           longitude: lng,
           latitude: lat,
-          zoom: viewPort.zoom,
+          zoom: 13,
         }}
         style={{
           width: '100%',

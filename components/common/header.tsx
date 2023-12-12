@@ -1,14 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
-import {useSession} from 'next-auth/react';
-import {redirect} from 'next/navigation'
+import { useSession } from 'next-auth/react';
 
 const Header = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const pathname = usePathname();
   const addHotel = searchParams.get('addHotel');
   const { appState, dispatch } = useAppCtx();
 
@@ -39,7 +39,7 @@ const Header = () => {
           priority
           quality={100}
           sizes='20vw'
-          className='absolute cursor-pointer object-contain'
+          className='absolute object-contain cursor-pointer'
         />
       </Link>
 
@@ -58,7 +58,7 @@ const Header = () => {
                 });
               }}
             >
-              <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
+              <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
               {/* {state.language === 'mn' ? 'Нэвтрэх' : 'Log In'} */}
               {lang === 'en' ? 'Log In' : 'Нэвтрэх'}
             </div>
@@ -79,16 +79,17 @@ const Header = () => {
                 });
               }}
             >
-              <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
+              <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
               {/* {state.language === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'} */}
               {lang === 'en' ? 'Sign Up' : 'Бүртгүүлэх'}
             </div>
           ) : null}
           {session?.user ? (
-            <Link href='/profile'
+            <Link
+              href='/profile'
               className='group relative flex h-[32px] cursor-pointer items-center'
             >
-              <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
+              <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
               {/* {state.language === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'} */}
               {session.user.name}
             </Link>
@@ -98,7 +99,7 @@ const Header = () => {
             draggable={false}
             className='group relative flex h-[32px] cursor-pointer items-center gap-[8px]'
           >
-            <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
+            <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='white'
@@ -123,7 +124,7 @@ const Header = () => {
               router.push(`/?${createQueryString('addHotel', nextAddHotel)}`);
             }}
           >
-            <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
+            <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -145,14 +146,14 @@ const Header = () => {
           <div
             onClick={() => {
               const nextLang = lang === 'en' ? 'mn' : 'en';
-              router.push(`/?${createQueryString('lang', nextLang)}`);
+              router.push(`${pathname}?${createQueryString('lang', nextLang)}`);
             }}
             className='group relative flex h-[32px] cursor-pointer items-center gap-[8px]'
             // onClick={() => {
             //   handleDay();
             // }}
           >
-            <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
+            <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
             <Image
               src={
                 lang === 'en'
