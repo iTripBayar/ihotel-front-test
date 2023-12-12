@@ -73,9 +73,9 @@ declare namespace HotelData {
     isTest: boolean;
     isTop: number;
     isVatpayer: boolean;
-    lat: string;
-    lng: string;
-    location: string[];
+    lat: number;
+    lng: number;
+    location: {lat: string, lng: string};
     maxTime: number;
     name: string;
     nameEn: string | null;

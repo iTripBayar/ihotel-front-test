@@ -64,7 +64,6 @@ const HotelPage = () => {
   roomPrices.sort((a, b) => b - a);
 
   const handleScrollToRooms = () => {
-    console.log('s');
 
     setShowAlert(true);
     setTimeout(() => {
@@ -244,12 +243,12 @@ const HotelPage = () => {
               <HotelMap
                 lat={
                   data?.hotel.lat
-                    ? parseInt(data?.hotel.lat)
+                    ? data?.hotel.lat
                     : 47.91823102891307
                 }
                 lng={
                   data?.hotel.lng
-                    ? parseInt(data?.hotel.lng)
+                    ? data?.hotel.lng
                     : 106.92059918835042
                 }
               />

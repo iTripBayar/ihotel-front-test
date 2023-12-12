@@ -12,43 +12,56 @@ import { useAppCtx } from '@/contexts/app';
 import { CircularProgress } from '@chakra-ui/react';
 import { ChakraProvider } from '@chakra-ui/react';
 import Header from '@/components/common/header';
-import { Footer } from 'react-day-picker';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
 import { useSearchParams } from 'next/navigation';
+import Footer from '@/components/common/footer';
+import { addDays, format } from 'date-fns';
 
 const SearchPage = () => {
   const searchParams = useSearchParams();
-  // const city = searchParams.get('city');
-  // const hotel = searchParams.get('hotel');
-  // const place = searchParams.get('place');
-  // const camp = searchParams.get('camp');
   const searchValue = searchParams.get('searchValue');
   const destination = searchParams.get('destination');
   const category = searchParams.get('category');
   const page = searchParams.get('page');
-  // console.log(hotel)
+  const min = searchParams.get('min');
+  const max = searchParams.get('max');
+  const services = searchParams.get('services');
 
-  const hotel = searchValue?.split('$')[1] === 'hotel' ? searchValue?.split('$')[2] : null;
+  const newDate = new Date();
+  const nextDay = addDays(newDate, 1);
+  const hotel =
+    searchValue?.split('$')[1] === 'hotel' ? searchValue?.split('$')[2] : null;
   const city =
     searchValue?.split('$')[1] === 'city' ? searchValue?.split('$')[2] : null;
   const place =
     searchValue?.split('$')[1] === 'place' ? searchValue?.split('$')[2] : null;
   const camp =
     searchValue?.split('$')[1] === 'camp' ? searchValue?.split('$')[2] : null;
-
+    
   const { data, loading, error } = useRequest(
     () => {
       return fetchCheckHotel({
         hotel: hotel,
-        city: city,
-        category: category,
         place: place,
-        destination: destination,
-        camp: camp,
+        city: city,
+        checkin: encodeURIComponent(format(newDate, 'MM/dd/yyyy')),
+        checkout: encodeURIComponent(format(nextDay, 'MM/dd/yyyy')),
+        isClosed: null,
+        page: page !== null ? page : '1',
+        prices:
+          min && max
+            ? encodeURIComponent(`[${min !== '0' ? `${min},` : ''} ${max}]`)
+            : null,
+        filterstar: null,
+        rating1: null,
+        rating2: null,
+        hotelServices: services ? `[${services}]` : null,
+        roomServices: null,
+        categories: `['${category}']`,
       });
     },
-    { refreshDeps: [searchValue] },
+    { refreshDeps: [searchParams] },
   );
 
   const { data: searchData } = useRequest(() => {
@@ -106,33 +119,28 @@ const SearchPage = () => {
             />
           ) : null}
         </div>
-
         {loading === true ? (
           <ChakraProvider>
             <div className='flex h-full w-full items-center justify-center pb-[100px]'>
               <CircularProgress isIndeterminate={true} color='#3C76FE' />
             </div>
           </ChakraProvider>
-        ) : (
-          <>
-            {appState.filter !== 'mobile' ? (
-              <div
-                className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:h-screen lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
-              >
-                <SearchCards data={data ? data.data : []} />
-                <MapContainer
-                  data={data ? data.data : []}
-                  lat={searchData?.mapCenter.lat}
-                  lng={searchData?.mapCenter.lng}
-                />
-              </div>
-            ) : null}
-          </>
-        )}
+        ) : appState.filter !== 'mobile' ? (
+          <div
+            className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
+          >
+            <SearchCards data={data ? data.data : []} />
+            <MapContainer
+              data={data ? data.data : []}
+              lat={searchData?.mapCenter.lat}
+              lng={searchData?.mapCenter.lng}
+            />
+          </div>
+        ) : null}
       </main>
     );
   return (
-    <div className='flex h-screen w-full flex-col justify-between'>
+    <div className='flex flex-col justify-between w-full h-screen'>
       <Header />
       <div className='flex h-full w-full flex-col items-center justify-center text-[128px] font-medium leading-[128px] text-sub-text'>
         <h1>404</h1>

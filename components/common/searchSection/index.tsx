@@ -41,9 +41,6 @@ const SearchSection = ({
     },
     [searchValue],
   );
-  useEffect(() => {
-    console.log(searchValue);
-  }, [searchValue]);
 
   const createQueryString = (
     name: string,
@@ -72,34 +69,34 @@ const SearchSection = ({
     return params.toString();
   };
   const multipleCreateQueryString = (
-    name: string | null,
+    name: string,
     value: string | null,
-    name1: string | null,
+    name1: string,
     value1: string | null,
-    name2: string | null,
+    name2: string,
     value2: string | null,
-    name3: string | null,
+    name3: string,
     value3: string | null,
   ) => {
     const params = new URLSearchParams(searchParams);
-    if (value !== null && name !== null) {
+    if (value !== null) {
       params.set(name, value);
-    } else if (value !== null && name) {
+    } else{
       params.delete(name);
     }
-    if (value1 !== null && name1 !== null) {
+    if (value1 !== null) {
       params.set(name1, value1);
-    } else if (value1 !== null && name1) {
+    } else {
       params.delete(name1);
     }
-    if (value2 !== null && name2 !== null) {
+    if (value2 !== null) {
       params.set(name2, value2);
-    } else if (value2 !== null && name2) {
+    } else  {
       params.delete(name2);
     }
-    if (value3 !== null && name3 !== null) {
+    if (value3 !== null) {
       params.set(name3, value3);
-    } else if (value3 !== null && name3) {
+    } else {
       params.delete(name3);
     }
     return params.toString();
@@ -215,7 +212,7 @@ const SearchSection = ({
                     'lang',
                     lang,
                     'toggle',
-                    toggle == true ? 'true' : null,
+                    toggle === true ? 'true' : null,
                     'filter',
                     filter,
                     'searchValue',

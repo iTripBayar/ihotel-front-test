@@ -54,7 +54,6 @@ const ReservationPage = () => {
 
   if (serializedData) {
     unserializedData = unserialize(serializedData);
-    console.log(unserializedData);
   }
 
   return (
@@ -134,7 +133,7 @@ const ReservationPage = () => {
               <>{lang === 'en' ? 'Go back' : 'Өмнөх хуудас руу буцах'}</>
             </div>
           </div>
-          <div className='relative hidden h-full w-full lg:col-span-2 lg:flex'>
+          <div className='relative hidden w-full h-full lg:col-span-2 lg:flex'>
             <div className='sticky top-[72px] h-fit'>
               <UserInfo ver={'web'} stat={stat} />
             </div>

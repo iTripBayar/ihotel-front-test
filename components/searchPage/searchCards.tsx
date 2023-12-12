@@ -10,6 +10,7 @@ interface iProps {
 const SearchCards = ({ data }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const toggle = searchParams.get('toggle');
   const { appState } = useAppCtx();
 
   const totalLength = data.length;
@@ -18,6 +19,9 @@ const SearchCards = ({ data }: iProps) => {
   divRef.current?.addEventListener('scroll', (e) => {
     e.preventDefault();
   });
+   if (toggle === 'true') {
+     data = data.filter((index) => index.isOnline === 1 && index.isOffline === 0);
+   }
 
   return (
     <div

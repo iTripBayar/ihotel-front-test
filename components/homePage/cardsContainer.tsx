@@ -71,7 +71,7 @@ const CardsContainer = ({
         </div>
         {data.length > 0 ? (
           <Link
-          href={{query: {'title': title}, pathname: '/search'}}
+          href={{query: {'category': title !== 'camp' ? 1 : 3}, pathname: '/search'}}
             className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white"
           >
             <p className="flex gap-[4px]">

@@ -36,7 +36,6 @@ export default function SignUp() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(userInfo);
   };
 
   const [arePasswordsValid, setArePasswordsValid] = useState(false);
@@ -150,7 +149,7 @@ export default function SignUp() {
                   : '* Нууц үг таарахгүй байна. *'}
               </p>
             )}
-          <div className='flex w-full items-center justify-between'>
+          <div className='flex items-center justify-between w-full'>
             <div className='h-[1px] w-[33%] bg-black/[.15]'></div>
             <p className='text-[16px] font-medium uppercase text-black/[.25]'>
               {lang === 'en' ? 'Or' : 'Эсвэл'}

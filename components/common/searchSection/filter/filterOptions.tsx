@@ -111,18 +111,8 @@ const FilterOptions = ({ categories, services }: Props) => {
     value3: string | null,
   ) => {
     const params = new URLSearchParams(searchParams);
-    if (value !== null && !params.get(name)) {
+    if (value !== null) {
       params.set(name, value);
-    } else if (value !== null && params.get(name)) {
-      if (name.includes(value)) {
-        for (let i = 0; i < name.length; i++) {
-          if (name[i] === value) {
-            params.delete(name, name[i]);
-          }
-        }
-      } else {
-        params.append(name, value);
-      }
     } else {
       params.delete(name);
     }

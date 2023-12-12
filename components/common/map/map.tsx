@@ -51,13 +51,12 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
     return;
   }, [size.width]);
 
-  const divRef = useRef<HTMLDivElement>(null);
   const [selectedHotel, setSelectedHotel] = useState<{
-    lat: string;
-    lng: string;
+    lat: number | null;
+    lng: number | null;
   }>({
-    lat: '',
-    lng: '',
+    lat: null,
+    lng: null,
   });
 
   const defaultMarkers = [
@@ -82,52 +81,10 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
       name: 'Их дэлгүүр',
       price: 30000,
     },
-    {
-      key: 3,
-      lng: 106.89472667140045,
-      lat: 47.915225456973545,
-      name: 'Баруун 4',
-      price: 40000,
-    },
-    {
-      key: 4,
-      lng: 106.94322683511892,
-      lat: 47.91900670820435,
-      name: 'Зүүн 4',
-      price: 50000,
-    },
-    {
-      key: 5,
-      lng: 106.92597437999615,
-      lat: 47.918424478982985,
-      name: 'Багшийн дээд',
-      price: 60000,
-    },
-    {
-      key: 6,
-      lng: 106.89952081975947,
-      lat: 47.9166500269689,
-      name: 'Computer land',
-      price: 70000,
-    },
-    {
-      key: 7,
-      lng: 106.86706559965062,
-      lat: 47.914420094972705,
-      name: '10-р хороолол',
-      price: 80000,
-    },
-    {
-      key: 8,
-      lng: 106.88062748835173,
-      lat: 47.91493906662716,
-      name: '25-р эмийн сан',
-      price: 90000,
-    },
   ];
 
   const cardData = [...data].filter(
-    (index) =>
+    (index) => selectedHotel.lat && selectedHotel.lng &&
       index.lat === selectedHotel.lat && index.lng === selectedHotel.lng,
   );
 
@@ -177,15 +134,67 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
     options: { radius: 75, maxZoom: 20 },
   });
 
-  console.log(data);
-
   return (
     <div
-      className={`sticky h-[calc(100vh-260px)] w-full flex-col items-center justify-start gap-[24px] bg-white px-[16px] pb-[24px]  sm:px-[42px] md:px-[72px] lg:h-[calc(100vh-60px)] lg:px-0 lg:pb-[24px]  lg:pt-[16px] ${
-        appState.map !== '' ? 'flex lg:col-span-2' : ' hidden '
-      }`}
-      ref={divRef}
+      className={`relative h-full w-full bg-white ${
+        appState.map !== '' ? 'flex' : 'hidden'
+      } flex-col-reverse items-center justify-start gap-[24px] px-[16px] pb-[24px] pt-[0px] sm:px-[42px] md:px-[72px] lg:col-span-2 lg:px-0 lg:pt-[16px]`}
     >
+      {/* buttons */}
+      <div className='flex w-full items-center justify-between gap-[24px] lg:justify-between '>
+        <div
+          className='flex h-[40px] max-w-[220px] cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue px-[16px] font-medium text-white'
+          onClick={() => {
+            dispatch({
+              type: 'CHANGE_APP_STATE',
+              payload: { map: '' },
+            });
+          }}
+        >
+          {lang === 'en' ? 'Close map' : 'Газрын зураг хаах'}
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+            strokeWidth={2.5}
+            stroke='currentColor'
+            className=' h-[18px] w-[18px]'
+          >
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3'
+            />
+          </svg>
+        </div>
+        {appState.map === 'open' ? (
+          <div
+            onClick={() => {
+              let nextLang = lang === 'en' ? 'mn' : 'en';
+              router.push(
+                `${pathname}?${createQueryString('lang', nextLang)}`,
+                {
+                  scroll: false,
+                },
+              );
+            }}
+            className='flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue '
+          >
+            <Image
+              src={
+                lang === 'en'
+                  ? '/images/mongolian-flag.png'
+                  : '/images/uk-flag.png'
+              }
+              alt='/lang'
+              width={28}
+              height={28}
+              sizes='10vw'
+              className='h-[30px] w-[30px] cursor-pointer object-cover'
+            />
+          </div>
+        ) : null}
+      </div>
       <ReactMapGL
         mapboxAccessToken='pk.eyJ1IjoiaWhvdGVsLWRldiIsImEiOiJjbG53eG4xM2cwOGdqMnFwZWZodmxyYWgwIn0.NKP_FGb_Ad26fu4wSqnJ7Q'
         initialViewState={{
@@ -194,12 +203,13 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
           zoom: viewPort.zoom,
         }}
         ref={mapRef}
+        onLoad={(map) => map.target.resize()}
         style={{
-          // width: '100%',
-          width: '100%',
-          height: '100%',
           borderRadius: 20,
           border: 'solid 1px rgb(0,0,0,0.25)',
+          width: '100%',
+          height: '100%',
+          position: 'relative',
         }}
         id='mapBox'
         mapStyle='mapbox://styles/ihotel-dev/clnwysb8a005b01qx38a9hgh0'
@@ -212,13 +222,9 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
         }}
       >
         {clusters.map((cluster) => {
-          // every cluster point has coordinates
           const [longitude, latitude] = cluster.geometry.coordinates;
-          // the point may be either a cluster or a crime point
           const { cluster: isCluster, point_count: pointCount } =
             cluster.properties;
-
-          // we have a cluster to render
           if (isCluster) {
             return (
               <Marker
@@ -304,19 +310,20 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
         {cardData.length > 0 ? (
           <Marker
             key={cardData[0].id}
-            latitude={parseInt(cardData[0].lat)}
-            longitude={parseInt(cardData[0].lng)}
+            // latitude={parseInt(cardData[0].lat)}
+            latitude={cardData[0].lat}
+            longitude={cardData[0].lng}
             style={{
-              // zIndex: 998,
+              zIndex: 998,
               position: 'relative',
               width: '75%',
-              // marginLeft: '-20px',
+              marginLeft: '-24px'
             }}
           >
             <div
               className='absolute left-0 top-0 z-[999] flex h-[30px] w-[30px] translate-x-[-50%] translate-y-[-50%] items-center justify-center rounded-full bg-primary-blue text-white ring-2 ring-white'
               onClick={() => {
-                setSelectedHotel({ lng: '', lat: '' });
+                setSelectedHotel({ lng: null, lat: null });
               }}
             >
               <svg
@@ -342,60 +349,6 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
         <NavigationControl showCompass={false} />
         <GeolocateControl />
       </ReactMapGL>
-      <div className='flex w-full items-center justify-between gap-[24px] lg:justify-between '>
-        <div
-          className='flex h-[40px] max-w-[220px] cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue px-[16px] font-medium text-white'
-          onClick={() => {
-            dispatch({
-              type: 'CHANGE_APP_STATE',
-              payload: { map: '' },
-            });
-          }}
-        >
-          {lang === 'en' ? 'Close map' : 'Газрын зураг хаах'}
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth={2.5}
-            stroke='currentColor'
-            className=' h-[18px] w-[18px]'
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              d='M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3'
-            />
-          </svg>
-        </div>
-        {appState.map === 'open' ? (
-          <div
-            onClick={() => {
-              let nextLang = lang === 'en' ? 'mn' : 'en';
-              router.push(
-                `${pathname}?${createQueryString('lang', nextLang)}`,
-                {
-                  scroll: false,
-                },
-              );
-            }}
-            className='flex h-[40px] w-[40px] items-center justify-center rounded-full border-2 border-white bg-primary-blue '
-          >
-            <Image
-              src={
-                lang === 'en'
-                  ? '/images/mongolian-flag.png'
-                  : '/images/uk-flag.png'
-              }
-              alt='/lang'
-              width={28}
-              height={28}
-              sizes='10vw'
-              className='h-[30px] w-[30px] cursor-pointer object-cover'
-            />
-          </div>
-        ) : null}
-      </div>
     </div>
   );
 };

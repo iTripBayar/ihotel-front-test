@@ -14,7 +14,7 @@ const HeroCategory = ({ data }: iProps) => {
       {data.map((data, i) => (
         <Link
         href={{
-          query: {type: data.id}, pathname: '/search'
+          query: {category: data.id}, pathname: '/search'
         }}
           className="flex w-1/4 cursor-pointer  flex-col items-center justify-center gap-[10px] font-medium md:gap-[16px]"
           key={i}
@@ -34,7 +34,7 @@ const HeroCategory = ({ data }: iProps) => {
               placeholder="blur"
               blurDataURL={`"_next/image/?url=${data.image}"`}
               sizes="25vw"
-              className="h-auto w-full object-fit duration-500 hover:scale-110"
+              className="w-full h-auto duration-500 object-fit hover:scale-110"
             />
           </div>
           <p className="lg:text-[16px]] text-center text-[11px] xs:text-[12px] sm:text-[13px] md:text-[14px] xl:text-[18px]">

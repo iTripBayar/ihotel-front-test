@@ -92,8 +92,6 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
     { id: data?.id, amount: 8 },
   ];
 
-  console.log(appState.selectedAmount);
-
   return (
     <div className="flex flex-col rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]">
       <div className="relative h-[225px] w-full overflow-hidden rounded-t-[16px] bg-sky-500 2xs:h-[260px] sm:h-[300px] ">
@@ -114,7 +112,7 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
               ? `"_next/image/?url=${data.images[0]}"`
               : '/samples/camp.png'
           }
-          className="absolute h-auto w-auto select-none object-cover duration-700 hover:scale-110"
+          className="absolute object-cover w-auto h-auto duration-700 select-none hover:scale-110"
           draggable={false}
         />
       </div>
@@ -191,7 +189,7 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
           </span>
         </div>
         {/* room price & occupancy */}
-        <div className="flex w-full items-center justify-between text-primary-blue">
+        <div className="flex items-center justify-between w-full text-primary-blue">
           {/* occupancy */}
           <div className="flex items-end gap-[4px]">
             <svg

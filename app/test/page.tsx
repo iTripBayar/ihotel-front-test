@@ -8,7 +8,6 @@ export default function page() {
           password: 'Wave920110@',
         });
     })
-    console.log(data)
   return (
     <div>page</div>
   )

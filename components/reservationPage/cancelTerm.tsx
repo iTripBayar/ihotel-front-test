@@ -45,7 +45,6 @@ export default function CancelTerm({ data, rooms, dollarRate }: Props) {
         parseInt(data[0].day)
       : date,
   );
-  console.log(format(displayDate1, 'yyyy-MM-dd'));
 
   return (
     <div className='flex h-auto w-full flex-col  rounded-[20px] px-[20px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] lg:rounded-none lg:border-t lg:border-dashed lg:border-t-black/[.15] lg:px-0 lg:pt-[32px] lg:shadow-none'>

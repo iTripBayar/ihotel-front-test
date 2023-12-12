@@ -82,7 +82,7 @@ const HotelCard = ({ data, fromMap }: iProps) => {
               ? `"_next/image/?url=${data?.coverPhoto}"`
               : '/samples/camp.png'
           }
-          className=" h-auto w-auto select-none object-cover duration-700 hover:scale-110"
+          className="object-cover w-auto h-auto duration-700 select-none hover:scale-110"
           draggable={false}
         />
       </div>
