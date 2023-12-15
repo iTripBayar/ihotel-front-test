@@ -83,7 +83,6 @@ export async function registerUser(e: {
   }
 }
 
-
 export async function fetchCheckHotel(e: {
   hotel: string;
   place: string;

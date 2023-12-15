@@ -10,9 +10,10 @@ export default function ProfilePage() {
       redirect('/');
     },
   });
-  console.log(session);
+  console.log(session?.user);
   return (
     <div>
+      <Link href={{pathname: '/'}}>Go to HomePage</Link>
       {session?.user ? `Welcome ${session.user.name}!` : 'Profile Page'}
       <button
         onClick={() => signOut({ callbackUrl: 'http://localhost:3000/' })}

@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute, useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
 import { signIn } from 'next-auth/react';

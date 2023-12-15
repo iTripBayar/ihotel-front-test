@@ -94,8 +94,6 @@ const HotelPage = () => {
       imagesData.push(data.hotel.images[i])
     }
   }
-  // const json: string[] = data?.hotel.images ? JSON.parse(data.hotel.images) : [];
-
 
   console.log(data)
   if (!error)

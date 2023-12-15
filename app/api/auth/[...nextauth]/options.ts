@@ -3,6 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import FaceBookProvider from 'next-auth/providers/facebook';
 
+
 export const options: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -19,12 +20,12 @@ export const options: NextAuthOptions = {
         email: {
           label: 'Email:',
           type: 'email',
-          placeholder: 'your-cool-username',
+          placeholder: 'your-username',
         },
         password: {
           label: 'Password:',
           type: 'password',
-          placeholder: 'your-awesome-password',
+          placeholder: 'your-password',
         },
       },
       async authorize(credentials) {
@@ -36,6 +37,7 @@ export const options: NextAuthOptions = {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
           },
           body: JSON.stringify({
             email: credentials?.email,

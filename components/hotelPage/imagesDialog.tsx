@@ -1,9 +1,7 @@
-import React, { useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination, Autoplay, Navigation } from 'swiper/modules';
-import { CardMedia, Box } from '@mui/material';
 import { useSwiper } from 'swiper/react';
 import { useAppCtx } from '@/contexts/app';
 
@@ -58,7 +56,7 @@ export function SlidePrevtButton() {
   );
 }
 export function SliderCloseButton(){
-  const { appState, dispatch } = useAppCtx();
+  const { dispatch } = useAppCtx();
     return (
       <button
         className='flex h-[36px] w-[36px] items-center justify-center rounded-full bg-primary-blue text-white'
@@ -87,47 +85,13 @@ export function SliderCloseButton(){
     );
 }
 
-export type ImageProps = {
-  data: string[];
-  grid?: boolean;
-  isFull?: boolean;
-};
-export default function ImagesDialog( props: ImageProps) {
-  const { appState, dispatch } = useAppCtx();
-
-    const images =
-      props.data && props.data.length > 0
-        ? props.data.map((index) => {
-            return {
-              original: `https://sandbox.api.myhotel.mn/image?path=$${index}`,
-            };
-          })
-        : [
-            {
-              original: `/samples/camp.png`,
-            },
-          ];
-  const renderItem = (item: { original: string }) => {
-    return (
-      <CardMedia
-        {...props}
-        component='img'
-        sx={{
-          width: '100%',
-          height: 'auto',
-          borderRadius: 2,
-        }}
-        image={item.original}
-        alt='green iguana'
-        onDragStart={(event: any) => event.preventDefault()}
-      />
-    );
-  };
-
+interface Props{
+  data: string[]
+}
+export default function ImagesDialog( {data}:Props) {
   return (
     <div className='absolute left-0 top-0 z-[999] flex h-screen w-screen items-center justify-center bg-black/75 backdrop-blur-[1px]'>
       <div className='flex h-screen w-[90%] items-center justify-center'>
-      {/* <div className='flex h-[1000px] w-[500px] items-center justify-center'> */}
         <Swiper
           modules={[Pagination, Autoplay, Navigation]}
           pagination={{ type: 'fraction' }}
@@ -146,31 +110,7 @@ export default function ImagesDialog( props: ImageProps) {
             color: 'white',
           }}
         >
-          {/* {images.map((index, i) => (
-            <SwiperSlide
-              key={i}
-              style={{
-                width: '100%',
-                maxHeight: '88%',
-                display: 'flex',
-                alignItems: 'center',
-                alignSelf: 'flex-start',
-                overflow: 'hidden',
-                borderRadius: 8,
-              }}
-            >
-              <img
-                src={
-                  i === 0
-                    ? `https://sandbox.api.myhotel.mn:9443/${index.original}`
-                    : `https://sandbox.api.myhotel.mn/image?path=${index.original}`
-                }
-                alt='Hotel images'
-                className='h-auto w-full'
-              />
-            </SwiperSlide>
-          ))} */}
-          {props.data.map((index, i) => (
+          {data.map((index, i) => (
             <SwiperSlide
               key={i}
               style={{
@@ -182,9 +122,7 @@ export default function ImagesDialog( props: ImageProps) {
                 overflow: 'hidden',
               }}
             >
-              {/* {renderItem(index)} */}
               <img
-                // src='/samples/longImage.png'
                 src={
                   i === 0
                     ? `https://sandbox.api.myhotel.mn:9443/${index}`
@@ -195,23 +133,7 @@ export default function ImagesDialog( props: ImageProps) {
               />
             </SwiperSlide>
           ))}
-          {/* {images.map((item, ind) => (
-            <SwiperSlide
-              key={ind}
-              style={{
-                width: '100%',
-                maxHeight: '88%',
-                display: 'flex',
-                alignItems: 'center',
-                alignSelf: 'flex-start',
-                overflow: 'hidden',
-                borderRadius: 8,
-              }}
-            >
-              {renderItem(item)}
-            </SwiperSlide>
-          ))} */}
-          {images.length > 1 ? (
+          {data.length > 1 ? (
             <div className='absolute bottom-0 flex w-full items-center justify-between px-[5%]'>
               <SlidePrevtButton />
               <SlideNextButton />

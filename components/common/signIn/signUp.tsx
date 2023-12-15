@@ -3,9 +3,6 @@ import { useSearchParams } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
 import { FormEvent } from 'react';
 import { FacebookSignInButton, GoogleSignInButton } from './authButtons';
-import { signIn } from 'next-auth/react';
-import { useRequest } from 'ahooks';
-import { registerUser } from '@/utils';
 
 export default function SignUp() {
   const searchParams = useSearchParams();
@@ -42,21 +39,25 @@ export default function SignUp() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
+
     try {
       const registerResponse = await fetch(
         'https://sandbox.api.myhotel.mn:9443/api/register',
+
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
           },
           body: JSON.stringify({
-            email: data.get('email'),
-            password: data.get('password'),
-            passwordConfirmation: data.get('passwordConfirmation'),
+            email: data.get('email')?.toString(),
+            password: data.get('password')?.toString(),
+            passwordConfirmation: data.get('passwordConfirmation')?.toString(),
           }),
         },
       );
+      
       if (!registerResponse.ok) {
         throw new Error(`HTTP error! Status: ${registerResponse.status}`);
       }
@@ -67,37 +68,6 @@ export default function SignUp() {
       console.error('Error:', (error as Error));
     }
   };
-
-  // const { run } = useRequest(
-  //   (e: {
-  //     email: string | undefined;
-  //     password: string | undefined;
-  //     passwordConfirmation: string | undefined;
-  //   }) => {
-  //     return registerUser({
-  //       email: e.email,
-  //       password: e.password,
-  //       passwordConfirmation: e.passwordConfirmation,
-  //     });
-  //   },
-  //   {
-  //     onSuccess(result, params) {
-  //       if (result.success) {
-  //         console.log(result)
-  //         console.log(params)
-  //       }
-  //     },
-  //   },
-  // );
-  // const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   const data = new FormData(e.currentTarget);
-  //   run({
-  //     email: data.get('email')?.toString(),
-  //     password: data.get('password')?.toString(),
-  //     passwordConfirmation: data.get('passwordConfirmation')?.toString(),
-  //   });
-  // };
 
   const [arePasswordsValid, setArePasswordsValid] = useState(false);
 

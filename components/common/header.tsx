@@ -12,7 +12,7 @@ const Header = () => {
   const addHotel = searchParams.get('addHotel');
   const { appState, dispatch } = useAppCtx();
 
-  const { data: session } = useSession({
+  const { data: session, status } = useSession({
     required: false,
   });
 
@@ -25,8 +25,8 @@ const Header = () => {
     }
     return params.toString();
   };
-
-  console.log(session)
+  
+  console.log(session, status)
 
   return (
     <header
