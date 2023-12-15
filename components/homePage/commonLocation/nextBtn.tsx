@@ -4,7 +4,7 @@ interface iProps {
 const NextBtn = ({ onClick }: iProps) => {
   return (
     <div
-      className="absolute right-[10%] top-[50%] z-10 flex h-[30px] w-[30px] translate-x-[50%] translate-y-[-50%] items-center justify-center rounded-full bg-black/[.7] sm:right-[6%] md:h-[40px]  md:w-[40px] xl:right-[5%] "
+      className="absolute right-[36px] top-[50%] z-10 flex h-[30px] w-[30px] translate-x-[50%] translate-y-[-50%] items-center justify-center rounded-full bg-black/[.7] sm:right-[50px] md:h-[40px]  md:w-[40px] lg:right-[72px] "
       onClick={onClick}
     >
       <svg

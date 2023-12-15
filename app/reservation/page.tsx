@@ -119,7 +119,7 @@ const ReservationPage = () => {
                   ? 'We will contact you shortly after confirming your order request.'
                   : 'Бид захиалах хүсэлт хүлээн авсны дараа таны захиалгыг шалгаад эргээд тантай холбогдох болно.'}
               </div>
-              <div className='flex w-full items-center justify-start gap-[8px] text-[12px] font-medium text-primary-blue/[.75] 2xs:text-[14px]'>
+              <button className='flex w-full items-center justify-start gap-[8px] text-[12px] font-medium text-primary-blue/[.75] 2xs:text-[14px]'>
                 <svg
                   viewBox='0 0 24 21'
                   fill='none'
@@ -132,9 +132,9 @@ const ReservationPage = () => {
                   />
                 </svg>
                 <>{lang === 'en' ? 'Go back' : 'Өмнөх хуудас руу буцах'}</>
-              </div>
+              </button>
             </div>
-            <div className='relative hidden w-full h-full lg:col-span-2 lg:flex'>
+            <div className='relative hidden h-full w-full lg:col-span-2 lg:flex'>
               <div className='sticky top-[72px] h-fit'>
                 <UserInfo ver={'web'} stat={stat} />
               </div>

@@ -14,26 +14,32 @@ import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
 import { useSearchParams } from 'next/navigation';
 import { addDays, format } from 'date-fns';
-import ErrorComponent from '@/components/common/404';
+import dynamic from 'next/dynamic';
+const ErrorComponent = dynamic(() => import('@/components/common/404'));
 
 const SearchPage = () => {
   const searchParams = useSearchParams();
   const searchValue = searchParams.get('searchValue');
-  const destination = searchParams.get('destination');
   const category = searchParams.get('category');
   const page = searchParams.get('page');
   const min = searchParams.get('min');
   const max = searchParams.get('max');
   const services = searchParams.get('services');
+  const lat = searchParams.get('lat');
+  const lng = searchParams.get('lng');
 
   const newDate = new Date();
   const nextDay = addDays(newDate, 1);
   const hotel =
-    searchValue?.split('$')[1] === 'hotel' ? searchValue?.split('$')[2] : null;
+    searchValue?.split('$')[1] === 'hotel' ? searchValue?.split('$')[2] : '';
   const city =
-    searchValue?.split('$')[1] === 'city' ? searchValue?.split('$')[2] : null;
+    searchValue?.split('$')[1] === 'city' ? searchValue?.split('$')[2] : '';
   const place =
-    searchValue?.split('$')[1] === 'place' ? searchValue?.split('$')[2] : null;
+    searchValue?.split('$')[1] === 'place' ? searchValue?.split('$')[2] : '';
+
+  const { data: searchData } = useRequest(() => {
+    return fetchDataSearch();
+  });
 
   const { data, loading, error } = useRequest(
     () => {
@@ -43,26 +49,26 @@ const SearchPage = () => {
         city: city,
         checkin: encodeURIComponent(format(newDate, 'MM/dd/yyyy')),
         checkout: encodeURIComponent(format(nextDay, 'MM/dd/yyyy')),
-        isClosed: null,
+        isClosed: '',
         page: page !== null ? page : '1',
         prices:
           min && max
-            ? encodeURIComponent(`[${min !== '0' ? `${min},` : ''} ${max}]`)
-            : null,
-        filterstar: null,
-        rating1: null,
-        rating2: null,
-        hotelServices: services ? `[${services}]` : null,
-        roomServices: null,
-        categories: `['${category}']`,
+            ? encodeURIComponent(
+                `["[${parseInt(min)}${
+                  max !== '0' ? `, ${parseInt(max)}` : ''
+                }]"]`,
+              )
+            : '',
+        filterstar: '',
+        rating1: '',
+        rating2: '',
+        hotelServices: services ? encodeURI(`[${services}]`) : '',
+        roomServices: '',
+        categories: category ? encodeURIComponent(`["${category}"]`) : '',
       });
     },
     { refreshDeps: [searchParams] },
   );
-
-  const { data: searchData } = useRequest(() => {
-    return fetchDataSearch();
-  });
 
   const { appState } = useAppCtx();
   if (!error)
@@ -128,8 +134,9 @@ const SearchPage = () => {
             <SearchCards data={data ? data.data : []} />
             <MapContainer
               data={data ? data.data : []}
-              lat={searchData?.mapCenter.lat}
-              lng={searchData?.mapCenter.lng}
+              zoom={lat && lng ? 8 : 12}
+              lat={lat ? parseInt(lat) : searchData?.mapCenter.lat}
+              lng={lng ? parseInt(lng) : searchData?.mapCenter.lng}
             />
           </div>
         ) : null}

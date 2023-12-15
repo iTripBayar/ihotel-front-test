@@ -1,7 +1,9 @@
 import Image from 'next/image';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 const BurgerMenu = () => {
   const [closeAnimation, setCloseAnimation] = useState(false);
@@ -10,7 +12,9 @@ const BurgerMenu = () => {
   const pathname = usePathname();
   const lang = searchParams.get('lang');
   const { appState, dispatch } = useAppCtx();
-
+  const { data: session } = useSession({
+    required: false,
+  });
   const createQueryString = (name: string, value: string | null) => {
     const params = new URLSearchParams(searchParams);
     if (value !== null) {
@@ -33,8 +37,7 @@ const BurgerMenu = () => {
   };
 
   const handleClick = (event: React.MouseEvent) => {
-    const target = event.target as HTMLElement; // Cast event.target to HTMLElement
-    // Check if the click target is not the white div
+    const target = event.target as HTMLElement;
     if (target.classList.contains('bg-black/50')) {
       close();
     }
@@ -56,7 +59,7 @@ const BurgerMenu = () => {
           viewBox='0 0 24 24'
           strokeWidth={2}
           stroke='currentColor'
-          className='absolute right-[18px] top-[18px] h-[28px] w-[28px]'
+          className='absolute right-[18px] top-[18px] h-[28px] w-[28px] cursor-pointer'
           onClick={() => {
             close();
           }}
@@ -70,46 +73,58 @@ const BurgerMenu = () => {
         {/* top section */}
         <div className='flex w-full flex-col justify-start gap-[24px]'>
           {/* logIn */}
-          <div
-            className='flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]'
-            onClick={() => {
-              close();
-              setTimeout(() => {
-                dispatch({
-                  type: 'CHANGE_APP_STATE',
-                  payload: {
-                    logOrSign: appState.logOrSign !== 'log' ? 'log' : '',
-                  },
-                });
-              }, 400);
-            }}
-          >
-            {/* {state.language === 'mn' ? 'Нэвтрэх' : 'Log In'} */}
-            {lang === 'en' ? 'Log In' : 'Нэвтрэх'}
-          </div>
+          {!session?.user ? (
+            <button
+              className='flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]'
+              onClick={() => {
+                close();
+                setTimeout(() => {
+                  dispatch({
+                    type: 'CHANGE_APP_STATE',
+                    payload: {
+                      logOrSign: appState.logOrSign !== 'log' ? 'log' : '',
+                    },
+                  });
+                }, 400);
+              }}
+            >
+              {lang === 'en' ? 'Log In' : 'Нэвтрэх'}
+            </button>
+          ) : null}
+
+          {!session?.user ? (
+            <button
+              className='flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]'
+              onClick={() => {
+                close();
+                setTimeout(() => {
+                  dispatch({
+                    type: 'CHANGE_APP_STATE',
+                    payload: {
+                      logOrSign: appState.logOrSign !== 'sign' ? 'sign' : '',
+                    },
+                  });
+                }, 400);
+              }}
+            >
+              {lang === 'en' ? 'Sign up' : 'Бүртгүүлэх'}
+            </button>
+          ) : null}
+
           {/* signUp */}
-          <div
-            className='flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]'
-            onClick={() => {
-              close();
-              setTimeout(() => {
-                dispatch({
-                  type: 'CHANGE_APP_STATE',
-                  payload: {
-                    logOrSign: appState.logOrSign !== 'sign' ? 'sign' : '',
-                  },
-                });
-              }, 400);
-            }}
-          >
-            {/* {state.language === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'} */}
-            {lang === 'en' ? 'Sign up' : 'Бүртгүүлэх'}
-          </div>
+
+          {session?.user ? (
+            <Link
+              href='/profile'
+              className='flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]'
+            >
+              {session.user.name}
+            </Link>
+          ) : null}
           {/* add hotel */}
-          <div className='flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]'>
-            {/* {state.language === 'mn' ? 'Буудал нэмэх' : 'Add hotel'} */}
+          <button className='flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]'>
             {lang === 'en' ? 'Add hotel' : 'Буудал нэмэх'}
-          </div>
+          </button>
         </div>
         {/* bottom section */}
         <div className='flex w-full flex-col justify-end gap-[24px]'>
@@ -132,7 +147,7 @@ const BurgerMenu = () => {
             <p className='leading-[16px]'>{appState.phone}</p>
           </div>
           {/* lang */}
-          <div
+          <button
             onClick={() => {
               const nextLang = lang === 'en' ? 'mn' : 'en';
               router.push(`${pathname}?${createQueryString('lang', nextLang)}`);
@@ -152,7 +167,7 @@ const BurgerMenu = () => {
               className='object-fit max-h-[22px] max-w-[22px] cursor-pointer'
             />
             {lang === 'en' ? 'MN' : 'EN'}
-          </div>
+          </button>
         </div>
       </div>
     </div>

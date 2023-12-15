@@ -17,12 +17,12 @@ const News = ({ data }: iProps) => {
     data = data.slice(0, cap);
   }
   return (
-    <div className="w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]">
+    <div className='w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]'>
       <div
-        className="flex w-full flex-col gap-[18px] border-t-[1px] border-black/[.15] pt-[32px] lg:gap-[32px]"
+        className='flex w-full flex-col gap-[18px] border-t-[1px] border-black/[.15] pt-[32px] lg:gap-[32px]'
         // style={{ borderTop: 'dashed 2px rgb(0 0 0 /15%)' }}
       >
-        <h3 className="text-[20px] font-bold text-main-text">
+        <h3 className='text-[20px] font-bold text-main-text'>
           {/* {state.language === 'mn' ? 'Нийтлэлүүд' : 'Articles'} */}
           {lang === 'en' ? 'Articles' : 'Нийтлэлүүд'}
         </h3>
@@ -35,23 +35,23 @@ const News = ({ data }: iProps) => {
           {data.map((data) => (
             <div
               key={data.id}
-              className="flex w-full flex-col justify-start gap-[8px] overflow-hidden rounded-[20px] pb-[8px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]"
+              className='flex w-full flex-col justify-start gap-[8px] overflow-hidden rounded-[20px] pb-[8px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]'
             >
               {/* image */}
-              <div className="relative h-[175px] w-full overflow-hidden md:h-[175px] lg:h-[225px] xl:h-[250px]">
+              <div className='relative h-[175px] w-full overflow-hidden md:h-[175px] lg:h-[225px] xl:h-[250px]'>
                 <Image
                   // src={data.img}
                   src={`https://ihotel.mn/${data.photos.match(/"([^"]+)"/)[1]}`}
-                  alt="/posts"
+                  alt='/posts'
                   fill={true}
                   quality={75}
-                  sizes="50vw"
-                  className="object-cover duration-700 hover:scale-110"
+                  sizes='50vw'
+                  className='object-cover duration-700 hover:scale-110'
                 />
               </div>
               {/* bottom section */}
-              <div className="flex w-full items-center justify-center px-[8px] text-[14px] text-main-text lg:px-[16px] lg:text-[16px]">
-                <p className=" line-clamp-3 2xs:line-clamp-2">
+              <div className='flex w-full items-center justify-center px-[8px] text-[14px] text-main-text lg:px-[16px] lg:text-[16px]'>
+                <p className=' line-clamp-3 2xs:line-clamp-2'>
                   {/* {state.language === 'mn' ? data.title : ''} */}
                   {lang === 'en' ? '' : data.title}
                 </p>
@@ -59,10 +59,11 @@ const News = ({ data }: iProps) => {
             </div>
           ))}
         </div>
-        <div className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
-          <p className="flex gap-[4px]">
+        <div className='flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white'>
+          <p className='flex gap-[4px]'>
             {/* {state.language === 'mn' ? 'Цааш үзэх' : 'More'}{' '} */}
-            {lang === 'en' ? 'More' : 'Цааш үзэх'} <span>(100+)</span>
+            {lang === 'en' ? 'More' : 'Цааш үзэх'}{' '}
+            {data.length - cap > 0 ? <span>({data.length - cap}+)</span> : null}
           </p>
         </div>
       </div>

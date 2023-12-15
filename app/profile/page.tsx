@@ -2,6 +2,7 @@
 import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { signOut } from 'next-auth/react';
 export default function ProfilePage() {
   const { data: session } = useSession({
     required: true,
@@ -13,8 +14,11 @@ export default function ProfilePage() {
   return (
     <div>
       {session?.user ? `Welcome ${session.user.name}!` : 'Profile Page'}
-
-      <Link href='/api/auth/signout'>Sign Out</Link>
+      <button
+        onClick={() => signOut({ callbackUrl: 'http://localhost:3000/' })}
+      >
+        Sign Out
+      </button>
     </div>
   );
 }

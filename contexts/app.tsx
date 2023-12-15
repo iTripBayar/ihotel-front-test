@@ -10,6 +10,7 @@ export type AppCtxState = {
   selectedRoom: string;
   selectedAmount: string[];
   calendar: string;
+  biggerImage: boolean;
 };
 
 type Action =
@@ -23,7 +24,7 @@ export type AppCtxProps = {
 
 const defaultValue: AppCtxProps = {
   appState: {
-    phone: '',
+    phone: '77279090',
     dollarRate: '',
     logOrSign: '',
     menu: '',
@@ -32,6 +33,7 @@ const defaultValue: AppCtxProps = {
     selectedRoom: '',
     selectedAmount: [],
     calendar: '',
+    biggerImage: false,
   },
   dispatch: () => {
     /**/

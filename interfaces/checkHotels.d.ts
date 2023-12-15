@@ -5,5 +5,4 @@ declare namespace CheckHotels {
     result: number;
     success: boolean;
   }
-  
 }

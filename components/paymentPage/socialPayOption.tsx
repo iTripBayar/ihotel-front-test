@@ -19,29 +19,23 @@ export default function SocialPayOption() {
     const interval = setInterval(() => {
       setCountdown((prevCountdown) => {
         if (prevCountdown === 0) {
-          // Navigate back when countdown reaches zero
           router.back();
           clearInterval(interval);
           return 0;
         }
 
-        // Calculate progress value based on the remaining time
         const newProgressValue = (prevCountdown / 600) * 100;
         setProgressValue(newProgressValue);
 
-        // Format the countdown as "mm:ss"
-        // const minutes = Math.floor(prevCountdown / 60);
-        // const seconds = prevCountdown % 60;
         return prevCountdown - 1;
       });
     }, 1000);
 
-    // Cleanup the interval on component unmount
     return () => clearInterval(interval);
   }, [router]);
 
   return (
-    <div className='flex flex-col items-center gap-[24px] py-[32px] pb-[50px] text-white'>
+    <div className='flex flex-col items-center gap-[24px] py-[32px] pb-[50px] text-main-text'>
       <h3 className='text-[16px] font-bold uppercase'>Social Pay</h3>
       <div className='flex w-full min-w-[300px] items-center justify-between 2xs:min-w-[340px] sm:min-w-[400px] md:min-w-[450px]'>
         {/* info */}
@@ -88,7 +82,7 @@ export default function SocialPayOption() {
             fill={true}
             sizes='50vw'
             quality={100}
-            className='absolute object-cover w-auto h-auto select-none'
+            className='absolute h-auto w-auto select-none object-cover'
             draggable={false}
           />
         </div>
@@ -98,7 +92,10 @@ export default function SocialPayOption() {
           ? 'To proceed with the payment, please scan the QR code or use the application.'
           : 'Та QR кодыг уншуулах эсвэл апп ашиглан төлбөр тооцоогоо хийнэ үү.'}
       </p>
-      <button className='font-medium leading-[16px] text-primary-blue'>
+      <button
+        className='font-medium leading-[16px] text-primary-blue'
+        onClick={() => router.back()}
+      >
         {lang === 'en' ? 'Cancel' : 'Цуцлах'}
       </button>
     </div>

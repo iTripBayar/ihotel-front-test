@@ -21,6 +21,9 @@
 .mapboxgl-ctrl-attrib-inner {
   display: none !important;
 }
+.slick-slide>div{
+  padding: 0 0 !important;
+}
 
 .scrollHidden::-webkit-scrollbar {
   display: hidden;
@@ -68,6 +71,10 @@
 }
 .rdp-day_today:not(.rdp-day_outside){
   font-weight: 400 !important;
+}
+.swiper-pagination{
+  bottom: 50px !important;
+  font-size: medium !important;
 }
 
 @media (max-width: 1023px){

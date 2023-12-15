@@ -40,27 +40,30 @@ export default function ServiceCollapse() {
       <Collapse
         in={size.width && size.width > 768 ? true : isOpen}
         animateOpacity
+        transition={{
+          enter: { duration: size.width && size.width > 768 ? 0 : undefined },
+        }}
         className={`!flex !flex-col justify-start gap-[16px] ${
           (size.width && size.width >= 768) || isOpen === true
             ? ' !pb-[16px]'
             : 'h-0'
         }`}
       >
-        <Link href='/' className='relative text-white underline-0 group'>
+        <Link href='/' className='underline-0 group relative text-white'>
           {lang === 'en'
             ? 'Room management system'
             : 'Өрөөний удирдлагын систем'}
-          <span className='absolute bottom-0 left-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-1/2'></span>
+          <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
         </Link>
 
-        <Link href='/' className='relative text-white underline-0 group'>
+        <Link href='/' className='underline-0 group relative text-white'>
           {lang === 'en' ? 'Web service' : 'Веб сайт бүтээх'}
-          <span className='absolute bottom-0 left-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-1/2'></span>
+          <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
         </Link>
 
-        <Link href='/' className='relative text-white underline-0 group'>
+        <Link href='/' className='underline-0 group relative text-white'>
           {lang === 'en' ? 'Support' : 'Тусламж'}
-          <span className='absolute bottom-0 left-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-1/2'></span>
+          <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
         </Link>
       </Collapse>
     </div>

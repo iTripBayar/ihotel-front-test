@@ -18,7 +18,11 @@ import { useAppCtx } from '@/contexts/app';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
 import { ChakraProvider, CircularProgress } from '@chakra-ui/react';
-import ErrorComponent from '@/components/common/404';
+import dynamic from 'next/dynamic';
+const ErrorComponent = dynamic(()=> import('@/components/common/404'))
+
+// const Fade = dynamic(() => import('@mui/material/Fade'), { ssr: false });
+
 
 const Home = () => {
   const [headerVer, setHeaderVer] = useState('default');
@@ -37,9 +41,8 @@ const Home = () => {
     if (data) {
       dispatch({
         type: 'CHANGE_APP_STATE',
-        payload: { phone: data.phoneNumber, dollarRate: data.dollarRate },
+        payload: { dollarRate: data.dollarRate },
       });
-      ``;
     }
   }, [loading === false]);
 
@@ -73,7 +76,7 @@ const Home = () => {
 
   if (!error)
     return (
-      <main className='relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]'>
+      <main className='relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px] '>
         <Header />
         {headerVer === 'fixed' ? (
           <HeaderVariants
@@ -118,7 +121,7 @@ const Home = () => {
         ) : (
           <CommonLocation
             data={data ? data.destCategories : []}
-            destinations={data ? data.topDestinations : []}
+            destinations={data ? data.recommendedPlaces : []}
           />
         )}
         {loading ? null : (
@@ -134,8 +137,6 @@ const Home = () => {
         <Footer />
       </main>
     );
-  return (
-   <ErrorComponent />
-  );
+  return <ErrorComponent />;
 };
 export default Home;

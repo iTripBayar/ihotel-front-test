@@ -23,7 +23,9 @@ import CartAlert from '@/components/hotelPage/cartAlert';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
 import { ChakraProvider, CircularProgress } from '@chakra-ui/react';
-import ErrorComponent from '@/components/common/404';
+import dynamic from 'next/dynamic';
+import ImagesDialog from '@/components/hotelPage/imagesDialog';
+const ErrorComponent = dynamic(() => import('@/components/common/404'));
 
 const HotelPage = () => {
   const searchParams = useSearchParams();
@@ -32,8 +34,6 @@ const HotelPage = () => {
   const { appState } = useAppCtx();
   const roomsContainer = useRef<HTMLDivElement>(null);
   const [showAlert, setShowAlert] = useState(false);
-
-  console.log(slug);
 
   const { data, loading, error } = useRequest(() => {
     if (slug) return fetchDataHotel(slug);
@@ -86,6 +86,18 @@ const HotelPage = () => {
       });
     }
   };
+
+  const imagesData: string[] = []
+  if(data?.hotel.images && data.hotel.coverPhoto){
+      imagesData.push(data.hotel.coverPhoto);
+    for (let i = 0; i < data?.hotel.images?.length; i++) {
+      imagesData.push(data.hotel.images[i])
+    }
+  }
+  // const json: string[] = data?.hotel.images ? JSON.parse(data.hotel.images) : [];
+
+
+  console.log(data)
   if (!error)
     return (
       <main className='relative'>
@@ -114,9 +126,12 @@ const HotelPage = () => {
           slug={slug ? slug : ''}
           handleScrollToRooms={handleScrollToRooms}
         />
+        {appState.biggerImage === true ? 
+        <ImagesDialog data={imagesData} />
+        : null}
         {loading ? (
           <ChakraProvider>
-            <div className='flex items-center justify-center w-full h-screen'>
+            <div className='flex h-screen w-full items-center justify-center'>
               <CircularProgress isIndeterminate={true} color='#3C76FE' />
             </div>
           </ChakraProvider>

@@ -46,13 +46,17 @@ const SearchCards = ({ data }: iProps) => {
           : null}
       </div>
       {data.length > 8 ? (
-        <div className="flex max-w-[171px] cursor-pointer items-center  justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white">
-          <p className="flex gap-[4px]">
+        <div className='flex max-w-[171px] cursor-pointer items-center  justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white'>
+          <p className='flex gap-[4px]'>
             {lang === 'en' ? 'More' : 'Цааш үзэх'}
             <span>({totalLength - data.length}+)</span>
           </p>
         </div>
-      ) : null}
+      ) : (
+        <p className='flex gap-[4px] self-center justify-self-center font-medium opacity-30'>
+          {lang === 'en' ? 'No more' : 'Бүх илэрцүүд'}
+        </p>
+      )}
     </div>
   );
 };

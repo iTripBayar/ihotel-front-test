@@ -87,7 +87,7 @@ const HeaderVariants = ({
           <div className="hidden lg:flex">Lang</div>
         ) : null}
         {/* burger menu (animated) */}
-        <div
+        <button
           onClick={() => {
             dispatch({
               type: 'CHANGE_APP_STATE',
@@ -99,7 +99,7 @@ const HeaderVariants = ({
           <div className="absolute top-[50%] h-[2px] w-[24px] translate-y-[-50%] animate-burger-top rounded-full bg-white"></div>
           <div className="absolute top-0 h-[2px] w-[24px] animate-burger-top1  rounded-full bg-white"></div>
           <div className="absolute bottom-0 h-[2px] w-[24px] animate-burger-top2  rounded-full bg-white"></div>
-        </div>
+        </button>
       </div>
     </header>
   );

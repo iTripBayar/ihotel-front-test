@@ -91,7 +91,7 @@ export default function GeneralInfo({
               </h4>
             </div>
           </div>
-          <div
+          <button
             className='relative flex min-h-[42px] w-full items-center justify-center rounded-full bg-primary-blue px-[20px]  text-[16px] font-medium text-white sm:min-h-[46px] sm:text-[18px] lg:col-span-2 lg:min-h-[20px] lg:max-w-[165px] lg:justify-between lg:justify-self-end lg:px-[16px] lg:py-[12px] lg:text-[15px] lg:leading-[14px]'
             onClick={() => {
               dispatch({
@@ -119,7 +119,7 @@ export default function GeneralInfo({
                 />
               </svg>
             </div>
-          </div>
+          </button>
         </div>
         {size.width && size.width >= 1024 ? (
           <p className='text-[18px] font-medium leading-[18px] text-sub-text lg:mb-[-12px]'>

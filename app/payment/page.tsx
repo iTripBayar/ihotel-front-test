@@ -9,6 +9,7 @@ import { CircularProgress, ChakraProvider } from '@chakra-ui/react';
 import BankOptions from '@/components/paymentPage/bankOptions';
 import SocialPayOption from '@/components/paymentPage/socialPayOption';
 import PassOption from '@/components/paymentPage/passOption';
+import CardOption from '@/components/paymentPage/cardOption';
 
 export default function page() {
   // const { data: userData } = useRequest(() => {
@@ -19,10 +20,10 @@ export default function page() {
   // });
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const paymentMethod = searchParams.get('paymentMethod');
+  const method = searchParams.get('method');
+  // let method = 'bank';
 
   const slug = '0d5b13';
-  let ver = 'pass';
 
   const { data, loading, error } = useRequest(() => {
     if (slug) return fetchDataHotel(slug);
@@ -30,7 +31,7 @@ export default function page() {
   });
   if (!error)
     return (
-      <div className='flex flex-col items-center justify-between w-full min-h-screen bg-payment-black'>
+      <div className='flex min-h-screen w-full flex-col items-center justify-between'>
         <Header />
         {loading ? (
           <ChakraProvider>
@@ -40,12 +41,14 @@ export default function page() {
           </ChakraProvider>
         ) : (
           <div className='flex min-h-[50vh] w-full items-center justify-center text-white'>
-            {ver === 'bank' ? (
+            {method === 'bank' ? (
               <BankOptions />
-            ) : ver === 'socialPay' ? (
+            ) : method === 'socialPay' ? (
               <SocialPayOption />
-            ) : ver === 'pass' ? (
+            ) : method === 'pass' ? (
               <PassOption />
+            ) : method === 'card' ? (
+              <CardOption />
             ) : null}
           </div>
         )}

@@ -22,17 +22,12 @@ export default function PassOption() {
   const handlePhoneNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
     const inputPhoneNumber = event.target.value;
 
-    // Ensure that the input only contains numeric values
     const numericValue = inputPhoneNumber.replace(/\D/g, '');
 
-    // Set the phone number state with a maximum length of 8
     setPhoneNumber(numericValue.slice(0, 8));
   };
 
   const handleProceedClick = () => {
-    // Implement your logic for the button click here
-    // This function will be called when the button is clicked
-    // You can use the 'phoneNumber' state value here
     console.log('Proceed clicked with phone number:', phoneNumber);
   };
 
@@ -40,28 +35,22 @@ export default function PassOption() {
     const interval = setInterval(() => {
       setCountdown((prevCountdown) => {
         if (prevCountdown === 0) {
-          // Navigate back when countdown reaches zero
           router.back();
           clearInterval(interval);
           return 0;
         }
 
-        // Calculate progress value based on the remaining time
         const newProgressValue = (prevCountdown / 600) * 100;
         setProgressValue(newProgressValue);
-        // Format the countdown as "mm:ss"
-        // const minutes = Math.floor(prevCountdown / 60);
-        // const seconds = prevCountdown % 60;
         return prevCountdown - 1;
       });
     }, 1000);
 
-    // Cleanup the interval on component unmount
     return () => clearInterval(interval);
   }, [router]);
 
   return (
-    <div className='flex flex-col items-center gap-[24px] py-[32px] pb-[50px] text-white'>
+    <div className='flex flex-col items-center gap-[24px] py-[32px] pb-[50px] text-main-text'>
       <h3 className='text-[16px] font-bold uppercase'>Pass.mn</h3>
       <div className='flex w-full min-w-[300px] items-center justify-between 2xs:min-w-[340px] sm:min-w-[400px] md:min-w-[450px]'>
         {/* info */}
@@ -104,11 +93,11 @@ export default function PassOption() {
         <div className='relative h-[200px] w-[200px] overflow-hidden'>
           <Image
             src='/qrSample.png'
-            alt='/hotel'
+            alt='/qrSample'
             fill={true}
             sizes='50vw'
             quality={100}
-            className='absolute object-cover w-auto h-auto select-none'
+            className='absolute h-auto w-auto select-none object-cover'
             draggable={false}
           />
         </div>
@@ -128,18 +117,21 @@ export default function PassOption() {
         maxLength={8}
         value={phoneNumber}
         onChange={handlePhoneNumberChange}
-        className=' bg-payment-black h-[40px] w-[250px] rounded-[12px] border-0 text-center text-[20px] font-bold tracking-[6px] text-white shadow-[1px_1px_4px_2px_rgb(37,228,106,0.45)] placeholder:mt-[-4px] placeholder:text-[14px] placeholder:font-medium placeholder:leading-[14px] placeholder:tracking-normal placeholder:text-white/25'
+        className=' h-[40px] w-[250px] rounded-[12px] border border-pass-green bg-payment-black/[.1] focus:border-pass-green focus:ring-pass-green text-center text-[16px] font-bold tracking-[6px] text-main-text shadow-[0px_0px_4px_1px_rgb(37,228,106,0.75)]  placeholder:mt-[-4px] placeholder:text-[14px] placeholder:font-medium placeholder:tracking-normal placeholder:text-main-text'
       />
       <button
         onClick={handleProceedClick}
-        className={`bg-pass-green flex h-[40px] w-[200px] items-center justify-center rounded-[12px] font-semibold text-main-text ${
+        className={`flex h-[40px] w-[200px] items-center justify-center rounded-[12px] bg-pass-green font-semibold text-white ${
           isButtonDisabled ? 'cursor-not-allowed opacity-50' : ''
         }`}
         disabled={isButtonDisabled}
       >
         {lang === 'en' ? 'Proceed' : 'Үргэлжлүүлэх'}
       </button>
-      <button className='text-pass-green font-medium leading-[16px]'>
+      <button
+        className='font-medium leading-[16px] text-pass-green'
+        onClick={() => router.back()}
+      >
         {lang === 'en' ? 'Back' : 'Буцах'}
       </button>
     </div>

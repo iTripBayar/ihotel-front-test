@@ -77,7 +77,7 @@ const CardsContainer = ({
             <p className="flex gap-[4px]">
               {/* {state.language === 'mn' ? 'Цааш үзэх' : 'More'}{' '} */}
               {lang === 'en' ? 'More' : 'Цааш үзэх'}
-              <span>({data.length}+)</span>
+              {data.length - cap > 0 ? <span>({data.length - cap}+)</span> : null}
             </p>
           </Link>
         ) : null}

@@ -250,7 +250,7 @@ const SearchSection = ({
               value={searchValue}
             />
           </div>
-          <div
+          <button
             className='flex h-[36px] items-center justify-center gap-[12px] rounded-full bg-white px-[8px] text-[15px] font-medium leading-[1px] text-primary-blue 2xs:px-[16px] xl:min-w-[250px]'
             onClick={() => {
               // router.replace(
@@ -287,7 +287,7 @@ const SearchSection = ({
             <p>
               {`${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year} - ${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}`}
             </p>
-          </div>
+          </button>
         </div>
       ) : null}
     </div>

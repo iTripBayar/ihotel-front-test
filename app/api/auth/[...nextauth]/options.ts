@@ -46,7 +46,7 @@ export const options: NextAuthOptions = {
         if (response.ok && user.accessToken) {
           user = {
             id: user.accessToken,
-            name: credentials?.email,
+            name: credentials?.email.split('@')[0],
             email: credentials?.email,
           };
           return user;

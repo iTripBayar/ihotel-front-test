@@ -2,16 +2,40 @@
 
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
+// import { ReactMouseEvent } from 'react';
+import { KeyboardEvent } from 'react';
+import { useEffect } from 'react';
 
 export function GoogleSignInButton() {
   const handleClick = () => {
     signIn('google');
   };
+   const handleKeyDown = (e: KeyboardEvent) => {
+     // Disable the button for keyboard events if the key is Enter
+     if (e.key === 'Enter') {
+       e.preventDefault();
+     }
+   };
+
+   useEffect(() => {
+     // Add event listener when component mounts
+     document.addEventListener('keydown', handleKeyDown as any); // Cast as any
+
+     // Remove event listener when component unmounts
+     return () => {
+       document.removeEventListener('keydown', handleKeyDown as any); // Cast as any
+     };
+   }, []);
 
   return (
     <button
       onClick={handleClick}
-      onKeyDown={(e) => e.preventDefault()}
+      onMouseEnter={() =>
+        document.removeEventListener('keydown', handleKeyDown as any)
+      } // Cast as any
+      onMouseLeave={() =>
+        document.addEventListener('keydown', handleKeyDown as any)
+      } // Cast as any
       className='group relative flex h-[50px] w-[125px] cursor-pointer items-center justify-center gap-[4px] rounded-[8px] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.25)]'
     >
       <Image
@@ -29,14 +53,39 @@ export function GoogleSignInButton() {
 }
 
 export function FacebookSignInButton() {
+  // const handleClick = () => {
+  //   signIn('facebook');
+  // };
   const handleClick = () => {
     signIn('facebook');
   };
 
+  const handleKeyDown = (e: KeyboardEvent) => {
+    // Disable the button for keyboard events if the key is Enter
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
+
+  useEffect(() => {
+    // Add event listener when component mounts
+    document.addEventListener('keydown', handleKeyDown as any); // Cast as any
+
+    // Remove event listener when component unmounts
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown as any); // Cast as any
+    };
+  }, []);
+
   return (
     <button
       onClick={handleClick}
-      onKeyDown={(e)=>e.preventDefault()}
+      onMouseEnter={() =>
+        document.removeEventListener('keydown', handleKeyDown as any)
+      } // Cast as any
+      onMouseLeave={() =>
+        document.addEventListener('keydown', handleKeyDown as any)
+      } // Cast as any
       className='group relative flex h-[50px] w-[125px] cursor-pointer items-center justify-center gap-[4px] rounded-[8px] bg-white shadow-[0_3px_10px_rgb(0,0,0,0.25)]'
     >
       <Image

@@ -11,7 +11,7 @@ declare namespace HomeData {
     places: SearchData.Places[];
     posts: Posts[];
     propertyTypes: PropertyTypes[];
-    recommendedPlaces: [];
+    recommendedPlaces: RecommendedPlaces[];
     searchCity: number | null;
     searchHotel: number | null;
     searchPlace: number | null;
@@ -54,6 +54,39 @@ declare namespace HomeData {
     name: string;
     nameEn: string;
     placeKey: number;
+    slug: string;
+    thumbnail: string;
+    updatedAt: string;
+  }
+  interface RecommendedPlaces {
+    coverPhoto: string;
+    createdAt: string;
+    description: string;
+    district: {
+      code: number | null;
+      countryId: number | null;
+      createdAt: string;
+      id: number;
+      image: string | null;
+      international: string;
+      isActive: boolean;
+      isRecommended: number;
+      location: { lat: number; lng: number };
+      name: string;
+      orderNo: number;
+      provinceId: number;
+      updatedAt: string;
+    };
+    districtId: number;
+    id: number;
+    image: string;
+    isRecommended: number;
+    isSearch: number;
+    longitudeLatitude: null;
+    name: string;
+    nameEn: string;
+    placeKey: number;
+    provinceId: number;
     slug: string;
     thumbnail: string;
     updatedAt: string;

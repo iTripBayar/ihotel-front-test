@@ -32,7 +32,9 @@ export default function RootLayout({
               content='width=device-width, initial-scale=1, maximum-scale=1'
             ></meta>
           </head>
-          <body className={`relative overscroll-y-none ${inter.className}`}>
+          <body
+            className={`relative overscroll-y-none ${inter.className}`}
+          >
             {children}
           </body>
         </html>

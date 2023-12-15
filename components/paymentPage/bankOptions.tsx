@@ -50,11 +50,11 @@ export default function BankOptions() {
   };
 
   return (
-    <div className='flex flex-col items-center gap-[24px] py-[32px] pb-[50px] text-white'>
+    <div className='flex flex-col items-center gap-[24px] py-[32px] pb-[50px] text-main-text'>
       <h3 className='text-[16px] font-bold uppercase'>
         {lang === 'en' ? 'Bank transfer' : 'Дансаар шилжүүлэх'}
       </h3>
-      <div className='flex min-w-[300px] flex-col items-center justify-start gap-[20px] rounded-[8px] border border-white/50 px-[16px] py-[16px] shadow-[0px_0px_12px_2px_rgb(255,255,255,0.1)] 2xs:min-w-[340px] 2xs:px-[24px] sm:min-w-[400px] md:min-w-[450px]'>
+      <div className='flex min-w-[300px] flex-col items-center justify-start gap-[20px] rounded-[8px] border border-black/50 px-[16px] py-[16px] shadow-[0px_0px_12px_2px_rgb(255,255,255,0.1)] 2xs:min-w-[340px] 2xs:px-[24px] sm:min-w-[400px] md:min-w-[450px]'>
         {/* bank info */}
         <div className='flex w-full flex-col items-start justify-start gap-[20px] text-[16px] leading-[16px]'>
           <div className='flex gap-[12px]'>
@@ -111,7 +111,7 @@ export default function BankOptions() {
                   </div>
                   {/* copy button */}
                   <button
-                    className='flex h-[40px] w-[80px] items-center justify-center rounded-[8px] border border-white/60 font-medium hover:border-white hover:bg-white/25'
+                    className='flex h-[40px] w-[80px] items-center justify-center rounded-[8px] border border-black/[.3]  font-medium hover:border-white hover:bg-payment-black/25 bg-payment-black/[.05]'
                     onClick={() => handleCopyClick(index.account)}
                   >
                     {lang === 'en' ? 'Copy' : 'Хуулах'}

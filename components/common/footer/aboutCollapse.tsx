@@ -38,26 +38,28 @@ export default function AboutCollapse() {
       <Collapse
         in={size.width && size.width > 768 ? true : isOpen}
         animateOpacity
+        // duration={500}
+        transition={{ enter: { duration: size.width && size.width > 768 ? 0 : undefined } }}
         className={`!flex !flex-col justify-start gap-[16px] ${
           (size.width && size.width >= 768) || isOpen === true
             ? ' !pb-[16px]'
             : 'h-0'
         }`}
       >
-        <Link href='/' className='relative text-white underline-0 group'>
+        <Link href='/' className='underline-0 group relative text-white'>
           {lang === 'en' ? 'About us' : 'Бидний тухай'}
 
-          <span className='absolute bottom-0 left-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-1/2'></span>
+          <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
         </Link>
-        <Link href='/' className='relative text-white underline-0 group'>
+        <Link href='/' className='underline-0 group relative text-white'>
           {lang === 'en' ? 'Q&A' : 'Түгээмэл асуулт хариулт'}
 
-          <span className='absolute bottom-0 left-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-1/2'></span>
+          <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
         </Link>
-        <Link href='/' className='relative text-white underline-0 group'>
+        <Link href='/' className='underline-0 group relative text-white'>
           {lang === 'en' ? 'Terms of service' : 'Үйлчилгээний нөхцөл'}
 
-          <span className='absolute bottom-0 left-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-1/2'></span>
+          <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
         </Link>
       </Collapse>
     </div>

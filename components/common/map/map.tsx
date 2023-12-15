@@ -17,9 +17,10 @@ interface iProps {
   data: HotelData.Hotel[];
   lat: number | undefined;
   lng: number | undefined;
+  zoom: number
 }
 
-const MapContainer = ({ data, lat, lng }: iProps) => {
+const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
@@ -91,9 +92,10 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
   const [viewPort, setViewPort] = useState({
     lng: lng ? lng : 106.91744615540313,
     lat: lat ? lat : 47.91768064540636,
-    zoom: 12,
+    zoom: zoom,
   });
-  const mapRef = useRef<any>();
+  const mapRef = useRef<any>(null);
+  // const mapRef = useRef<React.RefObject<ReactMapGL | null>>(null);
   const markerRef = useRef<any>();
   const samplePrice = 70000;
 
@@ -203,6 +205,7 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
           zoom: viewPort.zoom,
         }}
         ref={mapRef}
+        // ref={(map) => setMapRef(map)}
         onLoad={(map) => map.target.resize()}
         style={{
           borderRadius: 20,
@@ -317,7 +320,7 @@ const MapContainer = ({ data, lat, lng }: iProps) => {
               zIndex: 998,
               position: 'relative',
               width: '75%',
-              marginLeft: '-24px'
+              marginLeft: '-24px',
             }}
           >
             <div

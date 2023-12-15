@@ -26,11 +26,12 @@ const Header = () => {
     return params.toString();
   };
 
+  console.log(session)
+
   return (
     <header
       className={`flex h-[52px] min-h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white 2xs:px-[24px] sm:px-[50px] lg:px-[150px] xl:px-[200px]`}
     >
-      {/* use ? : to only load one of the images */}
       <Link href='/' className='relative h-[36.5px] w-[114px]'>
         <Image
           src='/images/logo-white.png'
@@ -39,13 +40,11 @@ const Header = () => {
           priority
           quality={100}
           sizes='20vw'
-          className='absolute object-contain cursor-pointer'
+          className='absolute cursor-pointer object-contain'
         />
       </Link>
-
       <div className='flex items-center justify-end'>
         <div className='hidden justify-end gap-[20px] text-[14px] font-medium leading-[14px] lg:flex xl:gap-[32px] xl:text-[15px] xl:leading-[15px]'>
-          {/* log in */}
           {!session?.user ? (
             <div
               className='group relative flex h-[32px] cursor-pointer items-center'
@@ -58,18 +57,13 @@ const Header = () => {
                 });
               }}
             >
-              <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
-              {/* {state.language === 'mn' ? 'Нэвтрэх' : 'Log In'} */}
+              <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
               {lang === 'en' ? 'Log In' : 'Нэвтрэх'}
             </div>
           ) : null}
-          {/* sign in */}
           {!session?.user ? (
             <div
               className='group relative flex h-[32px] cursor-pointer items-center'
-              // onClick={() => {
-              //   logIn('signUp');
-              // }}
               onClick={() => {
                 dispatch({
                   type: 'CHANGE_APP_STATE',
@@ -79,8 +73,7 @@ const Header = () => {
                 });
               }}
             >
-              <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
-              {/* {state.language === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'} */}
+              <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
               {lang === 'en' ? 'Sign Up' : 'Бүртгүүлэх'}
             </div>
           ) : null}
@@ -89,17 +82,16 @@ const Header = () => {
               href='/profile'
               className='group relative flex h-[32px] cursor-pointer items-center'
             >
-              <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
-              {/* {state.language === 'mn' ? 'Бүртгүүлэх' : 'Sign Up'} */}
-              {session.user.name}
+              <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
+              {session.user.name?.charAt(0).toUpperCase()}
+              {session.user.name?.slice(1)}
             </Link>
           ) : null}
-          {/* phone number */}
           <div
             draggable={false}
             className='group relative flex h-[32px] cursor-pointer items-center gap-[8px]'
           >
-            <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
+            <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='white'
@@ -121,10 +113,12 @@ const Header = () => {
             className='group relative flex h-[32px] cursor-pointer items-center gap-[8px]'
             onClick={() => {
               const nextAddHotel = addHotel !== 'open' ? 'open' : null;
-              router.push(`/?${createQueryString('addHotel', nextAddHotel)}`);
+              router.replace(
+                `/?${createQueryString('addHotel', nextAddHotel)}`,
+              );
             }}
           >
-            <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
+            <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -139,7 +133,6 @@ const Header = () => {
                 d='M12 4.5v15m7.5-7.5h-15'
               />
             </svg>
-            {/* {state.language === 'mn' ? 'Буудал нэмэх' : 'Add hotel'} */}
             {lang === 'en' ? 'Add hotel' : 'Буудал нэмэх'}
           </div>
           {/* lang btn */}
@@ -149,11 +142,8 @@ const Header = () => {
               router.push(`${pathname}?${createQueryString('lang', nextLang)}`);
             }}
             className='group relative flex h-[32px] cursor-pointer items-center gap-[8px]'
-            // onClick={() => {
-            //   handleDay();
-            // }}
           >
-            <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
+            <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
             <Image
               src={
                 lang === 'en'
@@ -169,7 +159,7 @@ const Header = () => {
             {lang === 'en' ? 'MN' : 'EN'}
           </div>
         </div>
-        <div
+        <button
           className='relative flex h-[16px] w-[24px] flex-col items-center lg:hidden'
           onClick={() => {
             dispatch({
@@ -181,7 +171,7 @@ const Header = () => {
           <div className='absolute top-[50%] h-[2px] w-[24px] translate-y-[-50%] animate-burger-top rounded-full bg-white'></div>
           <div className='absolute top-0 h-[2px] w-[24px] animate-burger-top1  rounded-full bg-white'></div>
           <div className='absolute bottom-0 h-[2px] w-[24px] animate-burger-top2  rounded-full bg-white'></div>
-        </div>
+        </button>
       </div>
     </header>
   );
