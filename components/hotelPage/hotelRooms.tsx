@@ -156,6 +156,8 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
     }
   }
 
+  console.log(data)
+
   return (
     <div className='flex flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] text-main-text lg:gap-[32px] lg:pt-[32px]'>
       <p className='text-[20px] font-medium leading-[20px]'>

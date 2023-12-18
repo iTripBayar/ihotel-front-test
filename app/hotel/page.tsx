@@ -114,8 +114,13 @@ const HotelPage = () => {
             <CalendarDialog ver={'web'} />
           </div>
         ) : null}
-        {appState.logOrSign === 'log' ? <LogIn /> : ''}
-        {appState.logOrSign === 'sign' ? <SignUp /> : ''}
+        {appState.logOrSign === 'log' ||
+        appState.logOrSign === 'forgotPassword' ? (
+          <LogIn />
+        ) : (
+          null
+        )}
+        {appState.logOrSign === 'sign' ? <SignUp /> : null}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
         <Dialogs
           roomPrices={roomPrices}
@@ -124,9 +129,9 @@ const HotelPage = () => {
           slug={slug ? slug : ''}
           handleScrollToRooms={handleScrollToRooms}
         />
-        {appState.biggerImage === true ? 
-        <ImagesDialog data={imagesData} />
-        : null}
+        {appState.biggerImage === true ? (
+          <ImagesDialog data={imagesData} />
+        ) : null}
         {loading ? (
           <ChakraProvider>
             <div className='flex h-screen w-full items-center justify-center'>

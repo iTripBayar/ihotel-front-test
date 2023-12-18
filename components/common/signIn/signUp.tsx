@@ -3,6 +3,7 @@ import { useSearchParams } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
 import { FormEvent } from 'react';
 import { FacebookSignInButton, GoogleSignInButton } from './authButtons';
+import { Alert, AlertIcon, ChakraProvider } from '@chakra-ui/react';
 
 export default function SignUp() {
   const searchParams = useSearchParams();
@@ -16,6 +17,7 @@ export default function SignUp() {
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordVisible1, setPasswordVisible1] = useState(false);
+  const [message, setMessage] = useState('');
 
   const close = () => {
     dispatch({
@@ -35,15 +37,14 @@ export default function SignUp() {
     // Check if the email is not empty and is valid
     setIsEmailValid(value === '' || event.target.checkValidity());
   };
-  
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
 
     try {
       const registerResponse = await fetch(
-        'https://sandbox.api.myhotel.mn:9443/api/register',
-
+        `${process.env.WEB_URL}/api/register`,
         {
           method: 'POST',
           headers: {
@@ -57,15 +58,26 @@ export default function SignUp() {
           }),
         },
       );
-      
+
       if (!registerResponse.ok) {
-        throw new Error(`HTTP error! Status: ${registerResponse.status}`);
+        setMessage('invalid');
+      } else {
+        setMessage('success');
       }
       const res = await registerResponse.json();
       console.log(res);
-    }
-     catch (error: any) {
-      console.error('Error:', (error as Error));
+    } catch (error: any) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('HTTP error! Status:', error.response.status);
+
+        // You can also access the response data (if available)
+        console.error('Response data:', error.response.data);
+      } else {
+        // The request was made but no response was received
+        console.error('Request error:', error.message);
+      }
     }
   };
 
@@ -83,12 +95,32 @@ export default function SignUp() {
     const { value } = event.target;
     setUserInfo({ ...userInfo, passwordConfirmation: value });
   };
+  if (message !== '') {
+    setTimeout(() => {
+      setMessage('');
+    }, 3000);
+  }
 
   return (
     <div
       className='fixed z-[999] flex h-screen w-full animate-fade items-center justify-center bg-black/[.35]'
       onClick={handleClick}
     >
+      {message !== '' ? (
+        <div className='absolute top-[60px]'>
+          <ChakraProvider>
+            <Alert
+              status={message === 'success' ? 'success' : 'error'}
+              className=' rounded-lg'
+            >
+              <AlertIcon />
+              {message === 'success'
+                ? `${lang === 'en' ? 'Successful!' : 'Амжилттай бүртгэгдлээ!'}`
+                : `${lang === 'en' ? 'Error!' : 'Алдаа гарлаа!'}`}
+            </Alert>
+          </ChakraProvider>
+        </div>
+      ) : null}
       <div className='flex h-auto w-[95%] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] 2xs:w-[85%] sm:w-[55%] md:w-[40%] lg:w-[35%] xl:w-[30%] 2xl:w-[25%]'>
         {/* title */}
         <div className='flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px] text-main-text'>
@@ -261,6 +293,13 @@ export default function SignUp() {
               )}
             </button>
           </div>
+          {message === 'invalid' && (
+            <p className='mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]'>
+              {lang === 'en'
+                ? '* Email is already registered *'
+                : '* И-мэйл хаяг бүртгэлтэй байна *'}
+            </p>
+          )}
           {arePasswordsValid === false && (
             <p className='mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]'>
               {lang === 'en'

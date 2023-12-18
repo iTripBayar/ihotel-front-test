@@ -158,6 +158,11 @@ export default function GeneralInfo({
             <Collapse
               in={isOpen}
               animateOpacity
+              transition={{
+                enter: {
+                  duration: 0.25,
+                },
+              }}
               className={`!flex w-full !flex-col !gap-[16px] sm:!gap-[20px]  ${
                 isOpen === true
                   ? 'mt-[8px] h-auto pb-[16px] sm:pb-[20px]'
@@ -168,7 +173,7 @@ export default function GeneralInfo({
                 <Image
                   src={
                     image
-                      ? `https://sandbox.api.myhotel.mn:9443/${image}`
+                      ? `${process.env.WEB_URL}/${image}`
                       : '/samples/camp.png'
                   }
                   alt='/hotel'
@@ -243,7 +248,7 @@ export default function GeneralInfo({
               <Image
                 src={
                   image
-                    ? `https://sandbox.api.myhotel.mn:9443/${image}`
+                    ? `${process.env.WEB_URL}/${image}`
                     : '/samples/camp.png'
                 }
                 alt='/hotel'

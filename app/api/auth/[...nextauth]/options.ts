@@ -2,7 +2,8 @@ import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import FaceBookProvider from 'next-auth/providers/facebook';
-
+// import { serialize, CookieSerializeOptions } from 'cookie';
+import { cookies } from 'next/headers';
 
 export const options: NextAuthOptions = {
   providers: [
@@ -29,11 +30,7 @@ export const options: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
-        // This is where you need to retrieve user data
-        // to verify with credentials
-        // Docs: https://next-auth.js.org/configuration/providers/credentials
-        // const user = { id: '1114', name: 'Bayar', password: 'Bayar1114' };
-        const response = await fetch(`${process.env.API_URL}/api/login`, {
+        const response = await fetch(`${process.env.WEB_URL}/api/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -46,6 +43,8 @@ export const options: NextAuthOptions = {
         });
         let user = await response.json();
         if (response.ok && user.accessToken) {
+          const token = user.accessToken;
+          cookies().set('accessToken', token);
           user = {
             id: user.accessToken,
             name: credentials?.email.split('@')[0],

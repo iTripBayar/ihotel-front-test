@@ -49,22 +49,35 @@ export default function InfoCollapse() {
             : 'h-0'
         }`}
       >
-        <Link href='/' className='underline-0 group relative text-white'>
+        {/* Articles */}
+        <Link
+          href={`${process.env.TEMPORARY_URL}/posts`}
+          className='underline-0 group relative text-white'
+        >
           {lang === 'en' ? 'Articles' : 'Мэдээ мэдээлэл'}
           <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
         </Link>
-
-        <Link href='/' className='underline-0 group relative text-white'>
+        {/* Tips for hotels */}
+        <Link
+          href={`${process.env.TEMPORARY_URL}/category/1`}
+          className='underline-0 group relative text-white'
+        >
           {lang === 'en' ? 'Tips for hotels' : 'Буудалд зориулсан зөвлөмж'}
           <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
         </Link>
-
-        <Link href='/' className='underline-0 group relative text-white'>
+        {/* Tips for travelers */}
+        <Link
+          href={`${process.env.TEMPORARY_URL}/category/4`}
+          className='underline-0 group relative text-white'
+        >
           {lang === 'en' ? 'Tips for travelers' : 'Аялагчдад зориулсан зөвлөмж'}
           <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
         </Link>
-
-        <Link href='/' className='underline-0 group relative text-white'>
+        {/* iHotel's success history */}
+        <Link
+          href={`${process.env.TEMPORARY_URL}/category/5`}
+          className='underline-0 group relative text-white'
+        >
           {lang === 'en' ? "iHotel's success history" : 'iHotel амжилтын түүх'}
           <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
         </Link>

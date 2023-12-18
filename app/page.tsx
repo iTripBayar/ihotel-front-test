@@ -87,8 +87,8 @@ const Home = () => {
             cityData={searchData ? searchData.cities : []}
           />
         ) : null}
-        {appState.logOrSign === 'log' ? <LogIn /> : ''}
-        {appState.logOrSign === 'sign' ? <SignUp /> : ''}
+        {appState.logOrSign === 'log' || appState.logOrSign === 'forgotPassword' ? <LogIn /> : null}
+        {appState.logOrSign === 'sign' ? <SignUp /> : null}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
         <BottomSection ver={headerVer} />
         {loading ? (

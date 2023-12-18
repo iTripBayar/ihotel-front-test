@@ -122,9 +122,12 @@ const BurgerMenu = () => {
             </Link>
           ) : null}
           {/* add hotel */}
-          <button className='flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]'>
+          <Link
+            href={`${process.env.TEMPORARY_URL}/hotel/create`}
+            className='flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]'
+          >
             {lang === 'en' ? 'Add hotel' : 'Буудал нэмэх'}
-          </button>
+          </Link>
         </div>
         {/* bottom section */}
         <div className='flex w-full flex-col justify-end gap-[24px]'>

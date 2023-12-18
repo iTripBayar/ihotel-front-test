@@ -48,7 +48,7 @@ export default function CancelTerm({ data, rooms, dollarRate }: Props) {
 
   return (
     <div className='flex h-auto w-full flex-col  rounded-[20px] px-[20px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] lg:rounded-none lg:border-t lg:border-dashed lg:border-t-black/[.15] lg:px-0 lg:pt-[32px] lg:shadow-none'>
-      <div className='flex w-full flex-col gap-[24px]'>
+      <div className='w-full flex-col gap-[24px] hidden lg:flex'>
         <p className='text-[18px] font-medium leading-[18px] text-sub-text'>
           {lang === 'en' ? 'Term of cancellation' : 'Цуцлалтын нөхцөл'}
         </p>
@@ -124,6 +124,11 @@ export default function CancelTerm({ data, rooms, dollarRate }: Props) {
         <Collapse
           in={isOpen}
           animateOpacity
+          transition={{
+            enter: {
+              duration: 0.25,
+            },
+          }}
           className={`!flex w-full !flex-col !gap-[16px] sm:!gap-[20px] ${
             isOpen === true
               ? 'mt-[10px] h-auto pb-[16px] sm:pb-[20px] '

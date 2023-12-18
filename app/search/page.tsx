@@ -84,8 +84,13 @@ const SearchPage = () => {
           campsData={[]}
           cityData={searchData ? searchData.cities : []}
         />
-        {appState.logOrSign === 'log' ? <LogIn /> : ''}
-        {appState.logOrSign === 'sign' ? <SignUp /> : ''}
+        {appState.logOrSign === 'log' ||
+        appState.logOrSign === 'forgotPassword' ? (
+          <LogIn />
+        ) : (
+          null
+        )}
+        {appState.logOrSign === 'sign' ? <SignUp /> : null}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
         <BottomSection ver={'search'} />
         <div

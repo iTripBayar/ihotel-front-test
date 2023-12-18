@@ -19,6 +19,7 @@ import { CircularProgress, ChakraProvider } from '@chakra-ui/react';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
 import ErrorComponent from '@/components/common/404';
+import PaymentMethod from '@/components/reservationPage/paymentMethod';
 
 const ReservationPage = () => {
   const searchParams = useSearchParams();
@@ -73,8 +74,13 @@ const ReservationPage = () => {
         <div className='fixed left-[50%] top-[72px] z-[900] hidden h-auto w-auto translate-x-[-50%] lg:flex'>
           {appState.calendar === 'open' ? <CalendarDialog ver={'web'} /> : null}
         </div>
-        {appState.logOrSign === 'log' ? <LogIn /> : ''}
-        {appState.logOrSign === 'sign' ? <SignUp /> : ''}
+        {appState.logOrSign === 'log' ||
+        appState.logOrSign === 'forgotPassword' ? (
+          <LogIn />
+        ) : (
+          null
+        )}
+        {appState.logOrSign === 'sign' ? <SignUp /> : null}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
         <div className='fixed bottom-0 z-[800] w-full sm:px-[50px] md:px-[72px] lg:hidden '>
           {appState.calendar === 'open' ? (
@@ -90,7 +96,7 @@ const ReservationPage = () => {
             </div>
           </ChakraProvider>
         ) : (
-          <div className='relative flex w-full flex-col gap-[20px] px-[16px] pb-[150px] pt-[72px] 2xs:pb-[128px] sm:gap-[24px] sm:px-[50px] md:px-[72px] lg:grid lg:grid-cols-5 lg:gap-[48px]  lg:px-[60px] lg:pb-[50px] xl:gap-[64px] xl:px-[100px] 2xl:px-[150px]'>
+          <div className='relative flex w-full flex-col gap-[20px] px-[16px] pb-[150px] pt-[72px] sm:gap-[24px] sm:px-[50px] md:px-[72px] lg:grid lg:grid-cols-5 lg:gap-[48px]  lg:px-[60px] lg:pb-[50px] xl:gap-[64px] xl:px-[100px] 2xl:px-[150px]'>
             <div className='flex flex-col gap-[20px] lg:col-span-3 lg:gap-[32px]'>
               <GeneralInfo
                 name={data ? data.hotel.name : null}
@@ -114,11 +120,21 @@ const ReservationPage = () => {
                 dollarRate={data ? data.rate : null}
               />
               <AdditionalRequest />
-              <div className='w-full rounded-[8px] border border-primary-blue/50 px-[20px] py-[12px] text-[12px] font-medium leading-[20px] text-primary-blue 2xs:text-[14px] lg:hidden'>
-                {lang === 'en'
-                  ? 'We will contact you shortly after confirming your order request.'
-                  : 'Бид захиалах хүсэлт хүлээн авсны дараа таны захиалгыг шалгаад эргээд тантай холбогдох болно.'}
-              </div>
+              {stat === 'online' ? (
+                <div className='flex w-full flex-col gap-[16px] rounded-[20px] bg-white px-[16px] py-[12px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] sm:gap-[20px] sm:py-[16px] lg:hidden'>
+                  <p className='text-[18px] font-medium leading-[18px] text-sub-text'>
+                    {lang === 'en' ? `Payment options` : 'Төлбөрийн сонголт'}
+                  </p>
+                  <PaymentMethod />
+                </div>
+              ) : null}
+              {stat === 'pending' ? (
+                <div className='w-full rounded-[8px] border border-primary-blue/50 px-[20px] py-[12px] text-[12px] font-medium leading-[20px] text-primary-blue 2xs:text-[14px] lg:hidden'>
+                  {lang === 'en'
+                    ? 'We will contact you shortly after confirming your order request.'
+                    : 'Бид захиалах хүсэлт хүлээн авсны дараа таны захиалгыг шалгаад эргээд тантай холбогдох болно.'}
+                </div>
+              ) : null}
               <button className='flex w-full items-center justify-start gap-[8px] text-[12px] font-medium text-primary-blue/[.75] 2xs:text-[14px]'>
                 <svg
                   viewBox='0 0 24 21'
@@ -141,11 +157,12 @@ const ReservationPage = () => {
             </div>
           </div>
         )}
-        <Footer />
+        <div className='hidden lg:flex'>
+          <Footer />
+        </div>
       </div>
     );
   return <ErrorComponent />;
-  
 };
 
 export default ReservationPage;

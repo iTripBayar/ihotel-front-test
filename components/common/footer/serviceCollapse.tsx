@@ -49,19 +49,29 @@ export default function ServiceCollapse() {
             : 'h-0'
         }`}
       >
-        <Link href='/' className='underline-0 group relative text-white'>
+        {/* Room management system */}
+        <Link
+          href={`${process.env.TEMPORARY_URL1}`}
+          className='underline-0 group relative text-white'
+        >
           {lang === 'en'
             ? 'Room management system'
             : 'Өрөөний удирдлагын систем'}
           <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
         </Link>
-
-        <Link href='/' className='underline-0 group relative text-white'>
+        {/* Web service */}
+        <Link
+          href={`${process.env.TEMPORARY_URL}/website`}
+          className='underline-0 group relative text-white'
+        >
           {lang === 'en' ? 'Web service' : 'Веб сайт бүтээх'}
           <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
         </Link>
-
-        <Link href='/' className='underline-0 group relative text-white'>
+        {/* Support */}
+        <Link
+          href={`${process.env.TEMPORARY_URL}/helps`}
+          className='underline-0 group relative text-white'
+        >
           {lang === 'en' ? 'Support' : 'Тусламж'}
           <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
         </Link>

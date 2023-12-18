@@ -1,7 +1,8 @@
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
+import PaymentMethod from './paymentMethod';
+import { useAppCtx } from '@/contexts/app';
 
 interface Props {
   ver: string;
@@ -12,6 +13,7 @@ export default function UserInfo({ ver, stat }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const [isChecked, setIsChecked] = useState(false);
+  const {appState} = useAppCtx()
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -22,12 +24,8 @@ export default function UserInfo({ ver, stat }: Props) {
   const [test, setTest] = useState([
     { firstName: '', familyName: '', email: '', phone: '', nationality: '' },
   ]);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState('socialPay');
 
-  const handlePaymentMethodChange = (method: string) => {
-    setSelectedPaymentMethod(method);
-  };
+  // console.log(appState.paymentMethod)
 
   if (ver === 'mobile') {
     return (
@@ -263,163 +261,7 @@ export default function UserInfo({ ver, stat }: Props) {
             <p className='text-[18px] font-medium leading-[18px] text-sub-text'>
               {lang === 'en' ? `Payment options` : 'Төлбөрийн сонголт'}
             </p>
-            <div className='flex w-full flex-wrap items-center justify-start gap-[24px] text-[16px] text-main-text'>
-              {/* socialPay */}
-              <div className='flex cursor-pointer items-center gap-[8px]'>
-                <input
-                  type='radio'
-                  name='paymentMethod'
-                  id='socialPay'
-                  className='h-[14px] w-[14px] cursor-pointer border-black/[.35]'
-                  checked={selectedPaymentMethod === 'socialPay'}
-                  onChange={() => handlePaymentMethodChange('socialPay')}
-                />
-                <label
-                  htmlFor='socialPay'
-                  className='flex cursor-pointer items-center gap-[4px]'
-                >
-                  <div className='relative h-[40px] w-[40px] overflow-hidden'>
-                    <Image
-                      src={'/SocialPay.png'}
-                      // src={'/samples/camp.png'}
-                      alt='/hotel'
-                      fill={true}
-                      loading='lazy'
-                      sizes='50vw'
-                      placeholder='blur'
-                      blurDataURL={'/SocialPay.png'}
-                      className='absolute h-auto w-auto select-none object-cover'
-                      draggable={false}
-                    />
-                  </div>
-                  <p>Social Pay</p>
-                </label>
-              </div>
-              {/* qPay */}
-              <div className='flex cursor-pointer items-center gap-[8px]'>
-                <input
-                  type='radio'
-                  className='h-[14px] w-[14px] cursor-pointer border-black/[.35]'
-                  name='paymentMethod'
-                  id='qPay'
-                  checked={selectedPaymentMethod === 'qPay'}
-                  onChange={() => handlePaymentMethodChange('qPay')}
-                />
-                <label
-                  htmlFor='qPay'
-                  className='flex cursor-pointer items-center gap-[4px]'
-                >
-                  <div className='relative h-[40px] w-[40px] overflow-hidden'>
-                    <Image
-                      src={'/QPay.png'}
-                      // src={'/samples/camp.png'}
-                      alt='/hotel'
-                      fill={true}
-                      loading='lazy'
-                      sizes='50vw'
-                      placeholder='blur'
-                      blurDataURL={'/QPay.png'}
-                      className='absolute h-auto w-auto select-none object-cover'
-                      draggable={false}
-                    />
-                  </div>
-                  <p>QPay</p>
-                </label>
-              </div>
-              {/* pass */}
-              <div className='flex cursor-pointer items-center gap-[8px]'>
-                <input
-                  type='radio'
-                  className='h-[14px] w-[14px] cursor-pointer border-black/[.35]'
-                  name='paymentMethod'
-                  id='pass'
-                  checked={selectedPaymentMethod === 'pass'}
-                  onChange={() => handlePaymentMethodChange('pass')}
-                />
-                <label
-                  htmlFor='pass'
-                  className='flex cursor-pointer items-center gap-[4px]'
-                >
-                  <div className='relative h-[32px] w-[90px] overflow-hidden'>
-                    <Image
-                      src={'/pass-logo.png'}
-                      // src={'/samples/camp.png'}
-                      alt='/hotel'
-                      fill={true}
-                      loading='lazy'
-                      sizes='50vw'
-                      placeholder='blur'
-                      blurDataURL={'/pass-logo.png'}
-                      className='absolute h-auto w-auto select-none object-cover'
-                      draggable={false}
-                    />
-                  </div>
-                  <p>Pass.mn</p>
-                </label>
-              </div>
-              {/* card */}
-              <div className='flex cursor-pointer items-center gap-[8px]'>
-                <input
-                  type='radio'
-                  className='h-[14px] w-[14px] cursor-pointer border-black/[.35]'
-                  name='paymentMethod'
-                  id='card'
-                  checked={selectedPaymentMethod === 'card'}
-                  onChange={() => handlePaymentMethodChange('card')}
-                />
-                <label
-                  htmlFor='card'
-                  className='flex cursor-pointer items-center gap-[4px]'
-                >
-                  <div className='relative h-[40px] w-[40px] overflow-hidden'>
-                    <Image
-                      src={'/golomt-logo.png'}
-                      // src={'/samples/camp.png'}
-                      alt='/hotel'
-                      fill={true}
-                      loading='lazy'
-                      sizes='50vw'
-                      placeholder='blur'
-                      blurDataURL={'/golomt-logo.png'}
-                      className='absolute h-auto w-auto select-none object-cover'
-                      draggable={false}
-                    />
-                  </div>
-                  <p>Card</p>
-                </label>
-              </div>
-              {/* bank */}
-              <div className='flex cursor-pointer items-center gap-[8px]'>
-                <input
-                  type='radio'
-                  className='h-[14px] w-[14px] cursor-pointer border-black/[.35]'
-                  name='paymentMethod'
-                  id='bank'
-                  checked={selectedPaymentMethod === 'bank'}
-                  onChange={() => handlePaymentMethodChange('bank')}
-                />
-                <label
-                  htmlFor='bank'
-                  className='flex cursor-pointer items-center gap-[4px]'
-                >
-                  <div className='relative h-[40px] w-[40px] overflow-hidden'>
-                    <Image
-                      src={'/khaan-logo.png'}
-                      // src={'/samples/camp.png'}
-                      alt='/hotel'
-                      fill={true}
-                      loading='lazy'
-                      sizes='50vw'
-                      placeholder='blur'
-                      blurDataURL={'/khaan-logo.png'}
-                      className='absolute h-auto w-auto select-none object-cover'
-                      draggable={false}
-                    />
-                  </div>
-                  <p>Bank</p>
-                </label>
-              </div>
-            </div>
+            <PaymentMethod />
             <div className='flex flex-col items-center justify-center gap-[24px]'>
               <div className='flex items-center justify-center gap-[8px] text-[12px] text-sub-text/75 2xs:text-[14px]'>
                 <input
@@ -446,29 +288,25 @@ export default function UserInfo({ ver, stat }: Props) {
                   ? 'Accept Terms and Conditions'
                   : 'Үйлчилгээний нөхцөл зөвшөөрөх'} */}
               </div>
-              {/* <button className='flex w-full max-w-[375px] items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white sm:text-[18px] '></button> */}
-              {buttonDisabled ? (
-                <button
-                  className={`flex w-full max-w-[375px] items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white sm:text-[18px]  ${
-                    buttonDisabled ? 'cursor-not-allowed opacity-50' : ''
-                  }`}
-                  disabled={buttonDisabled}
-                >
-                  {lang === 'en' ? 'Proceed to payment' : 'Төлбөр төлөх'}
-                </button>
-              ) : (
+              {!buttonDisabled && appState.paymentMethod !== '' ? (
                 <Link
                   href={{
-                    query: { method: selectedPaymentMethod },
+                    query: { method: appState.paymentMethod },
                     pathname: '/payment',
                   }}
                   className={`flex w-full max-w-[375px] items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white sm:text-[18px]  ${
                     buttonDisabled ? 'cursor-not-allowed opacity-50' : ''
                   }`}
-                  // disabled={buttonDisabled}
                 >
                   {lang === 'en' ? 'Proceed to payment' : 'Төлбөр төлөх'}
                 </Link>
+              ) : (
+                <button
+                  className={`flex w-full max-w-[375px] cursor-not-allowed items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white opacity-50 sm:text-[18px]`}
+                  disabled={true}
+                >
+                  {lang === 'en' ? 'Proceed to payment' : 'Төлбөр төлөх'}
+                </button>
               )}
             </div>
           </div>

@@ -124,7 +124,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
             <Image
               src={
                 data.coverPhoto !== null && data.coverPhoto !== ''
-                  ? `https://sandbox.api.myhotel.mn:9443/${data.coverPhoto}`
+                  ? `${process.env.WEB_URL}/${data.coverPhoto}`
                   : '/samples/camp.png'
               }
               alt='/commonLocs'

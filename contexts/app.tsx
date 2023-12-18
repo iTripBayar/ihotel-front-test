@@ -12,6 +12,7 @@ export type AppCtxState = {
   calendar: string;
   biggerImage: boolean;
   userToken: string
+  paymentMethod: string;
 };
 
 type Action =
@@ -35,7 +36,8 @@ const defaultValue: AppCtxProps = {
     selectedAmount: [],
     calendar: '',
     biggerImage: false,
-    userToken: ''
+    userToken: '',
+    paymentMethod: ''
   },
   dispatch: () => {
     /**/

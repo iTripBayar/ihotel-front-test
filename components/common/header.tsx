@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
 import { useSession } from 'next-auth/react';
+import { useCookies } from 'react-cookie';
 
 const Header = () => {
   const router = useRouter();
@@ -11,6 +12,8 @@ const Header = () => {
   const pathname = usePathname();
   const addHotel = searchParams.get('addHotel');
   const { appState, dispatch } = useAppCtx();
+  const [cookies, setCookie] = useCookies(['accessToken']);
+  
 
   const { data: session, status } = useSession({
     required: false,
@@ -26,7 +29,7 @@ const Header = () => {
     return params.toString();
   };
   
-  console.log(session, status)
+  // console.log(cookies, '<');
 
   return (
     <header
@@ -109,14 +112,9 @@ const Header = () => {
             <p className='leading-[16px]'>{appState.phone}</p>
           </div>
           {/* add hotel */}
-          <div
+          <Link
+            href={`${process.env.TEMPORARY_URL}/hotel/create`}
             className='group relative flex h-[32px] cursor-pointer items-center gap-[8px]'
-            onClick={() => {
-              const nextAddHotel = addHotel !== 'open' ? 'open' : null;
-              router.replace(
-                `/?${createQueryString('addHotel', nextAddHotel)}`,
-              );
-            }}
           >
             <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
             <svg
@@ -134,7 +132,7 @@ const Header = () => {
               />
             </svg>
             {lang === 'en' ? 'Add hotel' : 'Буудал нэмэх'}
-          </div>
+          </Link>
           {/* lang btn */}
           <div
             onClick={() => {

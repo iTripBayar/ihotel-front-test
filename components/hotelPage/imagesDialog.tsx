@@ -125,7 +125,7 @@ export default function ImagesDialog( {data}:Props) {
               <img
                 src={
                   i === 0
-                    ? `https://sandbox.api.myhotel.mn:9443/${index}`
+                    ? `${process.env.WEB_URL}/${index}`
                     : `https://sandbox.api.myhotel.mn/image?path=${index}`
                 }
                 alt='Hotel images'
@@ -142,7 +142,7 @@ export default function ImagesDialog( {data}:Props) {
           <div className='absolute bottom-0 flex w-full items-center justify-between px-[5%]'>
             <SlidePrevtButton />
             <SliderCloseButton />
-           
+
             <SlideNextButton />
           </div>
         </Swiper>

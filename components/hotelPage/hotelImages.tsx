@@ -39,7 +39,7 @@ const HotelImages = ({ images, image, coverPhoto }: Props) => {
         <Image
           src={
             coverPhoto
-              ? `https://sandbox.api.myhotel.mn:9443/${coverPhoto}`
+              ? `${process.env.WEB_URL}/${coverPhoto}`
               : '/samples/camp.png'
           }
           alt='/hotel'
@@ -67,7 +67,7 @@ const HotelImages = ({ images, image, coverPhoto }: Props) => {
                 }}
               >
                 <Image
-                  src={`https://sandbox.api.myhotel.mn/image?path=${index}`}
+                  src={`${process.env.WEB_URL}/image?path=${index}`}
                   alt='/hotel'
                   fill={true}
                   loading='lazy'

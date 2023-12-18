@@ -101,32 +101,37 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
 
   return (
     <div className='flex flex-col rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]'>
-      <Slider {...settings} ref={sliderRef} className='m-0 p-0'>
-        {data.images.map((index, i) => (
-          <div className='relative h-[225px] w-full overflow-hidden rounded-t-[16px] bg-sky-500 2xs:h-[260px] sm:h-[300px] ' key={i}>
-            <Image
-              src={
-                data.photos !== null
-                  ? `https://sandbox.api.myhotel.mn:9443/${index}`
-                  : '/samples/camp.png'
-              }
-              alt='/hotel'
-              fill={true}
-              quality={75}
-              loading='lazy'
-              sizes='50vw'
-              placeholder='blur'
-              blurDataURL={
-                data.images.length > 0
-                  ? `"_next/image/?url=${data.images[0]}"`
-                  : '/samples/camp.png'
-              }
-              className='absolute h-auto w-auto select-none object-cover duration-700 hover:scale-110'
-              draggable={false}
-            />
-          </div>
-        ))}
-      </Slider>
+      {data.images ? (
+        <Slider {...settings} ref={sliderRef} className='m-0 p-0'>
+          {data.images.map((index, i) => (
+            <div
+              className='relative h-[225px] w-full overflow-hidden rounded-t-[16px] bg-sky-500 2xs:h-[260px] sm:h-[300px] '
+              key={i}
+            >
+              <Image
+                src={
+                  data.photos !== null
+                    ? `${process.env.WEB_URL}/${index}`
+                    : '/samples/camp.png'
+                }
+                alt='/hotel'
+                fill={true}
+                quality={75}
+                loading='lazy'
+                sizes='50vw'
+                placeholder='blur'
+                blurDataURL={
+                  data.images.length > 0
+                    ? `"_next/image/?url=${data.images[0]}"`
+                    : '/samples/camp.png'
+                }
+                className='absolute h-auto w-auto select-none object-cover duration-700 hover:scale-110'
+                draggable={false}
+              />
+            </div>
+          ))}
+        </Slider>
+      ) : null}
 
       <div className='flex w-full flex-col gap-[20px] px-[16px] pb-[20px] pt-[24px]'>
         {/* name */}
