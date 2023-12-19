@@ -18,8 +18,6 @@ export async function fetchDataSearch(): Promise<SearchData.Data> {
   return result;
 }
 
-
-
 export async function fetchUserData(e: {
   email: string | undefined;
   password: string | undefined;
@@ -45,59 +43,6 @@ export async function fetchUserData(e: {
     } else {
       console.error('Error fetching user data:', error.message);
     }
-    throw error;
-  }
-}
-
-// https://sandbox.api.myhotel.mn:9443/password/email
-export async function forgotPassword(e: {
-  email: string | undefined;
-}) {
-  try {
-    const response = await fetch(`${process.env.WEB_URL}/password/email`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: e.email,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error('Error registering user:', error);
-    throw error;
-  }
-}
-
-export async function registerUser(e: {
-  email: string | undefined;
-  password: string | undefined;
-  passwordConfirmation: string | undefined;
-}) {
-  try {
-    const response = await fetch(`${process.env.WEB_URL}/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: e.email,
-        password: e.password,
-        passwordConfirmation: e.passwordConfirmation,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error('Error registering user:', error);
     throw error;
   }
 }

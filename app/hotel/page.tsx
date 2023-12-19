@@ -1,30 +1,30 @@
 'use client';
 import HeaderVariants from '@/components/common/headerVariants';
-import HotelImages from '@/components/hotelPage/hotelImages';
+import HotelImages from '@/components/pageComponents/hotelPage/hotelImages';
 import { useRequest } from 'ahooks';
 import { fetchDataHotel } from '@/utils';
-import HotelInfo from '@/components/hotelPage/hotelInfo';
-import Amenity from '@/components/hotelPage/amenity';
-import Review from '@/components/hotelPage/review';
-import HotelMap from '@/components/hotelPage/hotelMap';
-import OrderCount from '@/components/hotelPage/orderCount';
-import Services from '@/components/hotelPage/services';
-import HotelRooms from '@/components/hotelPage/hotelRooms';
+import HotelInfo from '@/components/pageComponents/hotelPage/hotelInfo';
+import Amenity from '@/components/pageComponents/hotelPage/amenity';
+import Review from '@/components/pageComponents/hotelPage/review';
+import HotelMap from '@/components/pageComponents/hotelPage/hotelMap';
+import OrderCount from '@/components/pageComponents/hotelPage/orderCount';
+import Services from '@/components/pageComponents/hotelPage/services';
+import HotelRooms from '@/components/pageComponents/hotelPage/hotelRooms';
 import BurgerMenu from '@/components/common/burgermenu';
-import Description from '@/components/hotelPage/description';
+import Description from '@/components/pageComponents/hotelPage/description';
 import HotelCard from '@/components/common/hotelCard';
 import Footer from '@/components/common/footer';
-import Dialogs from '@/components/hotelPage/dialogs';
-import CalendarDialog from '@/components/hotelPage/dialogs/calendarDialog';
+import Dialogs from '@/components/pageComponents/hotelPage/dialogs';
+import CalendarDialog from '@/components/pageComponents/hotelPage/dialogs/calendarDialog';
 import { useSearchParams } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
 import { useRef, useState } from 'react';
-import CartAlert from '@/components/hotelPage/cartAlert';
+import CartAlert from '@/components/pageComponents/hotelPage/cartAlert';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
 import { ChakraProvider, CircularProgress } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
-import ImagesDialog from '@/components/hotelPage/imagesDialog';
+import ImagesDialog from '@/components/pageComponents/hotelPage/imagesDialog';
 const ErrorComponent = dynamic(() => import('@/components/common/404'));
 
 const HotelPage = () => {
@@ -33,6 +33,7 @@ const HotelPage = () => {
   const lang = searchParams.get('lang');
   const { appState } = useAppCtx();
   const roomsContainer = useRef<HTMLDivElement>(null);
+  const reviewsContainer = useRef<HTMLDivElement>(null);
   const [showAlert, setShowAlert] = useState(false);
 
   const { data, loading, error } = useRequest(() => {
@@ -67,35 +68,48 @@ const HotelPage = () => {
   }
   roomPrices.sort((a, b) => b - a);
 
-  const handleScrollToRooms = () => {
-    setShowAlert(true);
-    setTimeout(() => {
-      setShowAlert(false);
-    }, 5000);
-    // Get the DOM element from the ref
-    const container = roomsContainer.current;
+  const handleScrollTo = (ver: string) => {
+    if(ver === 'reviews'){
+      const container = reviewsContainer.current;
+      if (container) {
+        // Get the position of the element relative to the viewport
+        const rect = container.getBoundingClientRect();
+        // Scroll to the top of the element with smooth behavior
+        window.scrollTo({
+          top: rect.top + window.scrollY - 75,
+          behavior: 'smooth',
+        });
+      }
+    }
+    if(ver === 'rooms'){
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 5000);
+      // Get the DOM element from the ref
+      const container = roomsContainer.current;
 
-    if (container) {
-      // Get the position of the element relative to the viewport
-      const rect = container.getBoundingClientRect();
+      if (container) {
+        // Get the position of the element relative to the viewport
+        const rect = container.getBoundingClientRect();
 
-      // Scroll to the top of the element with smooth behavior
-      window.scrollTo({
-        top: rect.top + window.scrollY,
-        behavior: 'smooth',
-      });
+        // Scroll to the top of the element with smooth behavior
+        window.scrollTo({
+          top: rect.top + window.scrollY,
+          behavior: 'smooth',
+        });
+      }
     }
   };
 
-  const imagesData: string[] = []
-  if(data?.hotel.images && data.hotel.coverPhoto){
-      imagesData.push(data.hotel.coverPhoto);
+  const imagesData: string[] = [];
+  if (data?.hotel.images && data.hotel.coverPhoto) {
+    imagesData.push(data.hotel.coverPhoto);
     for (let i = 0; i < data?.hotel.images?.length; i++) {
-      imagesData.push(data.hotel.images[i])
+      imagesData.push(data.hotel.images[i]);
     }
   }
 
-  console.log(data)
   if (!error)
     return (
       <main className='relative'>
@@ -117,9 +131,7 @@ const HotelPage = () => {
         {appState.logOrSign === 'log' ||
         appState.logOrSign === 'forgotPassword' ? (
           <LogIn />
-        ) : (
-          null
-        )}
+        ) : null}
         {appState.logOrSign === 'sign' ? <SignUp /> : null}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
         <Dialogs
@@ -127,14 +139,14 @@ const HotelPage = () => {
           stat={stat}
           allRooms={data?.rooms ? data?.rooms : []}
           slug={slug ? slug : ''}
-          handleScrollToRooms={handleScrollToRooms}
+          handleScrollToRooms={(ver: string) => handleScrollTo(ver)}
         />
-        {appState.biggerImage === true ? (
-          <ImagesDialog data={imagesData} />
+        {appState.biggerImage.length > 0 ? (
+          <ImagesDialog />
         ) : null}
         {loading ? (
           <ChakraProvider>
-            <div className='flex h-screen w-full items-center justify-center'>
+            <div className='flex items-center justify-center w-full h-screen'>
               <CircularProgress isIndeterminate={true} color='#3C76FE' />
             </div>
           </ChakraProvider>
@@ -145,10 +157,7 @@ const HotelPage = () => {
                 <div className='flex flex-col gap-[16px] 2xs:gap-[24px] lg:flex-col-reverse lg:gap-[24px]'>
                   <HotelImages
                     images={data?.hotel?.images ? data?.hotel.images : []}
-                    image={data?.hotel?.image ? data?.hotel.image : []}
-                    coverPhoto={
-                      data?.hotel.coverPhoto ? data.hotel.coverPhoto : ''
-                    }
+                    image={data?.hotel?.image ? data?.hotel.image : ''}
                   />
                   <HotelInfo
                     name={data?.hotel.name}
@@ -209,7 +218,11 @@ const HotelPage = () => {
                     <p>{data?.hotel.email}</p>
                   </div>
                 </div>
-                <Review ver='' data={data?.reviews ? data?.reviews : []} />
+                <Review
+                  ver=''
+                  data={data?.reviews ? data?.reviews : []}
+                  handleScrollTo={(ver: string) => handleScrollTo(ver)}
+                />
                 {/* stat & price */}
                 <div className='hidden flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] lg:flex'>
                   {stat !== 'data' ? (
@@ -263,7 +276,7 @@ const HotelPage = () => {
                       </span>
                     </p>
                     <div
-                      onClick={() => handleScrollToRooms()}
+                      onClick={() => handleScrollTo('rooms')}
                       className='flex items-center justify-center rounded-[16px] bg-main-online px-[16px] py-[6px] font-medium text-white'
                     >
                       {lang === 'en' ? 'Order' : 'Захиалах'}
@@ -276,7 +289,9 @@ const HotelPage = () => {
                     lat={data?.hotel.lat ? data?.hotel.lat : 47.91823102891307}
                     lng={data?.hotel.lng ? data?.hotel.lng : 106.92059918835042}
                   />
-                  <OrderCount count={783} />
+                  <OrderCount
+                    count={data?.orderCount ? data.orderCount : 783}
+                  />
                 </div>
               </div>
             </div>
@@ -286,14 +301,20 @@ const HotelPage = () => {
             <div ref={roomsContainer}>
               <HotelRooms
                 data={data?.rooms}
-                handleScrollToRooms={handleScrollToRooms}
+                handleScrollToRooms={(ver: string) => handleScrollTo(ver)}
               />
             </div>
             <Description
               introduction={data?.hotel.introduction}
               introductionEn={data?.hotel.introductionEn}
             />
-            <Review ver='full' data={data?.reviews ? data?.reviews : []} />
+            <div ref={reviewsContainer}>
+              <Review
+                ver='full'
+                data={data?.reviews ? data?.reviews : []}
+                handleScrollTo={(ver: string) => handleScrollTo(ver)}
+              />
+            </div>
             {/* recommended places */}
             <div className='flex w-full flex-col gap-[24px] border-t-[1px] border-black/[.15] pt-[24px] lg:gap-[32px] lg:pt-[32px]'>
               <p className='text-[20px] font-medium leading-[20px] text-main-text'>
@@ -302,13 +323,17 @@ const HotelPage = () => {
               <div className='grid w-full grid-cols-1 gap-[24px] sm:grid-cols-2 lg:grid-cols-3 lg:gap-[32px]'>
                 {data?.offerHotels &&
                   data?.offerHotels.map((index, i) => (
-                    <HotelCard data={index} key={i} fromMap={false} />
+                    <HotelCard
+                      data={index}
+                      key={i}
+                      fromMap={false}
+                      ver='home'
+                    />
                   ))}
               </div>
             </div>
           </div>
         )}
-
         <Footer />
       </main>
     );

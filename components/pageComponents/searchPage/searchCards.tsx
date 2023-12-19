@@ -1,4 +1,4 @@
-import HotelCard from '../common/hotelCard';
+import HotelCard from '../../common/hotelCard';
 import { useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
@@ -41,7 +41,7 @@ const SearchCards = ({ data }: iProps) => {
       >
         {data.length > 0
           ? data.map((data, i: number) => (
-              <HotelCard data={data} key={i} fromMap={false} />
+              <HotelCard data={data} key={i} fromMap={false} ver='search' />
             ))
           : null}
       </div>

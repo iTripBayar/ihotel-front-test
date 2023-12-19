@@ -1,5 +1,5 @@
 import useWindowSize from '@/hooks/windowSize';
-import HotelCard from '../common/hotelCard';
+import HotelCard from '../../common/hotelCard';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
@@ -55,7 +55,7 @@ const CardsContainer = ({
           </h3>
         ) : null}
         <div
-          className={`grid xs:grid-rows-${cap} gap-[32px] sm:grid-cols-2 sm:grid-rows-${
+          className={`grid xs:grid-rows-${cap} gap-[32px] sm:gap-[24px] md:gap-[32px] sm:grid-cols-2 sm:grid-rows-${
             cap / 2
           }  xl:grid-rows-${
             cap / 3
@@ -63,6 +63,7 @@ const CardsContainer = ({
         >
           {data.map((data, i: number) => (
             <HotelCard
+            ver='home'
               data={data}
               key={i}
               fromMap={false}

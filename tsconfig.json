@@ -33,6 +33,6 @@
     "app/*.tsx",
     "/app/**/*.tsx",
     "node_modules/@deck.gl/aggregation-layers/typed/**.ts"
-  ],
+, "components/pageComponents/paymentPage", "components/pageComponents/reservationPage", "components/pageComponents/searchPage", "components/pageComponents/hotelPage", "components/pageComponents/homePage"  ],
   "exclude": ["node_modules"]
 }

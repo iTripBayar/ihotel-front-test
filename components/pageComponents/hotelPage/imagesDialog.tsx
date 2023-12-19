@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Pagination, Autoplay, Navigation } from 'swiper/modules';
+import { Pagination, Navigation } from 'swiper/modules';
 import { useSwiper } from 'swiper/react';
 import { useAppCtx } from '@/contexts/app';
 
@@ -10,8 +10,10 @@ export function SlideNextButton() {
 
   return (
     <button
-      onClick={() => swiper.slideNext()}
-      className='w-[36px] h-[36px] pl-[2px] bg-primary-blue rounded-full flex justify-center items-center text-white'
+      onClick={() => {
+        swiper.slideNext();
+      }}
+      className='flex h-[36px] w-[36px] items-center justify-center rounded-full bg-primary-blue pl-[2px] text-white'
     >
       <svg
         xmlns='http://www.w3.org/2000/svg'
@@ -19,7 +21,7 @@ export function SlideNextButton() {
         viewBox='0 0 24 24'
         strokeWidth='2.5'
         stroke='currentColor'
-        className='min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px]'
+        className='max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px]'
       >
         <path
           strokeLinecap='round'
@@ -35,8 +37,10 @@ export function SlidePrevtButton() {
 
   return (
     <button
-      onClick={() => swiper.slidePrev()}
-      className='flex h-[36px] w-[36px] pr-[2px] items-center justify-center rounded-full bg-primary-blue text-white'
+      onClick={() => {
+        swiper.slidePrev();
+      }}
+      className='flex h-[36px] w-[36px] items-center justify-center rounded-full bg-primary-blue pr-[2px] text-white'
     >
       <svg
         xmlns='http://www.w3.org/2000/svg'
@@ -55,53 +59,48 @@ export function SlidePrevtButton() {
     </button>
   );
 }
-export function SliderCloseButton(){
+export function SliderCloseButton() {
   const { dispatch } = useAppCtx();
-    return (
-      <button
-        className='flex h-[36px] w-[36px] items-center justify-center rounded-full bg-primary-blue text-white'
-        onClick={() => {
-          dispatch({
-            type: 'CHANGE_APP_STATE',
-            payload: { biggerImage: false },
-          });
-        }}
+  return (
+    <button
+      className='flex h-[36px] w-[36px] items-center justify-center rounded-full bg-primary-blue text-white'
+      onClick={() => {
+        dispatch({
+          type: 'CHANGE_APP_STATE',
+          payload: { biggerImage: [] },
+        });
+      }}
+    >
+      <svg
+        xmlns='http://www.w3.org/2000/svg'
+        fill='none'
+        viewBox='0 0 24 24'
+        strokeWidth='2'
+        stroke='currentColor'
+        className='max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px]'
       >
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          fill='none'
-          viewBox='0 0 24 24'
-          strokeWidth='2'
-          stroke='currentColor'
-          className='max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px]'
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='M6 18L18 6M6 6l12 12'
-          />
-        </svg>
-      </button>
-    );
+        <path
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          d='M6 18L18 6M6 6l12 12'
+        />
+      </svg>
+    </button>
+  );
 }
 
-interface Props{
-  data: string[]
-}
-export default function ImagesDialog( {data}:Props) {
+export default function ImagesDialog() {
+  const { appState } = useAppCtx();
+
   return (
-    <div className='absolute left-0 top-0 z-[999] flex h-screen w-screen items-center justify-center bg-black/75 backdrop-blur-[1px]'>
-      <div className='flex h-screen w-[90%] items-center justify-center'>
+    <div className='fixed left-0 top-0 z-[999] flex h-screen w-screen items-center justify-center bg-black/[.8] backdrop-blur-[2px]'>
+      <div className='flex h-screen w-[calc(100%-32px)]  max-w-[500px] items-center justify-center sm:w-[calc(100%-100px)] md:w-[calc(100%-244px)]'>
         <Swiper
-          modules={[Pagination, Autoplay, Navigation]}
+          modules={[Pagination, Navigation]}
           pagination={{ type: 'fraction' }}
           spaceBetween={20}
-          autoplay={{
-            delay: 5000,
-            stopOnLastSlide: false,
-            disableOnInteraction: false,
-          }}
           slidesPerView={1}
+          loop={true}
           style={{
             display: 'flex',
             alignItems: 'flex-start',
@@ -110,39 +109,38 @@ export default function ImagesDialog( {data}:Props) {
             color: 'white',
           }}
         >
-          {data.map((index, i) => (
+          {appState.biggerImage.map((index, i) => (
             <SwiperSlide
               key={i}
               style={{
                 width: '100%',
-                maxHeight: '88%',
+                maxHeight: '80%',
                 display: 'flex',
                 alignItems: 'center',
                 alignSelf: 'flex-start',
+                justifyContent: 'center',
                 overflow: 'hidden',
+                // backgroundColor: 'rgb(0 0 0/50%)',
               }}
             >
               <img
                 src={
-                  i === 0
-                    ? `${process.env.WEB_URL}/${index}`
-                    : `https://sandbox.api.myhotel.mn/image?path=${index}`
+                  `${process.env.IMAGE_URL}${index}`
                 }
                 alt='Hotel images'
-                className='h-auto w-full'
+                className='w-full h-auto'
               />
             </SwiperSlide>
           ))}
-          {data.length > 1 ? (
+          {appState.biggerImage.length > 1 ? (
             <div className='absolute bottom-0 flex w-full items-center justify-between px-[5%]'>
               <SlidePrevtButton />
               <SlideNextButton />
             </div>
           ) : null}
-          <div className='absolute bottom-0 flex w-full items-center justify-between px-[5%]'>
+          <div className='absolute bottom-0 z-[999] flex w-full items-center justify-between px-[5%]'>
             <SlidePrevtButton />
             <SliderCloseButton />
-
             <SlideNextButton />
           </div>
         </Swiper>

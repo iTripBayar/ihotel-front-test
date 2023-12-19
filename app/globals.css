@@ -76,6 +76,15 @@
   bottom: 50px !important;
   font-size: medium !important;
 }
+.roomImages .swiper-pagination{
+  bottom: 0 !important;
+}
+.roomImages .swiper-pagination-bullet{
+  border: 2px solid #ffffff !important;
+  background-color: #3C76FE;
+  width: 10px;
+  height: 10px;
+}
 
 @media (max-width: 1023px){
   .rdp-months{

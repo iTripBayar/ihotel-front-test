@@ -8,25 +8,23 @@ import { useRequest } from 'ahooks';
 import { useCookies } from 'react-cookie';
 export default function ProfilePage() {
   const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
-
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
       redirect('/');
     },
   });
-  const {data: userData} = useRequest(()=>{
-    return fetchUserData({ email: 'orgil@ihotel.mn', password: 'Wave920110@' });
-  })
-  console.log(userData);
+  // const {data: userData} = useRequest(()=>{
+  //   return fetchUserData({ email: 'orgil@ihotel.mn', password: 'Wave920110@' });
+  // })
   return (
     <div>
-      <Link href={{pathname: '/'}}>Go to HomePage</Link>
+      <Link href={{ pathname: '/' }}>Go to HomePage</Link>
       {session?.user ? `Welcome ${session.user.name}!` : 'Profile Page'}
       <button
-        onClick={() =>  {
+        onClick={() => {
           removeCookie('accessToken');
-          signOut({ callbackUrl: 'http://localhost:3000/' })
+          signOut({ callbackUrl: 'http://localhost:3000/' });
         }}
       >
         Sign Out

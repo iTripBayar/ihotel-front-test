@@ -47,6 +47,7 @@ module.exports = {
     FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
     FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
     WEB_URL: process.env.WEB_URL,
+    IMAGE_URL: process.env.IMAGE_URL,
     TEMPORARY_URL: process.env.TEMPORARY_URL,
     TEMPORARY_URL1: process.env.TEMPORARY_URL1,
   },

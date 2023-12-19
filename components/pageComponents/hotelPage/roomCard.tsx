@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAppCtx } from '@/contexts/app';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Pagination } from 'swiper/modules';
 
 interface Props {
   data: roomData.room;
-  handleScrollToRooms: () => void;
+  handleScrollToRooms: (ver: string) => void;
 }
 
 const RoomCard = ({ data, handleScrollToRooms }: Props) => {
@@ -88,51 +89,49 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
     { id: data?.id, amount: 8 },
   ];
 
-
-  const sliderRef = React.useRef<Slider>(null);
-  const settings = {
-    infinite: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: false,
-    speed: 1000,
-    dots: true
-  };
-
   return (
-    <div className='flex flex-col rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]'>
-      {data.images ? (
-        <Slider {...settings} ref={sliderRef} className='m-0 p-0'>
-          {data.images.map((index, i) => (
-            <div
-              className='relative h-[225px] w-full overflow-hidden rounded-t-[16px] bg-sky-500 2xs:h-[260px] sm:h-[300px] '
-              key={i}
-            >
-              <Image
-                src={
-                  data.photos !== null
-                    ? `${process.env.WEB_URL}/${index}`
-                    : '/samples/camp.png'
-                }
-                alt='/hotel'
-                fill={true}
-                quality={75}
-                loading='lazy'
-                sizes='50vw'
-                placeholder='blur'
-                blurDataURL={
-                  data.images.length > 0
-                    ? `"_next/image/?url=${data.images[0]}"`
-                    : '/samples/camp.png'
-                }
-                className='absolute h-auto w-auto select-none object-cover duration-700 hover:scale-110'
-                draggable={false}
-              />
-            </div>
-          ))}
-        </Slider>
-      ) : null}
-
+    <div className=' flex flex-col rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]'>
+      <Swiper
+        pagination={{
+          dynamicBullets: true,
+        }}
+        modules={[Pagination]}
+        className=' roomImages h-[225px] w-full rounded-t-[16px] 2xs:h-[275px] sm:h-[325px] md:h-[225px] xl:h-[250px] 2xl:h-[275px]'
+      >
+        {data.images && data.images.map((index, i) => (
+          <SwiperSlide
+            className='relative w-full h-full overflow-hidden'
+            key={i}
+            onClick={()=>{
+               dispatch({
+                 type: 'CHANGE_APP_STATE',
+                 payload: { biggerImage: data.images },
+               });
+            }}
+          >
+            <Image
+              src={
+                data.images && data.images.length > 0
+                  ? `${process.env.IMAGE_URL}${index}`
+                  : '/samples/camp.png'
+              }
+              alt='/hotel'
+              fill={true}
+              quality={75}
+              loading='lazy'
+              sizes='50vw'
+              placeholder='blur'
+              blurDataURL={
+                data.images.length > 0
+                  ? `"_next/image/?url=${data.images[0]}"`
+                  : '/samples/camp.png'
+              }
+              className='absolute object-cover w-auto h-auto duration-700 select-none hover:scale-110'
+              draggable={false}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
       <div className='flex w-full flex-col gap-[20px] px-[16px] pb-[20px] pt-[24px]'>
         {/* name */}
         <p className='text-[18px] font-bold text-main-text'>
@@ -176,7 +175,6 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
                 fill='#212529'
               />
             </svg>
-
             <p>{data.floorSize}</p>
           </div>
           <div className='flex items-center gap-[8px] rounded-[8px] bg-black/10 px-[16px] py-[8px] '>
@@ -213,7 +211,7 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
           </span>
         </div>
         {/* room price & occupancy */}
-        <div className='flex w-full items-center justify-between text-primary-blue'>
+        <div className='flex items-center justify-between w-full text-primary-blue'>
           {/* occupancy */}
           <div className='flex items-end gap-[4px]'>
             <svg
@@ -413,7 +411,7 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
         </div>
         {cart.length < 1 ? (
           <div
-            onClick={handleScrollToRooms}
+            onClick={() => handleScrollToRooms('rooms')}
             className='flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white'
           >
             {lang === 'en' ? 'Order' : 'Захиалах'}
@@ -430,6 +428,7 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
               },
               pathname: '/reservation',
             }}
+            target='blank'
             className='flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white'
           >
             {lang === 'en' ? 'Order' : 'Захиалах'}

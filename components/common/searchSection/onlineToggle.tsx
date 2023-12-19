@@ -18,9 +18,9 @@ const OnlineToggle = ({ ver, changeToggle, value }: iProps) => {
       className={`relative flex w-full items-center justify-center overflow-hidden bg-white text-[12px] leading-[12px]
        text-main-text 2xs:text-[13px] 2xs:leading-[13px] sm:text-[14px] sm:leading-[14px] lg:text-[12px] lg:leading-[12px]  xl:text-[14px] xl:leading-[14px] ${
         ver === 'normal'
-          ? 'h-[46px] rounded-[8px] border border-black/[.25] lg:max-w-[280px] xl:max-w-[320px]'
+          ? 'h-[46px] rounded-[8px] border border-black/[.25] lg:max-w-[280px] lg:min-w-[260px] xl:max-w-[320px]'
           : ver === 'fixed'
-          ? 'h-[36px] rounded-full lg:max-w-[280px] xl:max-w-[320px]'
+          ? 'h-[36px] rounded-full lg:max-w-[280px] lg:min-w-[260px] xl:max-w-[320px]'
           : ver === 'headerSearch'
           ? 'h-[46px] rounded-full shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)]'
           : ver === 'search'
@@ -30,19 +30,19 @@ const OnlineToggle = ({ ver, changeToggle, value }: iProps) => {
       ref={containerRef}
     >
       {ver === 'headerSearch' ? (
-        <div className="grid h-full w-full animate-brotate grid-cols-2 grid-rows-2 overflow-visible">
+        <div className="grid w-full h-full grid-cols-2 grid-rows-2 overflow-visible animate-brotate">
           <div className="h-full w-full rounded-r-full bg-gradient-to-t from-main-online/90 from-50% via-white/90 to-transparent "></div>
-          <div className="h-full w-full bg-white"></div>
+          <div className="w-full h-full bg-white"></div>
           <div className="h-full w-full rounded-r-full bg-gradient-to-b from-main-online/90 from-50% via-white/90 to-transparent"></div>
-          <div className="h-full w-full bg-white"></div>
+          <div className="w-full h-full bg-white"></div>
         </div>
       ) : null}
       <div
         className={`absolute flex  items-center justify-between ${
           ver === 'normal'
-            ? ' h-full w-full px-[12px] pr-[8px]'
+            ? ' h-full w-full px-[12px] lg:px-[8px] xl:px-[12px] pr-[8px]'
             : ver === 'fixed' || ver === 'search'
-            ? 'h-full w-full px-[10px] xl:px-[12px]'
+            ? 'h-full w-full px-[10px] lg:px-[8px] xl:px-[12px]'
             : ver === 'headerSearch'
             ? 'h-[41px] w-[calc(100%-5px)] rounded-full bg-white px-[12px] pr-[8px]'
             : ''
@@ -51,9 +51,9 @@ const OnlineToggle = ({ ver, changeToggle, value }: iProps) => {
         <div
           className={`flex items-center ${
             ver === 'normal'
-              ? 'gap-[6px] xl:gap-[10px]'
+              ? 'gap-[6px] lg:gap-[4px] xl:gap-[10px]'
               : ver === 'fixed' || ver === 'search'
-              ? ' gap-[6px] xl:gap-[8px]'
+              ? ' gap-[6px] lg:gap-[4px] xl:gap-[8px]'
               : ver === 'headerSearch'
               ? 'gap-[6px]'
               : ''

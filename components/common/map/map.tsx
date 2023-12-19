@@ -17,7 +17,7 @@ interface iProps {
   data: HotelData.Hotel[];
   lat: number | undefined;
   lng: number | undefined;
-  zoom: number
+  zoom: number;
 }
 
 const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
@@ -85,8 +85,11 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
   ];
 
   const cardData = [...data].filter(
-    (index) => selectedHotel.lat && selectedHotel.lng &&
-      index.lat === selectedHotel.lat && index.lng === selectedHotel.lng,
+    (index) =>
+      selectedHotel.lat &&
+      selectedHotel.lng &&
+      index.lat === selectedHotel.lat &&
+      index.lng === selectedHotel.lng,
   );
 
   const [viewPort, setViewPort] = useState({
@@ -135,6 +138,11 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
     zoom: viewPort.zoom,
     options: { radius: 75, maxZoom: 20 },
   });
+
+  useEffect(() => {
+    if (appState.map === 'open') {
+    }
+  }, [appState.map]);
 
   return (
     <div
@@ -206,7 +214,11 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
         }}
         ref={mapRef}
         // ref={(map) => setMapRef(map)}
-        onLoad={(map) => map.target.resize()}
+        // onLoad={(map) => map.target.resize()}
+        // onLoad={(map) => handleResize(map)}
+        onRender={(map) => {
+          map.target.resize();
+        }}
         style={{
           borderRadius: 20,
           border: 'solid 1px rgb(0,0,0,0.25)',
@@ -318,34 +330,36 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
             longitude={cardData[0].lng}
             style={{
               zIndex: 998,
-              position: 'relative',
-              width: '75%',
-              marginLeft: '-24px',
+              // position: 'relative',
+              width: 'auto',
+              // paddingLeft: '24px'
+              // marginLeft: '-24px',
             }}
           >
-            <div
-              className='absolute left-0 top-0 z-[999] flex h-[30px] w-[30px] translate-x-[-50%] translate-y-[-50%] items-center justify-center rounded-full bg-primary-blue text-white ring-2 ring-white'
-              onClick={() => {
-                setSelectedHotel({ lng: null, lat: null });
-              }}
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth={2}
-                stroke='currentColor'
-                className='max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px]'
+            <div className='relative ml-[2px] w-full min-w-[250px] max-w-[280px] 2xs:min-w-[300px] 2xs:max-w-[340px] lg:min-w-[270px] lg:max-w-[280px] xl:min-w-[320px] xl:max-w-[350px]'>
+              <div
+                className='absolute left-0 top-0 z-[999] flex h-[30px] w-[30px] translate-x-[-50%] translate-y-[-50%] items-center justify-center rounded-full bg-primary-blue text-white ring-2 ring-white'
+                onClick={() => {
+                  setSelectedHotel({ lng: null, lat: null });
+                }}
               >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M6 18L18 6M6 6l12 12'
-                />
-              </svg>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={2}
+                  stroke='currentColor'
+                  className='max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px]'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M6 18L18 6M6 6l12 12'
+                  />
+                </svg>
+              </div>
+              <HotelCard ver='home' data={cardData[0]} fromMap={true} />
             </div>
-
-            <HotelCard data={cardData[0]} fromMap={true} />
           </Marker>
         ) : null}
         <FullscreenControl />

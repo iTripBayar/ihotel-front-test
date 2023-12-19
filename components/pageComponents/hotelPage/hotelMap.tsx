@@ -18,7 +18,7 @@ const HotelMap = ({ lat, lng }: Props) => {
     });
   }, 1000);
   return (
-    <div className="h-[225px] w-full sm:h-[300px] lg:h-[225px]">
+    <div className="h-[225px] w-full 2xs:h-[265px] sm:h-[300px] md:h-[325px] lg:h-[225px]">
       <ReactMapGL
         ref={mapRef}
         mapboxAccessToken="pk.eyJ1IjoiaWhvdGVsLWRldiIsImEiOiJjbG53eG4xM2cwOGdqMnFwZWZodmxyYWgwIn0.NKP_FGb_Ad26fu4wSqnJ7Q"

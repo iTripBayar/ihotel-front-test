@@ -5,7 +5,6 @@ import { signIn } from 'next-auth/react';
 import { FormEvent } from 'react';
 import { FacebookSignInButton, GoogleSignInButton } from './authButtons';
 import { Alert, AlertIcon, ChakraProvider } from '@chakra-ui/react';
-import { forgotPassword } from '@/utils';
 
 export default function LogIn() {
   const searchParams = useSearchParams();
@@ -15,8 +14,6 @@ export default function LogIn() {
   const [error, setError] = useState<string | null>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [message, setMessage] = useState('');
-
-  console.log(appState)
 
   const close = () => {
     dispatch({
@@ -34,7 +31,6 @@ export default function LogIn() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-    // console.log(data)
     const signInResponse = await signIn('credentials', {
       email: data.get('email'),
       password: data.get('password'),
@@ -43,7 +39,7 @@ export default function LogIn() {
 
     if (signInResponse && !signInResponse.error) {
       setMessage('success');
-      console.log(signInResponse)
+      console.log(signInResponse);
       // console.log(signInResponse.)
       setTimeout(() => {
         router.push('/profile');
@@ -55,7 +51,7 @@ export default function LogIn() {
     }
   };
 
-  const handleForgotPassword = async (e: FormEvent<HTMLFormElement>)=>{
+  const handleForgotPassword = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     try {
@@ -72,10 +68,8 @@ export default function LogIn() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const result = await response.json();
-      console.log(result)
       setMessage('emailed');
       return result;
-
     } catch (error) {
       console.error('Error registering user:', error);
       throw error;
@@ -83,7 +77,7 @@ export default function LogIn() {
     // if (data.get('email') !== undefined) {
     //   forgotPassword({ email: data.get('email')?.toString() });
     // }
-  }
+  };
 
   if (message !== '') {
     setTimeout(() => {
@@ -104,18 +98,23 @@ export default function LogIn() {
                   ? 'success'
                   : 'error'
               }
-              className=' rounded-lg'
+              className='rounded-lg '
             >
               <AlertIcon />
               {message === 'success'
                 ? `${lang === 'en' ? 'Successful!' : 'Амжилттай нэвтэрлээ!'}`
-                : message ===
-                  'emailed' ? `${lang === 'en' ? 'We have e-mailed your password reset link!' : 'Нууц үг сэргээх холбоосыг таны и-мэйл хаяг руу илгээлээ!'}` :`${lang === 'en' ? 'Error!' : 'Алдаа гарлаа!'}`}
+                : message === 'emailed'
+                ? `${
+                    lang === 'en'
+                      ? 'We have e-mailed your password reset link!'
+                      : 'Нууц үг сэргээх холбоосыг таны и-мэйл хаяг руу илгээлээ!'
+                  }`
+                : `${lang === 'en' ? 'Error!' : 'Алдаа гарлаа!'}`}
             </Alert>
           </ChakraProvider>
         </div>
       ) : null}
-      <div className='flex h-auto w-[95%] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] 2xs:w-[85%] sm:w-[55%] md:w-[40%] lg:w-[35%] xl:w-[30%] 2xl:w-[25%]'>
+      <div className='flex h-auto w-[calc(100%-32px)] flex-col max-w-[370px] justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:max-w-[400px]'>
         <div className='flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px] text-main-text'>
           {appState.logOrSign === 'log' ? (
             <p className='font-medium'>
@@ -229,9 +228,9 @@ export default function LogIn() {
                   : '* И-мэйл эсвэл нууц үг буруу байна! *'}
               </p>
             ) : null}
-            <div className='flex w-full items-center justify-between'>
+            <div className='flex items-center justify-between w-full'>
               <div className='h-[1px] w-[33%] bg-black/[.15]'></div>
-              <p className='text-[16px] font-medium uppercase text-black/[.25]'>
+              <p className='text-[14px] font-medium uppercase text-black/[.25] sm:text-[16px]'>
                 {lang === 'en' ? 'Or' : 'Эсвэл'}
               </p>
               <div className='h-[1px] w-[33%] bg-black/[.15]'></div>
@@ -255,7 +254,7 @@ export default function LogIn() {
                 {lang === 'en' ? 'Log In' : 'Нэвтрэх'}
               </button>
               <button
-                className='justify-self-end text-[13px] text-primary-blue 2xs:text-[14px]'
+                className='justify-self-end text-[13px] text-primary-blue sm:text-[14px]'
                 onClick={() => {
                   dispatch({
                     type: 'CHANGE_APP_STATE',
@@ -273,7 +272,7 @@ export default function LogIn() {
             onSubmit={handleForgotPassword}
           >
             <div className='flex flex-col gap-[8px]'>
-              <label htmlFor='email' className=' text-center indent-1'>
+              <label htmlFor='email' className='text-center indent-1'>
                 {lang === 'en'
                   ? 'Please enter your e-mail.'
                   : 'И-мэйл хаягаа оруулна уу.'}

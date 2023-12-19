@@ -1,9 +1,11 @@
 import useWindowSize from '@/hooks/windowSize';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { unserialize } from 'serialize-php';
 
 interface iProps {
-  data: any[];
+  data: HomeData.Posts[];
 }
 const News = ({ data }: iProps) => {
   const searchParams = useSearchParams();
@@ -16,6 +18,12 @@ const News = ({ data }: iProps) => {
   if (cap != 0) {
     data = data.slice(0, cap);
   }
+  // const serializedData: string | undefined = data?.photos;
+  // let unserializedData: { day: string; fee: string }[] = [{ day: '', fee: '' }];
+
+  // if (serializedData) {
+  //   unserializedData = unserialize(serializedData);
+  // }
   return (
     <div className='w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]'>
       <div
@@ -32,16 +40,18 @@ const News = ({ data }: iProps) => {
             cap / 2
           } 2xs:grid-cols-2  md:gap-[24px] lg:grid-cols-3 lg:grid-rows-2 2xl:gap-[48px]`}
         >
-          {data.map((data) => (
+          {data.map((index) => (
             <div
-              key={data.id}
+              key={index.id}
               className='flex w-full flex-col justify-start gap-[8px] overflow-hidden rounded-[20px] pb-[8px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]'
             >
               {/* image */}
               <div className='relative h-[175px] w-full overflow-hidden md:h-[175px] lg:h-[225px] xl:h-[250px]'>
                 <Image
-                  // src={data.img}
-                  src={`https://ihotel.mn/${data.photos.match(/"([^"]+)"/)[1]}`}
+                  // src={`https://ihotel.mn/${unserialize(index.photos)[0]}`}
+                  src={`${process.env.IMAGE_URL}${
+                    unserialize(index.photos)[0]
+                  }`}
                   alt='/posts'
                   fill={true}
                   quality={75}
@@ -53,19 +63,22 @@ const News = ({ data }: iProps) => {
               <div className='flex w-full items-center justify-center px-[8px] text-[14px] text-main-text lg:px-[16px] lg:text-[16px]'>
                 <p className=' line-clamp-3 2xs:line-clamp-2'>
                   {/* {state.language === 'mn' ? data.title : ''} */}
-                  {lang === 'en' ? '' : data.title}
+                  {lang === 'en' ? '' : index.title}
                 </p>
               </div>
             </div>
           ))}
         </div>
-        <div className='flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white'>
+        <Link
+          href={`${process.env.TEMPORARY_URL}/posts`}
+          className='flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white'
+        >
           <p className='flex gap-[4px]'>
             {/* {state.language === 'mn' ? 'Цааш үзэх' : 'More'}{' '} */}
             {lang === 'en' ? 'More' : 'Цааш үзэх'}{' '}
             {data.length - cap > 0 ? <span>({data.length - cap}+)</span> : null}
           </p>
-        </div>
+        </Link>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ interface Props {
   stat: string;
   allRooms: roomData.room[];
   slug: string;
-  handleScrollToRooms: () => void;
+  handleScrollToRooms: (ver:string) => void;
 }
 
 export default function Dialogs({
@@ -41,7 +41,7 @@ export default function Dialogs({
             roomPrices={roomPrices}
             allRooms={allRooms}
             slug={slug}
-            handleScrollToRooms={handleScrollToRooms}
+            handleScrollToRooms={(ver: string)=>handleScrollToRooms(ver)}
           />
         ) : null
       ) : null}

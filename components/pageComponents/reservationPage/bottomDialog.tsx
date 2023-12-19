@@ -11,7 +11,7 @@ export default function BottomDialog({ stat }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const [isChecked, setIsChecked] = useState(false);
-  const {appState, dispatch} = useAppCtx()
+  const { appState } = useAppCtx();
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -31,11 +31,11 @@ export default function BottomDialog({ stat }: Props) {
         <label htmlFor='termCheck'>
           {lang === 'en' ? (
             <>
-              Accept <span className=' underline'>Terms and Conditions</span>
+              Accept <span className='underline '>Terms and Conditions</span>
             </>
           ) : (
             <>
-              <span className=' underline'>Үйлчилгээний нөхцөл</span> зөвшөөрөх
+              <span className='underline '>Үйлчилгээний нөхцөл</span> зөвшөөрөх
             </>
           )}
         </label>

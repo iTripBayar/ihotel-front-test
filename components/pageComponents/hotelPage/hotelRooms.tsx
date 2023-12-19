@@ -6,7 +6,7 @@ import { useAppCtx } from '@/contexts/app';
 
 interface Props {
   data: roomData.room[] | undefined;
-  handleScrollToRooms: () => void;
+  handleScrollToRooms: (ver: string) => void;
 }
 
 const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
@@ -156,8 +156,6 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
     }
   }
 
-  console.log(data)
-
   return (
     <div className='flex flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] text-main-text lg:gap-[32px] lg:pt-[32px]'>
       <p className='text-[20px] font-medium leading-[20px]'>
@@ -197,12 +195,12 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
               <RoomCard
                 data={index}
                 key={i}
-                handleScrollToRooms={handleScrollToRooms}
+                handleScrollToRooms={(ver:string)=>handleScrollToRooms(ver)}
               />
             ))}
         </div>
         {/* side order & calendar */}
-        <div className='hidden flex-col items-center justify-start lg:sticky lg:col-span-2 lg:flex'>
+        <div className='flex-col items-center justify-start hidden lg:sticky lg:col-span-2 lg:flex'>
           <div
             onClick={() => {
               dispatch({
@@ -268,7 +266,7 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
                       className={`flex min-h-[45px] w-full items-center  justify-between gap-[10px] border-b border-b-black/[.15] pb-[8px] pt-[6px] text-primary-blue `}
                     >
                       <div className='flex w-full flex-col justify-between gap-[8px] font-medium'>
-                        <div className='flex w-full items-center justify-between'>
+                        <div className='flex items-center justify-between w-full'>
                           <h3 className='text-[20px] leading-[20px] text-main-text'>
                             {cart && index && data
                               ? data.filter(
@@ -287,7 +285,6 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
                                 )}`,
                                 { scroll: false },
                               );
-                              // console.log(cart.indexOf(index));
                             }}
                           >
                             <svg
@@ -337,7 +334,7 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
             ) : null}
             {cart.length < 1 ? (
               <div
-                onClick={handleScrollToRooms}
+                onClick={()=>handleScrollToRooms('rooms')}
                 className='flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white'
               >
                 {lang === 'en' ? 'Order' : 'Захиалах'}
@@ -354,6 +351,7 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
                   },
                   pathname: '/reservation',
                 }}
+                target='blank'
                 className='flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white'
               >
                 {lang === 'en' ? 'Order' : 'Захиалах'}

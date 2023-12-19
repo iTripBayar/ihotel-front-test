@@ -6,9 +6,11 @@ interface iProps {
   data: HomeData.PropertyTypes[];
 }
 
+
 const HeroCategory = ({ data }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+
   return (
     <div className=' flex w-full items-start justify-between px-[10px] text-main-text sm:px-[50px] lg:px-[150px]'>
       {data.map((data, i) => (
@@ -24,16 +26,18 @@ const HeroCategory = ({ data }: iProps) => {
             <Image
               src={
                 data.image
-                  ? `${process.env.WEB_URL}/img/type_${data.image}`
+                  ? `${process.env.IMAGE_URL}${data.image}`
                   : '/samples/camp.png'
               }
               alt='/heroCategory'
               fill={true}
               priority
               placeholder='blur'
-              blurDataURL={`"_next/image/?url=${data.image}"`}
+              blurDataURL={
+                data.image ? `"_next/image/?url=${data.image}"` : '/samples/camp.png'
+              }
               sizes='25vw'
-              className='object-fit h-auto w-full duration-500 hover:scale-110'
+              className='w-full h-auto duration-500 object-fit hover:scale-110'
             />
           </div>
           <p className='lg:text-[16px]] text-center text-[11px] xs:text-[12px] sm:text-[13px] md:text-[14px] xl:text-[18px]'>

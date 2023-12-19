@@ -1,12 +1,12 @@
 'use client';
 import HeaderVariants from '@/components/common/headerVariants';
-import CalendarDialog from '@/components/hotelPage/dialogs/calendarDialog';
-import AdditionalRequest from '@/components/reservationPage/additionalRequest';
-import BottomDialog from '@/components/reservationPage/bottomDialog';
-import CancelTerm from '@/components/reservationPage/cancelTerm';
-import GeneralInfo from '@/components/reservationPage/generalInfo';
-import OrderInfo from '@/components/reservationPage/orderInfo';
-import UserInfo from '@/components/reservationPage/userInfo';
+import CalendarDialog from '@/components/pageComponents/hotelPage/dialogs/calendarDialog';
+import AdditionalRequest from '@/components/pageComponents/reservationPage/additionalRequest';
+import BottomDialog from '@/components/pageComponents/reservationPage/bottomDialog';
+import CancelTerm from '@/components/pageComponents/reservationPage/cancelTerm';
+import GeneralInfo from '@/components/pageComponents/reservationPage/generalInfo';
+import OrderInfo from '@/components/pageComponents/reservationPage/orderInfo';
+import UserInfo from '@/components/pageComponents/reservationPage/userInfo';
 import { fetchDataHotel } from '@/utils';
 import { useRequest } from 'ahooks';
 import Footer from '@/components/common/footer';
@@ -19,7 +19,7 @@ import { CircularProgress, ChakraProvider } from '@chakra-ui/react';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
 import ErrorComponent from '@/components/common/404';
-import PaymentMethod from '@/components/reservationPage/paymentMethod';
+import PaymentMethod from '@/components/pageComponents/reservationPage/paymentMethod';
 
 const ReservationPage = () => {
   const searchParams = useSearchParams();
@@ -57,11 +57,12 @@ const ReservationPage = () => {
   if (serializedData) {
     unserializedData = unserialize(serializedData);
   }
+  console.log(data);
   if (!error)
     return (
       <div>
         {loading ? (
-          <Header />
+          <Header user='' />
         ) : (
           <HeaderVariants
             ver={'hotel'}
@@ -77,9 +78,7 @@ const ReservationPage = () => {
         {appState.logOrSign === 'log' ||
         appState.logOrSign === 'forgotPassword' ? (
           <LogIn />
-        ) : (
-          null
-        )}
+        ) : null}
         {appState.logOrSign === 'sign' ? <SignUp /> : null}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
         <div className='fixed bottom-0 z-[800] w-full sm:px-[50px] md:px-[72px] lg:hidden '>
@@ -101,7 +100,7 @@ const ReservationPage = () => {
               <GeneralInfo
                 name={data ? data.hotel.name : null}
                 nameEn={data ? data.hotel.nameEn : null}
-                image={data ? data.hotel.coverPhoto : null}
+                image={data ? data.hotel.image : null}
                 address={data ? data.hotel.address : null}
                 addressEn={data ? data.hotel.addressEn : null}
                 phone={data ? data.hotel.phone : null}
@@ -150,7 +149,7 @@ const ReservationPage = () => {
                 <>{lang === 'en' ? 'Go back' : 'Өмнөх хуудас руу буцах'}</>
               </button>
             </div>
-            <div className='relative hidden h-full w-full lg:col-span-2 lg:flex'>
+            <div className='relative hidden w-full h-full lg:col-span-2 lg:flex'>
               <div className='sticky top-[72px] h-fit'>
                 <UserInfo ver={'web'} stat={stat} />
               </div>

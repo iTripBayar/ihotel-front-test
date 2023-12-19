@@ -12,7 +12,8 @@ export default function CardOption() {
   const lang = searchParams.get('lang');
 
   const router = useRouter();
-  const [countdown, setCountdown] = useState(600); // 10 minutes in seconds
+  const duration = 600; // 10 minutes in seconds
+  const [countdown, setCountdown] = useState(duration); // 10 minutes in seconds
   const [progressValue, setProgressValue] = useState(100);
   const [cardNumber, setCardNumber] = useState('');
   const [cardHolder, setCardHolder] = useState('');
@@ -20,53 +21,53 @@ export default function CardOption() {
   const [expiryYear, setExpiryYear] = useState('');
   const [cvvCode, setCvvCode] = useState('');
 
-const handleCardNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
-  const inputNumber = event.target.value.replace(/\D/g, '').slice(0, 16);
-  const formattedNumber = inputNumber.replace(/(\d{4})(?=\d)/g, '$1 ');
+  const handleCardNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputNumber = event.target.value.replace(/\D/g, '').slice(0, 16);
+    const formattedNumber = inputNumber.replace(/(\d{4})(?=\d)/g, '$1 ');
 
-  setCardNumber(formattedNumber);
-};
+    setCardNumber(formattedNumber);
+  };
 
- const handleCardHolderChange = (event: ChangeEvent<HTMLInputElement>) => {
-   const inputName = event.target.value.replace(/[^A-Za-z.]/g, '');
-   setCardHolder(inputName.toUpperCase());
- };
+  const handleCardHolderChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputName = event.target.value.replace(/[^A-Za-z.]/g, '');
+    setCardHolder(inputName.toUpperCase());
+  };
 
- const handleExpiryMonthChange = (event: ChangeEvent<HTMLInputElement>) => {
-   const inputMonth = event.target.value.replace(/\D/g, '').slice(0, 2);
-   setExpiryMonth(inputMonth.padStart(2, '0'));
- };
+  const handleExpiryMonthChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputMonth = event.target.value.replace(/\D/g, '').slice(0, 2);
+    setExpiryMonth(inputMonth.padStart(2, '0'));
+  };
 
- const handleExpiryYearChange = (event: ChangeEvent<HTMLInputElement>) => {
-   const inputYear = event.target.value.replace(/\D/g, '').slice(0, 2);
-   setExpiryYear(inputYear);
- };
+  const handleExpiryYearChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputYear = event.target.value.replace(/\D/g, '').slice(0, 2);
+    setExpiryYear(inputYear);
+  };
 
- const handleCvvCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
-   const inputCvv = event.target.value.replace(/\D/g, '').slice(0, 3);
-   setCvvCode(inputCvv);
- };
+  const handleCvvCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputCvv = event.target.value.replace(/\D/g, '').slice(0, 3);
+    setCvvCode(inputCvv);
+  };
 
- const isFormValid = () => {
-   return (
-     cardNumber !== '' &&
-     cardHolder !== '' &&
-     expiryMonth !== '' &&
-     expiryYear !== '' &&
-     cvvCode !== ''
-   );
- };
+  const isFormValid = () => {
+    return (
+      cardNumber !== '' &&
+      cardHolder !== '' &&
+      expiryMonth !== '' &&
+      expiryYear !== '' &&
+      cvvCode !== ''
+    );
+  };
 
- const handleSubmit = (event: React.FormEvent) => {
-   event.preventDefault();
-   console.log('Form submitted:', {
-     cardNumber,
-     cardHolder,
-     expiryMonth,
-     expiryYear,
-     cvvCode,
-   });
- };
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    console.log('Form submitted:', {
+      cardNumber,
+      cardHolder,
+      expiryMonth,
+      expiryYear,
+      cvvCode,
+    });
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -77,7 +78,7 @@ const handleCardNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
           return 0;
         }
 
-        const newProgressValue = (prevCountdown / 600) * 100;
+        const newProgressValue = (prevCountdown / duration) * 100;
         setProgressValue(newProgressValue);
         return prevCountdown - 1;
       });

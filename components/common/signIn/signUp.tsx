@@ -58,7 +58,6 @@ export default function SignUp() {
           }),
         },
       );
-
       if (!registerResponse.ok) {
         setMessage('invalid');
       } else {
@@ -111,7 +110,7 @@ export default function SignUp() {
           <ChakraProvider>
             <Alert
               status={message === 'success' ? 'success' : 'error'}
-              className=' rounded-lg'
+              className='rounded-lg '
             >
               <AlertIcon />
               {message === 'success'
@@ -121,7 +120,7 @@ export default function SignUp() {
           </ChakraProvider>
         </div>
       ) : null}
-      <div className='flex h-auto w-[95%] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] 2xs:w-[85%] sm:w-[55%] md:w-[40%] lg:w-[35%] xl:w-[30%] 2xl:w-[25%]'>
+      <div className='flex h-auto w-[calc(100%-32px)] max-w-[370px] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:max-w-[400px] '>
         {/* title */}
         <div className='flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px] text-main-text'>
           <p className='font-medium'>
@@ -315,9 +314,9 @@ export default function SignUp() {
                   : '* Нууц үг таарахгүй байна. *'}
               </p>
             )}
-          <div className='flex w-full items-center justify-between'>
+          <div className='flex items-center justify-between w-full'>
             <div className='h-[1px] w-[33%] bg-black/[.15]'></div>
-            <p className='text-[16px] font-medium uppercase text-black/[.25]'>
+            <p className='text-[14px] font-medium uppercase text-black/[.25] sm:text-[16px]'>
               {lang === 'en' ? 'Or' : 'Эсвэл'}
             </p>
             <div className='h-[1px] w-[33%] bg-black/[.15]'></div>
@@ -341,7 +340,7 @@ export default function SignUp() {
               {lang === 'en' ? 'Sign Up' : 'Бүртгүүлэх'}
             </button>
             <button
-              className='justify-self-end text-[13px] text-primary-blue 2xs:text-[14px]'
+              className='justify-self-end text-[13px] text-primary-blue sm:text-[14px]'
               onClick={() => {
                 dispatch({
                   type: 'CHANGE_APP_STATE',

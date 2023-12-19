@@ -251,7 +251,7 @@ const SearchBox = ({
         ver !== 'search' &&
         ver !== 'headerSearch' &&
         ver !== 'hotel' ? (
-          <div className=' max-w-[120px] overflow-hidden'>
+          <div className=' max-w-[125px] overflow-hidden'>
             <Slider {...settings} ref={sliderRef}>
               {suggestion.map((index, i) => (
                 <p

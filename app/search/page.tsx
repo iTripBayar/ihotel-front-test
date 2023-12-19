@@ -5,7 +5,7 @@ import HeaderVariants from '@/components/common/headerVariants';
 import BurgerMenu from '@/components/common/burgermenu';
 import BottomSection from '@/components/common/bottomSection';
 import SearchSection from '@/components/common/searchSection';
-import SearchCards from '@/components/searchPage/searchCards';
+import SearchCards from '@/components/pageComponents/searchPage/searchCards';
 import MapContainer from '@/components/common/map/map';
 import FilterOptions from '@/components/common/searchSection/filter/filterOptions';
 import { useAppCtx } from '@/contexts/app';
@@ -87,9 +87,7 @@ const SearchPage = () => {
         {appState.logOrSign === 'log' ||
         appState.logOrSign === 'forgotPassword' ? (
           <LogIn />
-        ) : (
-          null
-        )}
+        ) : null}
         {appState.logOrSign === 'sign' ? <SignUp /> : null}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
         <BottomSection ver={'search'} />

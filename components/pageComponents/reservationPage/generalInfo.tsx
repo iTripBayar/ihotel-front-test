@@ -173,7 +173,7 @@ export default function GeneralInfo({
                 <Image
                   src={
                     image
-                      ? `${process.env.WEB_URL}/${image}`
+                      ? `${process.env.IMAGE_URL}${image}`
                       : '/samples/camp.png'
                   }
                   alt='/hotel'
@@ -187,7 +187,7 @@ export default function GeneralInfo({
                       ? `"_next/image/?url=${image}"`
                       : '/samples/camp.png'
                   }
-                  className='absolute h-auto w-auto select-none object-cover'
+                  className='absolute object-cover w-auto h-auto select-none'
                   draggable={false}
                 />
               </div>
@@ -248,7 +248,7 @@ export default function GeneralInfo({
               <Image
                 src={
                   image
-                    ? `${process.env.WEB_URL}/${image}`
+                    ? `${process.env.IMAGE_URL}${image}`
                     : '/samples/camp.png'
                 }
                 alt='/hotel'
@@ -262,11 +262,11 @@ export default function GeneralInfo({
                     ? `"_next/image/?url=${image}"`
                     : '/samples/camp.png'
                 }
-                className='absolute h-auto w-auto select-none object-cover'
+                className='absolute object-cover w-auto h-auto select-none'
                 draggable={false}
               />
             </div>
-            <div className='col-span-2 flex h-full w-full flex-col justify-between'>
+            <div className='flex flex-col justify-between w-full h-full col-span-2'>
               <p className='relative text-justify indent-5 text-[14px] leading-[18px] text-sub-text/75'>
                 <svg
                   viewBox='0 0 13 13'

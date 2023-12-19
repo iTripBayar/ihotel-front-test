@@ -13,7 +13,7 @@ export default function UserInfo({ ver, stat }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const [isChecked, setIsChecked] = useState(false);
-  const {appState} = useAppCtx()
+  const { appState } = useAppCtx();
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -21,11 +21,9 @@ export default function UserInfo({ ver, stat }: Props) {
 
   const buttonDisabled = !isChecked;
 
-  const [test, setTest] = useState([
+  const [clients, setClients] = useState([
     { firstName: '', familyName: '', email: '', phone: '', nationality: '' },
   ]);
-
-  // console.log(appState.paymentMethod)
 
   if (ver === 'mobile') {
     return (
@@ -33,9 +31,9 @@ export default function UserInfo({ ver, stat }: Props) {
         <p className='text-[18px] font-medium leading-[18px] text-sub-text'>
           {lang === 'en' ? `Client's info` : 'Захиалагчийн мэдээлэл'}
         </p>
-        {test.map((index, i) => (
+        {clients.map((index, i) => (
           <div key={i} className='flex w-full flex-col gap-[16px]'>
-            {test.length > 1 ? (
+            {clients.length > 1 ? (
               <p className='text-center text-[14px] font-medium text-main-text'>
                 {lang === 'en' ? 'Client' : 'Захиалагч'} {i + 1}
               </p>
@@ -90,16 +88,20 @@ export default function UserInfo({ ver, stat }: Props) {
               placeholder={lang === 'en' ? 'Nationality' : 'Иргэншил'}
               className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
             />
-            {i === test.length - 1 ? (
+            {i === clients.length - 1 ? (
               <div
                 className={`flex w-full items-center ${
-                  test.length > 1 && i !== 0 ? 'justify-between' : 'justify-end'
+                  clients.length > 1 && i !== 0
+                    ? 'justify-between'
+                    : 'justify-end'
                 } gap-[3px]`}
               >
-                {test.length > 1 ? (
+                {clients.length > 1 ? (
                   <button
                     className='flex items-center gap-[3px] sm:gap-[6px]'
-                    onClick={() => setTest(test.slice(0, test.length - 1))}
+                    onClick={() =>
+                      setClients(clients.slice(0, clients.length - 1))
+                    }
                   >
                     <div className='relative h-[16px] w-[16px]'>
                       <div className='absolute left-[50%] top-[50%] h-[2px] w-[9px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue sm:w-[12px]'></div>
@@ -112,8 +114,8 @@ export default function UserInfo({ ver, stat }: Props) {
                 <button
                   className='flex items-center gap-[3px] sm:gap-[6px]'
                   onClick={() =>
-                    setTest([
-                      ...test,
+                    setClients([
+                      ...clients,
                       {
                         firstName: '',
                         familyName: '',
@@ -146,9 +148,9 @@ export default function UserInfo({ ver, stat }: Props) {
         <p className='text-[18px] font-medium leading-[18px] text-sub-text'>
           {lang === 'en' ? `Client's info` : 'Захиалагчийн мэдээлэл'}
         </p>
-        {test.map((index, i) => (
+        {clients.map((index, i) => (
           <div key={i} className='flex w-full flex-col gap-[24px]'>
-            {test.length > 1 ? (
+            {clients.length > 1 ? (
               <p className='text-center text-[14px] font-medium text-main-text'>
                 {lang === 'en' ? 'Client' : 'Захиалагч'} {i + 1}
               </p>
@@ -203,16 +205,18 @@ export default function UserInfo({ ver, stat }: Props) {
               placeholder={lang === 'en' ? 'Nationality' : 'Иргэншил'}
               className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
             />
-            {i === test.length - 1 ? (
+            {i === clients.length - 1 ? (
               <div
                 className={`flex w-full items-center ${
-                  test.length > 1 && i !== 0 ? 'justify-between' : 'justify-end'
+                  clients.length > 1 && i !== 0
+                    ? 'justify-between'
+                    : 'justify-end'
                 } gap-[3px]`}
               >
-                {test.length > 1 ? (
+                {clients.length > 1 ? (
                   <div
                     className='flex items-center gap-[3px] sm:gap-[6px]'
-                    onClick={() => setTest(test.slice(0, test.length - 1))}
+                    onClick={() => setClients(clients.slice(0, clients.length - 1))}
                   >
                     <div className='relative h-[16px] w-[16px]'>
                       <div className='absolute left-[50%] top-[50%] h-[2px] w-[10px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue '></div>
@@ -225,8 +229,8 @@ export default function UserInfo({ ver, stat }: Props) {
                 <button
                   className='flex items-center gap-[3px] sm:gap-[6px]'
                   onClick={() =>
-                    setTest([
-                      ...test,
+                    setClients([
+                      ...clients,
                       {
                         firstName: '',
                         familyName: '',
@@ -275,11 +279,11 @@ export default function UserInfo({ ver, stat }: Props) {
                   {lang === 'en' ? (
                     <>
                       Accept{' '}
-                      <span className=' underline'>Terms and Conditions</span>
+                      <span className='underline '>Terms and Conditions</span>
                     </>
                   ) : (
                     <>
-                      <span className=' underline'>Үйлчилгээний нөхцөл</span>{' '}
+                      <span className='underline '>Үйлчилгээний нөхцөл</span>{' '}
                       зөвшөөрөх
                     </>
                   )}

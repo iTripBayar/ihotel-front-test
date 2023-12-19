@@ -5,7 +5,7 @@ interface Props {
   roomPrices: number[];
   allRooms: roomData.room[];
   slug: string;
-  handleScrollToRooms: () => void;
+  handleScrollToRooms: (ver: string) => void;
 }
 export default function OrderDialog({
   roomPrices,
@@ -128,7 +128,7 @@ export default function OrderDialog({
   }
 
   return (
-    <div className="flex w-full flex-col rounded-t-[30px] bg-white px-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px]">
+    <div className='flex w-full flex-col rounded-t-[30px] bg-white px-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px]'>
       {cart && cart.length > 0 ? (
         <div
           className={` flex-col justify-between gap-[4px]  ${
@@ -147,16 +147,16 @@ export default function OrderDialog({
                     : ''
                 }`}
               >
-                <div className="flex w-full flex-col justify-between gap-[8px] font-medium">
-                  <div className="flex w-full items-end justify-between">
-                    <h3 className="text-[20px] leading-[20px] text-main-text">
+                <div className='flex w-full flex-col justify-between gap-[8px] font-medium'>
+                  <div className='flex items-end justify-between w-full'>
+                    <h3 className='text-[20px] leading-[20px] text-main-text'>
                       {cart && index
                         ? allRooms.filter(
                             (room) => room.id === parseInt(index.split('$')[0]),
                           )[0].name
                         : null}
                     </h3>
-                    <p className="flex gap-[4px] text-[16px] leading-[16px] text-sub-text/75">
+                    <p className='flex gap-[4px] text-[16px] leading-[16px] text-sub-text/75'>
                       {cart.length > 1
                         ? `${allRooms
                             .filter(
@@ -172,7 +172,7 @@ export default function OrderDialog({
                   </div>
 
                   {cart.length < 2 ? (
-                    <div className="flex w-full items-end justify-between text-[16px] leading-[16px] text-sub-text/75">
+                    <div className='flex w-full items-end justify-between text-[16px] leading-[16px] text-sub-text/75'>
                       <p>
                         {
                           allRooms.filter(
@@ -193,7 +193,7 @@ export default function OrderDialog({
                   ) : null}
                 </div>
                 <div
-                  className="flex h-[36px] w-[36px] items-center justify-center"
+                  className='flex h-[36px] w-[36px] items-center justify-center'
                   onClick={() => {
                     router.replace(
                       `/hotel/?${createQueryString(
@@ -205,17 +205,17 @@ export default function OrderDialog({
                   }}
                 >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
                     strokeWidth={2}
-                    stroke="currentColor"
-                    className="max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px]"
+                    stroke='currentColor'
+                    className='max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px]'
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M6 18L18 6M6 6l12 12'
                     />
                   </svg>
                 </div>
@@ -227,13 +227,13 @@ export default function OrderDialog({
         className={` flex min-h-[90px] w-full items-center justify-between gap-[2px]`}
       >
         {/* date & price */}
-        <div className="flex flex-col justify-between gap-[8px]">
-          <p className="text-[12px] font-medium leading-[13px] text-sub-text/75 2xs:text-[14px] 2xs:leading-[15px] 2xs:tracking-wide">
+        <div className='flex flex-col justify-between gap-[8px]'>
+          <p className='text-[12px] font-medium leading-[13px] text-sub-text/75 2xs:text-[14px] 2xs:leading-[15px] 2xs:tracking-wide'>
             {lang === 'en'
               ? `${displayDate.en} (${days ? days : 1} days)`
               : `${displayDate.mn} (${days ? days : 1} хоног)`}
           </p>
-          <h3 className="text-[20px] font-medium leading-[20px] text-main-text 2xs:text-[24px] 2xs:leading-[24px] 2xs:tracking-wide">
+          <h3 className='text-[20px] font-medium leading-[20px] text-main-text 2xs:text-[24px] 2xs:leading-[24px] 2xs:tracking-wide'>
             {cart && cart.length > 0
               ? (totalPrice * parseInt(`${days ? days : 1}`)).toLocaleString()
               : (
@@ -245,8 +245,8 @@ export default function OrderDialog({
         {/* orderBtn */}
         {cart.length < 1 ? (
           <div
-            onClick={() => handleScrollToRooms()}
-            className="rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]"
+            onClick={() => handleScrollToRooms('rooms')}
+            className='rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]'
           >
             {lang === 'en' ? 'Order' : 'Захиалах'}
           </div>
@@ -262,7 +262,8 @@ export default function OrderDialog({
               },
               pathname: '/reservation',
             }}
-            className="rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]"
+            target='blank'
+            className='rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]'
           >
             {lang === 'en' ? 'Order' : 'Захиалах'}
           </Link>

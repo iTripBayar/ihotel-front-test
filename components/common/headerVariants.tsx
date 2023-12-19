@@ -21,7 +21,7 @@ const HeaderVariants = ({
   const { dispatch } = useAppCtx();
   return (
     <header
-      className={`fixed z-[100] flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white sm:px-[50px] ${
+      className={`fixed z-[500] flex h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white sm:px-[50px] ${
         ver === 'fixed'
           ? ' animate-slide-bottom 2xs:px-[24px] md:px-[67px] lg:gap-[24px] lg:px-[150px] xl:gap-[65px] 2xl:gap-[100px] 2xl:px-[200px] '
           : ver === 'search'

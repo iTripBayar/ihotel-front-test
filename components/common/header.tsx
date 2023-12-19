@@ -2,22 +2,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
-import { useSession } from 'next-auth/react';
-import { useCookies } from 'react-cookie';
 
-const Header = () => {
+interface Props{
+  user: string
+}
+
+const Header = ({user}:Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const pathname = usePathname();
-  const addHotel = searchParams.get('addHotel');
   const { appState, dispatch } = useAppCtx();
-  const [cookies, setCookie] = useCookies(['accessToken']);
-  
-
-  const { data: session, status } = useSession({
-    required: false,
-  });
 
   const createQueryString = (name: string, value: string | null) => {
     const params = new URLSearchParams(searchParams);
@@ -29,8 +24,6 @@ const Header = () => {
     return params.toString();
   };
   
-  // console.log(cookies, '<');
-
   return (
     <header
       className={`flex h-[52px] min-h-[52px] w-full items-center justify-between bg-primary-blue px-[16px] text-white 2xs:px-[24px] sm:px-[50px] lg:px-[150px] xl:px-[200px]`}
@@ -43,12 +36,12 @@ const Header = () => {
           priority
           quality={100}
           sizes='20vw'
-          className='absolute cursor-pointer object-contain'
+          className='absolute object-contain cursor-pointer'
         />
       </Link>
       <div className='flex items-center justify-end'>
         <div className='hidden justify-end gap-[20px] text-[14px] font-medium leading-[14px] lg:flex xl:gap-[32px] xl:text-[15px] xl:leading-[15px]'>
-          {!session?.user ? (
+          {user === '' ? (
             <div
               className='group relative flex h-[32px] cursor-pointer items-center'
               onClick={() => {
@@ -60,11 +53,11 @@ const Header = () => {
                 });
               }}
             >
-              <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
+              <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
               {lang === 'en' ? 'Log In' : 'Нэвтрэх'}
             </div>
           ) : null}
-          {!session?.user ? (
+          {user === '' ? (
             <div
               className='group relative flex h-[32px] cursor-pointer items-center'
               onClick={() => {
@@ -76,25 +69,24 @@ const Header = () => {
                 });
               }}
             >
-              <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
+              <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
               {lang === 'en' ? 'Sign Up' : 'Бүртгүүлэх'}
             </div>
           ) : null}
-          {session?.user ? (
+          {user !== '' ? (
             <Link
               href='/profile'
               className='group relative flex h-[32px] cursor-pointer items-center'
             >
-              <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
-              {session.user.name?.charAt(0).toUpperCase()}
-              {session.user.name?.slice(1)}
+              <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
+              {user}
             </Link>
           ) : null}
           <div
             draggable={false}
             className='group relative flex h-[32px] cursor-pointer items-center gap-[8px]'
           >
-            <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
+            <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='white'
@@ -116,7 +108,7 @@ const Header = () => {
             href={`${process.env.TEMPORARY_URL}/hotel/create`}
             className='group relative flex h-[32px] cursor-pointer items-center gap-[8px]'
           >
-            <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
+            <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -141,7 +133,7 @@ const Header = () => {
             }}
             className='group relative flex h-[32px] cursor-pointer items-center gap-[8px]'
           >
-            <span className='ease absolute bottom-0 right-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-full'></span>
+            <span className='absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 ease border-white/50 group-hover:w-full'></span>
             <Image
               src={
                 lang === 'en'
