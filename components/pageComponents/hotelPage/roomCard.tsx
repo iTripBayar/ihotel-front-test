@@ -11,9 +11,16 @@ import { Pagination } from 'swiper/modules';
 interface Props {
   data: roomData.room;
   handleScrollToRooms: (ver: string) => void;
+  handleOrder: () => void;
+  orderLoading: boolean
 }
 
-const RoomCard = ({ data, handleScrollToRooms }: Props) => {
+const RoomCard = ({
+  data,
+  handleScrollToRooms,
+  handleOrder,
+  orderLoading,
+}: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const router = useRouter();
@@ -77,17 +84,10 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
       }
     }
   }
-  const sampleRooms = [
-    { id: data?.id, amount: 0 },
-    { id: data?.id, amount: 1 },
-    { id: data?.id, amount: 2 },
-    { id: data?.id, amount: 3 },
-    { id: data?.id, amount: 4 },
-    { id: data?.id, amount: 5 },
-    { id: data?.id, amount: 6 },
-    { id: data?.id, amount: 7 },
-    { id: data?.id, amount: 8 },
-  ];
+  const roomAmount = [{ id: data?.id, amount: 0 }];
+  for (let i = 0; i < data.number; i++) {
+    roomAmount.push({ id: data?.id, amount: i + 1 });
+  }
 
   return (
     <div className=' flex flex-col rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]'>
@@ -98,39 +98,40 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
         modules={[Pagination]}
         className=' roomImages h-[225px] w-full rounded-t-[16px] 2xs:h-[275px] sm:h-[325px] md:h-[225px] xl:h-[250px] 2xl:h-[275px]'
       >
-        {data.images && data.images.map((index, i) => (
-          <SwiperSlide
-            className='relative w-full h-full overflow-hidden'
-            key={i}
-            onClick={()=>{
-               dispatch({
-                 type: 'CHANGE_APP_STATE',
-                 payload: { biggerImage: data.images },
-               });
-            }}
-          >
-            <Image
-              src={
-                data.images && data.images.length > 0
-                  ? `${process.env.IMAGE_URL}${index}`
-                  : '/samples/camp.png'
-              }
-              alt='/hotel'
-              fill={true}
-              quality={75}
-              loading='lazy'
-              sizes='50vw'
-              placeholder='blur'
-              blurDataURL={
-                data.images.length > 0
-                  ? `"_next/image/?url=${data.images[0]}"`
-                  : '/samples/camp.png'
-              }
-              className='absolute object-cover w-auto h-auto duration-700 select-none hover:scale-110'
-              draggable={false}
-            />
-          </SwiperSlide>
-        ))}
+        {data.images &&
+          data.images.map((index, i) => (
+            <SwiperSlide
+              className='relative h-full w-full overflow-hidden'
+              key={i}
+              onClick={() => {
+                dispatch({
+                  type: 'CHANGE_APP_STATE',
+                  payload: { biggerImage: data.images },
+                });
+              }}
+            >
+              <Image
+                src={
+                  data.images && data.images.length > 0
+                    ? `${process.env.IMAGE_URL}${index}`
+                    : '/samples/camp.png'
+                }
+                alt='/hotel'
+                fill={true}
+                quality={75}
+                loading='lazy'
+                sizes='50vw'
+                placeholder='blur'
+                blurDataURL={
+                  data.images.length > 0
+                    ? `"_next/image/?url=${data.images[0]}"`
+                    : '/samples/camp.png'
+                }
+                className='absolute h-auto w-auto select-none object-cover duration-700'
+                draggable={false}
+              />
+            </SwiperSlide>
+          ))}
       </Swiper>
       <div className='flex w-full flex-col gap-[20px] px-[16px] pb-[20px] pt-[24px]'>
         {/* name */}
@@ -211,7 +212,7 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
           </span>
         </div>
         {/* room price & occupancy */}
-        <div className='flex items-center justify-between w-full text-primary-blue'>
+        <div className='flex w-full items-center justify-between text-primary-blue'>
           {/* occupancy */}
           <div className='flex items-end gap-[4px]'>
             <svg
@@ -259,19 +260,6 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
                 : ' lg:hidden'
             }`}
             onClick={() => {
-              // router.replace(
-              //   `/hotel/?${createQueryString(
-              //     'roomSelect',
-              //     'open',
-              //     'room',
-              //     data.id.toString(),
-              //     'null',
-              //     null,
-              //   )}`,
-              //   {
-              //     scroll: false,
-              //   },
-              // );
               dispatch({
                 type: 'CHANGE_APP_STATE',
                 payload: {
@@ -304,28 +292,17 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
           {/* web roomSelect dropdown */}
           {appState.selectedRoom === data.id.toString() ? (
             <div className=' scrollHidden absolute left-0 z-50 hidden max-h-[166px] min-w-[90px] flex-col overflow-y-auto rounded-[8px] border-[2px] border-primary-blue/50 bg-white px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px] lg:flex'>
-              {sampleRooms.map((index, i) => (
+              {roomAmount.map((index, i) => (
                 <div
                   key={i}
                   className=' flex min-h-[34px] cursor-pointer items-center justify-center border-b border-b-primary-blue/50'
                   onClick={() => {
-                    // router.replace(
-                    //   `/hotel/?${multipleCreateQueryString(
-                    //     'roomAmount',
-                    //     `${room}$${sampleRooms.indexOf(index).toString()}`,
-                    //     'roomSelect',
-                    //     null,
-                    //     'room',
-                    //     null,
-                    //   )}`,
-                    //   { scroll: false },
-                    // );
                     dispatch({
                       type: 'CHANGE_APP_STATE',
                       payload: {
                         selectedRoom: '',
                         selectedAmount: (() => {
-                          const newValue = `${data.id}$${sampleRooms
+                          const newValue = `${data.id}$${roomAmount
                             .indexOf(index)
                             .toString()}`;
                           const indexOfId = appState.selectedAmount.findIndex(
@@ -355,7 +332,7 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
                             updatedAmount.push(newValue);
                           } else if (
                             indexOfId !== -1 &&
-                            sampleRooms.indexOf(index) === 0
+                            roomAmount.indexOf(index) === 0
                           ) {
                             // If the ID exists and sampleRooms.indexOf(index) is 0, remove the value
                             updatedAmount.splice(indexOfId, 1);
@@ -368,7 +345,7 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
                   }}
                 >
                   {index.amount} {lang === 'en' ? 'rooms' : 'өрөө'}{' '}
-                  {sampleRooms.indexOf(index) === parseInt(updatedAmount) ? (
+                  {roomAmount.indexOf(index) === parseInt(updatedAmount) ? (
                     <svg
                       viewBox='0 0 19 14'
                       fill='none'
@@ -409,7 +386,7 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
             {lang === 'en' ? 'Add to cart' : 'Сангсанд нэмэх'}
           </div>
         </div>
-        {cart.length < 1 ? (
+        {/* {cart.length < 1 ? (
           <div
             onClick={() => handleScrollToRooms('rooms')}
             className='flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white'
@@ -428,12 +405,29 @@ const RoomCard = ({ data, handleScrollToRooms }: Props) => {
               },
               pathname: '/reservation',
             }}
-            target='blank'
+            target='_blank'
             className='flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white'
           >
             {lang === 'en' ? 'Order' : 'Захиалах'}
           </Link>
-        )}
+        )} */}
+        <div
+          onClick={() => {
+            if (!cart || cart.length === 0) {
+              handleScrollToRooms('rooms');
+            } else {
+              handleOrder();
+            }
+          }}
+          className={`flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online ${
+            orderLoading === true ? 'text-[16px]' : 'text-[22px]'
+          } font-medium text-white`}
+        >
+          {orderLoading === true
+            ? `${lang === 'en' ? 'Loading...' : 'Уншиж байна...'}`
+            : `${lang === 'en' ? 'Order' : 'Захиалах'}`}
+        </div>
+        {/* handleOrder */}
       </div>
     </div>
   );

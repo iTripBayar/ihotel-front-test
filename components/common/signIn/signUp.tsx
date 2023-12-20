@@ -180,9 +180,7 @@ export default function SignUp() {
               onChange={handlePasswordChange}
               placeholder={lang === 'en' ? 'Password' : 'Нууц үг'}
               minLength={8}
-              // pattern='^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
-              // pattern='^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[\w@$!%*?&]{8,}$'
-              pattern='^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[\w@$!%*?&#]{8,}$'
+              pattern='^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&()#])[\w@$!%*?&()#]{8,}$'
               className='h-[34px] w-full rounded-[4px] border-black/[.15]'
             />
             <button
@@ -243,9 +241,7 @@ export default function SignUp() {
                 lang === 'en' ? 'Confirm Password' : 'Нууц үг дахин оруулна уу'
               }
               className='h-[34px] w-full rounded-[4px] border-black/[.15]'
-              // pattern='^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
-              // pattern='^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[\w@$!%*?&]{8,}$'
-              pattern='^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[\w@$!%*?&#]{8,}$'
+              pattern='^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&()#])[\w@$!%*?&()#]{8,}$'
             />
             <button
               type='button'
@@ -314,7 +310,7 @@ export default function SignUp() {
                   : '* Нууц үг таарахгүй байна. *'}
               </p>
             )}
-          <div className='flex items-center justify-between w-full'>
+          <div className='flex w-full items-center justify-between'>
             <div className='h-[1px] w-[33%] bg-black/[.15]'></div>
             <p className='text-[14px] font-medium uppercase text-black/[.25] sm:text-[16px]'>
               {lang === 'en' ? 'Or' : 'Эсвэл'}

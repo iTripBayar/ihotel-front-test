@@ -93,24 +93,6 @@ export default function PaymentMethod() {
                  <p>Card</p>
                </div>
              </Radio>
-             <Radio value='bank'>
-               <div className='flex cursor-pointer items-center gap-[4px]'>
-                 <div className='relative h-[40px] w-[40px] overflow-hidden'>
-                   <Image
-                     src={'/khaan-logo.png'}
-                     alt='/hotel'
-                     fill={true}
-                     loading='lazy'
-                     sizes='50vw'
-                     placeholder='blur'
-                     blurDataURL={'/khaan-logo.png'}
-                     className='absolute object-cover w-auto h-auto select-none'
-                     draggable={false}
-                   />
-                 </div>
-                 <p>Bank</p>
-               </div>
-             </Radio>
            </div>
          </RadioGroup>
        </ChakraProvider>

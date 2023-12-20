@@ -69,6 +69,8 @@ const SearchPage = () => {
     },
     { refreshDeps: [searchParams] },
   );
+  console.log(data);
+
 
   const { appState } = useAppCtx();
   if (!error)

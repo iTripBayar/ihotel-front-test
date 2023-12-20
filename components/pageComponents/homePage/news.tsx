@@ -24,6 +24,7 @@ const News = ({ data }: iProps) => {
   // if (serializedData) {
   //   unserializedData = unserialize(serializedData);
   // }
+  console.log(data);
   return (
     <div className='w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]'>
       <div
@@ -41,7 +42,9 @@ const News = ({ data }: iProps) => {
           } 2xs:grid-cols-2  md:gap-[24px] lg:grid-cols-3 lg:grid-rows-2 2xl:gap-[48px]`}
         >
           {data.map((index) => (
-            <div
+            <Link
+              href={{ pathname: `${process.env.WEB_URL}/ihotel/post/${index.slug}` }}
+              target='_blank'
               key={index.id}
               className='flex w-full flex-col justify-start gap-[8px] overflow-hidden rounded-[20px] pb-[8px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]'
             >
@@ -49,9 +52,7 @@ const News = ({ data }: iProps) => {
               <div className='relative h-[175px] w-full overflow-hidden md:h-[175px] lg:h-[225px] xl:h-[250px]'>
                 <Image
                   // src={`https://ihotel.mn/${unserialize(index.photos)[0]}`}
-                  src={`${process.env.IMAGE_URL}${
-                    unserialize(index.photos)[0]
-                  }`}
+                  src={`${process.env.WEB_URL}/${unserialize(index.photos)[0]}`}
                   alt='/posts'
                   fill={true}
                   quality={75}
@@ -66,7 +67,7 @@ const News = ({ data }: iProps) => {
                   {lang === 'en' ? '' : index.title}
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
         <Link

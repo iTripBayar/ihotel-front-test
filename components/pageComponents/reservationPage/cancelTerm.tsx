@@ -4,30 +4,21 @@ import format from 'date-fns/format';
 
 interface Props {
   data: { day: string; fee: string }[] | undefined;
-  rooms: roomData.room[];
   dollarRate: string | null;
+  totalPrice: number;
+
 }
-export default function CancelTerm({ data, rooms, dollarRate }: Props) {
+export default function CancelTerm({
+  data,
+  dollarRate,
+  totalPrice,
+}: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const cart = searchParams.getAll('cart');
   const dateFrom = searchParams.get('dateFrom');
   const dateTo = searchParams.get('dateTo');
   const days = searchParams.get('days');
-
   const { isOpen, onToggle } = useDisclosure();
-
-  let totalPrice = 0;
-  for (let i = 0; i < cart.length; i++) {
-    if (cart[i]) {
-      for (let j = 0; j < rooms.length; j++) {
-        if (parseInt(cart[i].split('$')[0]) === rooms[j].id) {
-          totalPrice =
-            totalPrice + rooms[j].priceDayUse * parseInt(cart[i].split('$')[1]);
-        }
-      }
-    }
-  }
 
   const newDate = new Date();
   const date = newDate.getDate();
@@ -48,7 +39,7 @@ export default function CancelTerm({ data, rooms, dollarRate }: Props) {
 
   return (
     <div className='flex h-auto w-full flex-col  rounded-[20px] px-[20px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] lg:rounded-none lg:border-t lg:border-dashed lg:border-t-black/[.15] lg:px-0 lg:pt-[32px] lg:shadow-none'>
-      <div className='w-full flex-col gap-[24px] hidden lg:flex'>
+      <div className='hidden w-full flex-col gap-[24px] lg:flex'>
         <p className='text-[18px] font-medium leading-[18px] text-sub-text'>
           {lang === 'en' ? 'Term of cancellation' : 'Цуцлалтын нөхцөл'}
         </p>
@@ -83,8 +74,15 @@ export default function CancelTerm({ data, rooms, dollarRate }: Props) {
                         <td>{index.fee}%</td>
                         <td>
                           {lang === 'en' && dollarRate
-                            ? totalPrice / parseInt(dollarRate) / 100
-                            : (totalPrice / 100) * parseInt(index.fee)}
+                            ? `${(
+                                totalPrice /
+                                parseInt(dollarRate) /
+                                100
+                              ).toLocaleString()} $`
+                            : `${(
+                                (totalPrice / 100) *
+                                parseInt(index.fee)
+                              ).toLocaleString()} ₮`}
                         </td>
                       </tr>
                     ))

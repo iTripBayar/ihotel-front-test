@@ -9,7 +9,10 @@ interface Props {
   stat: string;
   allRooms: roomData.room[];
   slug: string;
-  handleScrollToRooms: (ver:string) => void;
+  handleScrollToRooms: (ver: string) => void;
+  totalPrice: number;
+  handleOrder: () => void;
+  orderLoading: boolean;
 }
 
 export default function Dialogs({
@@ -18,17 +21,23 @@ export default function Dialogs({
   allRooms,
   slug,
   handleScrollToRooms,
+  totalPrice,
+  handleOrder,
+  orderLoading,
 }: Props) {
   const searchParams = useSearchParams();
-  const room = searchParams.get('room');
   const roomSelect = searchParams.get('roomSelect');
   const { appState } = useAppCtx();
 
   return (
-    <div className="fixed bottom-0 z-[900] w-full sm:px-[50px] md:px-[72px] lg:hidden ">
+    <div className='fixed bottom-0 z-[900] w-full sm:px-[50px] md:px-[72px] lg:hidden '>
       {appState.selectedRoom ? (
         <RoomSelection
-          roomData={allRooms.filter((index) => index.id.toString() === room)[0]}
+          roomData={
+            allRooms.filter(
+              (index) => index.id.toString() === appState.selectedRoom,
+            )[0]
+          }
         />
       ) : null}
       {appState.calendar === 'open' && !roomSelect ? (
@@ -41,7 +50,10 @@ export default function Dialogs({
             roomPrices={roomPrices}
             allRooms={allRooms}
             slug={slug}
-            handleScrollToRooms={(ver: string)=>handleScrollToRooms(ver)}
+            handleScrollToRooms={(ver: string) => handleScrollToRooms(ver)}
+            totalPrice={totalPrice}
+            handleOrder={handleOrder}
+            orderLoading={orderLoading}
           />
         ) : null
       ) : null}

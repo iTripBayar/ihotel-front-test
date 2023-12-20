@@ -139,11 +139,6 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
     options: { radius: 75, maxZoom: 20 },
   });
 
-  useEffect(() => {
-    if (appState.map === 'open') {
-    }
-  }, [appState.map]);
-
   return (
     <div
       className={`relative h-full w-full bg-white ${

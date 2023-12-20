@@ -22,7 +22,7 @@ const Footer = () => {
               width={320}
               height={361}
               sizes='50vw'
-              className='object-contain w-full h-auto'
+              className='h-auto w-full object-contain'
             />
           </div>
           <div className='flex flex-col justify-start gap-[16px] text-[13px] md:justify-self-start lg:justify-self-end lg:pl-[28px] lg:text-[14px] xl:text-[16px]'>
@@ -33,8 +33,8 @@ const Footer = () => {
               {/* facebook */}
               <Link
                 href='https://www.facebook.com/ihotel.mn/'
-                target='blank'
-                className='relative group'
+                target='_blank'
+                className='group relative'
               >
                 <svg
                   className='h-[16px] w-[16px]'
@@ -52,8 +52,8 @@ const Footer = () => {
               {/* instagram */}
               <Link
                 href='https://www.instagram.com/ihotel.mn/?hl=en'
-                target='blank'
-                className='relative group'
+                target='_blank'
+                className='group relative'
               >
                 <svg
                   className='h-[16px] w-[16px]'
@@ -91,8 +91,8 @@ const Footer = () => {
               {/* youtube */}
               <Link
                 href='https://www.youtube.com/channel/UCSCwq_vU3Xsj9h2e_qH1Pkg'
-                target='blank'
-                className='relative group'
+                target='_blank'
+                className='group relative'
               >
                 <svg
                   className='h-[16px] w-[20px]'
@@ -110,8 +110,8 @@ const Footer = () => {
               {/* linkedIn */}
               <Link
                 href='https://www.linkedin.com/company/ihotelmn/'
-                target='blank'
-                className='relative group'
+                target='_blank'
+                className='group relative'
               >
                 <svg
                   className='h-[16px] w-[16px]'
@@ -141,8 +141,8 @@ const Footer = () => {
               {/* medium */}
               <Link
                 href='https://medium.com/@ihotel.mn'
-                target='blank'
-                className='relative group'
+                target='_blank'
+                className='group relative'
               >
                 <svg
                   className='h-[16px] w-[16px]'

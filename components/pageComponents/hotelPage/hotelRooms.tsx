@@ -1,21 +1,29 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import RoomCard from './roomCard';
 import { addDays, format } from 'date-fns';
-import Link from 'next/link';
 import { useAppCtx } from '@/contexts/app';
 
 interface Props {
   data: roomData.room[] | undefined;
   handleScrollToRooms: (ver: string) => void;
+  totalPrice: number;
+  handleOrder: () => void;
+  orderLoading: boolean
 }
 
-const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
+const HotelRooms = ({
+  data,
+  handleScrollToRooms,
+  totalPrice,
+  handleOrder,
+  orderLoading,
+}: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const cart = searchParams.getAll('cart');
   const router = useRouter();
-  const dateFrom = searchParams.get('dateFrom');
-  const dateTo = searchParams.get('dateTo');
+  const checkIn = searchParams.get('checkIn');
+  const checkOut = searchParams.get('checkOut');
   const days = searchParams.get('days');
   const slug = searchParams.get('slug');
   const { dispatch } = useAppCtx();
@@ -25,18 +33,6 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
     params.delete(name, cart[index]);
     return params.toString();
   };
-
-  let totalPrice = 0;
-  if (cart && cart.length > 0 && data) {
-    for (let i = 0; i < data.length; i++) {
-      for (let j = 0; j < cart.length; j++) {
-        if (data[i].id === parseInt(cart[j].split('$')[0])) {
-          totalPrice =
-            totalPrice + data[i].priceDayUse * parseInt(cart[j].split('$')[1]);
-        }
-      }
-    }
-  }
 
   const newDate = new Date();
   const nextDay = addDays(newDate, 1);
@@ -63,34 +59,34 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
       date: `${nextDay.toDateString().split(' ')[2]}`,
     },
   };
-  if (dateFrom && dateTo) {
+  if (checkIn && checkOut) {
     formattedDate = {
       from: {
-        year: `${dateFrom.split('|')[0].split('/')[2]}`,
-        month: `${dateFrom.split('|')[0].split('/')[0]}`,
-        date: `${dateFrom.split('|')[0].split('/')[1]}`,
+        year: `${checkIn.split('|')[0].split('/')[2]}`,
+        month: `${checkIn.split('|')[0].split('/')[0]}`,
+        date: `${checkIn.split('|')[0].split('/')[1]}`,
       },
       to: {
-        year: `${dateTo.split('|')[0].split('/')[2]}`,
-        month: `${dateTo.split('|')[0].split('/')[0]}`,
-        date: `${dateTo.split('|')[0].split('/')[1]}`,
+        year: `${checkOut.split('|')[0].split('/')[2]}`,
+        month: `${checkOut.split('|')[0].split('/')[0]}`,
+        date: `${checkOut.split('|')[0].split('/')[1]}`,
       },
       fromEn: {
-        year: `${dateFrom.split('|')[1].split('-')[2]}`,
-        month: `${dateFrom.split('|')[1].split('-')[0]}`,
-        date: `${dateFrom.split('|')[1].split('-')[1]}`,
+        year: `${checkIn.split('|')[1].split('-')[2]}`,
+        month: `${checkIn.split('|')[1].split('-')[0]}`,
+        date: `${checkIn.split('|')[1].split('-')[1]}`,
       },
       toEn: {
-        year: `${dateTo.split('|')[1].split('-')[2]}`,
-        month: `${dateTo.split('|')[1].split('-')[0]}`,
-        date: `${dateTo.split('|')[1].split('-')[1]}`,
+        year: `${checkOut.split('|')[1].split('-')[2]}`,
+        month: `${checkOut.split('|')[1].split('-')[0]}`,
+        date: `${checkOut.split('|')[1].split('-')[1]}`,
       },
     };
   }
 
   let displayDate = { mn: '', en: '', days: '' };
 
-  if (!dateFrom && !dateTo) {
+  if (!checkIn && !checkOut) {
     if (formattedDate.from.month === formattedDate.to.month) {
       displayDate = {
         mn: `${formattedDate.from.month}-р сар ${formattedDate.from.date}-${formattedDate.to.date}`,
@@ -115,24 +111,25 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
   } else {
     const mnDate = {
       from: {
-        month: dateFrom?.split('|')[0].split('/')[0],
-        date: dateFrom?.split('|')[0].split('/')[1],
+        month: checkIn?.split('|')[0].split('/')[0],
+        date: checkIn?.split('|')[0].split('/')[1],
       },
       to: {
-        month: dateTo?.split('|')[0].split('/')[0],
-        date: dateTo?.split('|')[0].split('/')[1],
+        month: checkOut?.split('|')[0].split('/')[0],
+        date: checkOut?.split('|')[0].split('/')[1],
       },
     };
     const enDate = {
       from: {
-        month: dateFrom?.split('|')[1]?.split('-')[0],
-        date: dateFrom?.split('|')[1]?.split('-')[1],
+        month: checkIn?.split('|')[1]?.split('-')[0],
+        date: checkIn?.split('|')[1]?.split('-')[1],
       },
       to: {
-        month: dateTo?.split('|')[1].split('-')[0],
-        date: dateTo?.split('|')[1].split('-')[1],
+        month: checkOut?.split('|')[1].split('-')[0],
+        date: checkOut?.split('|')[1].split('-')[1],
       },
     };
+
     if (mnDate.from.month === mnDate.to.month) {
       displayDate = {
         mn: `${mnDate.from.month}-р сар ${mnDate.from.date}-${mnDate.to.date}`,
@@ -195,12 +192,14 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
               <RoomCard
                 data={index}
                 key={i}
-                handleScrollToRooms={(ver:string)=>handleScrollToRooms(ver)}
+                handleScrollToRooms={(ver: string) => handleScrollToRooms(ver)}
+                handleOrder={handleOrder}
+                orderLoading={orderLoading}
               />
             ))}
         </div>
         {/* side order & calendar */}
-        <div className='flex-col items-center justify-start hidden lg:sticky lg:col-span-2 lg:flex'>
+        <div className='hidden flex-col items-center justify-start lg:sticky lg:col-span-2 lg:flex'>
           <div
             onClick={() => {
               dispatch({
@@ -266,7 +265,7 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
                       className={`flex min-h-[45px] w-full items-center  justify-between gap-[10px] border-b border-b-black/[.15] pb-[8px] pt-[6px] text-primary-blue `}
                     >
                       <div className='flex w-full flex-col justify-between gap-[8px] font-medium'>
-                        <div className='flex items-center justify-between w-full'>
+                        <div className='flex w-full items-center justify-between'>
                           <h3 className='text-[20px] leading-[20px] text-main-text'>
                             {cart && index && data
                               ? data.filter(
@@ -332,9 +331,9 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
                   ))}
               </div>
             ) : null}
-            {cart.length < 1 ? (
+            {/* {cart.length < 1 ? (
               <div
-                onClick={()=>handleScrollToRooms('rooms')}
+                onClick={() => handleScrollToRooms('rooms')}
                 className='flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white'
               >
                 {lang === 'en' ? 'Order' : 'Захиалах'}
@@ -344,19 +343,35 @@ const HotelRooms = ({ data, handleScrollToRooms }: Props) => {
                 href={{
                   query: {
                     slug: slug,
-                    dateFrom: dateFrom,
-                    dateTo: dateTo,
+                    checkIn: checkIn,
+                    checkOut: checkOut,
                     days: days,
                     cart: cart,
                   },
                   pathname: '/reservation',
                 }}
-                target='blank'
+                target='_blank'
                 className='flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white'
               >
                 {lang === 'en' ? 'Order' : 'Захиалах'}
               </Link>
-            )}
+            )} */}
+            <div
+              onClick={() => {
+                if (!cart || cart.length === 0) {
+                  handleScrollToRooms('rooms');
+                } else {
+                  handleOrder();
+                }
+              }}
+              className={`flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online ${
+                orderLoading === true ? 'text-[16px]' : 'text-[22px]'
+              } font-medium text-white`}
+            >
+              {orderLoading === true
+                ? `${lang === 'en' ? 'Loading...' : 'Уншиж байна...'}`
+                : `${lang === 'en' ? 'Order' : 'Захиалах'}`}
+            </div>
           </div>
         </div>
       </div>

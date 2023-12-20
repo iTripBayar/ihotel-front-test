@@ -1,7 +1,6 @@
 'use client';
 
 import HeroCategory from '@/components/pageComponents/homePage/heroCategory';
-import '../app/globals.css';
 import CommonLocation from '@/components/pageComponents/homePage/commonLocation';
 import News from '@/components/pageComponents/homePage/news';
 import Footer from '@/components/common/footer';
@@ -21,7 +20,6 @@ import { ChakraProvider, CircularProgress } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 const ErrorComponent = dynamic(() => import('@/components/common/404'));
 import { useSession } from 'next-auth/react';
-
 
 // const Fade = dynamic(() => import('@mui/material/Fade'), { ssr: false });
 
@@ -75,15 +73,24 @@ const Home = () => {
     };
   }, []);
 
-
   const { data: session, status } = useSession({
     required: false,
   });
 
+  console.log(data);
+
   if (!error)
     return (
       <main className='relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px] '>
-        <Header user={session ? `${session.user?.name?.charAt(0).toUpperCase()}${session.user?.name?.slice(1)}` : ''}/>
+        <Header
+          user={
+            session
+              ? `${session.user?.name
+                  ?.charAt(0)
+                  .toUpperCase()}${session.user?.name?.slice(1)}`
+              : ''
+          }
+        />
         {headerVer === 'fixed' ? (
           <HeaderVariants
             ver={headerVer}
@@ -128,21 +135,20 @@ const Home = () => {
             </div>
           </ChakraProvider>
         ) : (
-          <CommonLocation
-            data={data ? data.destCategories : []}
-            destinations={data ? data.topDestinations : []}
-          />
+          <div className='relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px] '>
+            <CommonLocation
+              data={data ? data.destCategories : []}
+              destinations={data ? data.topDestinations : []}
+            />
+            <CardsContainer
+              title={'cheap'}
+              data={data ? data.cheapHotels : []}
+            />
+            <CardsContainer title={'hotels'} data={data ? data.hotels : []} />
+            <CardsContainer title={'camps'} data={data ? data.camps : []} />
+            <News data={data ? data.posts : []} />
+          </div>
         )}
-        {loading ? null : (
-          <CardsContainer title={'cheap'} data={data ? data.cheapHotels : []} />
-        )}
-        {loading ? null : (
-          <CardsContainer title={'hotels'} data={data ? data.hotels : []} />
-        )}
-        {loading ? null : (
-          <CardsContainer title={'camps'} data={data ? data.camps : []} />
-        )}
-        {loading ? null : <News data={data ? data.posts : []} />}
         <Footer />
       </main>
     );

@@ -18,20 +18,20 @@ export default function CalendarDialog({ ver }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const lang = searchParams.get('lang');
-  const dateFrom = searchParams.get('dateFrom');
-  const dateTo = searchParams.get('dateTo');
+  const checkIn = searchParams.get('checkIn');
+  const checkOut = searchParams.get('checkOut');
   const days = searchParams.get('days');
   const { dispatch } = useAppCtx();
 
   const pathname = usePathname();
   const pastMonth = new Date(
     year,
-    (!dateFrom && !dateTo
+    (!checkIn && !checkOut
       ? month
-      : parseInt(dateFrom ? dateFrom?.split('|')[0].split('/')[0] : '0')) - 1,
-    !dateFrom && !dateTo
+      : parseInt(checkIn ? checkIn?.split('|')[0].split('/')[0] : '0')) - 1,
+    !checkIn && !checkOut
       ? date
-      : parseInt(dateFrom ? dateFrom?.split('|')[0].split('/')[1] : '0'),
+      : parseInt(checkIn ? checkIn?.split('|')[0].split('/')[1] : '0'),
   );
   const defaultSelected: DateRange = {
     from: pastMonth,
@@ -132,7 +132,7 @@ export default function CalendarDialog({ ver }: Props) {
             if (range?.from && range.to) {
               router.replace(
                 `${pathname}/?${multipleCreateQueryString(
-                  'dateFrom',
+                  'checkIn',
                   `${range?.from?.toLocaleDateString()}|${range?.from
                     ?.toDateString()
                     .split(' ')[1]}-${range?.from
@@ -140,7 +140,7 @@ export default function CalendarDialog({ ver }: Props) {
                     .split(' ')[2]}-${range?.from
                     ?.toDateString()
                     .split(' ')[3]}`,
-                  'dateTo',
+                  'checkOut',
                   `${range?.to?.toLocaleDateString()}|${range?.to
                     ?.toDateString()
                     .split(' ')[1]}-${range?.to
@@ -224,13 +224,13 @@ export default function CalendarDialog({ ver }: Props) {
           if (range?.from && range.to) {
             router.replace(
               `${pathname}/?${multipleCreateQueryString(
-                'dateFrom',
+                'checkIn',
                 `${range?.from?.toLocaleDateString()}|${range?.from
                   ?.toDateString()
                   .split(' ')[1]}-${range?.from
                   ?.toDateString()
                   .split(' ')[2]}-${range?.from?.toDateString().split(' ')[3]}`,
-                'dateTo',
+                'checkOut',
                 `${range?.to?.toLocaleDateString()}|${range?.to
                   ?.toDateString()
                   .split(' ')[1]}-${range?.to

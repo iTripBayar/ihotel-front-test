@@ -6,6 +6,9 @@ import { signOut } from 'next-auth/react';
 import { fetchUserData } from '@/utils';
 import { useRequest } from 'ahooks';
 import { useCookies } from 'react-cookie';
+import dynamic from 'next/dynamic';
+const ErrorComponent = dynamic(() => import('@/components/common/404'));
+
 export default function ProfilePage() {
   const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
   const { data: session } = useSession({

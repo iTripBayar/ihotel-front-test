@@ -4,26 +4,15 @@ import { useSearchParams } from 'next/navigation';
 interface Props {
   rooms: roomData.room[];
   dollarRate: string | null;
+  totalPrice: number;
 }
 
-export default function OrderInfo({ rooms, dollarRate }: Props) {
+export default function OrderInfo({ rooms, dollarRate, totalPrice }: Props) {
   const { isOpen, onToggle } = useDisclosure();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const days = searchParams.get('days');
   const cart = searchParams.getAll('cart');
-
-  let totalPrice = 0;
-  for (let i = 0; i < cart.length; i++) {
-    if (cart[i]) {
-      for (let j = 0; j < rooms.length; j++) {
-        if (parseInt(cart[i].split('$')[0]) === rooms[j].id) {
-          totalPrice =
-            totalPrice + rooms[j].priceDayUse * parseInt(cart[i].split('$')[1]);
-        }
-      }
-    }
-  }
 
   return (
     <div className='flex h-auto w-full flex-col rounded-[20px]  px-[20px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] lg:mt-[-20px] lg:px-0 lg:shadow-none'>
@@ -41,7 +30,6 @@ export default function OrderInfo({ rooms, dollarRate }: Props) {
               </p>
               <p className='text-[16px] text-main-text'>
                 {/* {} {lang === 'en' ? '' : ''} */}
-
                 {lang === 'en'
                   ? rooms.filter(
                       (room) => room.id === parseInt(index.split('$')[0]),

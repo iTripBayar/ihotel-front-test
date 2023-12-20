@@ -8,17 +8,13 @@ export default function RoomSelection({ roomData }: Props) {
   const lang = searchParams.get('lang');
   const { appState, dispatch } = useAppCtx();
 
-  const sampleRooms = [
-    { id: roomData?.id, hotelId: 0 },
-    { id: roomData?.id, hotelId: 1 },
-    { id: roomData?.id, hotelId: 2 },
-    { id: roomData?.id, hotelId: 3 },
-    { id: roomData?.id, hotelId: 4 },
-    { id: roomData?.id, hotelId: 5 },
-    { id: roomData?.id, hotelId: 6 },
-    { id: roomData?.id, hotelId: 7 },
-    { id: roomData?.id, hotelId: 8 },
+  const roomAmount = [
+    { id: roomData?.id, amount: 0 },
   ];
+
+  for(let i = 0; i< roomData.number; i++){
+    roomAmount.push({ id: roomData?.id, amount: i + 1 });
+  }
 
   let updatedAmount = 0;
   if (appState.selectedAmount.length > 0) {
@@ -33,7 +29,7 @@ export default function RoomSelection({ roomData }: Props) {
       className='flex max-h-[420px] min-h-[50px] flex-col overflow-y-auto rounded-t-[30px] bg-white px-[36px] pb-[50px] pt-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]'
       id='container'
     >
-      {sampleRooms.map((index, i) => (
+      {roomAmount.map((index, i) => (
         <div
           key={i}
           onClick={() => {
@@ -42,7 +38,7 @@ export default function RoomSelection({ roomData }: Props) {
               payload: {
                 selectedRoom: '',
                 selectedAmount: (() => {
-                  const newValue = `${appState.selectedRoom}$${sampleRooms
+                  const newValue = `${appState.selectedRoom}$${roomAmount
                     .indexOf(index)
                     .toString()}`;
                   const indexOfId = appState.selectedAmount.findIndex(
@@ -69,7 +65,7 @@ export default function RoomSelection({ roomData }: Props) {
                     updatedAmount.push(newValue);
                   } else if (
                     indexOfId !== -1 &&
-                    sampleRooms.indexOf(index) === 0
+                    roomAmount.indexOf(index) === 0
                   ) {
                     // If the ID exists and sampleRooms.indexOf(index) is 0, remove the value
                     updatedAmount.splice(indexOfId, 1);
@@ -82,8 +78,8 @@ export default function RoomSelection({ roomData }: Props) {
           }}
           className='leading relative flex min-h-[50px] w-full items-center  justify-center border-b border-b-black/[.15] text-[20px] font-medium text-main-text'
         >
-          {sampleRooms.indexOf(index)} {lang === 'en' ? 'rooms' : 'өрөө'}
-          {sampleRooms.indexOf(index) === updatedAmount ? (
+          {roomAmount.indexOf(index)} {lang === 'en' ? 'rooms' : 'өрөө'}
+          {roomAmount.indexOf(index) === updatedAmount ? (
             <svg
               viewBox='0 0 19 14'
               fill='none'

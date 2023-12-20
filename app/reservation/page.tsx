@@ -7,48 +7,244 @@ import CancelTerm from '@/components/pageComponents/reservationPage/cancelTerm';
 import GeneralInfo from '@/components/pageComponents/reservationPage/generalInfo';
 import OrderInfo from '@/components/pageComponents/reservationPage/orderInfo';
 import UserInfo from '@/components/pageComponents/reservationPage/userInfo';
-import { fetchDataHotel } from '@/utils';
+import { createOrder, fetchDataHotel, fetchOrderSession } from '@/utils';
 import { useRequest } from 'ahooks';
 import Footer from '@/components/common/footer';
 import BurgerMenu from '@/components/common/burgermenu';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
 import { unserialize } from 'serialize-php';
 import Header from '@/components/common/header';
 import { CircularProgress, ChakraProvider } from '@chakra-ui/react';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
-import ErrorComponent from '@/components/common/404';
-import PaymentMethod from '@/components/pageComponents/reservationPage/paymentMethod';
+import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
+// import ErrorComponent from '@/components/common/404';
+const ErrorComponent = dynamic(() => import('@/components/common/404'));
 
 const ReservationPage = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const slug = searchParams.get('slug');
   const lang = searchParams.get('lang');
+  const checkIn = searchParams.get('checkIn');
+  const checkOut = searchParams.get('checkOut');
+  const days = searchParams.get('days');
+  const cart = searchParams.getAll('cart');
+
+  const [clients, setClients] = useState(
+    { name: '', surName: '', email: '', phone: '', nationality: '' },
+  );
+
   const { appState } = useAppCtx();
 
   const { data, loading, error } = useRequest(() => {
-    if (slug) return fetchDataHotel(slug);
-    return fetchDataHotel('');
+    if (slug)
+      return fetchDataHotel({
+        slug: slug,
+        checkIn: checkIn ? checkIn.split('|')[0] : '',
+        checkOut: checkOut ? checkOut.split('|')[0] : '',
+      });
+    return fetchDataHotel({ slug: '', checkIn: '', checkOut: '' });
   });
+
+  useEffect(()=>{if(loading === false){
+    handleOrder();
+  }},[loading])
+  let orderingRooms: {
+    startdate: string;
+    enddate: string;
+    hotel_id: string;
+    room_id: string;
+    room_number: string;
+    person_number: string; //Зарим өрөөнүүд хүнээр захиалга үүсгэдэг. Энэ үед room_number 0 person_person хүний тоо байна
+    room_price: string;
+    room_type: string; // Нээх хамаагүй
+    room_name: string;
+    total_price: string;
+    by_person: string;
+  }[] = [];
+const handleOrder = () => {
+  if (cart && cart.length > 0) {
+    for (let i = 0; i < cart.length; i++) {
+      orderingRooms.push({
+        startdate: checkIn
+          ? `${checkIn?.split('|')[0].split('/')[2]}-${checkIn
+              ?.split('|')[0]
+              .split('/')[0]}-${checkIn?.split('|')[0].split('/')[1]}`
+          : '',
+        enddate: checkOut
+          ? `${checkOut?.split('|')[0].split('/')[2]}-${checkOut
+              ?.split('|')[0]
+              .split('/')[0]}-${checkOut?.split('|')[0].split('/')[1]}`
+          : '',
+        hotel_id: data?.hotel.id ? `${data?.hotel.id}` : '',
+        room_id: cart[i].split('$')[0],
+        room_number: cart[i].split('$')[1],
+        person_number: '', //Зарим өрөөнүүд хүнээр захиалга үүсгэдэг. Энэ үед room_number 0 person_person хүний тоо байна
+
+        room_price: data?.rooms.filter(
+          (index) => index.id === parseInt(cart[i].split('$')[0]),
+        )[0]
+          ? data?.rooms
+              .filter(
+                (index) => index.id === parseInt(cart[i].split('$')[0]),
+              )[0]
+              .priceDayUse.toString()
+          : '',
+        room_type: data?.rooms.filter(
+          (index) => index.id === parseInt(cart[i].split('$')[0]),
+        )[0]
+          ? data?.rooms
+              .filter(
+                (index) => index.id === parseInt(cart[i].split('$')[0]),
+              )[0]
+              .bedTypeId.toString()
+          : '', // Нээх хамаагүй
+        room_name: data?.rooms.filter(
+          (index) => index.id === parseInt(cart[i].split('$')[0]),
+        )[0].name
+          ? data?.rooms.filter(
+              (index) => index.id === parseInt(cart[i].split('$')[0]),
+            )[0].name
+          : '',
+        total_price: `${
+          data?.rooms.filter(
+            (index) => index.id === parseInt(cart[i].split('$')[0]),
+          )[0].priceDayUse && days
+            ? data?.rooms.filter(
+                (index) => index.id === parseInt(cart[i].split('$')[0]),
+              )[0].priceDayUse *
+              parseInt(cart[i].split('$')[1]) *
+              parseInt(days)
+            : ''
+        }`,
+        by_person: '',
+      });
+    }
+  }
+  runOrder();
+};
+  const {
+    data: orderSessionData,
+    loading: orderLoading1,
+    error: orderError1,
+    run: runOrder,
+  } = useRequest(
+    () => {
+      return fetchOrderSession({
+        hotelId: data?.hotel.id ? `${data.hotel.id}` : '',
+        startDate: checkIn
+          ? `${checkIn?.split('|')[0].split('/')[2]}-${checkIn
+              ?.split('|')[0]
+              .split('/')[0]}-${checkIn?.split('|')[0].split('/')[1]}`
+          : '',
+        endDate: checkOut
+          ? `${checkOut?.split('|')[0].split('/')[2]}-${checkOut
+              ?.split('|')[0]
+              .split('/')[0]}-${checkOut?.split('|')[0].split('/')[1]}`
+          : '',
+        roomData: orderingRooms,
+      });
+    },
+    {
+      manual: true,
+      onSuccess: (result) => {
+        if (result.success === true) {
+          router.replace(
+            `/reservation?slug=${slug}&checkIn=${checkIn}&checkOut=${checkOut}&days=${days}&cart=${cart}`,
+          );
+        }
+      },
+    },
+  );
+
+  const {
+    data: orderData,
+    loading: orderLoading,
+    error: orderError,
+    run: runCreateOrder,
+  } = useRequest(
+    () => {
+      return createOrder({
+        "name": clients.name,
+        "surname": clients.surName,
+        "country": clients.nationality,
+        "phone_number": clients.phone,
+        "email_order": clients.email,
+        "beneficiary_name": '',
+        "beneficiary_account_number": '',
+      });
+    },
+    {
+      manual: true,
+      onSuccess: (result) => {
+        console.log(result)
+      },
+    },
+  );
+  const updateClients = (e: {
+    name: string;
+    surName: string;
+    email: string;
+    phone: string;
+    nationality: string;
+  }) => {
+    const value = {
+      name: e.name,
+      surName: e.surName,
+      email: e.email,
+      phone: e.phone,
+      nationality: e.nationality,
+    };
+    setClients(value);
+  };
+  const handleSubmit = () => {
+    runCreateOrder();
+  };
+
+  // useEffect(() => {
+  //   console.log(clients);
+  // }, [clients]);
 
   let stat = '';
   if (data?.hotel.isOnline == 1 && data?.hotel.isOffline == 0) {
     stat = 'online';
   } else if (data?.hotel.isOnline == 0 && data?.hotel.isOffline == 0) {
     stat = 'pending';
-  } else if (
-    data?.hotel.isOnline == 0 &&
-    data?.hotel.isOffline == 1 &&
-    data?.hotel.phone != null
-  ) {
-    stat = 'offline';
-  } else if (
-    data?.hotel.isOnline == 0 &&
-    data?.hotel.isOffline == 1 &&
-    data?.hotel.phone == null
-  ) {
-    stat = 'data';
+  } else {
+    router.back();
+  }
+
+  const displayDate = {
+    from: `${checkIn?.split('|')[0].split('/')[2]}-${checkIn
+      ?.split('|')[0]
+      .split('/')[0]}-${checkIn?.split('|')[0].split('/')[1]}`,
+    fromEn: `${checkIn?.split('|')[1].split('-')[0]} ${checkIn
+      ?.split('|')[1]
+      .split('-')[1]} ${checkIn?.split('|')[1].split('-')[2]}`,
+    to: `${checkOut?.split('|')[0].split('/')[2]}-${checkOut
+      ?.split('|')[0]
+      .split('/')[0]}-${checkOut?.split('|')[0].split('/')[1]}`,
+    toEn: `${checkOut?.split('|')[1].split('-')[0]} ${checkOut
+      ?.split('|')[1]
+      .split('-')[1]} ${checkOut?.split('|')[1].split('-')[2]}`,
+  };
+
+  let totalPrice = 0;
+  for (let i = 0; i < cart.length; i++) {
+    if (cart[i] && days && data) {
+      for (let j = 0; j < data.rooms.length; j++) {
+        if (parseInt(cart[i].split('$')[0]) === data.rooms[j].id) {
+          totalPrice =
+            totalPrice +
+            data.rooms[j].priceDayUse *
+              parseInt(cart[i].split('$')[1]) *
+              parseInt(days);
+        }
+      }
+    }
   }
 
   const serializedData: string | undefined = data?.hotel.cancellationPolicies;
@@ -57,7 +253,7 @@ const ReservationPage = () => {
   if (serializedData) {
     unserializedData = unserialize(serializedData);
   }
-  console.log(data);
+  // console.log(data);
   if (!error)
     return (
       <div>
@@ -105,28 +301,34 @@ const ReservationPage = () => {
                 addressEn={data ? data.hotel.addressEn : null}
                 phone={data ? data.hotel.phone : null}
                 email={data ? data.hotel.email : null}
+                displayDate={displayDate}
               />
               <OrderInfo
                 rooms={data ? data.rooms : []}
                 dollarRate={data ? data.rate : null}
+                totalPrice={totalPrice}
               />
               <div className='lg:hidden'>
-                <UserInfo ver={'mobile'} stat={''} />
+                <UserInfo
+                  ver={'mobile'}
+                  stat={''}
+                  clients={clients}
+                  updateClients={(e: {
+                    name: string;
+                    surName: string;
+                    email: string;
+                    phone: string;
+                    nationality: string;
+                  }) => updateClients(e)}
+                  handleSubmit={handleSubmit}
+                />
               </div>
               <CancelTerm
                 data={unserializedData}
-                rooms={data ? data.rooms : []}
                 dollarRate={data ? data.rate : null}
+                totalPrice={totalPrice}
               />
               <AdditionalRequest />
-              {stat === 'online' ? (
-                <div className='flex w-full flex-col gap-[16px] rounded-[20px] bg-white px-[16px] py-[12px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] sm:gap-[20px] sm:py-[16px] lg:hidden'>
-                  <p className='text-[18px] font-medium leading-[18px] text-sub-text'>
-                    {lang === 'en' ? `Payment options` : 'Төлбөрийн сонголт'}
-                  </p>
-                  <PaymentMethod />
-                </div>
-              ) : null}
               {stat === 'pending' ? (
                 <div className='w-full rounded-[8px] border border-primary-blue/50 px-[20px] py-[12px] text-[12px] font-medium leading-[20px] text-primary-blue 2xs:text-[14px] lg:hidden'>
                   {lang === 'en'
@@ -149,9 +351,21 @@ const ReservationPage = () => {
                 <>{lang === 'en' ? 'Go back' : 'Өмнөх хуудас руу буцах'}</>
               </button>
             </div>
-            <div className='relative hidden w-full h-full lg:col-span-2 lg:flex'>
+            <div className='relative hidden h-full w-full lg:col-span-2 lg:flex'>
               <div className='sticky top-[72px] h-fit'>
-                <UserInfo ver={'web'} stat={stat} />
+                <UserInfo
+                  ver={'web'}
+                  stat={stat}
+                  clients={clients}
+                  updateClients={(e: {
+                    name: string;
+                    surName: string;
+                    email: string;
+                    phone: string;
+                    nationality: string;
+                  }) => updateClients(e)}
+                  handleSubmit={handleSubmit}
+                />
               </div>
             </div>
           </div>

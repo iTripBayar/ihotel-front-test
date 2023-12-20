@@ -43,7 +43,9 @@ const CommonLocation = ({ data, destinations }: iProps) => {
     prevArrow: <SamplePrevArrow />,
     // afterChange: (current: number) => setActive({ current }),
   };
-  
+
+  console.log(data);
+
   return (
     <div className='flex w-full flex-col gap-[20px]'>
       <h3 className='mb-[-10px] self-center text-[16px] font-medium md:text-[18px] lg:text-[22px]'>
@@ -59,9 +61,15 @@ const CommonLocation = ({ data, destinations }: iProps) => {
             <Image
               // src={`https://ihotel.mn/${index.coverPhoto}`}
               src={
-                index.coverPhoto
-                  ? `${process.env.IMAGE_URL}${index.coverPhoto}`
-                  : '/samples/camp.png'
+                index.id === 1
+                  ? '/images/top100/ub_city.jpg'
+                  : index.id === 2
+                  ? '/images/top100/lakes.jpg'
+                  : index.id === 3
+                  ? '/images/top100/gobi.jpg'
+                  : index.id === 4
+                  ? '/images/top100/tal_hangai.jpg'
+                  : '/images/top100/rashaan.jpg'
               }
               alt='/commonLocs'
               fill={true}
@@ -69,8 +77,18 @@ const CommonLocation = ({ data, destinations }: iProps) => {
               quality={80}
               sizes='90vw'
               placeholder='blur'
-              blurDataURL={`"_next/image/?url=${index.coverPhoto}"`}
-              className='object-cover w-full h-auto duration-1000 hover:scale-110'
+              blurDataURL={`"_next/image/?url=${
+                index.id === 1
+                  ? '/images/top100/ub_city.jpg'
+                  : index.id === 2
+                  ? '/images/top100/lakes.jpg'
+                  : index.id === 3
+                  ? '/images/top100/gobi.jpg'
+                  : index.id === 4
+                  ? '/images/top100/tal_hangai.jpg'
+                  : '/images/top100/rashaan.jpg'
+              }"`}
+              className='h-auto w-full object-cover duration-1000 hover:scale-110'
             />
             <div className='absolute bottom-0 z-[1] flex h-[50px] w-full flex-col items-center justify-center gap-[2px] bg-black/50 md:h-[75px] md:gap-[4px]'>
               <h3 className='text-[16px] font-medium leading-[14px] md:text-[18px] md:leading-[18px]'>
@@ -124,7 +142,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
               pathname: '/search',
             }}
             key={i}
-            className='group relative h-[150px] w-full cursor-pointer overflow-hidden rounded-[10px] 2xs:h-[250px] sm:h-[200px]  md:h-[225px] md:rounded-[16px] lg:h-[250px] lg:rounded-[16px]'
+            className='group relative h-[150px] w-full cursor-pointer overflow-hidden rounded-[10px] shadow-[0px_0px_12px_4px_rgb(0,0,0,0.25)] 2xs:h-[250px]  sm:h-[200px] md:h-[225px] md:rounded-[16px] lg:h-[250px] lg:rounded-[16px]'
           >
             {/* 1-р хороолол$place$1 */}
             <Image
@@ -143,7 +161,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
                   : '/samples/camp.png'
               }
               sizes='(max-width: 576px) 50vw, (max-width: 768px) 40vw, 50vw'
-              className='object-fill w-full h-auto duration-500 group-hover:scale-110'
+              className='h-auto w-full object-fill duration-500 group-hover:scale-110'
             />
             <div className='absolute z-10 flex h-full w-full flex-col items-start justify-end gap-[4px] bg-gradient-to-t from-black/60 to-transparent px-[16px] py-[12px] lg:gap-[6px]'>
               <h3 className='text-[18px] font-medium leading-[18px] md:text-[20px] lg:text-[18px]'>

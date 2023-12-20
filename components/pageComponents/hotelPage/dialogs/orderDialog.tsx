@@ -6,19 +6,25 @@ interface Props {
   allRooms: roomData.room[];
   slug: string;
   handleScrollToRooms: (ver: string) => void;
+  totalPrice: number;
+  handleOrder: () => void;
+  orderLoading: boolean;
 }
 export default function OrderDialog({
   roomPrices,
   allRooms,
   slug,
   handleScrollToRooms,
+  totalPrice,
+  handleOrder,
+  orderLoading,
 }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const lang = searchParams.get('lang');
   const cart = searchParams.getAll('cart');
-  const dateFrom = searchParams.get('dateFrom');
-  const dateTo = searchParams.get('dateTo');
+  const checkIn = searchParams.get('checkIn');
+  const checkOut = searchParams.get('checkOut');
   const days = searchParams.get('days');
 
   const createQueryString = (name: string, index: number) => {
@@ -27,19 +33,6 @@ export default function OrderDialog({
     return params.toString();
   };
 
-  let totalPrice = 0;
-
-  if (cart && cart.length > 0) {
-    for (let i = 0; i < allRooms.length; i++) {
-      for (let j = 0; j < cart.length; j++) {
-        if (allRooms[i].id === parseInt(cart[j].split('$')[0])) {
-          totalPrice =
-            totalPrice +
-            allRooms[i].priceDayUse * parseInt(cart[j].split('$')[1]);
-        }
-      }
-    }
-  }
   const newDate = new Date();
   const nextDay = addDays(newDate, 1);
   const formattedDate = {
@@ -61,7 +54,7 @@ export default function OrderDialog({
     },
   };
   let displayDate = { mn: '', en: '', days: '' };
-  if (!dateFrom && !dateTo) {
+  if (!checkIn && !checkOut) {
     if (formattedDate.from.month === formattedDate.to.month) {
       displayDate = {
         mn: `${formattedDate.from.month}-р сар ${formattedDate.from.date}-${formattedDate.to.date}`,
@@ -86,22 +79,22 @@ export default function OrderDialog({
   } else {
     const mnDate = {
       from: {
-        month: dateFrom?.split('|')[0].split('/')[0],
-        date: dateFrom?.split('|')[0].split('/')[1],
+        month: checkIn?.split('|')[0].split('/')[0],
+        date: checkIn?.split('|')[0].split('/')[1],
       },
       to: {
-        month: dateTo?.split('|')[0].split('/')[0],
-        date: dateTo?.split('|')[0].split('/')[1],
+        month: checkOut?.split('|')[0].split('/')[0],
+        date: checkOut?.split('|')[0].split('/')[1],
       },
     };
     const enDate = {
       from: {
-        month: dateFrom?.split('|')[1]?.split('-')[0],
-        date: dateFrom?.split('|')[1]?.split('-')[1],
+        month: checkIn?.split('|')[1]?.split('-')[0],
+        date: checkIn?.split('|')[1]?.split('-')[1],
       },
       to: {
-        month: dateTo?.split('|')[1].split('-')[0],
-        date: dateTo?.split('|')[1].split('-')[1],
+        month: checkOut?.split('|')[1].split('-')[0],
+        date: checkOut?.split('|')[1].split('-')[1],
       },
     };
     if (mnDate.from.month === mnDate.to.month) {
@@ -148,7 +141,7 @@ export default function OrderDialog({
                 }`}
               >
                 <div className='flex w-full flex-col justify-between gap-[8px] font-medium'>
-                  <div className='flex items-end justify-between w-full'>
+                  <div className='flex w-full items-end justify-between'>
                     <h3 className='text-[20px] leading-[20px] text-main-text'>
                       {cart && index
                         ? allRooms.filter(
@@ -243,7 +236,7 @@ export default function OrderDialog({
           </h3>
         </div>
         {/* orderBtn */}
-        {cart.length < 1 ? (
+        {/* {cart.length < 1 ? (
           <div
             onClick={() => handleScrollToRooms('rooms')}
             className='rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]'
@@ -255,19 +248,37 @@ export default function OrderDialog({
             href={{
               query: {
                 slug: slug,
-                dateFrom: dateFrom,
-                dateTo: dateTo,
+                checkIn: checkIn,
+                checkOut: checkOut,
                 days: days,
                 cart: cart,
               },
               pathname: '/reservation',
             }}
-            target='blank'
+            target='_blank'
             className='rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]'
           >
             {lang === 'en' ? 'Order' : 'Захиалах'}
           </Link>
-        )}
+        )} */}
+        <div
+          onClick={() => {
+            if (!cart || cart.length === 0) {
+              handleScrollToRooms('rooms');
+            } else {
+              handleOrder();
+            }
+          }}
+          className={`rounded-full bg-main-online px-[18px] py-[12px]  ${
+            orderLoading === true
+              ? 'text-[12px]'
+              : 'text-[18px] 2xs:text-[20px]'
+          } font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px]  2xs:leading-[20px]`}
+        >
+          {orderLoading === true
+            ? `${lang === 'en' ? 'Loading...' : 'Уншиж байна...'}`
+            : `${lang === 'en' ? 'Order' : 'Захиалах'}`}
+        </div>
       </div>
     </div>
   );

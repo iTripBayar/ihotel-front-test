@@ -52,6 +52,7 @@ export default function InfoCollapse() {
         {/* Articles */}
         <Link
           href={`${process.env.TEMPORARY_URL}/posts`}
+          target='_blank'
           className='underline-0 group relative text-white'
         >
           {lang === 'en' ? 'Articles' : 'Мэдээ мэдээлэл'}

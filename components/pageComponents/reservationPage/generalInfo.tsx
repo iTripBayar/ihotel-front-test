@@ -12,6 +12,7 @@ interface Props {
   addressEn: string | null;
   phone: string | null;
   email: string | null;
+  displayDate: {from: string, fromEn: string, to: string, toEn: string}
 }
 
 export default function GeneralInfo({
@@ -22,29 +23,13 @@ export default function GeneralInfo({
   addressEn,
   phone,
   email,
+  displayDate,
 }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const dateFrom = searchParams.get('dateFrom');
-  const dateTo = searchParams.get('dateTo');
   const { isOpen, onToggle } = useDisclosure();
   const size = useWindowSize();
   const { dispatch } = useAppCtx();
-
-  const displayDate = {
-    from: `${dateFrom?.split('|')[0].split('/')[2]}-${dateFrom
-      ?.split('|')[0]
-      .split('/')[0]}-${dateFrom?.split('|')[0].split('/')[1]}`,
-    fromEn: `${dateFrom?.split('|')[1].split('-')[0]} ${dateFrom
-      ?.split('|')[1]
-      .split('-')[1]} ${dateFrom?.split('|')[1].split('-')[2]}`,
-    to: `${dateTo?.split('|')[0].split('/')[2]}-${dateFrom
-      ?.split('|')[0]
-      .split('/')[0]}-${dateFrom?.split('|')[0].split('/')[1]}`,
-    toEn: `${dateTo?.split('|')[1].split('-')[0]} ${dateFrom
-      ?.split('|')[1]
-      .split('-')[1]} ${dateFrom?.split('|')[1].split('-')[2]}`,
-  };
 
   return (
     <div className='flex w-full flex-col gap-[16px]'>
@@ -55,7 +40,7 @@ export default function GeneralInfo({
         {/* calendar */}
         <div className='flex w-full flex-col gap-[24px] lg:grid lg:grid-cols-6 lg:items-center'>
           <div className='flex w-full items-center justify-between gap-[20px] rounded-[20px] bg-white px-[16px] py-[12px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] 2xs:gap-[36px] lg:col-span-4 lg:px-0 lg:shadow-none'>
-            {/* dateFrom */}
+            {/* checkIn */}
             <div className='flex flex-col items-center justify-center gap-[4px] sm:gap-[8px] lg:items-start'>
               <p className='text-[12px] leading-[14px] text-sub-text/75 sm:text-[14px]'>
                 {lang === 'en' ? 'Check In' : 'Ирэх өдөр'}
@@ -81,13 +66,13 @@ export default function GeneralInfo({
                 />
               </svg>
             </div>
-            {/* dateTo */}
+            {/* checkOut */}
             <div className='flex flex-col items-center justify-center gap-[4px] sm:gap-[8px] lg:items-start'>
               <p className='text-[12px] leading-[14px] text-sub-text/75 sm:text-[14px]'>
                 {lang === 'en' ? 'Check Out' : 'Гарах өдөр'}
               </p>
               <h4 className='text-[18px] font-medium  leading-[20px] text-primary-blue sm:text-[20px]'>
-                {lang === 'en' ? displayDate.fromEn : displayDate.from}
+                {lang === 'en' ? displayDate.toEn : displayDate.to}
               </h4>
             </div>
           </div>
@@ -187,7 +172,7 @@ export default function GeneralInfo({
                       ? `"_next/image/?url=${image}"`
                       : '/samples/camp.png'
                   }
-                  className='absolute object-cover w-auto h-auto select-none'
+                  className='absolute h-auto w-auto select-none object-cover'
                   draggable={false}
                 />
               </div>
@@ -262,11 +247,11 @@ export default function GeneralInfo({
                     ? `"_next/image/?url=${image}"`
                     : '/samples/camp.png'
                 }
-                className='absolute object-cover w-auto h-auto select-none'
+                className='absolute h-auto w-auto select-none object-cover'
                 draggable={false}
               />
             </div>
-            <div className='flex flex-col justify-between w-full h-full col-span-2'>
+            <div className='col-span-2 flex h-full w-full flex-col justify-between'>
               <p className='relative text-justify indent-5 text-[14px] leading-[18px] text-sub-text/75'>
                 <svg
                   viewBox='0 0 13 13'

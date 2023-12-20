@@ -25,8 +25,8 @@ const SearchSection = ({
   const filter = searchParams.get('filter');
   const router = useRouter();
   const pathname = usePathname();
-  const dateFrom = searchParams.get('dateFrom');
-  const dateTo = searchParams.get('dateTo');
+  const checkIn = searchParams.get('checkIn');
+  const checkOut = searchParams.get('checkOut');
   const { dispatch } = useAppCtx();
 
   const [toggle, setToggle] = useState(false);
@@ -106,57 +106,57 @@ const SearchSection = ({
   const nextDay = addDays(newDate, 1);
   const formattedDate = {
     from: {
-      year: !dateFrom
+      year: !checkIn
         ? `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`
-        : dateFrom.split('|')[0].split('/')[2],
-      month: !dateFrom
+        : checkIn.split('|')[0].split('/')[2],
+      month: !checkIn
         ? `${format(newDate, 'yyyy-MM-dd').split('-')[1]}`
-        : dateFrom.split('|')[0].split('/')[0],
-      date: !dateFrom
+        : checkIn.split('|')[0].split('/')[0],
+      date: !checkIn
         ? `${format(newDate, 'yyyy-MM-dd').split('-')[2]}`
-        : dateFrom.split('|')[0].split('/')[1],
+        : checkIn.split('|')[0].split('/')[1],
     },
     fromEn: {
-      year: !dateFrom
+      year: !checkIn
         ? `${format(newDate, 'MMM-dd-yyyy').split('-')[2]}`
-        : dateFrom?.split('|')[1]?.split('-')[2],
-      month: !dateFrom
+        : checkIn?.split('|')[1]?.split('-')[2],
+      month: !checkIn
         ? `${format(newDate, 'MMM-dd-yyyy').split('-')[0]}`
-        : dateFrom?.split('|')[1]?.split('-')[0],
-      date: !dateFrom
+        : checkIn?.split('|')[1]?.split('-')[0],
+      date: !checkIn
         ? `${format(newDate, 'MMM-dd-yyyy').split('-')[1]}`
-        : dateFrom?.split('|')[1]?.split('-')[1],
+        : checkIn?.split('|')[1]?.split('-')[1],
     },
     to: {
-      year: !dateTo
+      year: !checkOut
         ? `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`
-        : dateTo.split('|')[0].split('/')[2],
-      month: !dateTo
+        : checkOut.split('|')[0].split('/')[2],
+      month: !checkOut
         ? `${format(nextDay, 'yyyy-MM-dd').split('-')[1]}`
-        : dateTo.split('|')[0].split('/')[0],
-      date: !dateTo
+        : checkOut.split('|')[0].split('/')[0],
+      date: !checkOut
         ? `${format(nextDay, 'yyyy-MM-dd').split('-')[2]}`
-        : dateTo.split('|')[0].split('/')[1],
+        : checkOut.split('|')[0].split('/')[1],
     },
     toEn: {
-      year: !dateTo
+      year: !checkOut
         ? `${format(nextDay, 'MMM-dd-yyyy').split('-')[2]}`
-        : dateTo.split('|')[1].split('-')[2],
-      month: !dateTo
+        : checkOut.split('|')[1].split('-')[2],
+      month: !checkOut
         ? `${format(nextDay, 'MMM-dd-yyyy').split('-')[0]}`
-        : dateTo.split('|')[1].split('-')[0],
-      date: !dateTo
+        : checkOut.split('|')[1].split('-')[0],
+      date: !checkOut
         ? `${format(nextDay, 'MMM-dd-yyyy').split('-')[1]}`
-        : dateTo.split('|')[1].split('-')[1],
+        : checkOut.split('|')[1].split('-')[1],
     },
   };
   useEffect(() => {
-    if (!dateFrom && !dateTo && ver === 'hotel') {
+    if (!checkIn && !checkOut && ver === 'hotel') {
       router.replace(
         `${pathname}?${createQueryString(
-          'dateFrom',
+          'checkIn',
           `${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year}|${formattedDate.fromEn.month}-${formattedDate.fromEn.date}-${formattedDate.fromEn.year}`,
-          'dateTo',
+          'checkOut',
           `${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}|${formattedDate.toEn.month}-${formattedDate.toEn.date}-${formattedDate.toEn.year}`,
           'days',
           '1',

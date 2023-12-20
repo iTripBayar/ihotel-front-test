@@ -114,7 +114,7 @@ export default function LogIn() {
           </ChakraProvider>
         </div>
       ) : null}
-      <div className='flex h-auto w-[calc(100%-32px)] flex-col max-w-[370px] justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:max-w-[400px]'>
+      <div className='flex h-auto w-[calc(100%-32px)] max-w-[370px] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:max-w-[400px]'>
         <div className='flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px] text-main-text'>
           {appState.logOrSign === 'log' ? (
             <p className='font-medium'>
@@ -156,13 +156,12 @@ export default function LogIn() {
             />
             <div className='relative text-sub-text'>
               <input
-                // type='password'
                 type={passwordVisible === true ? 'text' : 'password'}
                 name='password'
                 required
                 placeholder={lang === 'en' ? 'Password' : 'Нууц үг'}
                 minLength={8}
-                pattern='^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[\w@$!%*?&]{8,}$'
+                pattern='^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&()#])[\w@$!%*?&()#]{8,}$'
                 className='h-[34px] w-full rounded-[4px] border-black/[.15]'
               />
               <button
@@ -228,7 +227,7 @@ export default function LogIn() {
                   : '* И-мэйл эсвэл нууц үг буруу байна! *'}
               </p>
             ) : null}
-            <div className='flex items-center justify-between w-full'>
+            <div className='flex w-full items-center justify-between'>
               <div className='h-[1px] w-[33%] bg-black/[.15]'></div>
               <p className='text-[14px] font-medium uppercase text-black/[.25] sm:text-[16px]'>
                 {lang === 'en' ? 'Or' : 'Эсвэл'}
