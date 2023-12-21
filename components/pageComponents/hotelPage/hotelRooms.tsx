@@ -2,21 +2,18 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import RoomCard from './roomCard';
 import { addDays, format } from 'date-fns';
 import { useAppCtx } from '@/contexts/app';
+import Link from 'next/link';
 
 interface Props {
   data: roomData.room[] | undefined;
   handleScrollToRooms: (ver: string) => void;
   totalPrice: number;
-  handleOrder: () => void;
-  orderLoading: boolean
 }
 
 const HotelRooms = ({
   data,
   handleScrollToRooms,
   totalPrice,
-  handleOrder,
-  orderLoading,
 }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
@@ -193,8 +190,6 @@ const HotelRooms = ({
                 data={index}
                 key={i}
                 handleScrollToRooms={(ver: string) => handleScrollToRooms(ver)}
-                handleOrder={handleOrder}
-                orderLoading={orderLoading}
               />
             ))}
         </div>
@@ -331,7 +326,7 @@ const HotelRooms = ({
                   ))}
               </div>
             ) : null}
-            {/* {cart.length < 1 ? (
+            {cart.length < 1 ? (
               <div
                 onClick={() => handleScrollToRooms('rooms')}
                 className='flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white'
@@ -355,8 +350,8 @@ const HotelRooms = ({
               >
                 {lang === 'en' ? 'Order' : 'Захиалах'}
               </Link>
-            )} */}
-            <div
+            )}
+            {/* <div
               onClick={() => {
                 if (!cart || cart.length === 0) {
                   handleScrollToRooms('rooms');
@@ -371,7 +366,7 @@ const HotelRooms = ({
               {orderLoading === true
                 ? `${lang === 'en' ? 'Loading...' : 'Уншиж байна...'}`
                 : `${lang === 'en' ? 'Order' : 'Захиалах'}`}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

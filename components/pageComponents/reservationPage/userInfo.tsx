@@ -19,9 +19,17 @@ interface Props {
     phone: string;
     nationality: string;
   }) => void;
-  handleSubmit: ()=>void
+  handleSubmit: () => void;
+  orderLoading: boolean
 }
-export default function UserInfo({ ver, stat, clients, updateClients, handleSubmit }: Props) {
+export default function UserInfo({
+  ver,
+  stat,
+  clients,
+  updateClients,
+  handleSubmit,
+  orderLoading,
+}: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const [isChecked, setIsChecked] = useState(false);
@@ -29,8 +37,6 @@ export default function UserInfo({ ver, stat, clients, updateClients, handleSubm
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
-
-  const buttonDisabled = !isChecked;
 
   if (ver === 'mobile') {
     return (
@@ -41,8 +47,8 @@ export default function UserInfo({ ver, stat, clients, updateClients, handleSubm
         <form className='flex w-full flex-col gap-[16px]'>
           <input
             type='text'
-            id={`name${1}`}
-            name={`name${1}`}
+            id={`name`}
+            name={`name`}
             pattern='[A-Za-z]+'
             required
             onChange={(e) => {
@@ -55,13 +61,21 @@ export default function UserInfo({ ver, stat, clients, updateClients, handleSubm
               };
               updateClients(value);
             }}
+            onKeyDown={(e) => {
+              const regex = /^[A-Za-z]+$/;
+              const isValid = regex.test(e.key);
+
+              if (!isValid) {
+                e.preventDefault();
+              }
+            }}
             placeholder={lang === 'en' ? 'Given name' : 'Нэр'}
             className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
           />
           <input
             type='text'
-            id={`surName${1}`}
-            name={`surName${1}`}
+            id={`surName`}
+            name={`surName`}
             pattern='[A-Za-z]+'
             required
             onChange={(e) => {
@@ -74,14 +88,22 @@ export default function UserInfo({ ver, stat, clients, updateClients, handleSubm
               };
               updateClients(value);
             }}
+            onKeyDown={(e) => {
+              const regex = /^[A-Za-z]+$/;
+              const isValid = regex.test(e.key);
+
+              if (!isValid) {
+                e.preventDefault();
+              }
+            }}
             placeholder={lang === 'en' ? 'Family name' : 'Овог'}
             className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
           />
           <input
             type='text'
-            id={`email${1}`}
-            name={`email${1}`}
-            pattern='[A-Za-z]+'
+            id={`email`}
+            name={`email`}
+            pattern='[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
             required
             onChange={(e) => {
               const value = {
@@ -98,9 +120,9 @@ export default function UserInfo({ ver, stat, clients, updateClients, handleSubm
           />
           <input
             type='text'
-            id={`phone${1}`}
-            name={`phone${1}`}
-            pattern='[A-Za-z]+'
+            id={`phone`}
+            name={`phone`}
+            pattern='[0-9]+'
             required
             onChange={(e) => {
               const value = {
@@ -112,6 +134,13 @@ export default function UserInfo({ ver, stat, clients, updateClients, handleSubm
               };
               updateClients(value);
             }}
+            // onKeyDown={(e) => {
+            //   // Allow only numeric characters (0-9)
+            //   const isNumeric = /^[0-9]$/.test(e.key);
+            //   if (!isNumeric) {
+            //     e.preventDefault();
+            //   }
+            // }}
             placeholder={lang === 'en' ? 'Phone number' : 'Утасны дугаар'}
             className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
           />
@@ -166,8 +195,8 @@ export default function UserInfo({ ver, stat, clients, updateClients, handleSubm
         <form className='flex w-full flex-col gap-[16px]'>
           <input
             type='text'
-            id={`name${1}`}
-            name={`name${1}`}
+            id={`name`}
+            name={`name`}
             pattern='[A-Za-z]+'
             required
             onChange={(e) => {
@@ -180,13 +209,21 @@ export default function UserInfo({ ver, stat, clients, updateClients, handleSubm
               };
               updateClients(value);
             }}
+            onKeyDown={(e) => {
+              const regex = /^[A-Za-z]+$/;
+              const isValid = regex.test(e.key);
+
+              if (!isValid) {
+                e.preventDefault();
+              }
+            }}
             placeholder={lang === 'en' ? 'Given name' : 'Нэр'}
             className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
           />
           <input
             type='text'
-            id={`surName${1}`}
-            name={`surName${1}`}
+            id={`surName`}
+            name={`surName`}
             pattern='[A-Za-z]+'
             required
             onChange={(e) => {
@@ -199,14 +236,22 @@ export default function UserInfo({ ver, stat, clients, updateClients, handleSubm
               };
               updateClients(value);
             }}
+            onKeyDown={(e) => {
+              const regex = /^[A-Za-z]+$/;
+              const isValid = regex.test(e.key);
+
+              if (!isValid) {
+                e.preventDefault();
+              }
+            }}
             placeholder={lang === 'en' ? 'Family name' : 'Овог'}
             className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
           />
           <input
             type='text'
-            id={`email${1}`}
-            name={`email${1}`}
-            pattern='[A-Za-z]+'
+            id={`email`}
+            name={`email`}
+            pattern='[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
             required
             onChange={(e) => {
               const value = {
@@ -292,9 +337,24 @@ export default function UserInfo({ ver, stat, clients, updateClients, handleSubm
                 <input
                   type='checkBox'
                   name='termCheck'
-                  className='cursor-pointer border-black/[.25] focus:ring-0'
+                  className={`${
+                    clients.name === '' &&
+                    clients.surName === '' &&
+                    clients.email === '' &&
+                    clients.phone === '' &&
+                    clients.nationality === ''
+                      ? ' cursor-not-allowed'
+                      : 'cursor-pointer'
+                  } border-black/[.25] focus:ring-0`}
                   checked={isChecked}
                   onChange={handleCheckboxChange}
+                  disabled={
+                    clients.name === '' &&
+                    clients.surName === '' &&
+                    clients.email === '' &&
+                    clients.phone === '' &&
+                    clients.nationality === ''
+                  }
                 />
                 <label htmlFor='termCheck' className='cursor-pointer'>
                   {lang === 'en' ? (
@@ -310,34 +370,29 @@ export default function UserInfo({ ver, stat, clients, updateClients, handleSubm
                   )}
                 </label>
               </div>
-              <button onClick={handleSubmit}>test</button>
-              {!buttonDisabled ? (
-                <Link
-                  href={{
-                    pathname: '/payment',
-                  }}
-                  className={`flex w-full max-w-[375px] items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white sm:text-[18px]  ${
-                    buttonDisabled ? 'cursor-not-allowed opacity-50' : ''
-                  }`}
-                >
-                  {lang === 'en' ? 'Proceed to payment' : 'Төлбөр төлөх'}
-                </Link>
-              ) : (
-                <button
-                  className={`flex w-full max-w-[375px] cursor-not-allowed items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white opacity-50 sm:text-[18px]`}
-                  disabled={true}
-                >
-                  {lang === 'en' ? 'Proceed to payment' : 'Төлбөр төлөх'}
-                </button>
-              )}
+              <button
+                className={`flex w-full max-w-[375px] items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white ${
+                  orderLoading === true ? 'sm:text-[12px]' : 'sm:text-[18px]'
+                } ${
+                  orderLoading === true || isChecked === false
+                    ? 'cursor-not-allowed opacity-50'
+                    : ''
+                }`}
+                onClick={handleSubmit}
+                disabled={orderLoading === true || isChecked === false}
+              >
+                {orderLoading === true
+                  ? `${lang === 'en' ? 'Loading...' : 'Уншиж байна...'}`
+                  : `${lang === 'en' ? 'Proceed to payment' : 'Төлбөр төлөх'}`}
+              </button>
             </div>
           </div>
         ) : (
           <button
-            className={`flex w-full max-w-[375px] items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white sm:text-[18px]${
-              buttonDisabled ? 'cursor-not-allowed opacity-50' : ''
+            className={`flex w-full max-w-[375px] items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white sm:text-[18px] ${
+              isChecked ? 'cursor-not-allowed opacity-50' : ''
             }`}
-            disabled={buttonDisabled}
+            disabled={isChecked === false}
           >
             {lang === 'en' ? 'Send order request' : 'Захиалах хүсэлт илгээх'}
           </button>

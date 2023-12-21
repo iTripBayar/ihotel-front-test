@@ -11,15 +11,11 @@ import { Pagination } from 'swiper/modules';
 interface Props {
   data: roomData.room;
   handleScrollToRooms: (ver: string) => void;
-  handleOrder: () => void;
-  orderLoading: boolean
 }
 
 const RoomCard = ({
   data,
   handleScrollToRooms,
-  handleOrder,
-  orderLoading,
 }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
@@ -386,7 +382,7 @@ const RoomCard = ({
             {lang === 'en' ? 'Add to cart' : 'Сангсанд нэмэх'}
           </div>
         </div>
-        {/* {cart.length < 1 ? (
+        {cart.length < 1 ? (
           <div
             onClick={() => handleScrollToRooms('rooms')}
             className='flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white'
@@ -410,8 +406,8 @@ const RoomCard = ({
           >
             {lang === 'en' ? 'Order' : 'Захиалах'}
           </Link>
-        )} */}
-        <div
+        )}
+        {/* <div
           onClick={() => {
             if (!cart || cart.length === 0) {
               handleScrollToRooms('rooms');
@@ -426,8 +422,7 @@ const RoomCard = ({
           {orderLoading === true
             ? `${lang === 'en' ? 'Loading...' : 'Уншиж байна...'}`
             : `${lang === 'en' ? 'Order' : 'Захиалах'}`}
-        </div>
-        {/* handleOrder */}
+        </div> */}
       </div>
     </div>
   );

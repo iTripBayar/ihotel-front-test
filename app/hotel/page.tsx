@@ -2,7 +2,7 @@
 import HeaderVariants from '@/components/common/headerVariants';
 import HotelImages from '@/components/pageComponents/hotelPage/hotelImages';
 import { useRequest } from 'ahooks';
-import { fetchDataHotel, fetchOrderSession } from '@/utils';
+import { fetchDataHotel} from '@/utils';
 import HotelInfo from '@/components/pageComponents/hotelPage/hotelInfo';
 import Amenity from '@/components/pageComponents/hotelPage/amenity';
 import Review from '@/components/pageComponents/hotelPage/review';
@@ -16,9 +16,9 @@ import HotelCard from '@/components/common/hotelCard';
 import Footer from '@/components/common/footer';
 import Dialogs from '@/components/pageComponents/hotelPage/dialogs';
 import CalendarDialog from '@/components/pageComponents/hotelPage/dialogs/calendarDialog';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import CartAlert from '@/components/pageComponents/hotelPage/cartAlert';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
@@ -29,12 +29,10 @@ const ErrorComponent = dynamic(() => import('@/components/common/404'));
 
 const HotelPage = () => {
   const searchParams = useSearchParams();
-  const router = useRouter()
   const slug = searchParams.get('slug');
   const lang = searchParams.get('lang');
   const checkIn = searchParams.get('checkIn');
   const checkOut = searchParams.get('checkOut');
-  const days = searchParams.get('days');
   const cart = searchParams.getAll('cart');
 
   const { appState } = useAppCtx();
@@ -51,133 +49,6 @@ const HotelPage = () => {
       });
     return fetchDataHotel({ slug: '', checkIn: '', checkOut: '' });
   });
-
-  let orderingRooms: {
-    "startdate": string;
-    "enddate": string;
-    "hotel_id": string;
-    "room_id": string;
-    "room_number": string;
-    "person_number": string; //Зарим өрөөнүүд хүнээр захиалга үүсгэдэг. Энэ үед room_number 0 person_person хүний тоо байна
-    "room_price": string;
-    "room_type": string; // Нээх хамаагүй
-    "room_name": string;
-    "total_price": string;
-    "by_person": string;
-  }[] = [];
-
-  const {
-    data: orderSessionData,
-    loading: orderLoading,
-    error: orderError,
-    run: runOrder,
-  } = useRequest(
-    () => {
-      return fetchOrderSession({
-        hotelId: data?.hotel.id ? `${data.hotel.id}` : '',
-        startDate: checkIn
-          ? `${checkIn?.split('|')[0].split('/')[2]}-${checkIn
-              ?.split('|')[0]
-              .split('/')[0]}-${checkIn?.split('|')[0].split('/')[1]}`
-          : '',
-        endDate: checkOut
-          ? `${checkOut?.split('|')[0].split('/')[2]}-${checkOut
-              ?.split('|')[0]
-              .split('/')[0]}-${checkOut?.split('|')[0].split('/')[1]}`
-          : '',
-        roomData: orderingRooms,
-      });
-    },
-    { manual: true, onSuccess:((result)=>{if(result.success === true){
-       router.replace(
-         `/reservation?slug=${slug}&checkIn=${checkIn}&checkOut=${checkOut}&days=${days}&cart=${cart}`,
-       );
-    }}) },
-  );
-
-  const handleOrder = () => {
-    if (cart && cart.length > 0) {
-      for (let i = 0; i < cart.length; i++) {
-        orderingRooms.push({
-          "startdate": checkIn
-            ? `${checkIn?.split('|')[0].split('/')[2]}-${checkIn
-                ?.split('|')[0]
-                .split('/')[0]}-${checkIn?.split('|')[0].split('/')[1]}`
-            : '',
-          "enddate": checkOut
-            ? `${checkOut?.split('|')[0].split('/')[2]}-${checkOut
-                ?.split('|')[0]
-                .split('/')[0]}-${checkOut?.split('|')[0].split('/')[1]}`
-            : '',
-          "hotel_id": data?.hotel.id ? `${data?.hotel.id}` : '',
-          "room_id": cart[i].split('$')[0],
-          "room_number": cart[i].split('$')[1],
-          "person_number": '', //Зарим өрөөнүүд хүнээр захиалга үүсгэдэг. Энэ үед room_number 0 person_person хүний тоо байна
-
-          "room_price": data?.rooms.filter(
-            (index) => index.id === parseInt(cart[i].split('$')[0]),
-          )[0]
-            ? data?.rooms
-                .filter(
-                  (index) => index.id === parseInt(cart[i].split('$')[0]),
-                )[0]
-                .priceDayUse.toString()
-            : '',
-          "room_type": data?.rooms.filter(
-            (index) => index.id === parseInt(cart[i].split('$')[0]),
-          )[0]
-            ? data?.rooms
-                .filter(
-                  (index) => index.id === parseInt(cart[i].split('$')[0]),
-                )[0]
-                .bedTypeId.toString()
-            : '', // Нээх хамаагүй
-          "room_name": data?.rooms.filter(
-            (index) => index.id === parseInt(cart[i].split('$')[0]),
-          )[0].name
-            ? data?.rooms.filter(
-                (index) => index.id === parseInt(cart[i].split('$')[0]),
-              )[0].name
-            : '',
-          "total_price": `${
-            data?.rooms.filter(
-              (index) => index.id === parseInt(cart[i].split('$')[0]),
-            )[0].priceDayUse && days
-              ? data?.rooms.filter(
-                  (index) => index.id === parseInt(cart[i].split('$')[0]),
-                )[0].priceDayUse *
-                parseInt(cart[i].split('$')[1]) *
-                parseInt(days)
-              : ''
-          }`,
-          "by_person": '',
-        });
-      }
-    }
-    runOrder();
-  };
-
-  // useEffect(() => {
-  //   if(orderSessionData.success === true){
-  //     router.push(
-  //       `/reservation?slug=${slug}&checkIn=${checkIn}&checkOut=${checkOut}&days=${days}&cart=${cart}`,
-  //     );
-  //   }
-  //   // router.push(`${pathname}?${createQueryString('lang', nextLang)}`
-  // }, [orderSessionData && !orderError]);
-
-  // href={{
-  //                 query: {
-  //                   slug: slug,
-  //                   checkIn: checkIn,
-  //                   checkOut: checkOut,
-  //                   days: days,
-  //                   cart: cart,
-  //                 },
-  //                 pathname: '/reservation',
-  //               }}
-
-  console.log(orderSessionData, orderLoading, orderError);
 
   let stat = '';
   if (data?.hotel.isOnline == 1 && data?.hotel.isOffline == 0) {
@@ -261,8 +132,6 @@ const HotelPage = () => {
     }
   }
 
-  console.log(data);
-
   if (!error)
     return (
       <main className='relative'>
@@ -294,8 +163,6 @@ const HotelPage = () => {
           slug={slug ? slug : ''}
           handleScrollToRooms={(ver: string) => handleScrollTo(ver)}
           totalPrice={totalPrice}
-          handleOrder={handleOrder}
-          orderLoading={orderLoading}
         />
         {appState.biggerImage.length > 0 ? <ImagesDialog /> : null}
         {loading ? (
@@ -457,8 +324,6 @@ const HotelPage = () => {
                 data={data?.rooms}
                 handleScrollToRooms={(ver: string) => handleScrollTo(ver)}
                 totalPrice={totalPrice}
-                handleOrder={handleOrder}
-                orderLoading={orderLoading}
               />
             </div>
             <Description

@@ -44,7 +44,6 @@ const News = ({ data }: iProps) => {
           {data.map((index) => (
             <Link
               href={{ pathname: `${process.env.WEB_URL}/ihotel/post/${index.slug}` }}
-              target='_blank'
               key={index.id}
               className='flex w-full flex-col justify-start gap-[8px] overflow-hidden rounded-[20px] pb-[8px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]'
             >

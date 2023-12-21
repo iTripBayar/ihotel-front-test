@@ -7,8 +7,6 @@ interface Props {
   slug: string;
   handleScrollToRooms: (ver: string) => void;
   totalPrice: number;
-  handleOrder: () => void;
-  orderLoading: boolean;
 }
 export default function OrderDialog({
   roomPrices,
@@ -16,8 +14,6 @@ export default function OrderDialog({
   slug,
   handleScrollToRooms,
   totalPrice,
-  handleOrder,
-  orderLoading,
 }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -236,7 +232,7 @@ export default function OrderDialog({
           </h3>
         </div>
         {/* orderBtn */}
-        {/* {cart.length < 1 ? (
+        {cart.length < 1 ? (
           <div
             onClick={() => handleScrollToRooms('rooms')}
             className='rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]'
@@ -260,8 +256,8 @@ export default function OrderDialog({
           >
             {lang === 'en' ? 'Order' : 'Захиалах'}
           </Link>
-        )} */}
-        <div
+        )}
+        {/* <div
           onClick={() => {
             if (!cart || cart.length === 0) {
               handleScrollToRooms('rooms');
@@ -278,7 +274,7 @@ export default function OrderDialog({
           {orderLoading === true
             ? `${lang === 'en' ? 'Loading...' : 'Уншиж байна...'}`
             : `${lang === 'en' ? 'Order' : 'Захиалах'}`}
-        </div>
+        </div> */}
       </div>
     </div>
   );

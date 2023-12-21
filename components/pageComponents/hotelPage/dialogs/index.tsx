@@ -11,8 +11,6 @@ interface Props {
   slug: string;
   handleScrollToRooms: (ver: string) => void;
   totalPrice: number;
-  handleOrder: () => void;
-  orderLoading: boolean;
 }
 
 export default function Dialogs({
@@ -22,8 +20,6 @@ export default function Dialogs({
   slug,
   handleScrollToRooms,
   totalPrice,
-  handleOrder,
-  orderLoading,
 }: Props) {
   const searchParams = useSearchParams();
   const roomSelect = searchParams.get('roomSelect');
@@ -52,8 +48,6 @@ export default function Dialogs({
             slug={slug}
             handleScrollToRooms={(ver: string) => handleScrollToRooms(ver)}
             totalPrice={totalPrice}
-            handleOrder={handleOrder}
-            orderLoading={orderLoading}
           />
         ) : null
       ) : null}

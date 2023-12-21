@@ -52,6 +52,7 @@ export default function ServiceCollapse() {
         {/* Room management system */}
         <Link
           href={`${process.env.TEMPORARY_URL1}`}
+          target='_blank'
           className='underline-0 group relative text-white'
         >
           {lang === 'en'
