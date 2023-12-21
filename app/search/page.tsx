@@ -15,6 +15,8 @@ import SignUp from '@/components/common/signIn/signUp';
 import { useSearchParams } from 'next/navigation';
 import { addDays, format } from 'date-fns';
 import dynamic from 'next/dynamic';
+import { useEffect } from 'react';
+import useWindowSize from '@/hooks/windowSize';
 const ErrorComponent = dynamic(() => import('@/components/common/404'));
 
 const SearchPage = () => {
@@ -27,6 +29,8 @@ const SearchPage = () => {
   const services = searchParams.get('services');
   const lat = searchParams.get('lat');
   const lng = searchParams.get('lng');
+  const { appState, dispatch } = useAppCtx();
+  const size = useWindowSize()
 
   const newDate = new Date();
   const nextDay = addDays(newDate, 1);
@@ -40,7 +44,20 @@ const SearchPage = () => {
   const { data: searchData } = useRequest(() => {
     return fetchDataSearch();
   });
-
+  useEffect(() => {
+    if (size.width && size.width >= 1024) {
+      dispatch({
+        type: 'CHANGE_APP_STATE',
+        payload: { map: 'open' },
+      });
+    } else {
+      dispatch({
+        type: 'CHANGE_APP_STATE',
+        payload: { map: '' },
+      });
+    }
+    return;
+  }, [size.width]);
   const { data, loading, error } = useRequest(
     () => {
       return fetchCheckHotel({
@@ -53,26 +70,20 @@ const SearchPage = () => {
         page: page !== null ? page : '1',
         prices:
           min && max
-            ? encodeURIComponent(
-                `["[${parseInt(min)}${
-                  max !== '0' ? `, ${parseInt(max)}` : ''
-                }]"]`,
-              )
+            ? encodeURIComponent(`["[${min}${max !== '0' ? `,${max}` : ''}]"]`)
             : '',
         filterstar: '',
         rating1: '',
         rating2: '',
-        hotelServices: services ? encodeURI(`[${services}]`) : '',
+        hotelServices: services ? encodeURIComponent(`[${services}]`) : '',
+        // hotelServices: services ? encodeURI(`[${services}]`) : '',
         roomServices: '',
         categories: category ? encodeURIComponent(`["${category}"]`) : '',
       });
     },
     { refreshDeps: [searchParams] },
   );
-  console.log(data);
 
-
-  const { appState } = useAppCtx();
   if (!error)
     return (
       <main
@@ -137,12 +148,12 @@ const SearchPage = () => {
             className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
           >
             <SearchCards data={data ? data.data : []} />
-            <MapContainer
+            {appState.map === 'open' ? <MapContainer
               data={data ? data.data : []}
               zoom={lat && lng ? 8 : 12}
               lat={lat ? parseInt(lat) : searchData?.mapCenter.lat}
               lng={lng ? parseInt(lng) : searchData?.mapCenter.lng}
-            />
+            /> : null}
           </div>
         ) : null}
       </main>

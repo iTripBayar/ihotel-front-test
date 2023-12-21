@@ -9,7 +9,7 @@ declare namespace SearchData {
     city: number | null;
     h: number | null;
     hotel: number | null;
-    hotelServices: [];
+    hotelServices: HotelServices[];
     isClosed: number | null;
     mapCenter: { lat: number; lng: number };
     maxprice: number;
@@ -62,5 +62,20 @@ declare namespace SearchData {
     slug: string;
     thumbnail: string;
     updatedAt: string;
+  }
+  interface HotelServices {
+    createdAt: string | null;
+    facilityCategoryId: number;
+    icon: string | null;
+    id: number;
+    image: string | null;
+    isDefault: number;
+    isFilter: number;
+    isMost: number;
+    mobileIcon: string | null;
+    name: string;
+    nameEn: string | null;
+    syncId: number;
+    updatedAt: string | null;
   }
 }

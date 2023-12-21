@@ -1,5 +1,6 @@
 import { Collapse, useDisclosure, Button } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 interface Props {
   iconRotateDuration: number;
@@ -12,6 +13,7 @@ export default function CategoryFilter({ iconRotateDuration, data, value, change
   const { isOpen, onToggle } = useDisclosure();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const category = searchParams.get('category');
 
   if(ver === 'web') return (
     <div className="flex h-full w-full flex-col items-center justify-start gap-[12px]">
@@ -19,14 +21,14 @@ export default function CategoryFilter({ iconRotateDuration, data, value, change
         {lang === 'en' ? 'Categories' : 'Төрөл'}
       </p>
       <div className="grid w-full grid-cols-2 gap-[8px] text-[15px] text-sub-text">
-        {data.map((index) => (
+        {data.map((index, i) => (
           <div
             onClick={() => changeValue(index)}
-            key={index.id}
+            key={i}
             className="flex w-full items-center gap-[8px]"
           >
             <input
-              id={`${index.id}`}
+              id={`cat${index.id}`}
               type="checkbox"
               readOnly
               value={index.name}
@@ -45,6 +47,7 @@ export default function CategoryFilter({ iconRotateDuration, data, value, change
       </div>
     </div>
   );
+  useEffect(()=>{if(category){onToggle()}},[category])
   return (
     <div className="flex h-auto w-full flex-col rounded-[20px] px-[20px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)]">
       <Button
@@ -79,27 +82,14 @@ export default function CategoryFilter({ iconRotateDuration, data, value, change
           isOpen === true ? '!mt-[8px] !pb-[16px] sm:pb-[20px]' : 'h-0'
         }`}
       >
-        {data.map((index) => (
+        {data.map((index, i) => (
           <div
-            // onClick={() => {
-            //   router.replace(
-            //     `/search/?${createAdditionalQueryString(
-            //       'null',
-            //       null,
-            //       'catVal',
-            //       index.name,
-            //       'null',
-            //       null,
-            //     )}`,
-            //     { scroll: false },
-            //   );
-            // }}
             onClick={()=>changeValue(index)}
-            key={index.id}
+            key={i}
             className="flex w-full items-center gap-[8px]"
           >
             <input
-              id={`${index.id}`}
+              id={`cat${index.id}`}
               type="checkbox"
               readOnly
               value={index.name}

@@ -44,8 +44,6 @@ const CommonLocation = ({ data, destinations }: iProps) => {
     // afterChange: (current: number) => setActive({ current }),
   };
 
-  console.log(data);
-
   return (
     <div className='flex w-full flex-col gap-[20px]'>
       <h3 className='mb-[-10px] self-center text-[16px] font-medium md:text-[18px] lg:text-[22px]'>

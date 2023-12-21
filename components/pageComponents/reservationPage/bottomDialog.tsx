@@ -1,7 +1,5 @@
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { useAppCtx } from '@/contexts/app';
-import Link from 'next/link';
 
 interface Props {
   stat: string;
@@ -62,26 +60,6 @@ export default function BottomDialog({ stat, handleSubmit, orderLoading, clients
           )}
         </label>
       </div>
-      {/* {!buttonDisabled && appState.paymentMethod !== '' ? (
-        <Link
-          href={{
-            query: { method: appState.paymentMethod },
-            pathname: '/payment',
-          }}
-          className={`flex w-full max-w-[375px] items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white sm:text-[18px]  ${
-            buttonDisabled ? 'cursor-not-allowed opacity-50' : ''
-          }`}
-        >
-          {lang === 'en' ? 'Proceed to payment' : 'Төлбөр төлөх'}
-        </Link>
-      ) : (
-        <button
-          className={`flex w-full max-w-[375px] cursor-not-allowed items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white opacity-50 sm:text-[18px]`}
-          disabled={true}
-        >
-          {lang === 'en' ? 'Proceed to payment' : 'Төлбөр төлөх'}
-        </button>
-      )} */}
       <button
         className={`flex w-full max-w-[375px] items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white ${
           orderLoading === true ? 'sm:text-[12px]' : 'sm:text-[18px]'
@@ -97,19 +75,6 @@ export default function BottomDialog({ stat, handleSubmit, orderLoading, clients
           ? `${lang === 'en' ? 'Loading...' : 'Уншиж байна...'}`
           : `${lang === 'en' ? 'Proceed to payment' : 'Төлбөр төлөх'}`}
       </button>
-      {/* <button
-        className={`flex w-full max-w-[375px] items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white sm:text-[18px] ${
-          buttonDisabled ? 'cursor-not-allowed opacity-50' : ''
-        }`}
-        disabled={buttonDisabled}
-      >
-        {stat === 'pending'
-          ? lang === 'en'
-            ? 'Send order request'
-            : 'Захиалах хүсэлт илгээх'
-          : null}
-        {stat === 'online' ? (lang === 'en' ? 'Order' : 'Захиалах') : null}
-      </button> */}
     </div>
   );
 }

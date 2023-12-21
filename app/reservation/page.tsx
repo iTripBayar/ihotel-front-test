@@ -19,7 +19,7 @@ import { CircularProgress, ChakraProvider } from '@chakra-ui/react';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
 import dynamic from 'next/dynamic';
-import {useState } from 'react';
+import { useEffect, useState } from 'react';
 const ErrorComponent = dynamic(() => import('@/components/common/404'));
 
 const ReservationPage = () => {
@@ -68,7 +68,7 @@ const ReservationPage = () => {
     return fetchDataHotel({ slug: '', checkIn: '', checkOut: '' });
   });
 
-  let orderingRooms: {
+  const orderingRooms: {
     startdate: string;
     enddate: string;
     hotel_id: string;
@@ -133,14 +133,8 @@ const ReservationPage = () => {
       by_person: '',
     });
   }
-  console.log(orderingRooms);
 
-  const {
-    data: orderData,
-    loading: orderLoading,
-    error: orderError,
-    run: runCreateOrder,
-  } = useRequest(
+  const { loading: orderLoading, run: runCreateOrder } = useRequest(
     () => {
       return fetchCreateOrder({
         name: clients.name,
@@ -165,12 +159,19 @@ const ReservationPage = () => {
           : '',
       });
     },
-    { manual: true, onSuccess: (result)=>{if(result.orderId && result?.token){
-      router.push(`/payment?id=${result.orderId}&tkn=${result.token}`)
-    }}},
+    {
+      manual: true,
+      onSuccess: (result) => {
+        if (result.orderId && result?.token) {
+          router.push(`/payment?id=${result.orderId}&tkn=${result.token}`);
+        }
+      },
+    },
   );
 
-  const handleSubmit = () => {runCreateOrder();};
+  const handleSubmit = () => {
+    runCreateOrder();
+  };
 
   let stat = '';
   if (data?.hotel.isOnline == 1 && data?.hotel.isOffline == 0) {

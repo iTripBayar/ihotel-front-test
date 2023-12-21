@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 const Footer = () => {
   return (
-    <div className='relative z-[999] flex w-full flex-col bg-footer px-[32px] pt-[32px] text-[14px] text-white sm:px-[42px] md:px-[50px] lg:px-[125px] xl:px-[150px] 2xl:px-[200px]'>
+    <div className='relative z-[500] flex w-full flex-col bg-footer px-[32px] pt-[32px] text-[14px] text-white sm:px-[42px] md:px-[50px] lg:px-[125px] xl:px-[150px] 2xl:px-[200px]'>
       <div className=' md:flex md:flex-row-reverse md:justify-between md:gap-[32px]'>
         <div className='md:grid md:w-[70%] md:grid-cols-2 md:justify-between md:pl-[32px]'>
           <AboutCollapse />

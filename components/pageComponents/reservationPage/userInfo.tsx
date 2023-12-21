@@ -1,6 +1,5 @@
 import { useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
-import Link from 'next/link';
+import { useState } from 'react';
 
 interface Props {
   ver: string;
@@ -33,6 +32,7 @@ export default function UserInfo({
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const [isChecked, setIsChecked] = useState(false);
+  const [additionalClients, setAdditionalClients] = useState<{name: string, surName: string, email: string, phone: string, nationality: string}[]>();
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -124,6 +124,14 @@ export default function UserInfo({
             name={`phone`}
             pattern='[0-9]+'
             required
+            onKeyDown={(e) => {
+              // Allow only numeric characters (0-9)
+              const isNumericOrBackspace =
+                /^[0-9]$/.test(e.key) || e.key === 'Backspace' || e.key ==='Tab';
+              if (!isNumericOrBackspace) {
+                e.preventDefault();
+              }
+            }}
             onChange={(e) => {
               const value = {
                 name: clients.name,
@@ -134,13 +142,6 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
-            // onKeyDown={(e) => {
-            //   // Allow only numeric characters (0-9)
-            //   const isNumeric = /^[0-9]$/.test(e.key);
-            //   if (!isNumeric) {
-            //     e.preventDefault();
-            //   }
-            // }}
             placeholder={lang === 'en' ? 'Phone number' : 'Утасны дугаар'}
             className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
           />
@@ -163,26 +164,6 @@ export default function UserInfo({
             placeholder={lang === 'en' ? 'Nationality' : 'Иргэншил'}
             className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
           />
-          {/* {clients.length === 1 ? (
-            <div className={`flex w-full items-center justify-end gap-[3px]`}>
-              <button
-                className='flex items-center gap-[3px] sm:gap-[6px]'
-                onClick={() =>
-                  addClients()
-                }
-              >
-                <div className='relative h-[16px] w-[16px]'>
-                  <div className='absolute left-[50%] top-[50%] h-[2px] w-[10px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue sm:h-[2px] sm:w-[14px]'></div>
-                  <div className='absolute left-[50%] top-[50%] h-[10px] w-[2px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue sm:h-[14px] sm:w-[2px]'></div>
-                </div>
-                <p className='text-[11px] font-medium leading-[14px] text-primary-blue 2xs:text-[13px] sm:text-[14px]'>
-                  {lang === 'en'
-                    ? `Add another client's info`
-                    : 'Нэмэлт зочны мэдээлэл нэмэх'}
-                </p>
-              </button>
-            </div>
-          ) : null} */}
         </form>
       </div>
     );
@@ -268,10 +249,18 @@ export default function UserInfo({
           />
           <input
             type='text'
-            id={`phone${1}`}
-            name={`phone${1}`}
-            pattern='[A-Za-z]+'
+            id={`phone`}
+            name={`phone`}
+            pattern='[0-9]+'
             required
+            onKeyDown={(e) => {
+              // Allow only numeric characters (0-9)
+              const isNumericOrBackspace =
+                /^[0-9]$/.test(e.key) || e.key === 'Backspace';
+              if (!isNumericOrBackspace) {
+                e.preventDefault();
+              }
+            }}
             onChange={(e) => {
               const value = {
                 name: clients.name,
@@ -304,26 +293,6 @@ export default function UserInfo({
             placeholder={lang === 'en' ? 'Nationality' : 'Иргэншил'}
             className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
           />
-          {/* {clients.length === 1 ? (
-            <div className={`flex w-full items-center justify-end gap-[3px]`}>
-              <button
-                className='flex items-center gap-[3px] sm:gap-[6px]'
-                onClick={() =>
-                  addClients()
-                }
-              >
-                <div className='relative h-[16px] w-[16px]'>
-                  <div className='absolute left-[50%] top-[50%] h-[2px] w-[10px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue sm:h-[2px] sm:w-[14px]'></div>
-                  <div className='absolute left-[50%] top-[50%] h-[10px] w-[2px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue sm:h-[14px] sm:w-[2px]'></div>
-                </div>
-                <p className='text-[11px] font-medium leading-[14px] text-primary-blue 2xs:text-[13px] sm:text-[14px]'>
-                  {lang === 'en'
-                    ? `Add another client's info`
-                    : 'Нэмэлт зочны мэдээлэл нэмэх'}
-                </p>
-              </button>
-            </div>
-          ) : null} */}
         </form>
         <div className='w-full rounded-[8px] border border-primary-blue/50 px-[20px] py-[12px] text-[12px] font-medium leading-[20px] text-primary-blue 2xs:text-[14px]'>
           {lang === 'en'

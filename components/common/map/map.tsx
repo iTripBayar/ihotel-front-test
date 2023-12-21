@@ -37,20 +37,7 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
     }
     return params.toString();
   };
-  useEffect(() => {
-    if (size.width && size.width >= 1024) {
-      dispatch({
-        type: 'CHANGE_APP_STATE',
-        payload: { map: 'open' },
-      });
-    } else {
-      dispatch({
-        type: 'CHANGE_APP_STATE',
-        payload: { map: '' },
-      });
-    }
-    return;
-  }, [size.width]);
+  
 
   const [selectedHotel, setSelectedHotel] = useState<{
     lat: number | null;
@@ -60,29 +47,6 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
     lng: null,
   });
 
-  const defaultMarkers = [
-    {
-      key: 0,
-      lng: 106.91758135480454,
-      lat: 47.91882489533373,
-      name: 'Сүхбаатарын талбай',
-      price: 10000,
-    },
-    {
-      key: 1,
-      lng: 106.92172595198987,
-      lat: 47.909895527948485,
-      name: 'Парк',
-      price: 20000,
-    },
-    {
-      key: 2,
-      lng: 106.90632030754686,
-      lat: 47.916690111044325,
-      name: 'Их дэлгүүр',
-      price: 30000,
-    },
-  ];
 
   const cardData = [...data].filter(
     (index) =>
@@ -98,21 +62,10 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
     zoom: zoom,
   });
   const mapRef = useRef<any>(null);
-  // const mapRef = useRef<React.RefObject<ReactMapGL | null>>(null);
   const markerRef = useRef<any>();
   const samplePrice = 70000;
 
-  const points =
-    data.length === 0
-      ? defaultMarkers.map((data) => ({
-          type: 'Sample',
-          properties: { cluster: false, pointId: data.key, price: data.price },
-          geometry: {
-            type: 'samplePoint',
-            coordinates: [data.lng, data.lat],
-          },
-        }))
-      : [
+  const points =[
           ...data.map((data) => ({
             type: 'Feature',
             properties: {
@@ -208,9 +161,6 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
           zoom: viewPort.zoom,
         }}
         ref={mapRef}
-        // ref={(map) => setMapRef(map)}
-        // onLoad={(map) => map.target.resize()}
-        // onLoad={(map) => handleResize(map)}
         onRender={(map) => {
           map.target.resize();
         }}

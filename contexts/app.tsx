@@ -1,4 +1,8 @@
 import { createContext, useContext, useReducer } from 'react';
+import { addDays, format } from 'date-fns';
+
+const newDate = new Date();
+const nextDay = addDays(newDate, 1);
 
 export type AppCtxState = {
   phone: string;
@@ -13,6 +17,7 @@ export type AppCtxState = {
   biggerImage: string[];
   userToken: string
   paymentMethod: string;
+  date: {from: string, fromEn: string, to: string, toEn: string}
 };
 
 type Action =
@@ -37,7 +42,8 @@ const defaultValue: AppCtxProps = {
     calendar: '',
     biggerImage: [],
     userToken: '',
-    paymentMethod: ''
+    paymentMethod: '',
+    date: {from: '', fromEn: '', to: '', toEn: ''}
   },
   dispatch: () => {
     /**/

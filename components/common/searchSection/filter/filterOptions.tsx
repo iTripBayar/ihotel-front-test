@@ -7,7 +7,7 @@ import { useAppCtx } from '@/contexts/app';
 
 interface Props {
   categories: SearchData.Categories[];
-  services: any[];
+  services: SearchData.HotelServices[];
 }
 
 const FilterOptions = ({ categories, services }: Props) => {
@@ -16,14 +16,37 @@ const FilterOptions = ({ categories, services }: Props) => {
   const lang = searchParams.get('lang');
   const router = useRouter();
   const { appState, dispatch } = useAppCtx();
+  const filterServices = searchParams.get('services');
+  const category = searchParams.get('category');
+  const min = searchParams.get('min');
+  const max = searchParams.get('max');
 
-  const [cat, setCat] = useState<SearchData.Categories | null>(null);
+  const [cat, setCat] = useState<SearchData.Categories | null>(
+    category
+      ? categories.filter((index) => index.id.toString() === category)[0]
+      : null,
+  );
+  const samplePrice = [
+    { id: 7, min: 0, max: 100000 },
+    { id: 8, min: 100000, max: 150000 },
+    { id: 9, min: 150000, max: 200000 },
+    { id: 10, min: 200000, max: 250000 },
+    { id: 11, min: 250000, max: 0 },
+  ];
   const [minMax, setMinMax] = useState<{
     id: number;
     min: number;
     max: number;
-  } | null>(null);
-  const [serv, setServices] = useState<string>('');
+  } | null>(
+    min && max
+      ? samplePrice.filter(
+          (i) => i.min.toString() === min && i.max.toString() === max,
+        )[0]
+      : null,
+  );
+  const [serv, setServices] = useState<string>(
+    filterServices ? filterServices : '',
+  );
 
   let sampleCat: SearchData.Categories[] = [
     {
@@ -79,25 +102,26 @@ const FilterOptions = ({ categories, services }: Props) => {
   if (categories) {
     sampleCat = categories;
   }
-  const samplePrice = [
-    { id: 7, min: 0, max: 100000 },
-    { id: 8, min: 100000, max: 150000 },
-    { id: 9, min: 150000, max: 200000 },
-    { id: 10, min: 200000, max: 250000 },
-    { id: 11, min: 250000, max: 0 },
+
+  let sampleServices: SearchData.HotelServices[] = [
+    {
+      createdAt: null,
+      facilityCategoryId: 1,
+      icon: null,
+      id: 1,
+      image: null,
+      isDefault: 0,
+      isFilter: 1,
+      isMost: 1,
+      mobileIcon: null,
+      name: 'Sample',
+      nameEn: 'Sample',
+      syncId: 1,
+      updatedAt: null,
+    },
   ];
-  let sampleAdditional = [
-    { id: 12, name: 'Хими цэвэрлэгээ', nameEn: '' },
-    { id: 13, name: 'Номын сан', nameEn: '' },
-    { id: 14, name: 'Усан сан', nameEn: '' },
-    { id: 15, name: 'Морь унах', nameEn: '' },
-    { id: 16, name: 'Англи хэлтэй', nameEn: '' },
-    { id: 17, name: 'Дугуй унах', nameEn: '' },
-    { id: 18, name: 'Элсний волейбол', nameEn: '' },
-    { id: 19, name: 'Дотоод аялал', nameEn: '' },
-  ];
-  if (services && services.length > 0) {
-    sampleAdditional = services;
+  if (services) {
+    sampleServices = services;
   }
 
   const createAdditionalQueryString = (
@@ -164,18 +188,18 @@ const FilterOptions = ({ categories, services }: Props) => {
   if (appState.filter === 'webFilter')
     return (
       <div
-        className="flex max-h-[300px] w-[85vw] animate-fade500 items-end"
-        id="container"
+        className='flex max-h-[300px] w-[85vw] animate-fade500 items-end'
+        id='container'
       >
-        <div className="flex h-[95%] w-full flex-col items-center gap-[8px] rounded-[20px] border border-black/20 bg-white px-[24px] py-[12px]">
-          <div className="flex h-full w-full items-start justify-between gap-[24px]">
+        <div className='flex h-[95%] w-full flex-col items-center gap-[8px] rounded-[20px] border border-black/20 bg-white px-[24px] py-[12px]'>
+          <div className='flex h-full w-full items-start justify-between gap-[24px]'>
             {/* Categories */}
             <CategoryFilter
               iconRotateDuration={0}
               data={sampleCat}
               value={cat}
               changeValue={(e: SearchData.Categories) => changeCat(e)}
-              ver="web"
+              ver='web'
             />
             {/* Price */}
             <PriceFilter
@@ -185,25 +209,114 @@ const FilterOptions = ({ categories, services }: Props) => {
               changeValue={(e: { id: number; min: number; max: number }) =>
                 changeMinMax(e)
               }
-              ver="web"
+              ver='web'
             />
             {/* services */}
             <ServiceFilter
               iconRotateDuration={iconRotateDuration}
-              data={sampleAdditional}
+              data={sampleServices}
               value={serv}
               changeValue={(e: string) => changeServ(e)}
-              ver="web"
+              ver='web'
             />
           </div>
           {/* search Btn */}
+          <div className='flex gap-[16px] self-end'>
+            <div
+              onClick={() => {
+                router.replace(
+                  `/search/?${createAdditionalQueryString(
+                    'services',
+                    serv ? serv : null,
+                    'category',
+                    cat ? `${cat?.id}` : null,
+                    'min',
+                    minMax ? `${minMax.min}` : null,
+                    'max',
+                    minMax ? `${minMax.max}` : null,
+                  )}`,
+                  { scroll: false },
+                );
+                dispatch({
+                  type: 'CHANGE_APP_STATE',
+                  payload: { filter: '' },
+                });
+              }}
+              className='flex max-w-[180px] items-center  justify-center self-end rounded-full bg-primary-blue px-[14px] py-[4px] text-[13px] font-medium uppercase text-white'
+            >
+              {lang === 'en' ? 'Filter' : 'Шүүх'}
+            </div>
+            <div
+              onClick={() => {
+                router.replace(
+                  `/search/?${createAdditionalQueryString(
+                    'services',
+                    null,
+                    'category',
+                    null,
+                    'min',
+                    null,
+                    'max',
+                    null,
+                  )}`,
+                  { scroll: false },
+                );
+                setCat(null);
+                setMinMax(null);
+                setServices('');
+                dispatch({
+                  type: 'CHANGE_APP_STATE',
+                  payload: { filter: '' },
+                });
+              }}
+              className='flex max-w-[180px] items-center  justify-center self-end rounded-full bg-primary-blue px-[14px] py-[4px] text-[13px] font-medium uppercase text-white'
+            >
+              {lang === 'en' ? 'Clear' : 'Цэвэрлэх'}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  else
+    return (
+      <div
+        className='flex w-full animate-fade500 flex-col gap-[24px] px-[20px] pb-[150px] sm:px-[50px] md:px-[72px]'
+        id='container'
+      >
+        {/* Categories */}
+        <CategoryFilter
+          iconRotateDuration={0}
+          data={sampleCat}
+          value={cat}
+          changeValue={(e: SearchData.Categories) => changeCat(e)}
+          ver='mobile'
+        />
+        {/* Price */}
+        <PriceFilter
+          iconRotateDuration={iconRotateDuration}
+          data={samplePrice}
+          value={minMax}
+          changeValue={(e: { id: number; min: number; max: number }) =>
+            changeMinMax(e)
+          }
+          ver='mobile'
+        />
+        {/* services */}
+        <ServiceFilter
+          iconRotateDuration={iconRotateDuration}
+          data={sampleServices}
+          value={serv}
+          changeValue={(e: string) => changeServ(e)}
+          ver='mobile'
+        />
+        <div className='flex items-center justify-center gap-[16px]'>
           <div
             onClick={() => {
               router.replace(
                 `/search/?${createAdditionalQueryString(
                   'services',
-                  serv ? serv : null,
-                  'catVal',
+                  serv ? `${serv}` : null,
+                  'category',
                   cat ? `${cat?.id}` : null,
                   'min',
                   minMax ? `${minMax.min}` : null,
@@ -217,68 +330,37 @@ const FilterOptions = ({ categories, services }: Props) => {
                 payload: { filter: '' },
               });
             }}
-            className="flex max-w-[180px] items-center  justify-center self-end rounded-full bg-primary-blue px-[14px] py-[4px] text-[13px] font-medium uppercase text-white"
+            className='flex min-h-[40px] w-auto min-w-[90px] items-center justify-center self-center rounded-full bg-primary-blue px-[12px] pt-[2px] text-[16px] font-medium uppercase tracking-wider text-white'
           >
             {lang === 'en' ? 'Filter' : 'Шүүх'}
           </div>
-        </div>
-      </div>
-    );
-  else
-    return (
-      <div
-        className="flex w-full animate-fade500 flex-col gap-[24px] px-[20px] pb-[150px] sm:px-[50px] md:px-[72px]"
-        id="container"
-      >
-        {/* Categories */}
-        <CategoryFilter
-          iconRotateDuration={0}
-          data={sampleCat}
-          value={cat}
-          changeValue={(e: SearchData.Categories) => changeCat(e)}
-          ver="mobile"
-        />
-        {/* Price */}
-        <PriceFilter
-          iconRotateDuration={iconRotateDuration}
-          data={samplePrice}
-          value={minMax}
-          changeValue={(e: { id: number; min: number; max: number }) =>
-            changeMinMax(e)
-          }
-          ver="mobile"
-        />
-        {/* services */}
-        <ServiceFilter
-          iconRotateDuration={iconRotateDuration}
-          data={sampleAdditional}
-          value={serv}
-          changeValue={(e: string) => changeServ(e)}
-          ver="mobile"
-        />
-        <div
-          onClick={() => {
-            router.replace(
-              `/search/?${createAdditionalQueryString(
-                'services',
-                serv ? `${serv}` : null,
-                'catVal',
-                cat ? `${cat?.id}` : null,
-                'min',
-                minMax ? `${minMax.min}` : null,
-                'max',
-                minMax ? `${minMax.max}` : null,
-              )}`,
-              { scroll: false },
-            );
-            dispatch({
-              type: 'CHANGE_APP_STATE',
-              payload: { filter: '' },
-            });
-          }}
-          className="flex min-h-[40px] w-auto min-w-[90px] items-center justify-center self-center rounded-full bg-primary-blue px-[12px] pt-[2px] text-[16px] font-medium uppercase tracking-wider text-white"
-        >
-          {lang === 'en' ? 'Filter' : 'Шүүх'}
+          <div
+            onClick={() => {
+              router.replace(
+                `/search/?${createAdditionalQueryString(
+                  'services',
+                  null,
+                  'category',
+                  null,
+                  'min',
+                  null,
+                  'max',
+                  null,
+                )}`,
+                { scroll: false },
+              );
+                setCat(null);
+                setMinMax(null);
+                setServices('');
+              dispatch({
+                type: 'CHANGE_APP_STATE',
+                payload: { filter: '' },
+              });
+            }}
+            className='flex min-h-[40px] w-auto min-w-[90px] items-center justify-center self-center rounded-full bg-primary-blue px-[12px] pt-[2px] text-[16px] font-medium uppercase tracking-wider text-white'
+          >
+            {lang === 'en' ? 'Clear' : 'Цэвэрлэх'}
+          </div>
         </div>
       </div>
     );

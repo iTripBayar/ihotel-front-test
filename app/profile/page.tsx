@@ -6,8 +6,6 @@ import { signOut } from 'next-auth/react';
 import { fetchUserData } from '@/utils';
 import { useRequest } from 'ahooks';
 import { useCookies } from 'react-cookie';
-import dynamic from 'next/dynamic';
-const ErrorComponent = dynamic(() => import('@/components/common/404'));
 
 export default function ProfilePage() {
   const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
@@ -17,9 +15,10 @@ export default function ProfilePage() {
       redirect('/');
     },
   });
-  // const {data: userData} = useRequest(()=>{
-  //   return fetchUserData({ email: 'orgil@ihotel.mn', password: 'Wave920110@' });
-  // })
+  const {data: userData} = useRequest(()=>{
+    return fetchUserData({ email: 'orgil@ihotel.mn', password: 'Wave920110@' });
+  })
+  console.log(userData)
   return (
     <div>
       <Link href={{ pathname: '/' }}>Go to HomePage</Link>

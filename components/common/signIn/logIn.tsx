@@ -40,7 +40,6 @@ export default function LogIn() {
     if (signInResponse && !signInResponse.error) {
       setMessage('success');
       console.log(signInResponse);
-      // console.log(signInResponse.)
       setTimeout(() => {
         router.push('/profile');
       }, 3000);

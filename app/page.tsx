@@ -21,8 +21,6 @@ import dynamic from 'next/dynamic';
 const ErrorComponent = dynamic(() => import('@/components/common/404'));
 import { useSession } from 'next-auth/react';
 
-// const Fade = dynamic(() => import('@mui/material/Fade'), { ssr: false });
-
 const Home = () => {
   const [headerVer, setHeaderVer] = useState('default');
   const searchBoxRef = useRef(null);
@@ -76,8 +74,6 @@ const Home = () => {
   const { data: session, status } = useSession({
     required: false,
   });
-
-  console.log(data);
 
   if (!error)
     return (

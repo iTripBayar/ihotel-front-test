@@ -1,9 +1,10 @@
 import { Collapse, useDisclosure, Button } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 interface Props {
   iconRotateDuration: number;
-  data: { id: number; name: string; nameEn: string }[];
+  data: SearchData.HotelServices[];
   value: string;
   changeValue: (e: string) => void;
   ver: string;
@@ -18,6 +19,9 @@ export default function ServiceFilter({
   const { isOpen, onToggle } = useDisclosure();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const services = searchParams.get('services');
+
+  useEffect(()=>{if(services){onToggle()}},[services])
   
   if (ver === 'web')
     return (
@@ -26,15 +30,15 @@ export default function ServiceFilter({
           {lang === 'en' ? 'Additional' : 'Нэмэлтээр'}
         </p>
         <div className='grid w-full grid-cols-2 gap-[8px] text-[15px] text-sub-text'>
-          {data.map((index) => (
+          {data.map((index, i) => (
             <div
               onClick={() => changeValue(`"${index.id}"`)}
-              key={index.id}
+              key={i}
               id='additionalLink'
               className='flex w-full items-center gap-[8px]'
             >
               <input
-                id={`${index.id}`}
+                id={`serv${index.id}`}
                 type='checkBox'
                 value={index.name}
                 checked={value.split(',').includes(`"${index.id}"`)}
@@ -91,15 +95,15 @@ export default function ServiceFilter({
           isOpen === true ? '!mt-[8px] !pb-[16px] sm:pb-[20px]' : 'h-0'
         }`}
       >
-        {data.map((index) => (
+        {data.map((index, i) => (
           <div
             onClick={() => changeValue(`"${index.id}"`)}
-            key={index.id}
+            key={i}
             id='additionalLink'
             className='flex w-full items-center gap-[8px]'
           >
             <input
-              id={`${index.id}`}
+              id={`serv${index.id}`}
               type='checkBox'
               value={index.name}
               checked={value.split(',').includes(`"${index.id}"`)}

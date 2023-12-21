@@ -1,5 +1,6 @@
 import { Collapse, useDisclosure, Button } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 interface Props {
   iconRotateDuration: number;
@@ -18,7 +19,12 @@ export default function PriceFilter({
   const { isOpen, onToggle } = useDisclosure();
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const min = searchParams.get('min');
+  const max = searchParams.get('max');
 
+  useEffect(()=>{if(min && max){
+    onToggle();
+  }},[min && max])
 
   if (ver === 'web') return (
     <div className="flex h-full w-[70%] flex-col items-center justify-start gap-[12px]">
@@ -26,27 +32,14 @@ export default function PriceFilter({
         {lang === 'en' ? 'Price' : 'Үнэ'}
       </p>
       <div className="grid w-full grid-cols-1 gap-[8px] text-[15px] text-sub-text">
-        {data.map((index) => (
+        {data.map((index, i) => (
           <div
-            // onClick={() => {
-            //   router.replace(
-            //     `/search/?${createAdditionalQueryString(
-            //       'null',
-            //       null,
-            //       'minVal',
-            //       index.min.toString(),
-            //       'maxVal',
-            //       index.max.toString(),
-            //     )}`,
-            //     { scroll: false },
-            //   );
-            // }}
             onClick={() => changeValue(index)}
-            key={index.id}
+            key={i}
             className="flex w-full items-center gap-[8px]"
           >
             <input
-              id={`${index.id}`}
+              id={`price${index.id}`}
               type="checkBox"
               value={index.max}
               checked={
@@ -110,27 +103,14 @@ export default function PriceFilter({
           isOpen === true ? '!mt-[8px] !pb-[16px] sm:pb-[20px]' : 'h-0'
         }`}
       >
-        {data.map((index) => (
+        {data.map((index,i) => (
           <div
-            // onClick={() => {
-            //   router.replace(
-            //     `/search/?${createAdditionalQueryString(
-            //       'null',
-            //       null,
-            //       'minVal',
-            //       index.min.toString(),
-            //       'maxVal',
-            //       index.max.toString(),
-            //     )}`,
-            //     { scroll: false },
-            //   );
-            // }}
             onClick={()=>changeValue(index)}
-            key={index.id}
+            key={i}
             className="flex w-full items-center gap-[8px]"
           >
             <input
-              id={`${index.id}`}
+              id={`price${index.id}`}
               type="checkBox"
               value={index.max}
               checked={value && index.min === value.min && index.max === value.max ? true : false}
