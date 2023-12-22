@@ -11,12 +11,10 @@ import { Pagination } from 'swiper/modules';
 interface Props {
   data: roomData.room;
   handleScrollToRooms: (ver: string) => void;
+  stat: string
 }
 
-const RoomCard = ({
-  data,
-  handleScrollToRooms,
-}: Props) => {
+const RoomCard = ({ data, handleScrollToRooms, stat }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const router = useRouter();
@@ -208,7 +206,7 @@ const RoomCard = ({
           </span>
         </div>
         {/* room price & occupancy */}
-        <div className='flex w-full items-center justify-between text-primary-blue'>
+        {stat !== 'data' ? <div className='flex w-full items-center justify-between text-primary-blue'>
           {/* occupancy */}
           <div className='flex items-end gap-[4px]'>
             <svg
@@ -240,9 +238,9 @@ const RoomCard = ({
               / {lang === 'en' ? 'day' : 'хоног'}
             </span>
           </div>
-        </div>
+        </div> : null}
         {/* room select section */}
-        <div
+        {stat === 'online' || stat === 'pending' ? <div
           className={`relative flex w-full ${
             appState.selectedRoom === data.id.toString()
               ? ' justify-between lg:justify-end'
@@ -381,8 +379,8 @@ const RoomCard = ({
           >
             {lang === 'en' ? 'Add to cart' : 'Сангсанд нэмэх'}
           </div>
-        </div>
-        {cart.length < 1 ? (
+        </div> : null}
+        {stat === 'online' || stat=== 'pending' ? <>{cart.length < 1 ? (
           <div
             onClick={() => handleScrollToRooms('rooms')}
             className='flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white'
@@ -406,7 +404,7 @@ const RoomCard = ({
           >
             {lang === 'en' ? 'Order' : 'Захиалах'}
           </Link>
-        )}
+        )}</> : null}
         {/* <div
           onClick={() => {
             if (!cart || cart.length === 0) {

@@ -84,7 +84,7 @@ const HotelCard = ({ data, fromMap, ver }: iProps) => {
             sizes=' 60vw'
             placeholder='blur'
             blurDataURL={
-              data.image 
+              data.image
                 ? `"_next/image/?url=${data?.image}"`
                 : '/samples/camp.png'
             }
@@ -150,8 +150,8 @@ const HotelCard = ({ data, fromMap, ver }: iProps) => {
                   stat === 'online'
                     ? 'bg-main-online px-[16px] text-[14px] sm:text-[11px] sm:leading-[12px] md:text-[14px] md:leading-[14px]'
                     : stat === 'pending'
-                    ? 'bg-main-pending px-[6px] text-[11px] leading-[11px] text-main-text 2xs:px-[8px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[2px] sm:text-[10px] sm:leading-[10px] md:px-[8px] md:text-[14px] md:leading-[14px]'
-                    : 'bg-main-offline px-[6px] text-[11px] leading-[11px] 2xs:px-[12px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[2px] sm:text-[10px] sm:leading-[10px] md:px-[4px] md:text-[14px] md:leading-[14px]'
+                    ? 'bg-main-pending px-[6px] text-[11px] leading-[11px] text-main-text 2xs:px-[8px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[6px] sm:text-[10px] sm:leading-[10px] md:px-[8px] md:text-[14px] md:leading-[14px]'
+                    : 'bg-main-offline px-[6px] text-[11px] leading-[11px] 2xs:px-[12px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[4px] sm:text-[10px] sm:leading-[10px] md:px-[6px] md:text-[14px] md:leading-[14px]'
                 }`}
               >
                 {lang === 'en' ? (
@@ -164,7 +164,7 @@ const HotelCard = ({ data, fromMap, ver }: iProps) => {
                       ? 'Booking unavailable'
                       : ''}
                     {stat === 'pending' ? (
-                      <span className='text-[14px] font-bold sm:text-[11px] md:text-[14px]'>
+                      <span className='text-[14px] font-semibold sm:text-[11px] md:text-[14px]'>
                         1-3 hours
                       </span>
                     ) : null}
@@ -179,7 +179,7 @@ const HotelCard = ({ data, fromMap, ver }: iProps) => {
                       ? 'Онлайн захиалга боломжгүй'
                       : ''}
                     {stat === 'pending' ? (
-                      <span className='text-[14px] font-bold sm:text-[11px] md:text-[14px]'>
+                      <span className='text-[14px] font-semibold sm:text-[11px] md:text-[14px]'>
                         1-3 цаг
                       </span>
                     ) : null}

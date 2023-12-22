@@ -266,7 +266,7 @@ const HotelPage = () => {
                             ? 'Booking unavailable'
                             : ''}
                           {stat === 'pending' ? (
-                            <span className='font-bold '>1-3 hours</span>
+                            <span className='font-semibold '>1-3 hours</span>
                           ) : null}
                         </p>
                       ) : (
@@ -279,7 +279,7 @@ const HotelPage = () => {
                             ? 'Онлайн захиалга боломжгүй'
                             : ''}
                           {stat === 'pending' ? (
-                            <span className='font-bold '>1-3 цаг</span>
+                            <span className='font-semibold '>1-3 цаг</span>
                           ) : null}
                         </p>
                       )}
@@ -324,6 +324,7 @@ const HotelPage = () => {
                 data={data?.rooms}
                 handleScrollToRooms={(ver: string) => handleScrollTo(ver)}
                 totalPrice={totalPrice}
+                stat={stat}
               />
             </div>
             <Description

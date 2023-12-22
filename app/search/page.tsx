@@ -84,6 +84,7 @@ const SearchPage = () => {
     { refreshDeps: [searchParams] },
   );
 
+
   if (!error)
     return (
       <main
@@ -151,7 +152,7 @@ const SearchPage = () => {
             {appState.map === 'open' ? (
               <MapContainer
                 data={data ? data.data : []}
-                zoom={lat && lng ? 8 : 10}
+                zoom={lat && lng ? 8 : 11}
                 lat={lat ? parseInt(lat) : searchData?.mapCenter.lat}
                 lng={lng ? parseInt(lng) : searchData?.mapCenter.lng}
               />

@@ -69,7 +69,7 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
             properties: {
               cluster: false,
               pointId: data.id,
-              price: data.roomTypes.sort(
+              price: data.roomTypes && data.roomTypes.sort(
                 (a, b) => b.priceDayUse - a.priceDayUse,
               )[0].priceDayUse,
             },

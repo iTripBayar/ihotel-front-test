@@ -8,12 +8,14 @@ interface Props {
   data: roomData.room[] | undefined;
   handleScrollToRooms: (ver: string) => void;
   totalPrice: number;
+  stat: string
 }
 
 const HotelRooms = ({
   data,
   handleScrollToRooms,
   totalPrice,
+  stat
 }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
@@ -187,6 +189,7 @@ const HotelRooms = ({
           {data &&
             data.map((index, i) => (
               <RoomCard
+                stat={stat}
                 data={index}
                 key={i}
                 handleScrollToRooms={(ver: string) => handleScrollToRooms(ver)}
@@ -326,30 +329,41 @@ const HotelRooms = ({
                   ))}
               </div>
             ) : null}
-            {cart.length < 1 ? (
-              <div
-                onClick={() => handleScrollToRooms('rooms')}
-                className='flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white'
-              >
-                {lang === 'en' ? 'Order' : 'Захиалах'}
-              </div>
+            {stat === 'online' || stat === 'pending' ? (
+              <>
+                {cart.length < 1 ? (
+                  <div
+                    onClick={() => handleScrollToRooms('rooms')}
+                    className='flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white'
+                  >
+                    {lang === 'en' ? 'Order' : 'Захиалах'}
+                  </div>
+                ) : (
+                  <Link
+                    href={{
+                      query: {
+                        slug: slug,
+                        checkIn: checkIn,
+                        checkOut: checkOut,
+                        days: days,
+                        cart: cart,
+                      },
+                      pathname: '/reservation',
+                    }}
+                    target='_blank'
+                    className='flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white'
+                  >
+                    {lang === 'en' ? 'Order' : 'Захиалах'}
+                  </Link>
+                )}
+              </>
             ) : (
-              <Link
-                href={{
-                  query: {
-                    slug: slug,
-                    checkIn: checkIn,
-                    checkOut: checkOut,
-                    days: days,
-                    cart: cart,
-                  },
-                  pathname: '/reservation',
-                }}
-                target='_blank'
-                className='flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white'
+              <button
+              disabled={true}
+                className='flex h-[45px] w-full items-center cursor-not-allowed opacity-50 justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white'
               >
-                {lang === 'en' ? 'Order' : 'Захиалах'}
-              </Link>
+                {lang === 'en' ? 'Order' : 'Захиалаx'}
+              </button>
             )}
             {/* <div
               onClick={() => {
