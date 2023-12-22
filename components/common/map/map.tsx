@@ -63,7 +63,7 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
   const markerRef = useRef<any>();
   const samplePrice = 70000;
 
-  const points =[
+  let points =[
           ...data.map((data) => ({
             type: 'Feature',
             properties: {
@@ -151,7 +151,7 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
           </div>
         ) : null}
       </div>
-      <ReactMapGL
+      {data ? <ReactMapGL
         mapboxAccessToken='pk.eyJ1IjoiaWhvdGVsLWRldiIsImEiOiJjbG53eG4xM2cwOGdqMnFwZWZodmxyYWgwIn0.NKP_FGb_Ad26fu4wSqnJ7Q'
         initialViewState={{
           longitude: viewPort.lng,
@@ -162,6 +162,13 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
         onRender={(map) => {
           map.target.resize();
         }}
+        onLoad={(map)=>{map.target.flyTo({
+          center: [viewPort.lng, viewPort.lat],
+          zoom: viewPort.zoom,
+          duration: 500,
+          speed: 0.5,
+          curve: 2,
+        });}}
         style={{
           borderRadius: 20,
           border: 'solid 1px rgb(0,0,0,0.25)',
@@ -179,7 +186,7 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
           });
         }}
       >
-        {clusters.map((cluster) => {
+        {clusters.length > 0 && clusters.map((cluster) => {
           const [longitude, latitude] = cluster.geometry.coordinates;
           const { cluster: isCluster, point_count: pointCount } =
             cluster.properties;
@@ -308,7 +315,7 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
         <FullscreenControl />
         <NavigationControl showCompass={false} />
         <GeolocateControl />
-      </ReactMapGL>
+      </ReactMapGL> : null}
     </div>
   );
 };
