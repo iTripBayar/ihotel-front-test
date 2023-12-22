@@ -19,7 +19,7 @@ interface Props {
     nationality: string;
   }) => void;
   handleSubmit: () => void;
-  orderLoading: boolean
+  orderLoading: boolean;
 }
 export default function UserInfo({
   ver,
@@ -32,10 +32,38 @@ export default function UserInfo({
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const [isChecked, setIsChecked] = useState(false);
-  const [additionalClients, setAdditionalClients] = useState<{name: string, surName: string, email: string, phone: string, nationality: string}[]>();
+  const [additionalClients, setAdditionalClients] = useState<
+    {
+      name: string;
+      surName: string;
+      email: string;
+      phone: string;
+      nationality: string;
+    }[]
+  >([]);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
+  };
+  const handleAdditionalClients = (e: string) => {
+    if (e === 'add') {
+      const sample = {
+        name: '',
+        surName: '',
+        email: '',
+        phone: '',
+        nationality: '',
+      };
+      if (additionalClients?.length === 0) {
+        setAdditionalClients([sample]);
+      } else {
+        setAdditionalClients((prev) => [...prev, sample]);
+      }
+    } else {
+      setAdditionalClients(
+        additionalClients.splice(0, additionalClients.length - 1),
+      );
+    }
   };
 
   if (ver === 'mobile') {
@@ -45,6 +73,11 @@ export default function UserInfo({
           {lang === 'en' ? `Client's info` : 'Захиалагчийн мэдээлэл'}
         </p>
         <form className='flex w-full flex-col gap-[16px]'>
+          {additionalClients.length > 0 && (
+            <p className='font-medium'>
+              {lang === 'en' ? 'Client' : 'Захиалагч'} 1
+            </p>
+          )}
           <input
             type='text'
             id={`name`}
@@ -127,7 +160,9 @@ export default function UserInfo({
             onKeyDown={(e) => {
               // Allow only numeric characters (0-9)
               const isNumericOrBackspace =
-                /^[0-9]$/.test(e.key) || e.key === 'Backspace' || e.key ==='Tab';
+                /^[0-9]$/.test(e.key) ||
+                e.key === 'Backspace' ||
+                e.key === 'Tab';
               if (!isNumericOrBackspace) {
                 e.preventDefault();
               }
@@ -147,8 +182,8 @@ export default function UserInfo({
           />
           <input
             type='text'
-            id={`nationality${1}`}
-            name={`nationality${1}`}
+            id={`nationality`}
+            name={`nationality`}
             pattern='[A-Za-z]+'
             required
             onChange={(e) => {
@@ -164,7 +199,213 @@ export default function UserInfo({
             placeholder={lang === 'en' ? 'Nationality' : 'Иргэншил'}
             className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
           />
+          {additionalClients.length === 0 ? (
+            <button
+              className='flex items-center justify-end'
+              onClick={() => handleAdditionalClients('add')}
+            >
+              <div className='relative h-[20px] w-[20px]'>
+                <div className='absolute left-[50%] top-[50%] h-[2px] w-[10px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue'></div>
+                <div className='absolute left-[50%] top-[50%] h-[10px] w-[2px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue'></div>
+              </div>
+              <p className='text-[12px] font-medium leading-[12px] text-primary-blue'>
+                {lang === 'en'
+                  ? `Add another client's info`
+                  : 'Нэмэлт захиалагчийн мэдээлэл оруулах'}
+              </p>
+            </button>
+          ) : null}
         </form>
+        {handleAdditionalClients.length > 0
+          ? additionalClients.map((index, i) => (
+              <form className='flex w-full flex-col gap-[16px]' key={i}>
+                <div className='flex justify-between'>
+                  <p className='font-medium'>
+                    {lang === 'en' ? 'Client' : 'Захиалагч'} {i + 2}
+                  </p>
+                  {i + 1 === additionalClients.length ? (
+                    <button
+                      className='flex items-center justify-end'
+                      onClick={() => handleAdditionalClients('delete')}
+                    >
+                      <div className='relative h-[20px] w-[20px]'>
+                        <div className='absolute left-[50%] top-[50%] h-[2px] w-[10px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue'></div>
+                      </div>
+                      <p className='text-[12px] font-medium leading-[12px] text-primary-blue'>
+                        {lang === 'en' ? `Delete` : 'Хасах'}
+                      </p>
+                    </button>
+                  ) : null}
+                </div>
+                <input
+                  type='text'
+                  id={`name-${i}`}
+                  name={`name-${i}`}
+                  pattern='[A-Za-z]+'
+                  required
+                  onChange={(e) => {
+                    if (parseInt(e.target.name.split('-')[1]) === i) {
+                      setAdditionalClients((prevClients) => {
+                        return prevClients.map((client, index) => {
+                          if (index === i) {
+                            // Update only the corresponding index's name value
+                            return {
+                              ...client,
+                              name: e.target.value,
+                            };
+                          }
+                          return client;
+                        });
+                      });
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    const regex = /^[A-Za-z]+$/;
+                    const isValid = regex.test(e.key);
+                    if (!isValid) {
+                      e.preventDefault();
+                    }
+                  }}
+                  placeholder={lang === 'en' ? 'Given name' : 'Нэр'}
+                  className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
+                />
+                <input
+                  type='text'
+                  id={`surName-${i}`}
+                  name={`surName-${i}`}
+                  pattern='[A-Za-z]+'
+                  required
+                  onChange={(e) => {
+                    if (parseInt(e.target.name.split('-')[1]) === i) {
+                      setAdditionalClients((prevClients) => {
+                        return prevClients.map((client, index) => {
+                          if (index === i) {
+                            // Update only the corresponding index's name value
+                            return {
+                              ...client,
+                              surName: e.target.value,
+                            };
+                          }
+                          return client;
+                        });
+                      });
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    const regex = /^[A-Za-z]+$/;
+                    const isValid = regex.test(e.key);
+
+                    if (!isValid) {
+                      e.preventDefault();
+                    }
+                  }}
+                  placeholder={lang === 'en' ? 'Family name' : 'Овог'}
+                  className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
+                />
+                <input
+                  type='text'
+                  id={`email-${i}`}
+                  name={`email-${i}`}
+                  pattern='[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+                  required
+                  onChange={(e) => {
+                    if (parseInt(e.target.name.split('-')[1]) === i) {
+                      setAdditionalClients((prevClients) => {
+                        return prevClients.map((client, index) => {
+                          if (index === i) {
+                            // Update only the corresponding index's name value
+                            return {
+                              ...client,
+                              email: e.target.value,
+                            };
+                          }
+                          return client;
+                        });
+                      });
+                    }
+                  }}
+                  placeholder={lang === 'en' ? 'Email' : 'И-мэйл'}
+                  className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
+                />
+                <input
+                  type='text'
+                  id={`phone-${i}`}
+                  name={`phone-${i}`}
+                  pattern='[0-9]+'
+                  required
+                  onKeyDown={(e) => {
+                    // Allow only numeric characters (0-9)
+                    const isNumericOrBackspace =
+                      /^[0-9]$/.test(e.key) ||
+                      e.key === 'Backspace' ||
+                      e.key === 'Tab';
+                    if (!isNumericOrBackspace) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onChange={(e) => {
+                    if (parseInt(e.target.name.split('-')[1]) === i) {
+                      setAdditionalClients((prevClients) => {
+                        return prevClients.map((client, index) => {
+                          if (index === i) {
+                            // Update only the corresponding index's name value
+                            return {
+                              ...client,
+                              phone: e.target.value,
+                            };
+                          }
+                          return client;
+                        });
+                      });
+                    }
+                  }}
+                  placeholder={lang === 'en' ? 'Phone number' : 'Утасны дугаар'}
+                  className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
+                />
+                <input
+                  type='text'
+                  id={`nationality-${i}`}
+                  name={`nationality-${i}`}
+                  pattern='[A-Za-z]+'
+                  required
+                  onChange={(e) => {
+                    if (parseInt(e.target.name.split('-')[1]) === i) {
+                      setAdditionalClients((prevClients) => {
+                        return prevClients.map((client, index) => {
+                          if (index === i) {
+                            // Update only the corresponding index's name value
+                            return {
+                              ...client,
+                              nationality: e.target.value,
+                            };
+                          }
+                          return client;
+                        });
+                      });
+                    }
+                  }}
+                  placeholder={lang === 'en' ? 'Nationality' : 'Иргэншил'}
+                  className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
+                />
+                {additionalClients.length === i + 1 ? (
+                  <button
+                    className='flex items-center justify-end'
+                    onClick={() => handleAdditionalClients('add')}
+                  >
+                    <div className='relative h-[20px] w-[20px]'>
+                      <div className='absolute left-[50%] top-[50%] h-[2px] w-[10px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue'></div>
+                      <div className='absolute left-[50%] top-[50%] h-[10px] w-[2px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue'></div>
+                    </div>
+                    <p className='text-[12px] font-medium leading-[12px] text-primary-blue'>
+                      {lang === 'en'
+                        ? `Add another client's info`
+                        : 'Нэмэлт захиалагчийн мэдээлэл оруулах'}
+                    </p>
+                  </button>
+                ) : null}
+              </form>
+            ))
+          : null}
       </div>
     );
   } else {
@@ -174,6 +415,11 @@ export default function UserInfo({
           {lang === 'en' ? `Client's info` : 'Захиалагчийн мэдээлэл'}
         </p>
         <form className='flex w-full flex-col gap-[16px]'>
+          {additionalClients.length > 0 && (
+            <p className='font-medium'>
+              {lang === 'en' ? 'Client' : 'Захиалагч'} 1
+            </p>
+          )}
           <input
             type='text'
             id={`name`}
@@ -256,7 +502,9 @@ export default function UserInfo({
             onKeyDown={(e) => {
               // Allow only numeric characters (0-9)
               const isNumericOrBackspace =
-                /^[0-9]$/.test(e.key) || e.key === 'Backspace';
+                /^[0-9]$/.test(e.key) ||
+                e.key === 'Backspace' ||
+                e.key === 'Tab';
               if (!isNumericOrBackspace) {
                 e.preventDefault();
               }
@@ -276,8 +524,8 @@ export default function UserInfo({
           />
           <input
             type='text'
-            id={`nationality${1}`}
-            name={`nationality${1}`}
+            id={`nationality`}
+            name={`nationality`}
             pattern='[A-Za-z]+'
             required
             onChange={(e) => {
@@ -293,7 +541,182 @@ export default function UserInfo({
             placeholder={lang === 'en' ? 'Nationality' : 'Иргэншил'}
             className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
           />
+          {additionalClients.length === 0 ? (
+            <button
+              className='flex items-center justify-end gap-[2px]'
+              onClick={() => handleAdditionalClients('add')}
+            >
+              <div className='relative h-[20px] w-[20px]'>
+                <div className='absolute left-[50%] top-[50%] h-[2px] w-[10px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue'></div>
+                <div className='absolute left-[50%] top-[50%] h-[10px] w-[2px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue'></div>
+              </div>
+              <p className='text-[14px] font-medium leading-[14px] text-primary-blue'>
+                {lang === 'en'
+                  ? `Add another client's info`
+                  : 'Нэмэлт захиалагчийн мэдээлэл оруулах'}
+              </p>
+            </button>
+          ) : null}
         </form>
+        {handleAdditionalClients.length > 0
+          ? additionalClients.map((index, i) => (
+              <form className='flex w-full flex-col gap-[16px]' key={i}>
+                <div className='flex justify-between'>
+                  <p className='font-medium'>
+                    {lang === 'en' ? 'Client' : 'Захиалагч'} {i + 2}
+                  </p>
+                  {i + 1 === additionalClients.length ? (
+                    <button
+                      className='flex items-center justify-end gap-[2px]'
+                      onClick={() => handleAdditionalClients('delete')}
+                    >
+                      <div className='relative h-[20px] w-[20px]'>
+                        <div className='absolute left-[50%] top-[50%] h-[2px] w-[10px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue'></div>
+                      </div>
+                      <p className='text-[14px] font-medium leading-[14px] text-primary-blue'>
+                        {lang === 'en' ? `Delete` : 'Хасах'}
+                      </p>
+                    </button>
+                  ) : null}
+                </div>
+                <input
+                  type='text'
+                  id={`name${i}`}
+                  name={`name${i}`}
+                  pattern='[A-Za-z]+'
+                  required
+                  onChange={(e) => {
+                    const value = {
+                      name: e.target.value,
+                      surName: clients.surName,
+                      email: clients.email,
+                      phone: clients.phone,
+                      nationality: clients.nationality,
+                    };
+                    updateClients(value);
+                  }}
+                  onKeyDown={(e) => {
+                    const regex = /^[A-Za-z]+$/;
+                    const isValid = regex.test(e.key);
+
+                    if (!isValid) {
+                      e.preventDefault();
+                    }
+                  }}
+                  placeholder={lang === 'en' ? 'Given name' : 'Нэр'}
+                  className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
+                />
+                <input
+                  type='text'
+                  id={`surName${i}`}
+                  name={`surName${i}`}
+                  pattern='[A-Za-z]+'
+                  required
+                  onChange={(e) => {
+                    const value = {
+                      name: clients.name,
+                      surName: e.target.value,
+                      email: clients.email,
+                      phone: clients.phone,
+                      nationality: clients.nationality,
+                    };
+                    updateClients(value);
+                  }}
+                  onKeyDown={(e) => {
+                    const regex = /^[A-Za-z]+$/;
+                    const isValid = regex.test(e.key);
+
+                    if (!isValid) {
+                      e.preventDefault();
+                    }
+                  }}
+                  placeholder={lang === 'en' ? 'Family name' : 'Овог'}
+                  className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
+                />
+                <input
+                  type='text'
+                  id={`email${i}`}
+                  name={`email${i}`}
+                  pattern='[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+                  required
+                  onChange={(e) => {
+                    const value = {
+                      name: clients.name,
+                      surName: clients.surName,
+                      email: e.target.value,
+                      phone: clients.phone,
+                      nationality: clients.nationality,
+                    };
+                    updateClients(value);
+                  }}
+                  placeholder={lang === 'en' ? 'Email' : 'И-мэйл'}
+                  className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
+                />
+                <input
+                  type='text'
+                  id={`phone${i}`}
+                  name={`phone${i}`}
+                  pattern='[0-9]+'
+                  required
+                  onKeyDown={(e) => {
+                    // Allow only numeric characters (0-9)
+                    const isNumericOrBackspace =
+                      /^[0-9]$/.test(e.key) || e.key === 'Backspace';
+                    if (!isNumericOrBackspace) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onChange={(e) => {
+                    const value = {
+                      name: clients.name,
+                      surName: clients.surName,
+                      email: clients.email,
+                      phone: e.target.value,
+                      nationality: clients.nationality,
+                    };
+                    updateClients(value);
+                  }}
+                  placeholder={lang === 'en' ? 'Phone number' : 'Утасны дугаар'}
+                  className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
+                />
+                <input
+                  type='text'
+                  id={`nationality${1}`}
+                  name={`nationality${1}`}
+                  pattern='[A-Za-z]+'
+                  required
+                  onChange={(e) => {
+                    const value = {
+                      name: clients.name,
+                      surName: clients.surName,
+                      email: clients.email,
+                      phone: clients.phone,
+                      nationality: e.target.value,
+                    };
+                    updateClients(value);
+                  }}
+                  placeholder={lang === 'en' ? 'Nationality' : 'Иргэншил'}
+                  className='rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0'
+                />
+                {additionalClients.length === i + 1 ? (
+                  <button
+                    className='flex items-center justify-end gap-[2px]'
+                    onClick={() => handleAdditionalClients('add')}
+                  >
+                    <div className='relative h-[20px] w-[20px]'>
+                      <div className='absolute left-[50%] top-[50%] h-[2px] w-[10px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue'></div>
+                      <div className='absolute left-[50%] top-[50%] h-[10px] w-[2px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue'></div>
+                    </div>
+                    <p className='text-[14px] font-medium leading-[14px] text-primary-blue'>
+                      {lang === 'en'
+                        ? `Add another client's info`
+                        : 'Нэмэлт захиалагчийн мэдээлэл оруулах'}
+                    </p>
+                  </button>
+                ) : null}
+              </form>
+            ))
+          : null}
         <div className='w-full rounded-[8px] border border-primary-blue/50 px-[20px] py-[12px] text-[12px] font-medium leading-[20px] text-primary-blue 2xs:text-[14px]'>
           {lang === 'en'
             ? 'We will contact you shortly after confirming your order request.'

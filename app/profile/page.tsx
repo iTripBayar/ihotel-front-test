@@ -15,10 +15,10 @@ export default function ProfilePage() {
       redirect('/');
     },
   });
-  const {data: userData} = useRequest(()=>{
+  const { data: userData } = useRequest(() => {
     return fetchUserData({ email: 'orgil@ihotel.mn', password: 'Wave920110@' });
-  })
-  console.log(userData)
+  });
+  console.log(userData);
   return (
     <div>
       <Link href={{ pathname: '/' }}>Go to HomePage</Link>

@@ -74,6 +74,7 @@ const Home = () => {
   const { data: session, status } = useSession({
     required: false,
   });
+  console.log(data);
 
   if (!error)
     return (

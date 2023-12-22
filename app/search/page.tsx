@@ -30,7 +30,7 @@ const SearchPage = () => {
   const lat = searchParams.get('lat');
   const lng = searchParams.get('lng');
   const { appState, dispatch } = useAppCtx();
-  const size = useWindowSize()
+  const size = useWindowSize();
 
   const newDate = new Date();
   const nextDay = addDays(newDate, 1);
@@ -148,12 +148,14 @@ const SearchPage = () => {
             className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
           >
             <SearchCards data={data ? data.data : []} />
-            {appState.map === 'open' ? <MapContainer
-              data={data ? data.data : []}
-              zoom={lat && lng ? 8 : 12}
-              lat={lat ? parseInt(lat) : searchData?.mapCenter.lat}
-              lng={lng ? parseInt(lng) : searchData?.mapCenter.lng}
-            /> : null}
+            {appState.map === 'open' ? (
+              <MapContainer
+                data={data ? data.data : []}
+                zoom={lat && lng ? 8 : 10}
+                lat={lat ? parseInt(lat) : searchData?.mapCenter.lat}
+                lng={lng ? parseInt(lng) : searchData?.mapCenter.lng}
+              />
+            ) : null}
           </div>
         ) : null}
       </main>

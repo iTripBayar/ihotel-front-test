@@ -19,7 +19,7 @@ import { CircularProgress, ChakraProvider } from '@chakra-ui/react';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 const ErrorComponent = dynamic(() => import('@/components/common/404'));
 
 const ReservationPage = () => {
@@ -122,7 +122,7 @@ const ReservationPage = () => {
       total_price: `${
         data?.rooms.filter(
           (index) => index.id === parseInt(cart[i].split('$')[0]),
-        )[0].priceDayUse && days
+        )[0] && days
           ? data?.rooms.filter(
               (index) => index.id === parseInt(cart[i].split('$')[0]),
             )[0].priceDayUse *
@@ -163,6 +163,7 @@ const ReservationPage = () => {
       manual: true,
       onSuccess: (result) => {
         if (result.orderId && result?.token) {
+          console.log(result);
           router.push(`/payment?id=${result.orderId}&tkn=${result.token}`);
         }
       },
@@ -261,7 +262,7 @@ const ReservationPage = () => {
           </ChakraProvider>
         ) : (
           <div className='relative flex w-full flex-col gap-[20px] px-[16px] pb-[150px] pt-[72px] sm:gap-[24px] sm:px-[50px] md:px-[72px] lg:grid lg:grid-cols-5 lg:gap-[48px]  lg:px-[60px] lg:pb-[50px] xl:gap-[64px] xl:px-[100px] 2xl:px-[150px]'>
-            <div className='flex flex-col gap-[20px] lg:col-span-3 lg:gap-[32px]'>
+            <div className='sticky flex flex-col gap-[20px] lg:col-span-3 lg:gap-[32px]'>
               <GeneralInfo
                 name={data ? data.hotel.name : null}
                 nameEn={data ? data.hotel.nameEn : null}

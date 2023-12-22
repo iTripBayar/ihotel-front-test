@@ -21,8 +21,12 @@ export default function ServiceFilter({
   const lang = searchParams.get('lang');
   const services = searchParams.get('services');
 
-  useEffect(()=>{if(services){onToggle()}},[services])
-  
+  useEffect(() => {
+    if (services) {
+      onToggle();
+    }
+  }, [services]);
+
   if (ver === 'web')
     return (
       <div className='flex h-full w-full flex-col items-center justify-start gap-[12px]'>

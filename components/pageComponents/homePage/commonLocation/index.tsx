@@ -43,6 +43,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
     prevArrow: <SamplePrevArrow />,
     // afterChange: (current: number) => setActive({ current }),
   };
+  console.log(destinations);
 
   return (
     <div className='flex w-full flex-col gap-[20px]'>
@@ -60,7 +61,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
               // src={`https://ihotel.mn/${index.coverPhoto}`}
               src={
                 index.id === 1
-                  ? '/images/top100/ub_city.jpg'
+                  ? '/images/top100/DJI_0437.jpg'
                   : index.id === 2
                   ? '/images/top100/lakes.jpg'
                   : index.id === 3
@@ -72,7 +73,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
               alt='/commonLocs'
               fill={true}
               priority
-              quality={80}
+              quality={100}
               sizes='90vw'
               placeholder='blur'
               blurDataURL={`"_next/image/?url=${
@@ -145,8 +146,8 @@ const CommonLocation = ({ data, destinations }: iProps) => {
             {/* 1-р хороолол$place$1 */}
             <Image
               src={
-                data.image !== null
-                  ? `${process.env.IMAGE_URL}${data.image}`
+                data.thumbnail !== null
+                  ? `${process.env.WEB_URL}/${data.thumbnail}`
                   : '/samples/camp.png'
               }
               alt='/commonLocs'

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, {
   GeolocateControl,
@@ -10,7 +10,6 @@ import Image from 'next/image';
 import useSupercluster from 'use-supercluster';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import HotelCard from '../hotelCard';
-import useWindowSize from '@/hooks/windowSize';
 import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
@@ -25,7 +24,6 @@ const MapContainer = ({ data, lat, lng, zoom }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const router = useRouter();
-  const size = useWindowSize();
   const { appState, dispatch } = useAppCtx();
 
   const createQueryString = (name: string, value: string | null) => {
