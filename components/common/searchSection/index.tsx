@@ -1,36 +1,37 @@
 import SearchBox from './searchBox';
 import OnlineToggle from './onlineToggle';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
-import { addDays, format } from 'date-fns';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
 import { useAppCtx } from '@/contexts/app';
+import { useRequest } from 'ahooks';
+import { fetchData, fetchDataSearch } from '@/utils';
 
 interface iProps {
-  hotelData: HotelData.Hotel[];
-  placesData: SearchData.Places[];
-  campsData: HotelData.Hotel[];
-  cityData: SearchData.Cities[];
   ver: string;
+  formattedDate: {
+    from: { year: string; month: string; date: string };
+    fromEn: { year: string; month: string; date: string };
+    to: { year: string; month: string; date: string };
+    toEn: { year: string; month: string; date: string };
+  } | null;
 }
 
-const SearchSection = ({
-  hotelData,
-  placesData,
-  campsData,
-  cityData,
-  ver,
-}: iProps) => {
+const SearchSection = ({ ver, formattedDate }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const filter = searchParams.get('filter');
   const router = useRouter();
-  const pathname = usePathname();
-  const checkIn = searchParams.get('checkIn');
-  const checkOut = searchParams.get('checkOut');
   const { dispatch } = useAppCtx();
 
   const [toggle, setToggle] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+
+  const { data } = useRequest(() => {
+    return fetchData();
+  });
+  const { data: searchData } = useRequest(() => {
+    return fetchDataSearch();
+  });
 
   const changeToggle = useCallback(() => {
     setToggle(!toggle);
@@ -42,32 +43,6 @@ const SearchSection = ({
     [searchValue],
   );
 
-  const createQueryString = (
-    name: string,
-    value: string | null,
-    name1: string,
-    value1: string | null,
-    name2: string,
-    value2: string | null,
-  ) => {
-    const params = new URLSearchParams(searchParams);
-    if (value !== null) {
-      params.set(name, value);
-    } else {
-      params.delete(name);
-    }
-    if (value1 !== null) {
-      params.set(name1, value1);
-    } else {
-      params.delete(name1);
-    }
-    if (value2 !== null) {
-      params.set(name2, value2);
-    } else {
-      params.delete(name2);
-    }
-    return params.toString();
-  };
   const multipleCreateQueryString = (
     name: string,
     value: string | null,
@@ -81,7 +56,7 @@ const SearchSection = ({
     const params = new URLSearchParams(searchParams);
     if (value !== null) {
       params.set(name, value);
-    } else{
+    } else {
       params.delete(name);
     }
     if (value1 !== null) {
@@ -91,7 +66,7 @@ const SearchSection = ({
     }
     if (value2 !== null) {
       params.set(name2, value2);
-    } else  {
+    } else {
       params.delete(name2);
     }
     if (value3 !== null) {
@@ -101,70 +76,6 @@ const SearchSection = ({
     }
     return params.toString();
   };
-
-  const newDate = new Date();
-  const nextDay = addDays(newDate, 1);
-  const formattedDate = {
-    from: {
-      year: !checkIn
-        ? `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`
-        : checkIn.split('|')[0].split('/')[2],
-      month: !checkIn
-        ? `${format(newDate, 'yyyy-MM-dd').split('-')[1]}`
-        : checkIn.split('|')[0].split('/')[0],
-      date: !checkIn
-        ? `${format(newDate, 'yyyy-MM-dd').split('-')[2]}`
-        : checkIn.split('|')[0].split('/')[1],
-    },
-    fromEn: {
-      year: !checkIn
-        ? `${format(newDate, 'MMM-dd-yyyy').split('-')[2]}`
-        : checkIn?.split('|')[1]?.split('-')[2],
-      month: !checkIn
-        ? `${format(newDate, 'MMM-dd-yyyy').split('-')[0]}`
-        : checkIn?.split('|')[1]?.split('-')[0],
-      date: !checkIn
-        ? `${format(newDate, 'MMM-dd-yyyy').split('-')[1]}`
-        : checkIn?.split('|')[1]?.split('-')[1],
-    },
-    to: {
-      year: !checkOut
-        ? `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`
-        : checkOut.split('|')[0].split('/')[2],
-      month: !checkOut
-        ? `${format(nextDay, 'yyyy-MM-dd').split('-')[1]}`
-        : checkOut.split('|')[0].split('/')[0],
-      date: !checkOut
-        ? `${format(nextDay, 'yyyy-MM-dd').split('-')[2]}`
-        : checkOut.split('|')[0].split('/')[1],
-    },
-    toEn: {
-      year: !checkOut
-        ? `${format(nextDay, 'MMM-dd-yyyy').split('-')[2]}`
-        : checkOut.split('|')[1].split('-')[2],
-      month: !checkOut
-        ? `${format(nextDay, 'MMM-dd-yyyy').split('-')[0]}`
-        : checkOut.split('|')[1].split('-')[0],
-      date: !checkOut
-        ? `${format(nextDay, 'MMM-dd-yyyy').split('-')[1]}`
-        : checkOut.split('|')[1].split('-')[1],
-    },
-  };
-  useEffect(() => {
-    if (!checkIn && !checkOut && ver === 'hotel') {
-      router.replace(
-        `${pathname}?${createQueryString(
-          'checkIn',
-          `${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year}|${formattedDate.fromEn.month}-${formattedDate.fromEn.date}-${formattedDate.fromEn.year}`,
-          'checkOut',
-          `${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}|${formattedDate.toEn.month}-${formattedDate.toEn.date}-${formattedDate.toEn.year}`,
-          'days',
-          '1',
-        )}`,
-        { scroll: false },
-      );
-    }
-  }, [ver === 'hotel']);
 
   return (
     <div
@@ -195,10 +106,10 @@ const SearchSection = ({
           }`}
         >
           <SearchBox
-            hotelData={hotelData}
-            placesData={placesData}
-            campsData={campsData}
-            cityData={cityData}
+            hotelData={data ? data.hotels : []}
+            campsData={data ? data.camps : []}
+            placesData={searchData ? searchData.places : []}
+            cityData={searchData ? searchData.cities : []}
             ver={ver}
             changeSearchValue={changeSearchValue}
             value={searchValue}
@@ -237,14 +148,14 @@ const SearchSection = ({
           ) : null}
         </div>
       ) : null}
-      {ver === 'hotel' ? (
+      {ver === 'hotel' && formattedDate !== null ? (
         <div className='flex gap-[24px]'>
           <div className='hidden lg:flex'>
             <SearchBox
-              hotelData={hotelData}
-              placesData={placesData}
-              campsData={campsData}
-              cityData={cityData}
+              hotelData={data ? data.hotels : []}
+              campsData={data ? data.camps : []}
+              placesData={searchData ? searchData.places : []}
+              cityData={searchData ? searchData.cities : []}
               ver={ver}
               changeSearchValue={changeSearchValue}
               value={searchValue}
@@ -253,10 +164,6 @@ const SearchSection = ({
           <button
             className='flex h-[36px] items-center justify-center gap-[12px] rounded-full bg-white px-[8px] text-[15px] font-medium leading-[1px] text-primary-blue 2xs:px-[16px] xl:min-w-[250px]'
             onClick={() => {
-              // router.replace(
-              //   `${pathname}?${createQueryString('calendar', 'open', '', null, '', null)}`,
-              //   { scroll: false },
-              // );
               dispatch({
                 type: 'CHANGE_APP_STATE',
                 payload: {

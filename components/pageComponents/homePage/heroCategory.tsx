@@ -6,7 +6,6 @@ interface iProps {
   data: HomeData.PropertyTypes[];
 }
 
-
 const HeroCategory = ({ data }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
@@ -24,7 +23,7 @@ const HeroCategory = ({ data }: iProps) => {
             }}
             className='relative h-[50px] w-[50px] overflow-hidden rounded-full  shadow-[0px_0px_15px_2px_rgb(0,0,0,0.12)] xs:h-[65px] xs:w-[65px] sm:h-[100px] sm:w-[100px] md:h-[120px] md:w-[120px] lg:h-[140px] lg:w-[140px] xl:h-[180px] xl:w-[180px] 2xl:h-[200px] 2xl:w-[200px]'
           >
-            <div className='h-full w-full shadow-[inset_0px_0px_12px_10px_rgb(0,0,0,0.15)] rounded-full z-[101] absolute'></div>
+            <div className='absolute z-[101] h-full w-full rounded-full shadow-[inset_0px_0px_12px_10px_rgb(0,0,0,0.15)]'></div>
             <Image
               // src={
               //   data.image
@@ -43,15 +42,24 @@ const HeroCategory = ({ data }: iProps) => {
               alt='/heroCategory'
               fill={true}
               priority
-              // placeholder='blur'
+              placeholder='blur'
               // blurDataURL={
               //   index.image
               //     ? `"_next/image/?url=${index.image}"`
               //     : '/samples/camp.png'
               // }
+              blurDataURL={
+                index.nameEn === 'Guest House'
+                  ? `"_next/image/?url=${process.env.WEB_URL}/img/type_2.jpg"`
+                  : index.name === 'Амралтын газар'
+                  ? `"_next/image/?url=${process.env.WEB_URL}/img/type_3.jpg"`
+                  : index.nameEn === 'Hotel'
+                  ? `"_next/image/?url=${process.env.WEB_URL}/img/type_5.jpg"`
+                  : '/samples/camp.png'
+              }
               sizes='50vw'
               quality={100}
-              className='h-auto w-full object-cover duration-500 hover:scale-110 z-[100]'
+              className='z-[100] h-auto w-full object-cover duration-500 hover:scale-110'
             />
           </Link>
           <Link

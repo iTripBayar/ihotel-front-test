@@ -225,13 +225,7 @@ const ReservationPage = () => {
         {loading ? (
           <Header user='' />
         ) : (
-          <HeaderVariants
-            ver={'hotel'}
-            hotelData={[]}
-            placesData={[]}
-            campsData={[]}
-            cityData={[]}
-          />
+          <HeaderVariants ver={'hotel'} formattedDate={null} />
         )}
         <div className='fixed left-[50%] top-[72px] z-[900] hidden h-auto w-auto translate-x-[-50%] lg:flex'>
           {appState.calendar === 'open' ? <CalendarDialog ver={'web'} /> : null}

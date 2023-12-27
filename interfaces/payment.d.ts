@@ -1,0 +1,61 @@
+declare namespace Payment {
+    interface SocialPay {
+      order: {
+        amount: number;
+        amountPaid: number;
+        arrivalTime: string | null;
+        balance: number;
+        beneficiaryAccountNumber: string | null;
+        beneficiaryName: string | null;
+        cancellationPolicyCloneId: string | null;
+        checkIn: string;
+        checkOut: string;
+        checkedInAt: string | null;
+        checkedOutAt: string | null;
+        confirmedAt: string | null;
+        createdAt: string;
+        day: number;
+        discount: number;
+        discountType: string;
+        dollarRate: string | null;
+        exitTime: string;
+        externalId: number | null;
+        flightdata: string;
+        groupId: number;
+        hotelId: number;
+        hotelName: string;
+        id: number;
+        isTime: boolean;
+        notes: string | null;
+        number: string;
+        numberOfChildren: number;
+        numberOfGuests: number;
+        partnerCloneId: number | null;
+        paymentMethod: number | null;
+        postedDate: string;
+        priceDollar: string | null;
+        ratePlanCloneId: numebr | null;
+        resReqId: numebr | null;
+        reviewId: numebr | null;
+        roomCloneId: numebr | null;
+        roomTypeCloneId: number;
+        rooms: string;
+        socialpayDeeplink: string;
+        sourceCloneId: number;
+        status: string;
+        statusAt: string | null;
+        stayNights: number;
+        stayType: string;
+        syncId: number | null;
+        token: string;
+        updatedAt: string;
+        userCloneId: number;
+        userId: number;
+        userdata: string;
+        xroomReservationId: number | null;
+      };
+      orderId: number;
+      orderTtl: number;
+      qpay: string;
+    }
+}

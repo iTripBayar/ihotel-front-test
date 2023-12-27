@@ -84,20 +84,13 @@ const SearchPage = () => {
     { refreshDeps: [searchParams] },
   );
 
-
   if (!error)
     return (
       <main
         className={`relative flex h-screen w-full flex-col gap-[20px] overflow-y-auto`}
         id='container'
       >
-        <HeaderVariants
-          ver={'search'}
-          hotelData={data ? data.data : []}
-          placesData={searchData ? searchData.places : []}
-          campsData={[]}
-          cityData={searchData ? searchData.cities : []}
-        />
+        <HeaderVariants ver={'search'} formattedDate={null}/>
         {appState.logOrSign === 'log' ||
         appState.logOrSign === 'forgotPassword' ? (
           <LogIn />
@@ -122,13 +115,7 @@ const SearchPage = () => {
             appState.filter === 'mobile' ? 'flex flex-col gap-[24px]' : ''
           }`}
         >
-          <SearchSection
-            ver={'headerSearch'}
-            hotelData={data ? data.data : []}
-            placesData={searchData ? searchData.places : []}
-            campsData={[]}
-            cityData={searchData ? searchData.cities : []}
-          />
+          <SearchSection ver={'headerSearch'} formattedDate={null} />
           {appState.filter === 'mobile' ? (
             <FilterOptions
               categories={searchData?.categories ? searchData?.categories : []}
@@ -148,13 +135,17 @@ const SearchPage = () => {
           <div
             className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
           >
-            <SearchCards data={data ? data.data : []} />
+            <SearchCards
+              data={data ? data.data : []}
+              dollarRate={searchData ? searchData.rate : '1'}
+            />
             {appState.map === 'open' ? (
               <MapContainer
                 data={data ? data.data : []}
                 zoom={lat && lng ? 8 : 11}
                 lat={lat ? parseInt(lat) : searchData?.mapCenter.lat}
                 lng={lng ? parseInt(lng) : searchData?.mapCenter.lng}
+                dollarRate={searchData ? searchData.rate : '1'}
               />
             ) : null}
           </div>

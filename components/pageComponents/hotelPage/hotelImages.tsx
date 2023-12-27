@@ -3,12 +3,12 @@ import { useAppCtx } from '@/contexts/app';
 
 interface Props {
   images: string[];
-  image: string ;
+  image: string;
 }
 
-const HotelImages = ({ images, image,  }: Props) => {
+const HotelImages = ({ images, image }: Props) => {
   const { dispatch } = useAppCtx();
-  
+
   let aditionalImages = [
     '/images/imageSample.png',
     '/images/imageSample.png',
@@ -19,9 +19,10 @@ const HotelImages = ({ images, image,  }: Props) => {
     '/images/imageSample.png',
     '/images/imageSample.png',
   ];
-if (images.length < 10) {
-  aditionalImages = aditionalImages.slice(0, 10 - images.length);
-}  
+  if (images.length < 10) {
+    aditionalImages = aditionalImages.slice(0, 10 - images.length);
+  }
+  console.log(images);
 
   return (
     <div className='flex w-full flex-col gap-[4px] overflow-hidden rounded-b-[6px] rounded-t-[12px]'>
@@ -30,7 +31,7 @@ if (images.length < 10) {
         onClick={() => {
           dispatch({
             type: 'CHANGE_APP_STATE',
-            payload: { biggerImage: [image,...images] },
+            payload: { biggerImage: [image, ...images] },
           });
         }}
       >
@@ -44,11 +45,9 @@ if (images.length < 10) {
           placeholder='blur'
           // blurDataURL='/samples/camp.png'
           blurDataURL={
-            images
-              ? `"_next/image/?url=${image}"`
-              : '/samples/camp.png'
+            images ? `"_next/image/?url=${image}"` : '/samples/camp.png'
           }
-          className='absolute object-cover w-auto h-auto select-none'
+          className='absolute h-auto w-auto select-none object-cover'
           draggable={false}
         />
       </div>
@@ -73,7 +72,7 @@ if (images.length < 10) {
                   sizes='50vw'
                   placeholder='blur'
                   blurDataURL={`"_next/image/?url=${index}"`}
-                  className='absolute object-fill w-auto h-auto select-none'
+                  className='absolute h-auto w-auto select-none object-fill'
                   draggable={false}
                 />
               </div>
@@ -99,7 +98,7 @@ if (images.length < 10) {
                   sizes='50vw'
                   placeholder='blur'
                   blurDataURL={`"_next/image/?url=${index}"`}
-                  className='absolute object-cover w-auto h-auto select-none '
+                  className='absolute h-auto w-auto select-none object-cover '
                   draggable={false}
                 />
               </div>

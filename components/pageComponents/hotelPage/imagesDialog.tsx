@@ -88,9 +88,9 @@ export function SliderCloseButton() {
     </button>
   );
 }
-
 export default function ImagesDialog() {
   const { appState } = useAppCtx();
+console.log(appState.biggerImage);
 
   return (
     <div className='fixed left-0 top-0 z-[999] flex h-screen w-screen items-center justify-center bg-black/[.8] backdrop-blur-[2px]'>

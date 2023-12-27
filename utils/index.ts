@@ -159,3 +159,58 @@ export async function fetchCreateOrder(e: {
     throw error;
   }
 }
+
+export async function testSocialPay(
+  orderId: string,
+  // token: string;
+  // totalPrice: string;
+): Promise<Payment.SocialPay> {
+  // const params = `?orderId=${e.orderId}`;
+  const response = await fetch(
+    `${process.env.WEB_URL}/ihotel/order/payment/socialpay/${orderId}`,
+    // { cache: 'force-cache' },
+  );
+  const result = await response.json();
+
+  return result;
+}
+interface testInquiry {
+  success: boolean;
+  response: {
+    amount: '70';
+    bank: string;
+    bankCode: string;
+    cardHolder: string;
+    cardNumber: string;
+    checksum: string;
+    errorCode: string | null;
+    errorDesc: string;
+    status: string;
+    transactionId: string;
+  };
+}
+export async function socialPayInquiry(e: {
+  order_id: string;
+  ihotel_order_id: string;
+}): Promise<testInquiry> {
+  // const params = `?orderId=${e.orderId}`;
+  const response = await fetch(
+    `${process.env.WEB_URL}/ihotel/order/payment/socialpay/inquiry`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        order_id: e.order_id,
+        ihotel_order_id: e.ihotel_order_id,
+      }),
+    },
+    // { cache: 'force-cache' },
+  );
+  const result = await response.json();
+
+  return result;
+}
+
+

@@ -1,5 +1,4 @@
 import { useSearchParams, useRouter } from 'next/navigation';
-import { addDays, format } from 'date-fns';
 import Link from 'next/link';
 interface Props {
   roomPrices: number[];
@@ -29,93 +28,48 @@ export default function OrderDialog({
     return params.toString();
   };
 
-  const newDate = new Date();
-  const nextDay = addDays(newDate, 1);
-  const formattedDate = {
+  let displayDate = { mn: '', en: '', days: '' };
+  const mnDate = {
     from: {
-      month: `${format(newDate, 'yyyy-MM-dd').split('-')[1]}`,
-      date: `${format(newDate, 'yyyy-MM-dd').split('-')[2]}`,
+      month: checkIn?.split('|')[0].split('/')[0],
+      date: checkIn?.split('|')[0].split('/')[1],
     },
     to: {
-      month: `${format(nextDay, 'yyyy-MM-dd').split('-')[1]}`,
-      date: `${format(nextDay, 'yyyy-MM-dd').split('-')[2]}`,
-    },
-    fromEn: {
-      month: `${newDate.toDateString().split(' ')[1]}`,
-      date: `${newDate.toDateString().split(' ')[2]}`,
-    },
-    toEn: {
-      month: `${nextDay.toDateString().split(' ')[1]}`,
-      date: `${nextDay.toDateString().split(' ')[2]}`,
+      month: checkOut?.split('|')[0].split('/')[0],
+      date: checkOut?.split('|')[0].split('/')[1],
     },
   };
-  let displayDate = { mn: '', en: '', days: '' };
-  if (!checkIn && !checkOut) {
-    if (formattedDate.from.month === formattedDate.to.month) {
-      displayDate = {
-        mn: `${formattedDate.from.month}-р сар ${formattedDate.from.date}-${formattedDate.to.date}`,
-        en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.date}`,
-        days: `${
-          parseInt(formattedDate.toEn.date) -
-          parseInt(formattedDate.fromEn.date) +
-          1
-        }`,
-      };
-    } else {
-      displayDate = {
-        mn: `${formattedDate.from.month}.${formattedDate.from.date}-${formattedDate.to.month}.${formattedDate.to.date}`,
-        en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.month} ${formattedDate.toEn.date}`,
-        days: `${
-          parseInt(formattedDate.toEn.date) -
-          parseInt(formattedDate.fromEn.date) +
-          1
-        }`,
-      };
-    }
+  const enDate = {
+    from: {
+      month: checkIn?.split('|')[1]?.split('-')[0],
+      date: checkIn?.split('|')[1]?.split('-')[1],
+    },
+    to: {
+      month: checkOut?.split('|')[1].split('-')[0],
+      date: checkOut?.split('|')[1].split('-')[1],
+    },
+  };
+  if (mnDate.from.month === mnDate.to.month) {
+    displayDate = {
+      mn: `${mnDate.from.month}-р сар ${mnDate.from.date}-${mnDate.to.date}`,
+      en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.date}`,
+      days: `${
+        parseInt(mnDate.to.date ? mnDate.to.date : '0') -
+        parseInt(mnDate.from.date ? mnDate.from.date : '0') +
+        1
+      }`,
+    };
   } else {
-    const mnDate = {
-      from: {
-        month: checkIn?.split('|')[0].split('/')[0],
-        date: checkIn?.split('|')[0].split('/')[1],
-      },
-      to: {
-        month: checkOut?.split('|')[0].split('/')[0],
-        date: checkOut?.split('|')[0].split('/')[1],
-      },
+    displayDate = {
+      mn: `${mnDate.from.month}.${mnDate.from.date}-${mnDate.to.month}.${mnDate.to.date}`,
+      en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.month} ${enDate.to.date}`,
+      days: `${
+        parseInt(mnDate.to.date ? mnDate.to.date : '0') -
+        parseInt(mnDate.from.date ? mnDate.from.date : '0') +
+        1
+      }`,
     };
-    const enDate = {
-      from: {
-        month: checkIn?.split('|')[1]?.split('-')[0],
-        date: checkIn?.split('|')[1]?.split('-')[1],
-      },
-      to: {
-        month: checkOut?.split('|')[1].split('-')[0],
-        date: checkOut?.split('|')[1].split('-')[1],
-      },
-    };
-    if (mnDate.from.month === mnDate.to.month) {
-      displayDate = {
-        mn: `${mnDate.from.month}-р сар ${mnDate.from.date}-${mnDate.to.date}`,
-        en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.date}`,
-        days: `${
-          parseInt(mnDate.to.date ? mnDate.to.date : '0') -
-          parseInt(mnDate.from.date ? mnDate.from.date : '0') +
-          1
-        }`,
-      };
-    } else {
-      displayDate = {
-        mn: `${mnDate.from.month}.${mnDate.from.date}-${mnDate.to.month}.${mnDate.to.date}`,
-        en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.month} ${enDate.to.date}`,
-        days: `${
-          parseInt(mnDate.to.date ? mnDate.to.date : '0') -
-          parseInt(mnDate.from.date ? mnDate.from.date : '0') +
-          1
-        }`,
-      };
-    }
   }
-
   return (
     <div className='flex w-full flex-col rounded-t-[30px] bg-white px-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px]'>
       {cart && cart.length > 0 ? (

@@ -12,9 +12,10 @@ interface Props {
   data: roomData.room;
   handleScrollToRooms: (ver: string) => void;
   stat: string
+  dollarRate: string
 }
 
-const RoomCard = ({ data, handleScrollToRooms, stat }: Props) => {
+const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const router = useRouter();
@@ -206,205 +207,215 @@ const RoomCard = ({ data, handleScrollToRooms, stat }: Props) => {
           </span>
         </div>
         {/* room price & occupancy */}
-        {stat !== 'data' ? <div className='flex w-full items-center justify-between text-primary-blue'>
-          {/* occupancy */}
-          <div className='flex items-end gap-[4px]'>
-            <svg
-              viewBox='-1 0 16 16'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-              className='max-h-[20px] min-h-[20px] min-w-[20px] max-w-[20px] text-primary-blue 2xs:max-h-[24px] 2xs:min-h-[24px] 2xs:min-w-[24px] 2xs:max-w-[24px]'
-            >
-              <path
-                d='M7 0C7.92826 0 8.8185 0.368749 9.47487 1.02513C10.1313 1.6815 10.5 2.57174 10.5 3.5C10.5 4.42826 10.1313 5.3185 9.47487 5.97487C8.8185 6.63125 7.92826
-                 7 7 7C6.07174 7 5.1815 6.63125 4.52513 5.97487C3.86875 5.3185 3.5 4.42826 3.5 3.5C3.5 2.57174 3.86875 1.6815 4.52513 1.02513C5.1815 0.368749 
-                 6.07174 0 7 0ZM7 8.75C10.8675 8.75 14 10.3162 14 12.25V14H0V12.25C0 10.3162 3.1325 8.75 7 8.75Z'
-                fill='currentColor'
-              />
-            </svg>
-            <p className='text-[16px] font-medium leading-[16px] 2xs:text-[18px] 2xs:leading-[18px]'>
-              x{data.occupancy}
-            </p>
-          </div>
-          {/* divider */}
-          <div className='h-[24px] w-[1px] rounded-full bg-primary-blue/50 2xs:h-[30px]'>
-            {' '}
-          </div>
-          <div className='text-[20px] font-medium 2xs:text-[24px]'>
-            {data.priceDayUse.toLocaleString()}
-            {lang === 'en' ? '$' : '₮'}
-            <span className=' text-[14px] font-medium'>
-              {' '}
-              / {lang === 'en' ? 'day' : 'хоног'}
-            </span>
-          </div>
-        </div> : null}
-        {/* room select section */}
-        {stat === 'online' || stat === 'pending' ? <div
-          className={`relative flex w-full ${
-            appState.selectedRoom === data.id.toString()
-              ? ' justify-between lg:justify-end'
-              : 'justify-between'
-          }`}
-        >
-          <div
-            className={`overflow-hidden rounded-[8px] border-[2px] border-primary-blue/50 px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px] ${
-              appState.selectedRoom !== data.id.toString()
-                ? 'lg:max-h-[38px]'
-                : ' lg:hidden'
-            }`}
-            onClick={() => {
-              dispatch({
-                type: 'CHANGE_APP_STATE',
-                payload: {
-                  selectedRoom: data.id.toString(),
-                },
-              });
-            }}
-          >
-            <div
-              className={`flex h-[34px] items-center justify-center gap-[8px] `}
-            >
-              <p>
-                {updatedAmount.length > 2 ? updatedAmount.split('$')[1] : 0}
-
-                {lang === 'en' ? ' rooms' : ' өрөө'}
-              </p>
+        {stat !== 'data' ? (
+          <div className='flex w-full items-center justify-between text-primary-blue'>
+            {/* occupancy */}
+            <div className='flex items-end gap-[4px]'>
               <svg
-                className='max-h-[8px] min-h-[8px] min-w-[12px] max-w-[12px]'
-                viewBox='0 0 12 8'
+                viewBox='-1 0 16 16'
                 fill='none'
                 xmlns='http://www.w3.org/2000/svg'
+                className='max-h-[20px] min-h-[20px] min-w-[20px] max-w-[20px] text-primary-blue 2xs:max-h-[24px] 2xs:min-h-[24px] 2xs:min-w-[24px] 2xs:max-w-[24px]'
               >
                 <path
-                  d='M5.04535 7.14L0.249351 1.658C-0.316649 1.013 0.143351 3.67706e-07 1.00235 3.67706e-07H10.5944C10.7866 -0.000164459 10.9748 0.0550878 11.1365 0.159141C11.2981 0.263194 11.4263 0.411637 11.5058 0.586693C11.5853 0.761749 11.6126 0.955998 11.5845 1.14618C11.5564 1.33636 11.474 1.51441 11.3474 1.659L6.55135 7.139C6.45749 7.24641 6.34174 7.3325 6.21186 7.39148C6.08198 7.45046 5.94099 7.48098 5.79835 7.48098C5.65571 7.48098 5.51472 7.45046 5.38484 7.39148C5.25497 7.3325 5.13921 7.24641 5.04535 7.139V7.14Z'
+                  d='M7 0C7.92826 0 8.8185 0.368749 9.47487 1.02513C10.1313 1.6815 10.5 2.57174 10.5 3.5C10.5 4.42826 10.1313 5.3185 9.47487 5.97487C8.8185 6.63125 7.92826
+                 7 7 7C6.07174 7 5.1815 6.63125 4.52513 5.97487C3.86875 5.3185 3.5 4.42826 3.5 3.5C3.5 2.57174 3.86875 1.6815 4.52513 1.02513C5.1815 0.368749 
+                 6.07174 0 7 0ZM7 8.75C10.8675 8.75 14 10.3162 14 12.25V14H0V12.25C0 10.3162 3.1325 8.75 7 8.75Z'
                   fill='currentColor'
                 />
               </svg>
+              <p className='text-[16px] font-medium leading-[16px] 2xs:text-[18px] 2xs:leading-[18px]'>
+                x{data.occupancy}
+              </p>
+            </div>
+            {/* divider */}
+            <div className='h-[24px] w-[1px] rounded-full bg-primary-blue/50 2xs:h-[30px]'>
+              {' '}
+            </div>
+            <div className='text-[20px] font-medium 2xs:text-[24px]'>
+              {lang === 'en'
+                ? (data.priceDayUse / parseInt(dollarRate)).toLocaleString()
+                : data.priceDayUse.toLocaleString()}
+              {lang === 'en' ? '$' : '₮'}
+              <span className=' text-[14px] font-medium'>
+                {' '}
+                / {lang === 'en' ? 'day' : 'хоног'}
+              </span>
             </div>
           </div>
-          {/* web roomSelect dropdown */}
-          {appState.selectedRoom === data.id.toString() ? (
-            <div className=' scrollHidden absolute left-0 z-50 hidden max-h-[166px] min-w-[90px] flex-col overflow-y-auto rounded-[8px] border-[2px] border-primary-blue/50 bg-white px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px] lg:flex'>
-              {roomAmount.map((index, i) => (
-                <div
-                  key={i}
-                  className=' flex min-h-[34px] cursor-pointer items-center justify-center border-b border-b-primary-blue/50'
-                  onClick={() => {
-                    dispatch({
-                      type: 'CHANGE_APP_STATE',
-                      payload: {
-                        selectedRoom: '',
-                        selectedAmount: (() => {
-                          const newValue = `${data.id}$${roomAmount
-                            .indexOf(index)
-                            .toString()}`;
-                          const indexOfId = appState.selectedAmount.findIndex(
-                            (existingValue) => {
-                              const [existingId] = existingValue.split('$');
-                              return existingId === `${data.id}`;
-                            },
-                          );
+        ) : null}
+        {/* room select section */}
+        {stat === 'online' || stat === 'pending' ? (
+          <div
+            className={`relative flex w-full ${
+              appState.selectedRoom === data.id.toString()
+                ? ' justify-between lg:justify-end'
+                : 'justify-between'
+            }`}
+          >
+            <div
+              className={`overflow-hidden rounded-[8px] border-[2px] border-primary-blue/50 px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px] ${
+                appState.selectedRoom !== data.id.toString()
+                  ? 'lg:max-h-[38px]'
+                  : ' lg:hidden'
+              }`}
+              onClick={() => {
+                dispatch({
+                  type: 'CHANGE_APP_STATE',
+                  payload: {
+                    selectedRoom: data.id.toString(),
+                  },
+                });
+              }}
+            >
+              <div
+                className={`flex h-[34px] items-center justify-center gap-[8px] `}
+              >
+                <p>
+                  {updatedAmount.length > 2 ? updatedAmount.split('$')[1] : 0}
 
-                          // Check if the value already exists in the array
-                          const updatedAmount = appState.selectedAmount.map(
-                            (existingValue) => {
-                              const [existingId] = existingValue.split('$');
-                              if (existingId === `${data.id}`) {
-                                // If the ID matches, update the existing value
-                                return newValue;
-                              }
-                              return existingValue;
-                            },
-                          );
-
-                          // If the ID doesn't exist, add the new value to the array
-                          if (
-                            indexOfId === -1 &&
-                            !updatedAmount.includes(newValue)
-                          ) {
-                            updatedAmount.push(newValue);
-                          } else if (
-                            indexOfId !== -1 &&
-                            roomAmount.indexOf(index) === 0
-                          ) {
-                            // If the ID exists and sampleRooms.indexOf(index) is 0, remove the value
-                            updatedAmount.splice(indexOfId, 1);
-                          }
-
-                          return updatedAmount;
-                        })(),
-                      },
-                    });
-                  }}
+                  {lang === 'en' ? ' rooms' : ' өрөө'}
+                </p>
+                <svg
+                  className='max-h-[8px] min-h-[8px] min-w-[12px] max-w-[12px]'
+                  viewBox='0 0 12 8'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
                 >
-                  {index.amount} {lang === 'en' ? 'rooms' : 'өрөө'}{' '}
-                  {roomAmount.indexOf(index) === parseInt(updatedAmount) ? (
-                    <svg
-                      viewBox='0 0 19 14'
-                      fill='none'
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='absolute right-0 top-[50%] max-h-[14px] min-h-[14px] min-w-[20px] max-w-[20px] translate-y-[-50%] text-primary-blue'
-                    >
-                      <path
-                        d='M17 2L7 12L2 7'
-                        stroke='#3C76FE'
-                        strokeWidth='2.5'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                      />
-                    </svg>
-                  ) : null}
-                </div>
-              ))}
+                  <path
+                    d='M5.04535 7.14L0.249351 1.658C-0.316649 1.013 0.143351 3.67706e-07 1.00235 3.67706e-07H10.5944C10.7866 -0.000164459 10.9748 0.0550878 11.1365 0.159141C11.2981 0.263194 11.4263 0.411637 11.5058 0.586693C11.5853 0.761749 11.6126 0.955998 11.5845 1.14618C11.5564 1.33636 11.474 1.51441 11.3474 1.659L6.55135 7.139C6.45749 7.24641 6.34174 7.3325 6.21186 7.39148C6.08198 7.45046 5.94099 7.48098 5.79835 7.48098C5.65571 7.48098 5.51472 7.45046 5.38484 7.39148C5.25497 7.3325 5.13921 7.24641 5.04535 7.139V7.14Z'
+                    fill='currentColor'
+                  />
+                </svg>
+              </div>
             </div>
-          ) : null}
-          <div
-            className='flex h-[38px] items-center justify-center rounded-[8px] border-[2px] border-primary-blue px-[12px] text-[14px] font-medium text-primary-blue 2xs:px-[16px] 2xs:text-[18px] md:px-[8px] md:text-[16px]'
-            onClick={() => {
-              if (updatedAmount.length > 2) {
-                router.replace(
-                  `/hotel/?${multipleCreateQueryString(
-                    'cart',
-                    updatedAmount,
-                    'roomSelect',
-                    null,
-                    'room',
-                    null,
-                  )}`,
-                  { scroll: false },
-                );
-              }
-            }}
-          >
-            {lang === 'en' ? 'Add to cart' : 'Сангсанд нэмэх'}
+            {/* web roomSelect dropdown */}
+            {appState.selectedRoom === data.id.toString() ? (
+              <div className=' scrollHidden absolute left-0 z-50 hidden max-h-[166px] min-w-[90px] flex-col overflow-y-auto rounded-[8px] border-[2px] border-primary-blue/50 bg-white px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px] lg:flex'>
+                {roomAmount.map((index, i) => (
+                  <div
+                    key={i}
+                    className=' flex min-h-[34px] cursor-pointer items-center justify-center border-b border-b-primary-blue/50'
+                    onClick={() => {
+                      dispatch({
+                        type: 'CHANGE_APP_STATE',
+                        payload: {
+                          selectedRoom: '',
+                          selectedAmount: (() => {
+                            const newValue = `${data.id}$${roomAmount
+                              .indexOf(index)
+                              .toString()}`;
+                            const indexOfId = appState.selectedAmount.findIndex(
+                              (existingValue) => {
+                                const [existingId] = existingValue.split('$');
+                                return existingId === `${data.id}`;
+                              },
+                            );
+
+                            // Check if the value already exists in the array
+                            const updatedAmount = appState.selectedAmount.map(
+                              (existingValue) => {
+                                const [existingId] = existingValue.split('$');
+                                if (existingId === `${data.id}`) {
+                                  // If the ID matches, update the existing value
+                                  return newValue;
+                                }
+                                return existingValue;
+                              },
+                            );
+
+                            // If the ID doesn't exist, add the new value to the array
+                            if (
+                              indexOfId === -1 &&
+                              !updatedAmount.includes(newValue)
+                            ) {
+                              updatedAmount.push(newValue);
+                            } else if (
+                              indexOfId !== -1 &&
+                              roomAmount.indexOf(index) === 0
+                            ) {
+                              // If the ID exists and sampleRooms.indexOf(index) is 0, remove the value
+                              updatedAmount.splice(indexOfId, 1);
+                            }
+
+                            return updatedAmount;
+                          })(),
+                        },
+                      });
+                    }}
+                  >
+                    {index.amount} {lang === 'en' ? 'rooms' : 'өрөө'}{' '}
+                    {roomAmount.indexOf(index) === parseInt(updatedAmount) ? (
+                      <svg
+                        viewBox='0 0 19 14'
+                        fill='none'
+                        xmlns='http://www.w3.org/2000/svg'
+                        className='absolute right-0 top-[50%] max-h-[14px] min-h-[14px] min-w-[20px] max-w-[20px] translate-y-[-50%] text-primary-blue'
+                      >
+                        <path
+                          d='M17 2L7 12L2 7'
+                          stroke='#3C76FE'
+                          strokeWidth='2.5'
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                        />
+                      </svg>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            <div
+              className='flex h-[38px] items-center justify-center rounded-[8px] border-[2px] border-primary-blue px-[12px] text-[14px] font-medium text-primary-blue 2xs:px-[16px] 2xs:text-[18px] md:px-[8px] md:text-[16px]'
+              onClick={() => {
+                if (updatedAmount.length > 2) {
+                  router.replace(
+                    `/hotel/?${multipleCreateQueryString(
+                      'cart',
+                      updatedAmount,
+                      'roomSelect',
+                      null,
+                      'room',
+                      null,
+                    )}`,
+                    { scroll: false },
+                  );
+                }
+              }}
+            >
+              {lang === 'en' ? 'Add to cart' : 'Сангсанд нэмэх'}
+            </div>
           </div>
-        </div> : null}
-        {stat === 'online' || stat=== 'pending' ? <>{cart.length < 1 ? (
-          <div
-            onClick={() => handleScrollToRooms('rooms')}
-            className='flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white'
-          >
-            {lang === 'en' ? 'Order' : 'Захиалах'}
-          </div>
-        ) : (
-          <Link
-            href={{
-              query: {
-                slug: slug,
-                dateFrom: dateFrom,
-                dateTo: dateTo,
-                days: days,
-                cart: cart,
-              },
-              pathname: '/reservation',
-            }}
-            target='_blank'
-            className='flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white'
-          >
-            {lang === 'en' ? 'Order' : 'Захиалах'}
-          </Link>
-        )}</> : null}
+        ) : null}
+        {stat === 'online' || stat === 'pending' ? (
+          <>
+            {cart.length < 1 ? (
+              <div
+                onClick={() => handleScrollToRooms('rooms')}
+                className='flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white'
+              >
+                {lang === 'en' ? 'Order' : 'Захиалах'}
+              </div>
+            ) : (
+              <Link
+                href={{
+                  query: {
+                    slug: slug,
+                    dateFrom: dateFrom,
+                    dateTo: dateTo,
+                    days: days,
+                    cart: cart,
+                  },
+                  pathname: '/reservation',
+                }}
+                target='_blank'
+                className='flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white'
+              >
+                {lang === 'en' ? 'Order' : 'Захиалах'}
+              </Link>
+            )}
+          </>
+        ) : null}
         {/* <div
           onClick={() => {
             if (!cart || cart.length === 0) {

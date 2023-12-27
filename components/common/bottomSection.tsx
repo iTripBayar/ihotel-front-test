@@ -26,10 +26,6 @@ const BottomSection = ({ ver }: iProps) => {
   };
 
   const handleScrollToTop = () => {
-    btnRef.current?.classList.add('animate-bounce');
-    setTimeout(() => {
-      btnRef.current?.classList.remove('animate-bounce');
-    }, 1000);
     window.scrollTo({
       top: 0,
       behavior: 'smooth',

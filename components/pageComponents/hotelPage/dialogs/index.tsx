@@ -11,6 +11,7 @@ interface Props {
   slug: string;
   handleScrollToRooms: (ver: string) => void;
   totalPrice: number;
+  
 }
 
 export default function Dialogs({

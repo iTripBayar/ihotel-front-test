@@ -2,19 +2,18 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useAppCtx } from '@/contexts/app';
 
 type iProps = {
   data: HotelData.Hotel;
   fromMap: boolean;
   ver: string
+  dollarRate: string
 };
 
-const HotelCard = ({ data, fromMap, ver }: iProps) => {
+const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
   const [fav, setFav] = useState(false);
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const { appState } = useAppCtx();
 
   let stat = '';
   if (data.isOnline == 1 && data.isOffline == 0) {
@@ -190,21 +189,16 @@ const HotelCard = ({ data, fromMap, ver }: iProps) => {
               // price if stat === 'data'
               <div className='self-end'>
                 <p className='text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]'>
-                  {/* {data.includedPrice
-                  ? data.includedPrice.slice(0, 10).toLocaleString()
-                  : (70000).toLocaleString()} */}
-
-                  {/* {lang === 'en' ? '$' : '₮'} */}
                   {lang === 'en'
                     ? `${
-                        appState.dollarRate
+                        dollarRate
                           ? `${
                               displayPrice.length > 0
                                 ? (
                                     displayPrice[0] /
-                                    parseInt(appState.dollarRate)
+                                    parseInt(dollarRate)
                                   ).toLocaleString()
-                                : 70000 / parseInt(appState.dollarRate)
+                                : 70000 / parseInt(dollarRate)
                             } $`
                           : `${(70000).toLocaleString()}`
                       } $`
@@ -228,22 +222,17 @@ const HotelCard = ({ data, fromMap, ver }: iProps) => {
               }`}
             >
               <p className='text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]'>
-                {/* {data.includedPrice
-                ? data.includedPrice.slice(0, 10).toLocaleString()
-                : (70000).toLocaleString()}
-              {lang === 'en' ? '$' : '₮'} */}
-
                 {lang === 'en'
                   ? `${
-                      appState.dollarRate
+                      dollarRate
                         ? `${
                             displayPrice.length > 0
                               ? (
                                   displayPrice[0] /
-                                  parseInt(appState.dollarRate)
+                                  parseInt(dollarRate)
                                 ).toLocaleString()
                               : (
-                                  70000 / parseInt(appState.dollarRate)
+                                  70000 / parseInt(dollarRate)
                                 ).toLocaleString()
                           } $`
                         : `${(70000).toLocaleString()} $`

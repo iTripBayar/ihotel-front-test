@@ -1,5 +1,4 @@
 'use client';
-
 import HeroCategory from '@/components/pageComponents/homePage/heroCategory';
 import CommonLocation from '@/components/pageComponents/homePage/commonLocation';
 import News from '@/components/pageComponents/homePage/news';
@@ -8,7 +7,7 @@ import BurgerMenu from '@/components/common/burgermenu';
 import { useState, useRef, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import HeaderVariants from '@/components/common/headerVariants';
-import { fetchData, fetchDataSearch } from '@/utils';
+import { fetchData } from '@/utils';
 import SearchSection from '@/components/common/searchSection';
 import Header from '@/components/common/header';
 import BottomSection from '@/components/common/bottomSection';
@@ -28,20 +27,7 @@ const Home = () => {
     return fetchData();
   });
 
-  const { data: searchData } = useRequest(() => {
-    return fetchDataSearch();
-  });
-
-  const { appState, dispatch } = useAppCtx();
-
-  useEffect(() => {
-    if (data) {
-      dispatch({
-        type: 'CHANGE_APP_STATE',
-        payload: { dollarRate: data.dollarRate },
-      });
-    }
-  }, [loading === false]);
+  const { appState } = useAppCtx();
 
   useEffect(() => {
     const options = {
@@ -74,6 +60,7 @@ const Home = () => {
   const { data: session, status } = useSession({
     required: false,
   });
+
   console.log(data);
 
   if (!error)
@@ -89,13 +76,7 @@ const Home = () => {
           }
         />
         {headerVer === 'fixed' ? (
-          <HeaderVariants
-            ver={headerVer}
-            hotelData={data ? data.hotels : []}
-            campsData={data ? data.camps : []}
-            placesData={searchData ? searchData.places : []}
-            cityData={searchData ? searchData.cities : []}
-          />
+          <HeaderVariants ver={headerVer} formattedDate={null} />
         ) : null}
         {appState.logOrSign === 'log' ||
         appState.logOrSign === 'forgotPassword' ? (
@@ -113,16 +94,9 @@ const Home = () => {
         ) : (
           <HeroCategory data={data ? data.propertyTypes : []} />
         )}
-
         <div ref={searchBoxRef}>
           {headerVer !== 'fixed' ? (
-            <SearchSection
-              hotelData={data ? data.hotels : []}
-              placesData={searchData ? searchData.places : []}
-              campsData={data ? data.camps : []}
-              cityData={searchData ? searchData.cities : []}
-              ver={'normal'}
-            />
+            <SearchSection ver={'normal'} formattedDate={null} />
           ) : null}
         </div>
         {loading ? (
@@ -140,9 +114,18 @@ const Home = () => {
             <CardsContainer
               title={'cheap'}
               data={data ? data.cheapHotels : []}
+              dollarRate={data ? data.dollarRate : '1'}
             />
-            <CardsContainer title={'hotels'} data={data ? data.hotels : []} />
-            <CardsContainer title={'camps'} data={data ? data.camps : []} />
+            <CardsContainer
+              title={'hotels'}
+              data={data ? data.hotels : []}
+              dollarRate={data ? data.dollarRate : '1'}
+            />
+            <CardsContainer
+              title={'camps'}
+              data={data ? data.camps : []}
+              dollarRate={data ? data.dollarRate : '1'}
+            />
             <News data={data ? data.posts : []} />
           </div>
         )}

@@ -6,12 +6,10 @@ import { useSearchParams } from 'next/navigation';
 interface iProps {
   title: string;
   data: HotelData.Hotel[];
+  dollarRate: string;
 }
 
-const CardsContainer = ({
-  title,
-  data,
-}: iProps) => {
+const CardsContainer = ({ title, data, dollarRate }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const size = useWindowSize();
@@ -36,7 +34,7 @@ const CardsContainer = ({
         className={`flex w-full flex-col gap-[24px] border-t-[1px]  border-black/[.15] pt-[32px] lg:gap-[32px]`}
       >
         {title !== '' ? (
-          <h3 className="text-[20px] font-bold text-main-text">
+          <h3 className='text-[20px] font-bold text-main-text'>
             {title === 'cheap'
               ? lang === 'en'
                 ? 'Comfortable & Cheap hotels'
@@ -55,7 +53,7 @@ const CardsContainer = ({
           </h3>
         ) : null}
         <div
-          className={`grid xs:grid-rows-${cap} gap-[32px] sm:gap-[24px] md:gap-[32px] sm:grid-cols-2 sm:grid-rows-${
+          className={`grid xs:grid-rows-${cap} gap-[32px] sm:grid-cols-2 sm:gap-[24px] md:gap-[32px] sm:grid-rows-${
             cap / 2
           }  xl:grid-rows-${
             cap / 3
@@ -63,22 +61,28 @@ const CardsContainer = ({
         >
           {data.map((data, i: number) => (
             <HotelCard
-            ver='home'
+              ver='home'
               data={data}
               key={i}
               fromMap={false}
+              dollarRate={dollarRate}
             />
           ))}
         </div>
         {data.length > 0 ? (
           <Link
-          href={{query: {'category': title !== 'camp' ? 1 : 3}, pathname: '/search'}}
-            className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white"
+            href={{
+              query: { category: title !== 'camp' ? 1 : 3 },
+              pathname: '/search',
+            }}
+            className='flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white'
           >
-            <p className="flex gap-[4px]">
+            <p className='flex gap-[4px]'>
               {/* {state.language === 'mn' ? 'Цааш үзэх' : 'More'}{' '} */}
               {lang === 'en' ? 'More' : 'Цааш үзэх'}
-              {data.length - cap > 0 ? <span>({data.length - cap}+)</span> : null}
+              {data.length - cap > 0 ? (
+                <span>({data.length - cap}+)</span>
+              ) : null}
             </p>
           </Link>
         ) : null}

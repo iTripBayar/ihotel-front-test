@@ -1,6 +1,5 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import RoomCard from './roomCard';
-import { addDays, format } from 'date-fns';
 import { useAppCtx } from '@/contexts/app';
 import Link from 'next/link';
 
@@ -8,14 +7,23 @@ interface Props {
   data: roomData.room[] | undefined;
   handleScrollToRooms: (ver: string) => void;
   totalPrice: number;
-  stat: string
+  stat: string;
+  dollarRate: string;
+  formattedDate: {
+    from: { year: string; month: string; date: string };
+    fromEn: { year: string; month: string; date: string };
+    to: { year: string; month: string; date: string };
+    toEn: { year: string; month: string; date: string };
+  };
 }
 
 const HotelRooms = ({
   data,
   handleScrollToRooms,
   totalPrice,
-  stat
+  stat,
+  dollarRate,
+  formattedDate,
 }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
@@ -33,123 +41,48 @@ const HotelRooms = ({
     return params.toString();
   };
 
-  const newDate = new Date();
-  const nextDay = addDays(newDate, 1);
-
-  let formattedDate = {
-    from: {
-      year: `${format(newDate, 'yyyy-MM-dd').split('-')[0]}`,
-      month: `${format(newDate, 'yyyy-MM-dd').split('-')[1]}`,
-      date: `${format(newDate, 'yyyy-MM-dd').split('-')[2]}`,
-    },
-    to: {
-      year: `${format(nextDay, 'yyyy-MM-dd').split('-')[0]}`,
-      month: `${format(nextDay, 'yyyy-MM-dd').split('-')[1]}`,
-      date: `${format(nextDay, 'yyyy-MM-dd').split('-')[2]}`,
-    },
-    fromEn: {
-      year: `${newDate.toDateString().split(' ')[3]}`,
-      month: `${newDate.toDateString().split(' ')[1]}`,
-      date: `${newDate.toDateString().split(' ')[2]}`,
-    },
-    toEn: {
-      year: `${nextDay.toDateString().split(' ')[3]}`,
-      month: `${nextDay.toDateString().split(' ')[1]}`,
-      date: `${nextDay.toDateString().split(' ')[2]}`,
-    },
-  };
-  if (checkIn && checkOut) {
-    formattedDate = {
-      from: {
-        year: `${checkIn.split('|')[0].split('/')[2]}`,
-        month: `${checkIn.split('|')[0].split('/')[0]}`,
-        date: `${checkIn.split('|')[0].split('/')[1]}`,
-      },
-      to: {
-        year: `${checkOut.split('|')[0].split('/')[2]}`,
-        month: `${checkOut.split('|')[0].split('/')[0]}`,
-        date: `${checkOut.split('|')[0].split('/')[1]}`,
-      },
-      fromEn: {
-        year: `${checkIn.split('|')[1].split('-')[2]}`,
-        month: `${checkIn.split('|')[1].split('-')[0]}`,
-        date: `${checkIn.split('|')[1].split('-')[1]}`,
-      },
-      toEn: {
-        year: `${checkOut.split('|')[1].split('-')[2]}`,
-        month: `${checkOut.split('|')[1].split('-')[0]}`,
-        date: `${checkOut.split('|')[1].split('-')[1]}`,
-      },
-    };
-  }
-
   let displayDate = { mn: '', en: '', days: '' };
 
-  if (!checkIn && !checkOut) {
-    if (formattedDate.from.month === formattedDate.to.month) {
-      displayDate = {
-        mn: `${formattedDate.from.month}-р сар ${formattedDate.from.date}-${formattedDate.to.date}`,
-        en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.date}`,
-        days: `${
-          parseInt(formattedDate.toEn.date) -
-          parseInt(formattedDate.fromEn.date) +
-          1
-        }`,
-      };
-    } else {
-      displayDate = {
-        mn: `${formattedDate.from.month}.${formattedDate.from.date}-${formattedDate.to.month}.${formattedDate.to.date}`,
-        en: `${formattedDate.fromEn.month} ${formattedDate.fromEn.date}-${formattedDate.toEn.month} ${formattedDate.toEn.date}`,
-        days: `${
-          parseInt(formattedDate.toEn.date) -
-          parseInt(formattedDate.fromEn.date) +
-          1
-        }`,
-      };
-    }
+  const mnDate = {
+    from: {
+      month: checkIn?.split('|')[0].split('/')[0],
+      date: checkIn?.split('|')[0].split('/')[1],
+    },
+    to: {
+      month: checkOut?.split('|')[0].split('/')[0],
+      date: checkOut?.split('|')[0].split('/')[1],
+    },
+  };
+  const enDate = {
+    from: {
+      month: checkIn?.split('|')[1]?.split('-')[0],
+      date: checkIn?.split('|')[1]?.split('-')[1],
+    },
+    to: {
+      month: checkOut?.split('|')[1].split('-')[0],
+      date: checkOut?.split('|')[1].split('-')[1],
+    },
+  };
+  if (mnDate.from.month === mnDate.to.month) {
+    displayDate = {
+      mn: `${mnDate.from.month}-р сар ${mnDate.from.date}-${mnDate.to.date}`,
+      en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.date}`,
+      days: `${
+        parseInt(mnDate.to.date ? mnDate.to.date : '0') -
+        parseInt(mnDate.from.date ? mnDate.from.date : '0') +
+        1
+      }`,
+    };
   } else {
-    const mnDate = {
-      from: {
-        month: checkIn?.split('|')[0].split('/')[0],
-        date: checkIn?.split('|')[0].split('/')[1],
-      },
-      to: {
-        month: checkOut?.split('|')[0].split('/')[0],
-        date: checkOut?.split('|')[0].split('/')[1],
-      },
+    displayDate = {
+      mn: `${mnDate.from.month}.${mnDate.from.date}-${mnDate.to.month}.${mnDate.to.date}`,
+      en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.month} ${enDate.to.date}`,
+      days: `${
+        parseInt(mnDate.to.date ? mnDate.to.date : '0') -
+        parseInt(mnDate.from.date ? mnDate.from.date : '0') +
+        1
+      }`,
     };
-    const enDate = {
-      from: {
-        month: checkIn?.split('|')[1]?.split('-')[0],
-        date: checkIn?.split('|')[1]?.split('-')[1],
-      },
-      to: {
-        month: checkOut?.split('|')[1].split('-')[0],
-        date: checkOut?.split('|')[1].split('-')[1],
-      },
-    };
-
-    if (mnDate.from.month === mnDate.to.month) {
-      displayDate = {
-        mn: `${mnDate.from.month}-р сар ${mnDate.from.date}-${mnDate.to.date}`,
-        en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.date}`,
-        days: `${
-          parseInt(mnDate.to.date ? mnDate.to.date : '0') -
-          parseInt(mnDate.from.date ? mnDate.from.date : '0') +
-          1
-        }`,
-      };
-    } else {
-      displayDate = {
-        mn: `${mnDate.from.month}.${mnDate.from.date}-${mnDate.to.month}.${mnDate.to.date}`,
-        en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.month} ${enDate.to.date}`,
-        days: `${
-          parseInt(mnDate.to.date ? mnDate.to.date : '0') -
-          parseInt(mnDate.from.date ? mnDate.from.date : '0') +
-          1
-        }`,
-      };
-    }
   }
 
   return (
@@ -193,6 +126,7 @@ const HotelRooms = ({
                 data={index}
                 key={i}
                 handleScrollToRooms={(ver: string) => handleScrollToRooms(ver)}
+                dollarRate={dollarRate}
               />
             ))}
         </div>
@@ -245,13 +179,14 @@ const HotelRooms = ({
                   <div className='flex w-full items-center justify-between text-[20px] font-medium leading-[20px] text-main-text'>
                     <p>{lang === 'en' ? 'Total price:' : 'Нийт үнэ:'}</p>
                     <h3 className='text-[20px] font-medium leading-[20px] text-main-text 2xs:text-[24px] 2xs:leading-[24px] 2xs:tracking-wide'>
-                      {cart && cart.length > 0
+                      {lang === 'en'
                         ? (
-                            totalPrice * parseInt(`${days ? days : 1}`)
+                            (totalPrice * parseInt(`${days ? days : 1}`)) /
+                            parseInt(dollarRate)
                           ).toLocaleString()
                         : (
-                            0 * parseInt(`${days ? days : 1}`)
-                          ).toLocaleString()}{' '}
+                            totalPrice * parseInt(`${days ? days : 1}`)
+                          ).toLocaleString()}
                       {lang === 'en' ? '$' : '₮'}
                     </h3>
                   </div>
@@ -359,8 +294,8 @@ const HotelRooms = ({
               </>
             ) : (
               <button
-              disabled={true}
-                className='flex h-[45px] w-full items-center cursor-not-allowed opacity-50 justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white'
+                disabled={true}
+                className='flex h-[45px] w-full cursor-not-allowed items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white opacity-50'
               >
                 {lang === 'en' ? 'Order' : 'Захиалаx'}
               </button>

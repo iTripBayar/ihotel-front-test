@@ -5,9 +5,10 @@ import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
   data: HotelData.Hotel[];
+  dollarRate: string
 }
 
-const SearchCards = ({ data }: iProps) => {
+const SearchCards = ({ data, dollarRate }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const toggle = searchParams.get('toggle');
@@ -19,9 +20,11 @@ const SearchCards = ({ data }: iProps) => {
   divRef.current?.addEventListener('scroll', (e) => {
     e.preventDefault();
   });
-   if (toggle === 'true') {
-     data = data.filter((index) => index.isOnline === 1 && index.isOffline === 0);
-   }
+  if (toggle === 'true') {
+    data = data.filter(
+      (index) => index.isOnline === 1 && index.isOffline === 0,
+    );
+  }
 
   return (
     <div
@@ -41,7 +44,13 @@ const SearchCards = ({ data }: iProps) => {
       >
         {data.length > 0
           ? data.map((data, i: number) => (
-              <HotelCard data={data} key={i} fromMap={false} ver='search' />
+              <HotelCard
+                data={data}
+                key={i}
+                fromMap={false}
+                ver='search'
+                dollarRate={dollarRate}
+              />
             ))
           : null}
       </div>
