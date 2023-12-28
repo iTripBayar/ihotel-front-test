@@ -5,19 +5,21 @@ import Timer from './timer';
 import { useRequest } from 'ahooks';
 import { passInquiry, passNotify, passPayment } from '@/utils/payment/pass';
 import QRCode from 'qrcode';
+import Success from './success';
 
 interface Props {
   handleTimeOut: () => void;
+  handleError: () => void;
 }
 
-export default function PassOption({ handleTimeOut }: Props) {
+export default function PassOption({ handleTimeOut, handleError }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const id = searchParams.get('id');
   const pathname = usePathname();
-
   const router = useRouter();
-  const [stop, setStop] = useState(false);
+  const [rerender, setRerender] = useState(false);
+
   let canvas: HTMLElement | null = document.getElementById('canvas');
 
   const { data, loading, error } = useRequest(
@@ -26,15 +28,10 @@ export default function PassOption({ handleTimeOut }: Props) {
     },
     {
       onSuccess: (res) => {
-        // const interval = setInterval(()=>{
-        //   run({ order_id: res?.orderId, ihotel_order_id: id ? id : ''});
-        //   if(pathname === '/payment'){
-        //     clearInterval(interval)
-        //   }
-        // },5000)
-        testFunc('run');
         console.log(res);
-        // QRCode.toDataURL(res.orderId).then(setQr);
+        setTimeout(() => {
+          setRerender(!rerender);
+        }, 100);
         if (canvas !== null) {
           console.log('not null');
           QRCode.toCanvas(canvas, res.orderId, function (error) {
@@ -45,13 +42,14 @@ export default function PassOption({ handleTimeOut }: Props) {
       },
       onError: (err) => {
         console.log(err);
+        handleError();
       },
     },
   );
   const {
     run,
-    error: paymentError,
     data: paymentData,
+    cancel: cancelInquiry,
   } = useRequest(
     (e: { order_id: string; ihotel_order_id: string }) => {
       return passInquiry({
@@ -64,13 +62,18 @@ export default function PassOption({ handleTimeOut }: Props) {
       onSuccess: (res) => {
         console.log(res);
       },
+      onError: (err) => {
+        console.log(err);
+        handleError();
+      },
+      onBefore: () => {
+        if (pathname === '/reservation') {
+          cancelInquiry();
+        }
+      },
     },
   );
-  const {
-    run: runNotif,
-    error: notifError,
-    data: notiftData,
-  } = useRequest(
+  const { run: runNotif } = useRequest(
     (e: { order_id: string; phone: string }) => {
       return passNotify({
         order_id: e.order_id,
@@ -82,48 +85,26 @@ export default function PassOption({ handleTimeOut }: Props) {
       onSuccess: (res) => {
         console.log(res);
       },
+      onError: (err) => {
+        console.log(err);
+        handleError();
+      },
     },
   );
-  const testFunc = (e: string) => {
+
+  useEffect(() => {
     const interval = setInterval(() => {
-      if (e === 'run') {
+      if (data && id) {
         run({
-          order_id: data?.orderId ? data.orderId : '',
-          ihotel_order_id: id ? id : '',
+          order_id: data.orderId,
+          ihotel_order_id: id,
         });
-      } else {
-        clearInterval(interval);
+      } else if (pathname === '/reservation') {
+        return () => clearInterval(interval);
       }
     }, 5000);
-  };
-  useEffect(() => {
-    if (pathname !== '/payment/') {
-      testFunc('stop');
-    }
-  }, [pathname]);
-
-  // useEffect(()=>{
-  //   const check = setInterval(() => {
-  //     if (data && id!==null) {
-  //       run({ order_id: data?.orderId, ihotel_order_id: id });
-
-  //     } else {
-  //       return ()=>clearInterval(check);
-  //     }
-  //     if (pathname === '/reservation/') {
-  //       clearInterval(check);
-  //       return 0;
-  //     }
-  //     if (stop === true) {
-  //       clearInterval(check);
-  //       return 0;
-  //     }
-  //   }, 5000);
-
-  //   if (paymentData?.response.ret.status === 'paid') {
-  //     clearInterval(check);
-  //   }
-  // },[data])
+    return () => clearInterval(interval);
+  }, [data]);
 
   const [phoneNumber, setPhoneNumber] = useState('');
   const isButtonDisabled = phoneNumber.length !== 8;
@@ -136,7 +117,6 @@ export default function PassOption({ handleTimeOut }: Props) {
   };
 
   const handleStop = () => {
-    setStop(true);
     handleTimeOut();
   };
 
@@ -170,7 +150,6 @@ export default function PassOption({ handleTimeOut }: Props) {
           {paymentData?.response.ret.status !== 'paid' ? (
             <div className='flex flex-col items-center justify-center gap-[24px]'>
               <div>
-                above
                 <div className='relative h-[200px] w-[200px] overflow-hidden'>
                   <canvas
                     id='canvas'
@@ -178,17 +157,6 @@ export default function PassOption({ handleTimeOut }: Props) {
                     width={200}
                     className='!h-[200px] !w-[200px] bg-white text-black'
                   ></canvas>
-                  {/* <Image
-                  src={qr}
-                  // src={data.orderId}
-                  // src={'https://s.qpay.mn/RKUyj1I8I'}
-                  alt='/qr'
-                  fill={true}
-                  sizes='50vw'
-                  quality={100}
-                  className='absolute h-auto w-auto select-none object-cover'
-                  draggable={false}
-                /> */}
                 </div>
               </div>
               <p className='foont-bold w-[250px] text-center leading-[16px]'>
@@ -218,20 +186,15 @@ export default function PassOption({ handleTimeOut }: Props) {
                 {lang === 'en' ? 'Proceed' : 'Үргэлжлүүлэх'}
               </button>
             </div>
-          ) : paymentError ? (
-            <>Error</>
           ) : (
-            <div>Success</div>
+            <Success />
           )}
-
-          {/* paymentError ? (<>Error</>) */}
-          {/* <div>Success</div> */}
-
           <button
             className='font-medium leading-[16px] text-pass-green'
             onClick={() => {
-              setStop(true);
-              router.back();
+              setTimeout(() => {
+                router.back();
+              }, 1000);
             }}
           >
             {lang === 'en' ? 'Back' : 'Буцах'}

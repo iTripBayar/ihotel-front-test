@@ -169,6 +169,7 @@ declare namespace Payment {
   interface QPay {
     success: boolean;
     message: string;
+    createdAt: string;
     response: {
       invoiceId: string;
       qrText: string;

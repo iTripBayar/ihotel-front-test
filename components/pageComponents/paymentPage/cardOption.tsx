@@ -2,9 +2,15 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, ChangeEvent } from 'react';
 import Image from 'next/image';
 
-export default function CardOption() {
+interface Props {
+  handleError: () => void;
+  handleTimeOut: () => void;
+}
+
+export default function CardOption({ handleError, handleTimeOut }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const id = searchParams.get('id');
 
   const router = useRouter();
   const [cardNumber, setCardNumber] = useState('');
@@ -65,7 +71,7 @@ export default function CardOption() {
     <div className='flex flex-col items-center gap-[24px] py-[32px] pb-[50px] text-main-text'>
       <div className='flex flex-col items-center justify-center gap-[4px]'>
         <h3 className='text-[16px] font-bold uppercase'>Card payment</h3>
-        <p className='text-[12px] font-bold leading-[12px] opacity-75'>{`RN-11282#84`}</p>
+        <p className='text-[12px] font-bold leading-[12px] opacity-75'>{`RN-${id}`}</p>
       </div>
       <div className='flex min-w-[300px] flex-col items-center justify-start gap-[20px] rounded-[8px] border border-white/50 px-[16px] py-[16px] shadow-[0px_0px_12px_2px_rgb(255,255,255,0.1)] 2xs:min-w-[340px] 2xs:px-[24px] sm:min-w-[400px] md:min-w-[450px]'>
         {/* bank info */}

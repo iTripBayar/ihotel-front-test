@@ -46,7 +46,6 @@ const Amenity = ({ data, internet }: Props) => {
   for (let i = 0; i < data.length; i++) {
     displayAmenities.push(data[i]);
   }
-  console.log(displayAmenities);
   return (
     <div className='flex flex-col gap-[16px] border-t-[1px] border-t-black/[.1] pt-[24px] text-[16px] text-main-text lg:gap-[24px] lg:border-none lg:pt-0'>
       <p className=' text-[20px] font-medium leading-[20px]'>

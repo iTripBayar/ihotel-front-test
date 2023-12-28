@@ -6,20 +6,22 @@ import { socialPayInquiry, socialPayPayment } from '@/utils/payment/socialPay';
 import Timer from './timer';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
+import Success from './success';
+import { useAppCtx } from '@/contexts/app';
 
 interface Props {
   handleTimeOut: () => void;
+  handleError: () => void;
 }
 
-export default function SocialPayOption({ handleTimeOut }: Props) {
+export default function SocialPayOption({ handleTimeOut, handleError }: Props) {
   const searchParams = useSearchParams();
+  const { appState } = useAppCtx();
   const pathname = usePathname();
   const lang = searchParams.get('lang');
   const id = searchParams.get('id');
-
   const router = useRouter();
   const [qr, setQr] = useState<string>('');
-  const [stop, setStop] = useState(false);
 
   const { data, loading, error } = useRequest(
     () => {
@@ -32,14 +34,11 @@ export default function SocialPayOption({ handleTimeOut }: Props) {
       },
       onError: (err) => {
         console.log(err);
+        handleError();
       },
     },
   );
-  const {
-    run,
-    error: paymentError,
-    data: paymentData,
-  } = useRequest(
+  const { run, data: paymentData } = useRequest(
     (e: { order_id: string; ihotel_order_id: string }) => {
       return socialPayInquiry({
         order_id: e.order_id,
@@ -51,10 +50,13 @@ export default function SocialPayOption({ handleTimeOut }: Props) {
       onSuccess: (res) => {
         console.log(res);
       },
+      onError: (err) => {
+        console.log(err);
+        handleError();
+      },
     },
   );
   const handleStop = () => {
-    setStop(true);
     handleTimeOut();
   };
 
@@ -62,20 +64,12 @@ export default function SocialPayOption({ handleTimeOut }: Props) {
     const check = setInterval(() => {
       if (id) {
         run({ order_id: id, ihotel_order_id: id });
-      } else {
-        clearInterval(check);
+      } else if (pathname === '/reservation') {
+        return () => clearInterval(check);
       }
     }, 5000);
-    if (pathname !== '/payment/') {
-      clearInterval(check);
-    }
-    if (paymentData?.response.status === 'SENT') {
-      clearInterval(check);
-    }
-    if (stop === true) {
-      clearInterval(check);
-    }
-  }, [data]);
+    return () => clearInterval(check);
+  }, [data, appState.paymentMethod]);
 
   if (!error) {
     if (loading === false && data) {
@@ -86,7 +80,7 @@ export default function SocialPayOption({ handleTimeOut }: Props) {
             <div className='flex flex-col gap-[12px] font-medium'>
               <div className='flex flex-col gap-[8px] leading-[16px]'>
                 <p className=' opacity-60'>Merchant</p>
-                <p className='pl-[12px] font-medium'>{`RN-11282`}</p>
+                <p className='pl-[12px] font-medium'>{`RN-${id}`}</p>
               </div>
               <div className='flex flex-col gap-[8px] leading-[16px]'>
                 <p className=' opacity-60'>
@@ -118,10 +112,8 @@ export default function SocialPayOption({ handleTimeOut }: Props) {
                   : 'Та QR кодыг уншуулах эсвэл апп ашиглан төлбөр тооцоогоо хийнэ үү.'}
               </p>
             </div>
-          ) : paymentError ? (
-            <>Error</>
           ) : (
-            <div>Success</div>
+            <Success />
           )}
           <button
             className='font-medium leading-[16px] text-primary-blue'
