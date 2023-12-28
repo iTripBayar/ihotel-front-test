@@ -7,7 +7,7 @@ import BurgerMenu from '@/components/common/burgermenu';
 import { useState, useRef, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import HeaderVariants from '@/components/common/headerVariants';
-import { fetchData } from '@/utils';
+import { fetchData, fetchDataSearch } from '@/utils';
 import SearchSection from '@/components/common/searchSection';
 import Header from '@/components/common/header';
 import BottomSection from '@/components/common/bottomSection';
@@ -25,6 +25,9 @@ const Home = () => {
   const searchBoxRef = useRef(null);
   const { data, loading, error } = useRequest(() => {
     return fetchData();
+  });
+  const { data: searchData } = useRequest(() => {
+    return fetchDataSearch();
   });
 
   const { appState } = useAppCtx();
@@ -61,8 +64,6 @@ const Home = () => {
     required: false,
   });
 
-  console.log(data);
-
   if (!error)
     return (
       <main className='relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px] '>
@@ -76,7 +77,11 @@ const Home = () => {
           }
         />
         {headerVer === 'fixed' ? (
-          <HeaderVariants ver={headerVer} formattedDate={null} />
+          <HeaderVariants
+            ver={headerVer}
+            formattedDate={null}
+            searchData={searchData}
+          />
         ) : null}
         {appState.logOrSign === 'log' ||
         appState.logOrSign === 'forgotPassword' ? (
@@ -96,7 +101,11 @@ const Home = () => {
         )}
         <div ref={searchBoxRef}>
           {headerVer !== 'fixed' ? (
-            <SearchSection ver={'normal'} formattedDate={null} />
+            <SearchSection
+              ver={'normal'}
+              formattedDate={null}
+              searchData={searchData}
+            />
           ) : null}
         </div>
         {loading ? (

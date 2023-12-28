@@ -14,7 +14,12 @@ interface Props {
   };
 }
 
-export default function BottomDialog({ stat, handleSubmit, orderLoading, clients }: Props) {
+export default function BottomDialog({
+  stat,
+  handleSubmit,
+  orderLoading,
+  clients,
+}: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const [isChecked, setIsChecked] = useState(false);
@@ -71,9 +76,13 @@ export default function BottomDialog({ stat, handleSubmit, orderLoading, clients
         onClick={handleSubmit}
         disabled={orderLoading === true || isChecked === false}
       >
-        {orderLoading === true
-          ? `${lang === 'en' ? 'Loading...' : 'Уншиж байна...'}`
-          : `${lang === 'en' ? 'Proceed to payment' : 'Төлбөр төлөх'}`}
+        {stat === 'online'
+          ? `${
+              orderLoading === true
+                ? `${lang === 'en' ? 'Loading...' : 'Уншиж байна...'}`
+                : `${lang === 'en' ? 'Proceed to payment' : 'Төлбөр төлөх'}`
+            }`
+          : `${lang === 'en' ? '' : ''}`}
       </button>
     </div>
   );

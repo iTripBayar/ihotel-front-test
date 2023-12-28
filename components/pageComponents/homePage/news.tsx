@@ -54,7 +54,7 @@ const News = ({ data }: iProps) => {
                 />
               </div>
               {/* bottom section */}
-              <div className='flex w-full items-center justify-center px-[8px] text-[14px] text-main-text lg:px-[16px] lg:text-[16px]'>
+              <div className='flex w-full items-start text-start justify-start px-[8px] text-[14px] text-main-text lg:px-[16px] lg:text-[16px]'>
                 <p className=' line-clamp-3 2xs:line-clamp-2'>
                   {/* {state.language === 'mn' ? data.title : ''} */}
                   {lang === 'en' ? '' : index.title}

@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { useAppCtx } from '@/contexts/app';
 import { useRequest } from 'ahooks';
-import { fetchData, fetchDataSearch } from '@/utils';
+import { fetchData } from '@/utils';
 
 interface iProps {
   ver: string;
@@ -14,9 +14,10 @@ interface iProps {
     to: { year: string; month: string; date: string };
     toEn: { year: string; month: string; date: string };
   } | null;
+  searchData: SearchData.Data | undefined;
 }
 
-const SearchSection = ({ ver, formattedDate }: iProps) => {
+const SearchSection = ({ ver, formattedDate, searchData }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const filter = searchParams.get('filter');
@@ -28,9 +29,6 @@ const SearchSection = ({ ver, formattedDate }: iProps) => {
 
   const { data } = useRequest(() => {
     return fetchData();
-  });
-  const { data: searchData } = useRequest(() => {
-    return fetchDataSearch();
   });
 
   const changeToggle = useCallback(() => {

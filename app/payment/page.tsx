@@ -7,9 +7,7 @@ import CardOption from '@/components/pageComponents/paymentPage/cardOption';
 import QpayOption from '@/components/pageComponents/paymentPage/qpayOption';
 import { useAppCtx } from '@/contexts/app';
 import PaymentMethod from '@/components/pageComponents/reservationPage/paymentMethod';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-const ErrorComponent = dynamic(() => import('@/components/common/404'));
 import { Alert, AlertIcon, ChakraProvider } from '@chakra-ui/react';
 import { useState } from 'react';
 
@@ -53,7 +51,7 @@ export default function PaymentPage() {
             {appState.paymentMethod === 'SocialPay' ? (
               <SocialPayOption handleTimeOut={handleTimeOut} />
             ) : appState.paymentMethod === 'pass' ? (
-              <PassOption />
+              <PassOption handleTimeOut={handleTimeOut} />
             ) : appState.paymentMethod === 'card' ? (
               <CardOption />
             ) : appState.paymentMethod === 'qPay' ? (

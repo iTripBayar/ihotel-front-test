@@ -2,7 +2,7 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { ChakraProvider, CircularProgress } from '@chakra-ui/react';
 import Image from 'next/image';
 import { useRequest } from 'ahooks';
-import { socialPayInquiry, testSocialPay } from '@/utils';
+import { socialPayInquiry, socialPayPayment } from '@/utils/payment/socialPay';
 import Timer from './timer';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
@@ -23,7 +23,7 @@ export default function SocialPayOption({ handleTimeOut }: Props) {
 
   const { data, loading, error } = useRequest(
     () => {
-      return testSocialPay(id ? id : '');
+      return socialPayPayment(id ? id : '');
     },
     {
       onSuccess: (res) => {

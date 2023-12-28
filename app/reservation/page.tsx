@@ -7,14 +7,13 @@ import CancelTerm from '@/components/pageComponents/reservationPage/cancelTerm';
 import GeneralInfo from '@/components/pageComponents/reservationPage/generalInfo';
 import OrderInfo from '@/components/pageComponents/reservationPage/orderInfo';
 import UserInfo from '@/components/pageComponents/reservationPage/userInfo';
-import { fetchDataHotel, fetchCreateOrder } from '@/utils';
+import { fetchDataHotel, fetchCreateOrder, fetchDataSearch } from '@/utils';
 import { useRequest } from 'ahooks';
 import Footer from '@/components/common/footer';
 import BurgerMenu from '@/components/common/burgermenu';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
 import { unserialize } from 'serialize-php';
-import Header from '@/components/common/header';
 import { CircularProgress, ChakraProvider } from '@chakra-ui/react';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
@@ -66,6 +65,9 @@ const ReservationPage = () => {
         checkOut: checkOut ? checkOut.split('|')[0] : '',
       });
     return fetchDataHotel({ slug: '', checkIn: '', checkOut: '' });
+  });
+  const { data: searchData } = useRequest(() => {
+    return fetchDataSearch();
   });
 
   const orderingRooms: {
@@ -222,11 +224,11 @@ const ReservationPage = () => {
   if (!error)
     return (
       <div>
-        {loading ? (
-          <Header user='' />
-        ) : (
-          <HeaderVariants ver={'hotel'} formattedDate={null} />
-        )}
+        <HeaderVariants
+          ver={'hotel'}
+          formattedDate={null}
+          searchData={searchData}
+        />
         <div className='fixed left-[50%] top-[72px] z-[900] hidden h-auto w-auto translate-x-[-50%] lg:flex'>
           {appState.calendar === 'open' ? <CalendarDialog ver={'web'} /> : null}
         </div>

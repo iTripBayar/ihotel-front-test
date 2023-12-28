@@ -207,7 +207,7 @@ const MapContainer = ({ data, lat, lng, zoom, dollarRate }: iProps) => {
                           cluster.geometry.coordinates[0],
                           cluster.geometry.coordinates[1],
                         ],
-                        zoom: 13,
+                        zoom: 11,
                         duration: 1500,
                         speed: 0.5,
                         curve: 2,
@@ -313,7 +313,7 @@ const MapContainer = ({ data, lat, lng, zoom, dollarRate }: iProps) => {
                   </svg>
                 </div>
                 <HotelCard
-                  ver='home'
+                  ver='map'
                   data={cardData[0]}
                   fromMap={true}
                   dollarRate={dollarRate}

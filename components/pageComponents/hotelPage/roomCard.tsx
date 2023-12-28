@@ -11,8 +11,8 @@ import { Pagination } from 'swiper/modules';
 interface Props {
   data: roomData.room;
   handleScrollToRooms: (ver: string) => void;
-  stat: string
-  dollarRate: string
+  stat: string;
+  dollarRate: string;
 }
 
 const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
@@ -192,19 +192,21 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
           </div>
         </div>
         {/* desc */}
-        <div className='border-y-[1px] border-y-black/[.15] py-[24px] text-[15px] text-main-text/50'>
-          {data.description
-            ? data.description?.slice(
-                0,
-                openDesc === false ? 30 : data.description.length,
-              )
-            : null}
-          ...
-          <span className='text-primary-blue'>
+        <div className='flex min-h-[80px] w-full flex-col gap-[6px] border-y-[1px] border-y-black/[.15] py-[24px] text-[15px] leading-[16px] text-main-text/50'>
+          <p
+            className={`${openDesc === false ? 'line-clamp-1' : ''} w-full `}
+            dangerouslySetInnerHTML={{
+              __html: data.description ? data.description : '',
+            }}
+          ></p>
+          <p
+            className='self-end text-primary-blue'
+            onClick={() => setOpenDesc(!openDesc)}
+          >
             {openDesc === false
               ? `${lang === 'en' ? 'More' : 'Цааш унших'}`
               : `${lang === 'en' ? 'Less' : 'Хураангуй'}`}
-          </span>
+          </p>
         </div>
         {/* room price & occupancy */}
         {stat !== 'data' ? (

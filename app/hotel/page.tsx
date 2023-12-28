@@ -2,7 +2,7 @@
 import HeaderVariants from '@/components/common/headerVariants';
 import HotelImages from '@/components/pageComponents/hotelPage/hotelImages';
 import { useRequest } from 'ahooks';
-import { fetchDataHotel } from '@/utils';
+import { fetchDataHotel, fetchDataSearch } from '@/utils';
 import HotelInfo from '@/components/pageComponents/hotelPage/hotelInfo';
 import Amenity from '@/components/pageComponents/hotelPage/amenity';
 import Review from '@/components/pageComponents/hotelPage/review';
@@ -142,6 +142,9 @@ const HotelPage = () => {
       });
     return fetchDataHotel({ slug: '', checkIn: '', checkOut: '' });
   });
+  const { data: searchData } = useRequest(() => {
+    return fetchDataSearch();
+  });
 
   let stat = '';
   if (data?.hotel.isOnline == 1 && data?.hotel.isOffline == 0) {
@@ -224,11 +227,14 @@ const HotelPage = () => {
       imagesData.push(data.hotel.images[i]);
     }
   }
-  console.log(data);
   if (!error)
     return (
       <main className='relative'>
-        <HeaderVariants ver={'hotel'} formattedDate={formattedDate} />
+        <HeaderVariants
+          ver={'hotel'}
+          formattedDate={formattedDate}
+          searchData={searchData}
+        />
         {showAlert === true ? (
           <CartAlert close={() => setShowAlert(false)} />
         ) : null}
@@ -260,7 +266,7 @@ const HotelPage = () => {
             </div>
           </ChakraProvider>
         ) : (
-          <div className='flex flex-col gap-[24px] overflow-x-hidden px-[16px] pb-[32px] pt-[80px] sm:px-[50px] md:px-[72px] lg:gap-[48px] lg:px-[60px]  xl:px-[100px] 2xl:px-[150px]'>
+          <div className='flex flex-col gap-[24px] overflow-x-hidden px-[16px] pb-[50px] pt-[80px] sm:px-[50px] md:px-[72px] lg:gap-[48px]  lg:px-[60px] xl:px-[100px] 2xl:px-[150px]'>
             <div className='grid grid-cols-1 gap-[24px] lg:grid-cols-5 lg:gap-[20px]'>
               <div className='flex w-full flex-col gap-[24px] lg:col-span-3 lg:gap-[24px] '>
                 <div className='flex flex-col gap-[16px] 2xs:gap-[24px] lg:flex-col-reverse lg:gap-[24px]'>
@@ -279,10 +285,13 @@ const HotelPage = () => {
                     addressEn={data?.hotel.addressEn}
                   />
                 </div>
-                <Amenity
-                  data={data?.hotel.facilities ? data?.hotel.facilities : []}
-                  internet={data ? data?.hotel.isInternet : 0}
-                />
+                {(data?.hotel.facilities && data.hotel.facilities.length > 0) ||
+                data?.hotel.isInternet !== 0 ? (
+                  <Amenity
+                    data={data?.hotel.facilities ? data?.hotel.facilities : []}
+                    internet={data ? data?.hotel.isInternet : 0}
+                  />
+                ) : null}
               </div>
               <div className='flex flex-col gap-[24px] lg:col-span-2'>
                 {/* contanct */}
@@ -326,11 +335,13 @@ const HotelPage = () => {
                     <p>{data?.hotel.email}</p>
                   </div>
                 </div>
-                <Review
-                  ver=''
-                  data={data?.reviews ? data?.reviews : []}
-                  handleScrollTo={(ver: string) => handleScrollTo(ver)}
-                />
+                {data?.reviews && data?.reviews.length > 0 ? (
+                  <Review
+                    ver=''
+                    data={data?.reviews ? data?.reviews : []}
+                    handleScrollTo={(ver: string) => handleScrollTo(ver)}
+                  />
+                ) : null}
                 {/* stat & price */}
                 <div className='hidden flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] lg:flex'>
                   {stat !== 'data' ? (
@@ -410,9 +421,12 @@ const HotelPage = () => {
                 </div>
               </div>
             </div>
-            <Services
-              services={data?.specialServices ? data?.specialServices : []}
-            />
+            {data?.activities && data.activities.length > 0 ? (
+              <Services
+                activities={data?.activities ? data?.activities : []}
+                dollarRate={data?.rate ? data?.rate : ''}
+              />
+            ) : null}
             <div ref={roomsContainer}>
               <HotelRooms
                 data={data?.rooms}
@@ -424,34 +438,43 @@ const HotelPage = () => {
               />
             </div>
             <Description
-              introduction={data?.hotel.introduction}
-              introductionEn={data?.hotel.introductionEn}
+              introduction={
+                data?.hotel.introduction ? data?.hotel.introduction : ''
+              }
+              introductionEn={
+                data?.hotel.introductionEn ? data?.hotel.introductionEn : ''
+              }
             />
-            <div ref={reviewsContainer}>
-              <Review
-                ver='full'
-                data={data?.reviews ? data?.reviews : []}
-                handleScrollTo={(ver: string) => handleScrollTo(ver)}
-              />
-            </div>
-            {/* recommended places */}
-            <div className='flex w-full flex-col gap-[24px] border-t-[1px] border-black/[.15] pt-[24px] lg:gap-[32px] lg:pt-[32px]'>
-              <p className='text-[20px] font-medium leading-[20px] text-main-text'>
-                {lang === 'en' ? 'Recommended' : 'Санал болгох'}
-              </p>
-              <div className='grid w-full grid-cols-1 gap-[24px] sm:grid-cols-2 lg:grid-cols-3 lg:gap-[32px]'>
-                {data?.offerHotels &&
-                  data?.offerHotels.map((index, i) => (
-                    <HotelCard
-                      data={index}
-                      key={i}
-                      fromMap={false}
-                      ver='home'
-                      dollarRate={data ? data.rate : '1'}
-                    />
-                  ))}
+            {data?.reviews && data.reviews.length > 0 ? (
+              <div ref={reviewsContainer}>
+                <Review
+                  ver='full'
+                  data={data?.reviews ? data?.reviews : []}
+                  handleScrollTo={(ver: string) => handleScrollTo(ver)}
+                />
               </div>
-            </div>
+            ) : null}
+
+            {/* recommended places */}
+            {data?.offerHotels && data?.offerHotels.length > 0 ? (
+              <div className='flex w-full flex-col gap-[24px] border-t-[1px] border-black/[.15] pt-[24px] lg:gap-[32px] lg:pt-[32px]'>
+                <p className='text-[20px] font-medium leading-[20px] text-main-text'>
+                  {lang === 'en' ? 'Recommended' : 'Санал болгох'}
+                </p>
+                <div className='grid w-full grid-cols-1 gap-[24px] sm:grid-cols-2 lg:grid-cols-3 lg:gap-[32px]'>
+                  {data?.offerHotels &&
+                    data?.offerHotels.map((index, i) => (
+                      <HotelCard
+                        data={index}
+                        key={i}
+                        fromMap={false}
+                        ver='home'
+                        dollarRate={data ? data.rate : '1'}
+                      />
+                    ))}
+                </div>
+              </div>
+            ) : null}
           </div>
         )}
         <Footer />

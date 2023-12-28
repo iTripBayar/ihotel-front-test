@@ -2,26 +2,23 @@ import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 interface Props {
-  introduction: string | null | undefined;
-  introductionEn: string | null | undefined;
+  introduction: string;
+  introductionEn: string;
 }
 
 const Description = ({ introduction, introductionEn }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const [open, setOpen] = useState(false);
-  const sample =
-    ' Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis animi numquam blanditiis nihil aspernatur autem distinctio vero quia tempora nesciunt, consequuntur natus, voluptatum iste quibusdam architecto possimus vitae iusto cum expedita doloremque saepe, praesentium dolores modi? Reprehenderit nobis soluta fuga. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis animi numquam blanditiis nihil aspernatur autem distinctio vero quia tempora nesciunt, consequuntur natus, voluptatum iste quibusdam architecto possimus vitae iusto cum expedita doloremque saepe, praesentium dolores modi? Reprehenderit nobis soluta fuga.';
-
-  console.log(introduction);
   return (
     <div className='flex w-full flex-col border-t-[1px] border-t-black/[.15] pt-[24px] text-justify text-[14px] leading-[24px] text-sub-text/75 lg:pt-[32px]'>
       <div className='flex flex-col lg:gap-[16px]'>
-        <p className={`${open === false ? ' line-clamp-3' : ''}`}>
-          {introduction
-            ? `${lang === 'en' ? introductionEn : introduction}`
-            : sample}
-        </p>
+        <p
+          className={`${open === false ? 'line-clamp-3' : ''}`}
+          dangerouslySetInnerHTML={{
+            __html: lang === 'en' ? introductionEn : introduction,
+          }}
+        ></p>
         <div
           className='flex items-center gap-[8px] text-[14px] font-medium leading-[15px] text-primary-blue '
           onClick={() => setOpen(!open)}

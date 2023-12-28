@@ -1,6 +1,6 @@
 declare namespace HotelData {
   interface full {
-    activities: [];
+    activities: Activities[];
     average: number;
     comfort: number;
     diff: number;
@@ -17,12 +17,25 @@ declare namespace HotelData {
     phoneNumber: string;
     price: number;
     rate: string;
-    reviews: [];
+    reviews: Reviews[];
     rooms: roomData.room[];
-    services: { activities: [] };
+    services: { Бусад: Services[] | null; ТопОнцлох: Services[] | null };
     specialServices: [];
     startdate: string;
     things: number;
+  }
+  interface Activities {
+    createdAt: string;
+    description: string;
+    descriptionEn: string;
+    hotelId: number;
+    id: number;
+    image: string;
+    isActive: null;
+    price: string;
+    title: string;
+    titleEn: string;
+    updatedAt: string;
   }
   interface Hotel {
     address: string;
@@ -227,5 +240,40 @@ declare namespace HotelData {
     userId: number | null;
     userdata: string;
     xroomReservationId: number | null;
+  }
+  interface Reviews {
+    average: number;
+    comfort: number;
+    comment: string;
+    createdAt: string;
+    displayName: number;
+    employees: number;
+    fresh: number;
+    hotelId: number;
+    id: number;
+    isApproved: number;
+    location: number;
+    price: number;
+    things: number;
+    title: string | null;
+    travelTeam: number;
+    travelType: number;
+    updatedAt: string;
+    userId: number | null;
+  }
+  interface Services {
+    createdAt: string | null;
+    facilityCategoryId: number;
+    icon: string | null;
+    id: number;
+    image: string | null;
+    isDefault: number;
+    isFilter: number;
+    isMost: number;
+    mobileIcon: string | null;
+    name: string;
+    nameEn: string | null;
+    syncId: number;
+    updatedAt: string;
   }
 }

@@ -5,11 +5,17 @@ import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
   ver: string;
-  formattedDate: {from: {year: string, month: string, date: string}, fromEn: {year: string, month: string, date:string}, to:{year: string, month: string, date: string}, toEn: {year: string, month: string, date: string}} | null
+  formattedDate: {
+    from: { year: string; month: string; date: string };
+    fromEn: { year: string; month: string; date: string };
+    to: { year: string; month: string; date: string };
+    toEn: { year: string; month: string; date: string };
+  } | null;
+  searchData: SearchData.Data | undefined;
 }
 
 
-const HeaderVariants = ({ ver, formattedDate }: iProps) => {
+const HeaderVariants = ({ ver, formattedDate, searchData }: iProps) => {
   const { dispatch } = useAppCtx();
   return (
     <header
@@ -64,7 +70,11 @@ const HeaderVariants = ({ ver, formattedDate }: iProps) => {
           ver === 'hotel' || ver === 'reservation' ? '' : 'hidden'
         } w-full items-center lg:flex`}
       >
-        <SearchSection ver={ver} formattedDate={formattedDate} />
+        <SearchSection
+          ver={ver}
+          formattedDate={formattedDate}
+          searchData={searchData}
+        />
       </div>
 
       <div className='flex items-center justify-end'>

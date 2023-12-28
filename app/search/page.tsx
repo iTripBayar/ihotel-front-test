@@ -65,7 +65,9 @@ const SearchPage = () => {
         place: place,
         city: city,
         checkin: encodeURIComponent(format(newDate, 'MM/dd/yyyy')),
+        // checkin: '',
         checkout: encodeURIComponent(format(nextDay, 'MM/dd/yyyy')),
+        // checkout: '',
         isClosed: '',
         page: page !== null ? page : '1',
         prices:
@@ -90,7 +92,11 @@ const SearchPage = () => {
         className={`relative flex h-screen w-full flex-col gap-[20px] overflow-y-auto`}
         id='container'
       >
-        <HeaderVariants ver={'search'} formattedDate={null}/>
+        <HeaderVariants
+          ver={'search'}
+          formattedDate={null}
+          searchData={searchData}
+        />
         {appState.logOrSign === 'log' ||
         appState.logOrSign === 'forgotPassword' ? (
           <LogIn />
@@ -115,7 +121,11 @@ const SearchPage = () => {
             appState.filter === 'mobile' ? 'flex flex-col gap-[24px]' : ''
           }`}
         >
-          <SearchSection ver={'headerSearch'} formattedDate={null} />
+          <SearchSection
+            ver={'headerSearch'}
+            formattedDate={null}
+            searchData={searchData}
+          />
           {appState.filter === 'mobile' ? (
             <FilterOptions
               categories={searchData?.categories ? searchData?.categories : []}

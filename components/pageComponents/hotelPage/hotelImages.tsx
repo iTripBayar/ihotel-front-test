@@ -22,7 +22,6 @@ const HotelImages = ({ images, image }: Props) => {
   if (images.length < 10) {
     aditionalImages = aditionalImages.slice(0, 10 - images.length);
   }
-  console.log(images);
 
   return (
     <div className='flex w-full flex-col gap-[4px] overflow-hidden rounded-b-[6px] rounded-t-[12px]'>

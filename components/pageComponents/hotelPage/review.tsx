@@ -1,9 +1,10 @@
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import useWindowSize from '@/hooks/windowSize';
+import { useState } from 'react';
 interface Props {
   ver: string;
-  data: any[];
+  data: HotelData.Reviews[];
   handleScrollTo: (ver: string) => void;
 }
 
@@ -11,65 +12,82 @@ const Review = ({ ver, data, handleScrollTo }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const size = useWindowSize();
+  const [page, setPage] = useState(1);
 
-  const sample = [
-    {
-      key: 0,
-      desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur magni corporis, at earum officiis possimus fugiat cupiditate iure provident illo!',
-    },
-    {
-      key: 1,
-      desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur magni corporis, at earum officiis possimus fugiat cupiditate iure provident illo!',
-    },
-    {
-      key: 3,
-      desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur magni corporis, at earum officiis possimus fugiat cupiditate iure provident illo!',
-    },
-    {
-      key: 4,
-      desc: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur magni corporis, at earum officiis possimus fugiat cupiditate iure provident illo!',
-    },
-  ];
+  const dateStrings: string[] = [];
+  let totalEmployees = 0;
+  let totalFresh = 0;
+  let totalComfort = 0;
+  let totalLocation = 0;
+  let totalPrice = 0;
+  let totalThings = 0;
+  let totalAverage = 0;
 
-  const sampleGraphs = [
+  for (let i = 0; i < data.length; i++) {
+    const toDate = new Date(data[i].updatedAt);
+    const value = toDate.toISOString().split('T')[0];
+    dateStrings.push(value);
+    totalEmployees = totalEmployees + data[i].employees;
+    totalFresh = totalFresh + data[i].fresh;
+    totalComfort = totalComfort + data[i].comfort;
+    totalLocation = totalLocation + data[i].location;
+    totalPrice = totalPrice + data[i].price;
+    totalThings = totalThings + data[i].things;
+    totalAverage = totalAverage + data[i].average;
+  }
+  const reviewGraph = [
     {
-      key: 10,
       title: 'Буудлын ажилчид',
-      titleEn: 'Hotel staff',
-      rate: 10,
+      titleEn: 'Staff',
+      value: totalEmployees / data.length,
     },
     {
-      key: 11,
       title: 'Өрөөний цэвэр ахуй',
-      titleEn: 'Room cleanliness',
-      rate: 9,
+      titleEn: 'Freshness',
+      value: totalFresh / data.length,
     },
-    { key: 12, title: 'Тав тух', titleEn: 'Comfort', rate: 8 },
-    { key: 13, title: 'Байршил', titleEn: 'Location', rate: 7 },
-    { key: 14, title: 'Үнэ', titleEn: 'Price', rate: 5 },
-    { key: 15, title: 'Эд хэрэгсэл', titleEn: 'Furniture', rate: 3.5 },
+    { title: 'Тав тух', titleEn: 'Comfort', value: totalComfort / data.length },
+    {
+      title: 'Байршил',
+      titleEn: 'Location',
+      value: totalLocation / data.length,
+    },
+    { title: 'Үнэ', titleEn: 'Price', value: totalPrice / data.length },
+    {
+      title: 'Эд хэрэгсэл',
+      titleEn: 'Furniture',
+      value: totalThings / data.length,
+    },
   ];
+  totalAverage = totalAverage / data.length;
 
   return (
     <div className='flex w-full flex-col gap-[24px] border-t-[1px] border-t-black/[.1] pt-[24px] text-[16px] lg:border-none lg:pt-0 '>
-      <p className='text-[20px] font-medium leading-[20px]'>
-        {lang === 'en' ? 'Reviews' : 'Үйлчлүүлэгчдийн сэтгэгдэл'}
-      </p>
+      <div className='flex w-full items-center justify-between'>
+        <p className='text-[20px] font-medium leading-[20px]'>
+          {lang === 'en' ? 'Reviews' : 'Үйлчлүүлэгчдийн сэтгэгдэл'}
+        </p>
+        {ver === 'full' ? (
+          <div className='flex h-[30px] w-[40px] items-center justify-center rounded-[6px] bg-primary-blue font-medium text-white 2xs:w-[50px] sm:right-[16px]  '>
+            {totalAverage}
+          </div>
+        ) : null}
+      </div>
       {/* graphs */}
       {ver === 'full' ? (
         <div className='grid w-full grid-cols-1 gap-[16px] pb-[10px] md:grid-cols-2 lg:grid-cols-3 lg:gap-[16px]'>
-          {sampleGraphs.map((index, i) => (
+          {reviewGraph.map((index, i) => (
             <div
               key={i}
               className='flex flex-col gap-[4px] text-[14px] font-medium leading-[16px] text-main-text lg:gap-[16px] lg:text-[16px] lg:leading-[20px]'
             >
               <p>{lang === 'en' ? index.titleEn : index.title}</p>
-              <div className='flex h-[16px] w-full rounded-full bg-black/[.15] text-[12px] leading-[12px]'>
+              <div className='flex h-[16px] w-full rounded-full bg-black/[.12] text-[12px] leading-[12px]'>
                 <div
-                  style={{ width: `${index.rate * 10}%` }}
+                  style={{ width: `${index.value * 10}%` }}
                   className={`flex h-full items-center justify-end rounded-full bg-primary-blue px-[12px] tracking-wider text-white`}
                 >
-                  {index.rate * 10}%
+                  {index.value * 10}%
                 </div>
               </div>
             </div>
@@ -83,7 +101,7 @@ const Review = ({ ver, data, handleScrollTo }: Props) => {
         }`}
       >
         {ver !== 'full' &&
-          sample
+          data
             .slice(
               0,
               size.width && size.width >= 768 && size.width < 1024 ? 2 : 1,
@@ -91,11 +109,11 @@ const Review = ({ ver, data, handleScrollTo }: Props) => {
             .map((index, i) => (
               <div
                 key={i}
-                className='relative z-10 flex flex-col gap-[8px] justify-between rounded-[10px] p-[12px] text-[14px] shadow-[0px_4px_12px_4px_rgb(0,0,0,0.15)] 2xs:gap-[12px] sm:min-h-[200px] sm:px-[16px] '
+                className='relative z-10 flex flex-col justify-between gap-[8px] rounded-[10px] p-[12px] text-[14px] shadow-[0px_4px_12px_4px_rgb(0,0,0,0.15)] 2xs:gap-[12px] sm:min-h-[200px] sm:px-[16px] '
               >
                 {/* review number */}
                 <div className='absolute right-[12px] top-[10px] z-10 flex h-[30px] w-[40px] items-center justify-center rounded-[6px] bg-primary-blue font-medium text-white 2xs:w-[50px] sm:right-[16px]  '>
-                  {'9.6'}
+                  {index.average}
                 </div>
                 {/* user info */}
                 <div className='flex items-center gap-[8px]'>
@@ -128,29 +146,34 @@ const Review = ({ ver, data, handleScrollTo }: Props) => {
                 </div>
                 {/* title */}
                 <p className='text-[15px] font-medium'>
-                  {'Great place to stay. Thank you so much'}
+                  {/* {'Great place to stay. Thank you so much'} */}
+                  {index.title
+                    ? index.title
+                    : 'Lorem ipsum dolor sit amet consectetur.'}
                 </p>
                 {/* review */}
                 <p
                   className={` relative line-clamp-3 text-justify text-sub-text/50`}
                 >
-                  {/* {sample.slice(0, open === false ? 67 : sample.length)} */}
-                  {index.desc}
+                  {index.comment}
                 </p>
 
                 {/* date */}
-                <div className='flex w-full items-center border-t-[1px] border-t-black/[.15] pt-[8px]'>{`2023-09-02`}</div>
+                <div className='flex w-full items-center border-t-[1px] border-t-black/[.15] pt-[8px]'>
+                  {/* {Date(index.updatedAt)} */}
+                  {dateStrings[i]}
+                </div>
               </div>
             ))}
         {ver === 'full' &&
-          sample.map((index, i) => (
+          data.map((index, i) => (
             <div
               key={i}
-              className='relative z-10 flex flex-col gap-[8px] rounded-[10px] p-[12px] text-[14px] shadow-[0px_4px_12px_4px_rgb(0,0,0,0.15)] 2xs:gap-[12px] sm:px-[16px] '
+              className='relative z-10 flex h-full flex-col gap-[8px] rounded-[10px] p-[12px] text-[14px] shadow-[0px_4px_12px_4px_rgb(0,0,0,0.15)] 2xs:gap-[12px] sm:px-[16px] '
             >
               {/* review number */}
               <div className='absolute right-[12px] top-[10px] z-10 flex h-[30px] w-[40px] items-center justify-center rounded-[6px] bg-primary-blue font-medium text-white 2xs:w-[50px] sm:right-[16px]  '>
-                {'9.6'}
+                {index.average}
               </div>
               {/* user info */}
               <div className='flex items-center gap-[8px]'>
@@ -183,31 +206,48 @@ const Review = ({ ver, data, handleScrollTo }: Props) => {
               </div>
               {/* title */}
               <p className='text-[15px] font-medium'>
-                {'Great place to stay. Thank you so much'}
+                {index.title
+                  ? index.title
+                  : 'Lorem ipsum dolor sit amet consectetur.'}
               </p>
               {/* review */}
               <p
                 className={` relative line-clamp-3 text-justify text-sub-text/50`}
               >
-                {index.desc}
+                {index.comment}
               </p>
 
               {/* date */}
-              <div className='flex w-full items-center border-t-[1px] border-t-black/[.15] pt-[8px]'>{`2023-09-02`}</div>
+              <div className='flex w-full items-center border-t-[1px] border-t-black/[.15] pt-[8px]'>
+                {dateStrings[i]}
+              </div>
             </div>
           ))}
       </div>
-      <button
-        className='self-center rounded-full bg-primary-blue px-[16px] py-[8px] font-medium text-white'
-        onClick={() => {
-          if (ver !== 'full') {
+      {ver !== 'full' ? (
+        <button
+          className='self-center rounded-full bg-primary-blue px-[16px] py-[8px] font-medium text-white'
+          onClick={() => {
             handleScrollTo('reviews');
-          }
-        }}
-      >
-        {lang === 'en' ? 'More' : 'Цааш үзэх'}{' '}
-        {ver === 'full' ? `(${sample.length}+)` : null}
-      </button>
+          }}
+        >
+          {lang === 'en' ? 'More' : 'Цааш үзэх'}
+        </button>
+      ) : (
+        <>
+          {data.length - 4 * page > 0 ? (
+            <button
+              className='self-center rounded-full bg-primary-blue px-[16px] py-[8px] font-medium text-white'
+              onClick={() => {
+                setPage(page + 1);
+              }}
+            >
+              {lang === 'en' ? 'More' : 'Цааш үзэх'}{' '}
+              {ver === 'full' ? `(${data.length - 4 * page}+)` : null}
+            </button>
+          ) : null}
+        </>
+      )}
     </div>
   );
 };

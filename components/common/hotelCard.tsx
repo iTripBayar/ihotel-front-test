@@ -102,16 +102,12 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
           {/* name & location */}
           <div className='flex w-full flex-col gap-[12px] pr-[14px]'>
             <p
-              className={`text-[16px] font-medium leading-[16px] text-main-text 2xs:text-[18px] 2xs:leading-[18px] ${
-                data.name.length > 27 ? 'xl:text-[14px]' : ''
-              }`}
+              className={`line-clamp-1 text-[16px] font-medium leading-[16px] text-main-text 2xs:text-[18px] 2xs:leading-[18px] sm:text-[14px] sm:leading-[14px] md:text-[16px] md:leading-[16px]`}
             >
               {lang === 'en' ? data.nameEn : data.name}
             </p>
             <p
-              className={`line-clamp-2 ${
-                ver === 'home' ? 'min-h-[28px]' : ''
-              } text-[12px] leading-[12px] text-sub-text/60 2xs:text-[14px] 2xs:leading-[14px]`}
+              className={`line-clamp-2 min-h-[28px] md:min-h-[30px] text-[12px] leading-[12px] text-sub-text/60 2xs:text-[14px] 2xs:leading-[14px]`}
             >
               {lang === 'en' ? data?.addressEn : data?.address}
             </p>
@@ -195,8 +191,7 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
                           ? `${
                               displayPrice.length > 0
                                 ? (
-                                    displayPrice[0] /
-                                    parseInt(dollarRate)
+                                    displayPrice[0] / parseInt(dollarRate)
                                   ).toLocaleString()
                                 : 70000 / parseInt(dollarRate)
                             } $`
@@ -228,12 +223,9 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
                         ? `${
                             displayPrice.length > 0
                               ? (
-                                  displayPrice[0] /
-                                  parseInt(dollarRate)
+                                  displayPrice[0] / parseInt(dollarRate)
                                 ).toLocaleString()
-                              : (
-                                  70000 / parseInt(dollarRate)
-                                ).toLocaleString()
+                              : (70000 / parseInt(dollarRate)).toLocaleString()
                           } $`
                         : `${(70000).toLocaleString()} $`
                     } `
