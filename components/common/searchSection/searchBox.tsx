@@ -7,7 +7,6 @@ import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
   hotelData: HotelData.Hotel[];
-  campsData: HotelData.Hotel[];
   placesData: SearchData.Places[];
   cityData: SearchData.Cities[];
   ver: string;
@@ -18,7 +17,6 @@ interface iProps {
 const SearchBox = ({
   hotelData,
   placesData,
-  campsData,
   cityData,
   ver,
   changeSearchValue,
@@ -61,14 +59,6 @@ const SearchBox = ({
     });
   }
 
-  for (let i = 0; i < campsData.length; i++) {
-    data.push({
-      id: campsData[i].id,
-      name: campsData[i].name,
-      nameEn: campsData[i].nameEn ? campsData[i].nameEn : '',
-      type: 'camp',
-    });
-  }
   for (let i = 0; i < placesData.length; i++) {
     data.push({
       id: placesData[i].id,

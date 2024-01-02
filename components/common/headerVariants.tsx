@@ -12,10 +12,16 @@ interface iProps {
     toEn: { year: string; month: string; date: string };
   } | null;
   searchData: SearchData.Data | undefined;
+  hotelData: HotelData.Hotel[] | undefined
 }
 
 
-const HeaderVariants = ({ ver, formattedDate, searchData }: iProps) => {
+const HeaderVariants = ({
+  ver,
+  formattedDate,
+  searchData,
+  hotelData,
+}: iProps) => {
   const { dispatch } = useAppCtx();
   return (
     <header
@@ -74,6 +80,7 @@ const HeaderVariants = ({ ver, formattedDate, searchData }: iProps) => {
           ver={ver}
           formattedDate={formattedDate}
           searchData={searchData}
+          hotelData={hotelData}
         />
       </div>
 

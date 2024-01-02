@@ -2,7 +2,7 @@
 import HeaderVariants from '@/components/common/headerVariants';
 import HotelImages from '@/components/pageComponents/hotelPage/hotelImages';
 import { useRequest } from 'ahooks';
-import { fetchDataHotel, fetchDataSearch } from '@/utils';
+import { fetchCheckHotel, fetchDataHotel, fetchDataSearch } from '@/utils';
 import HotelInfo from '@/components/pageComponents/hotelPage/hotelInfo';
 import Amenity from '@/components/pageComponents/hotelPage/amenity';
 import Review from '@/components/pageComponents/hotelPage/review';
@@ -22,12 +22,13 @@ import { useEffect, useRef, useState } from 'react';
 import CartAlert from '@/components/pageComponents/hotelPage/cartAlert';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
-import { ChakraProvider, CircularProgress } from '@chakra-ui/react';
+import { CircularProgress } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 import ImagesDialog from '@/components/pageComponents/hotelPage/imagesDialog';
 import BottomSection from '@/components/common/bottomSection';
 import { addDays, format } from 'date-fns';
 const ErrorComponent = dynamic(() => import('@/components/common/404'));
+import { Toaster } from 'sonner';
 
 const HotelPage = () => {
   const searchParams = useSearchParams();
@@ -146,6 +147,25 @@ const HotelPage = () => {
     return fetchDataSearch();
   });
 
+  const { data: hotelData } = useRequest(() => {
+    return fetchCheckHotel({
+      hotel: '',
+      place: '',
+      city: '',
+      checkin: '',
+      checkout: '',
+      isClosed: '',
+      page: '1',
+      prices: '',
+      filterstar: '',
+      rating1: '',
+      rating2: '',
+      hotelServices: '',
+      roomServices: '',
+      categories: '',
+    });
+  });
+
   let stat = '';
   if (data?.hotel.isOnline == 1 && data?.hotel.isOffline == 0) {
     stat = 'online';
@@ -234,7 +254,9 @@ const HotelPage = () => {
           ver={'hotel'}
           formattedDate={formattedDate}
           searchData={searchData}
+          hotelData={hotelData?.allhotels}
         />
+        <Toaster position='top-right' />
         {showAlert === true ? (
           <CartAlert close={() => setShowAlert(false)} />
         ) : null}
@@ -249,7 +271,7 @@ const HotelPage = () => {
         ) : null}
         {appState.logOrSign === 'sign' ? <SignUp /> : null}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
-        <BottomSection ver={'fixed'} handleScrollToTopVer={() => {}} />
+        <BottomSection ver={'hotel'} handleScrollToTopVer={() => {}} />
         <Dialogs
           roomPrices={roomPrices}
           stat={stat}
@@ -260,11 +282,9 @@ const HotelPage = () => {
         />
         {appState.biggerImage.length > 0 ? <ImagesDialog /> : null}
         {loading ? (
-          <ChakraProvider>
             <div className='flex h-screen w-full items-center justify-center'>
               <CircularProgress isIndeterminate={true} color='#3C76FE' />
             </div>
-          </ChakraProvider>
         ) : (
           <div className='flex flex-col gap-[24px] overflow-x-hidden px-[16px] pb-[50px] pt-[80px] sm:px-[50px] md:px-[72px] lg:gap-[48px]  lg:px-[60px] xl:px-[100px] 2xl:px-[150px]'>
             <div className='grid grid-cols-1 gap-[24px] lg:grid-cols-5 lg:gap-[20px]'>

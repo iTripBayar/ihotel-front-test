@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-  transpilePackages: ['ahooks'],
+  transpilePackages: ["ahooks"],
   compress: true,
   reactStrictMode: false,
   trailingSlash: true,
@@ -14,21 +14,21 @@ module.exports = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'sandbox.api.myhotel.mn',
+        protocol: "https",
+        hostname: "sandbox.api.myhotel.mn",
       },
       {
-        protocol: 'https',
-        hostname: 'ihotel.mn',
+        protocol: "https",
+        hostname: "ihotel.mn",
       },
     ],
     domains: [
-      'myhotel-images.s3.ap-east-1.amazonaws.com',
-      'pms-images.s3.ap-southeast-1.amazonaws.com',
-      'sandbox.api.myhotel.mn',
-      'localhost',
-      'api.myhotel.mn',
-      'ihotel.mn',
+      "myhotel-images.s3.ap-east-1.amazonaws.com",
+      "pms-images.s3.ap-southeast-1.amazonaws.com",
+      "sandbox.api.myhotel.mn",
+      "localhost",
+      "api.myhotel.mn",
+      "ihotel.mn",
     ],
     // These are the default device/image sizes provided by Next.js.  Leaving them here for easier experimentation.
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -50,5 +50,7 @@ module.exports = {
     IMAGE_URL: process.env.IMAGE_URL,
     TEMPORARY_URL: process.env.TEMPORARY_URL,
     TEMPORARY_URL1: process.env.TEMPORARY_URL1,
+    NEXT_PUBLIC_GOLOMT_URL: process.env.NEXT_PUBLIC_GOLOMT_URL,
+    NEXT_PUBLIC_GOLOMT_KEY_NUMBER: process.env.NEXT_PUBLIC_GOLOMT_KEY_NUMBER,
   },
 };

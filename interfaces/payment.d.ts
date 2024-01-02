@@ -316,4 +316,10 @@ declare namespace Payment {
       ];
     };
   }
+  interface Card {
+
+  }
+  interface CardInquiry {
+
+  }
 }

@@ -3,7 +3,7 @@ import { useSearchParams } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
 import { FormEvent } from 'react';
 import { FacebookSignInButton, GoogleSignInButton } from './authButtons';
-import { Alert, AlertIcon, ChakraProvider } from '@chakra-ui/react';
+import { Alert, AlertIcon } from '@chakra-ui/react';
 
 export default function SignUp() {
   const searchParams = useSearchParams();
@@ -107,7 +107,6 @@ export default function SignUp() {
     >
       {message !== '' ? (
         <div className='absolute top-[60px]'>
-          <ChakraProvider>
             <Alert
               status={message === 'success' ? 'success' : 'error'}
               className='rounded-lg '
@@ -117,7 +116,6 @@ export default function SignUp() {
                 ? `${lang === 'en' ? 'Successful!' : 'Амжилттай бүртгэгдлээ!'}`
                 : `${lang === 'en' ? 'Error!' : 'Алдаа гарлаа!'}`}
             </Alert>
-          </ChakraProvider>
         </div>
       ) : null}
       <div className='flex h-auto w-[calc(100%-32px)] max-w-[370px] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:max-w-[400px] '>

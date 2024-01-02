@@ -3,8 +3,6 @@ import OnlineToggle from './onlineToggle';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { useAppCtx } from '@/contexts/app';
-import { useRequest } from 'ahooks';
-import { fetchData } from '@/utils';
 
 interface iProps {
   ver: string;
@@ -15,9 +13,15 @@ interface iProps {
     toEn: { year: string; month: string; date: string };
   } | null;
   searchData: SearchData.Data | undefined;
+  hotelData: HotelData.Hotel[] | undefined;
 }
 
-const SearchSection = ({ ver, formattedDate, searchData }: iProps) => {
+const SearchSection = ({
+  ver,
+  formattedDate,
+  searchData,
+  hotelData,
+}: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const filter = searchParams.get('filter');
@@ -27,9 +31,27 @@ const SearchSection = ({ ver, formattedDate, searchData }: iProps) => {
   const [toggle, setToggle] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
-  const { data } = useRequest(() => {
-    return fetchData();
-  });
+  // const { data } = useRequest(() => {
+  //   return fetchCheckHotel({
+  //       hotel: '',
+  //       place: '',
+  //       city: '',
+  //       checkin: '',
+  //       // checkin: '',
+  //       checkout: '',
+  //       // checkout: '',
+  //       isClosed: '',
+  //       page: '1',
+  //       prices: '',
+  //       filterstar: '',
+  //       rating1: '',
+  //       rating2: '',
+  //       hotelServices: '',
+  //       roomServices: '',
+  //       categories:  '',
+  //     });
+  //   },
+  // })
 
   const changeToggle = useCallback(() => {
     setToggle(!toggle);
@@ -104,8 +126,7 @@ const SearchSection = ({ ver, formattedDate, searchData }: iProps) => {
           }`}
         >
           <SearchBox
-            hotelData={data ? data.hotels : []}
-            campsData={data ? data.camps : []}
+            hotelData={hotelData ? hotelData : []}
             placesData={searchData ? searchData.places : []}
             cityData={searchData ? searchData.cities : []}
             ver={ver}
@@ -150,8 +171,7 @@ const SearchSection = ({ ver, formattedDate, searchData }: iProps) => {
         <div className='flex gap-[24px]'>
           <div className='hidden lg:flex'>
             <SearchBox
-              hotelData={data ? data.hotels : []}
-              campsData={data ? data.camps : []}
+              hotelData={hotelData ? hotelData : []}
               placesData={searchData ? searchData.places : []}
               cityData={searchData ? searchData.cities : []}
               ver={ver}

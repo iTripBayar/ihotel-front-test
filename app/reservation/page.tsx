@@ -7,14 +7,14 @@ import CancelTerm from '@/components/pageComponents/reservationPage/cancelTerm';
 import GeneralInfo from '@/components/pageComponents/reservationPage/generalInfo';
 import OrderInfo from '@/components/pageComponents/reservationPage/orderInfo';
 import UserInfo from '@/components/pageComponents/reservationPage/userInfo';
-import { fetchDataHotel, fetchCreateOrder, fetchDataSearch } from '@/utils';
+import { fetchDataHotel, fetchCreateOrder, fetchDataSearch, fetchCheckHotel } from '@/utils';
 import { useRequest } from 'ahooks';
 import Footer from '@/components/common/footer';
 import BurgerMenu from '@/components/common/burgermenu';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
 import { unserialize } from 'serialize-php';
-import { CircularProgress, ChakraProvider } from '@chakra-ui/react';
+import { CircularProgress } from '@chakra-ui/react';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
 import dynamic from 'next/dynamic';
@@ -69,7 +69,40 @@ const ReservationPage = () => {
   const { data: searchData } = useRequest(() => {
     return fetchDataSearch();
   });
+  const { data: hotelData } = useRequest(() => {
+    return fetchCheckHotel({
+      hotel: '',
+      place: '',
+      city: '',
+      checkin: '',
+      checkout: '',
+      isClosed: '',
+      page: '1',
+      prices: '',
+      filterstar: '',
+      rating1: '',
+      rating2: '',
+      hotelServices: '',
+      roomServices: '',
+      categories: '',
+    });
+  });
 
+
+  let totalPrice = 0;
+  for (let i = 0; i < cart.length; i++) {
+    if (cart[i] && days && data) {
+      for (let j = 0; j < data.rooms.length; j++) {
+        if (parseInt(cart[i].split('$')[0]) === data.rooms[j].id) {
+          totalPrice =
+            totalPrice +
+            data.rooms[j].priceDayUse *
+              parseInt(cart[i].split('$')[1]) *
+              parseInt(days);
+        }
+      }
+    }
+  }
   const orderingRooms: {
     startdate: string;
     enddate: string;
@@ -166,7 +199,9 @@ const ReservationPage = () => {
       onSuccess: (result) => {
         if (result.orderId && result?.token) {
           console.log(result);
-          router.push(`/payment?id=${result.orderId}&tkn=${result.token}`);
+          router.push(
+            `/payment?id=${result.orderId}&tkn=${result.token}&totalPrice=${totalPrice}`,
+          );
         }
       },
     },
@@ -200,20 +235,6 @@ const ReservationPage = () => {
       .split('-')[1]} ${checkOut?.split('|')[1].split('-')[2]}`,
   };
 
-  let totalPrice = 0;
-  for (let i = 0; i < cart.length; i++) {
-    if (cart[i] && days && data) {
-      for (let j = 0; j < data.rooms.length; j++) {
-        if (parseInt(cart[i].split('$')[0]) === data.rooms[j].id) {
-          totalPrice =
-            totalPrice +
-            data.rooms[j].priceDayUse *
-              parseInt(cart[i].split('$')[1]) *
-              parseInt(days);
-        }
-      }
-    }
-  }
 
   const serializedData: string | undefined = data?.hotel.cancellationPolicies;
   let unserializedData: { day: string; fee: string }[] = [{ day: '', fee: '' }];
@@ -228,6 +249,7 @@ const ReservationPage = () => {
           ver={'hotel'}
           formattedDate={null}
           searchData={searchData}
+          hotelData={hotelData?.allhotels}
         />
         <div className='fixed left-[50%] top-[72px] z-[900] hidden h-auto w-auto translate-x-[-50%] lg:flex'>
           {appState.calendar === 'open' ? <CalendarDialog ver={'web'} /> : null}
@@ -251,11 +273,9 @@ const ReservationPage = () => {
           )}
         </div>
         {loading === true ? (
-          <ChakraProvider>
             <div className='flex h-screen w-full items-center justify-center pb-[100px]'>
               <CircularProgress isIndeterminate={true} color='#3C76FE' />
             </div>
-          </ChakraProvider>
         ) : (
           <div className='relative flex w-full flex-col gap-[20px] px-[16px] pb-[150px] pt-[72px] sm:gap-[24px] sm:px-[50px] md:px-[72px] lg:grid lg:grid-cols-5 lg:gap-[48px]  lg:px-[60px] lg:pb-[50px] xl:gap-[64px] xl:px-[100px] 2xl:px-[150px]'>
             <div className='sticky flex flex-col gap-[20px] lg:col-span-3 lg:gap-[32px]'>

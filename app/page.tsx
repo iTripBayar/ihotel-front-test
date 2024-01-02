@@ -7,7 +7,7 @@ import BurgerMenu from '@/components/common/burgermenu';
 import { useState, useRef, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import HeaderVariants from '@/components/common/headerVariants';
-import { fetchData, fetchDataSearch } from '@/utils';
+import { fetchCheckHotel, fetchData, fetchDataSearch } from '@/utils';
 import SearchSection from '@/components/common/searchSection';
 import Header from '@/components/common/header';
 import BottomSection from '@/components/common/bottomSection';
@@ -15,7 +15,7 @@ import CardsContainer from '@/components/pageComponents/homePage/cardsContainer'
 import { useAppCtx } from '@/contexts/app';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
-import { ChakraProvider, CircularProgress } from '@chakra-ui/react';
+import { CircularProgress } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 const ErrorComponent = dynamic(() => import('@/components/common/404'));
 import { useSession } from 'next-auth/react';
@@ -29,6 +29,27 @@ const Home = () => {
   const { data: searchData } = useRequest(() => {
     return fetchDataSearch();
   });
+
+  const { data: hotelData} = useRequest(
+    () => {
+      return fetchCheckHotel({
+        hotel: '',
+        place: '',
+        city: '',
+        checkin: '',
+        checkout: '',
+        isClosed: '',
+        page: '1',
+        prices:'',
+        filterstar: '',
+        rating1: '',
+        rating2: '',
+        hotelServices: '',
+        roomServices: '',
+        categories:'',
+      });
+    }
+  );
 
   const { appState } = useAppCtx();
 
@@ -81,6 +102,7 @@ const Home = () => {
             ver={headerVer}
             formattedDate={null}
             searchData={searchData}
+            hotelData={hotelData?.allhotels}
           />
         ) : null}
         {appState.logOrSign === 'log' ||
@@ -89,14 +111,12 @@ const Home = () => {
         ) : null}
         {appState.logOrSign === 'sign' ? <SignUp /> : null}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
-            
-        <BottomSection ver={headerVer} handleScrollToTopVer={()=>{}}/>
+
+        <BottomSection ver={headerVer} handleScrollToTopVer={() => {}} />
         {loading ? (
-          <ChakraProvider>
             <div className='flex h-[111px] w-full items-center justify-center 2xs:h-[100px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[225px] 2xl:h-[250px]'>
               <CircularProgress isIndeterminate={true} color='#3C76FE' />
             </div>
-          </ChakraProvider>
         ) : (
           <HeroCategory data={data ? data.propertyTypes : []} />
         )}
@@ -106,15 +126,14 @@ const Home = () => {
               ver={'normal'}
               formattedDate={null}
               searchData={searchData}
+              hotelData={hotelData?.allhotels}
             />
           ) : null}
         </div>
         {loading ? (
-          <ChakraProvider>
             <div className='flex h-[500px] w-full items-center justify-center'>
               <CircularProgress isIndeterminate={true} color='#3C76FE' />
             </div>
-          </ChakraProvider>
         ) : (
           <div className='relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px] '>
             <CommonLocation

@@ -15,7 +15,7 @@ export default function AboutCollapse() {
     >
       <Button
         onClick={size.width && size.width >= 768 ? () => {} : onToggle}
-        className='flex w-full !items-center !justify-between'
+        className='flex w-full !items-center !justify-between !bg-transparent !px-0 !text-white'
       >
         <h3 className='text-[18px]'>{lang === 'en' ? 'About' : 'Тухай'}</h3>
         <svg

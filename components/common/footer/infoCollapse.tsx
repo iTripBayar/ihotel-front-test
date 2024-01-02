@@ -14,26 +14,26 @@ export default function InfoCollapse() {
     >
       <Button
         onClick={size.width && size.width >= 768 ? () => {} : onToggle}
-        className='flex w-full !items-center !justify-between'
+        className="flex w-full !items-center !justify-between !bg-transparent !px-0 !text-white"
       >
-        <h3 className='text-[18px]'>
+        <h3 className="text-[18px]">
           {/* {state.language === 'mn' ? 'Тухай' : 'About'} */}
-          {lang === 'en' ? 'News' : 'Мэдээлэл'}
+          {lang === "en" ? "News" : "Мэдээлэл"}
         </h3>
         <svg
-          xmlns='http://www.w3.org/2000/svg'
-          fill='none'
-          viewBox='2 0 20 20'
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="2 0 20 20"
           strokeWidth={3}
-          stroke='currentColor'
+          stroke="currentColor"
           className={`h-[16px] w-[16px] md:hidden ${
-            isOpen === true ? 'rotate-180' : null
+            isOpen === true ? "rotate-180" : null
           }`}
         >
           <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='M19.5 8.25l-7.5 7.5-7.5-7.5'
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M19.5 8.25l-7.5 7.5-7.5-7.5"
           />
         </svg>
       </Button>
@@ -45,41 +45,41 @@ export default function InfoCollapse() {
         }}
         className={`!flex !flex-col justify-start gap-[16px] ${
           (size.width && size.width >= 768) || isOpen === true
-            ? ' !pb-[16px]'
-            : 'h-0'
+            ? " !pb-[16px]"
+            : "h-0"
         }`}
       >
         {/* Articles */}
         <Link
           href={`${process.env.TEMPORARY_URL}/posts`}
-          className='underline-0 group relative text-white'
+          className="underline-0 group relative text-white"
         >
-          {lang === 'en' ? 'Articles' : 'Мэдээ мэдээлэл'}
-          <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
+          {lang === "en" ? "Articles" : "Мэдээ мэдээлэл"}
+          <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
         </Link>
         {/* Tips for hotels */}
         <Link
           href={`${process.env.TEMPORARY_URL}/category/1`}
-          className='underline-0 group relative text-white'
+          className="underline-0 group relative text-white"
         >
-          {lang === 'en' ? 'Tips for hotels' : 'Буудалд зориулсан зөвлөмж'}
-          <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
+          {lang === "en" ? "Tips for hotels" : "Буудалд зориулсан зөвлөмж"}
+          <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
         </Link>
         {/* Tips for travelers */}
         <Link
           href={`${process.env.TEMPORARY_URL}/category/4`}
-          className='underline-0 group relative text-white'
+          className="underline-0 group relative text-white"
         >
-          {lang === 'en' ? 'Tips for travelers' : 'Аялагчдад зориулсан зөвлөмж'}
-          <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
+          {lang === "en" ? "Tips for travelers" : "Аялагчдад зориулсан зөвлөмж"}
+          <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
         </Link>
         {/* iHotel's success history */}
         <Link
           href={`${process.env.TEMPORARY_URL}/category/5`}
-          className='underline-0 group relative text-white'
+          className="underline-0 group relative text-white"
         >
-          {lang === 'en' ? "iHotel's success history" : 'iHotel амжилтын түүх'}
-          <span className='ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2'></span>
+          {lang === "en" ? "iHotel's success history" : "iHotel амжилтын түүх"}
+          <span className="ease absolute bottom-0 left-0 h-0 w-0 border-b-2 border-white/50 transition-all duration-200 group-hover:w-1/2"></span>
         </Link>
       </Collapse>
     </div>

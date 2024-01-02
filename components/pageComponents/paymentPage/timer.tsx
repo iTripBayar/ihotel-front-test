@@ -1,5 +1,4 @@
 import {
-  ChakraProvider,
   CircularProgress,
   CircularProgressLabel,
 } from '@chakra-ui/react';
@@ -42,7 +41,6 @@ export default function Timer({ time, handleTimeOut }: Props) {
 
   return (
     <div>
-      <ChakraProvider>
         <CircularProgress
           value={progressValue}
           color='#3C76FE'
@@ -58,7 +56,6 @@ export default function Timer({ time, handleTimeOut }: Props) {
               .padStart(2, '0')}`}
           </CircularProgressLabel>
         </CircularProgress>
-      </ChakraProvider>
     </div>
   );
 }

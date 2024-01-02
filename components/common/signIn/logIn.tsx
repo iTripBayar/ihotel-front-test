@@ -4,7 +4,7 @@ import { useAppCtx } from '@/contexts/app';
 import { signIn } from 'next-auth/react';
 import { FormEvent } from 'react';
 import { FacebookSignInButton, GoogleSignInButton } from './authButtons';
-import { Alert, AlertIcon, ChakraProvider } from '@chakra-ui/react';
+import { Alert, AlertIcon } from '@chakra-ui/react';
 
 export default function LogIn() {
   const searchParams = useSearchParams();
@@ -90,7 +90,6 @@ export default function LogIn() {
     >
       {message !== '' ? (
         <div className='absolute top-[60px]'>
-          <ChakraProvider>
             <Alert
               status={
                 message === 'success' || message === 'emailed'
@@ -110,7 +109,6 @@ export default function LogIn() {
                   }`
                 : `${lang === 'en' ? 'Error!' : 'Алдаа гарлаа!'}`}
             </Alert>
-          </ChakraProvider>
         </div>
       ) : null}
       <div className='flex h-auto w-[calc(100%-32px)] max-w-[370px] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:max-w-[400px]'>

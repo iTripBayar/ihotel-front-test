@@ -3,12 +3,11 @@ import Header from '@/components/common/header';
 import Footer from '@/components/common/footer';
 import SocialPayOption from '@/components/pageComponents/paymentPage/socialPayOption';
 import PassOption from '@/components/pageComponents/paymentPage/passOption';
-import CardOption from '@/components/pageComponents/paymentPage/cardOption';
 import QpayOption from '@/components/pageComponents/paymentPage/qpayOption';
 import { useAppCtx } from '@/contexts/app';
 import PaymentMethod from '@/components/pageComponents/reservationPage/paymentMethod';
 import { useRouter } from 'next/navigation';
-import { Alert, AlertIcon, ChakraProvider } from '@chakra-ui/react';
+import { Alert, AlertIcon } from '@chakra-ui/react';
 import { useState } from 'react';
 import ErrorComponent from '@/components/common/404';
 
@@ -38,7 +37,6 @@ const handleError = () => {
         <Header user={''} />
         <div className='2xl:px[200px] relative flex min-h-[50vh] w-full flex-col items-center justify-start px-[16px] pt-[16px] sm:px-[42px] sm:pt-[24px] md:px-[72px] lg:px-[150px]'>
           {showAlert === true ? (
-            <ChakraProvider>
               <div className='fixed top-[62px] z-[100] max-w-[250px]'>
                 <Alert
                   status='error'
@@ -48,7 +46,6 @@ const handleError = () => {
                   Connection timed out!
                 </Alert>
               </div>
-            </ChakraProvider>
           ) : null}
           <PaymentMethod />
           {appState.paymentMethod !== '' ? (
@@ -62,10 +59,6 @@ const handleError = () => {
                 <PassOption
                   handleTimeOut={handleTimeOut}
                   handleError={handleError}
-                />
-              ) : appState.paymentMethod === 'card' ? (
-                <CardOption handleError={handleError} 
-                  handleTimeOut={handleTimeOut}
                 />
               ) : appState.paymentMethod === 'qPay' ? (
                 <QpayOption

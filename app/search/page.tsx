@@ -9,18 +9,20 @@ import SearchCards from '@/components/pageComponents/searchPage/searchCards';
 import MapContainer from '@/components/common/map/map';
 import FilterOptions from '@/components/common/searchSection/filter/filterOptions';
 import { useAppCtx } from '@/contexts/app';
-import { CircularProgress, ChakraProvider } from '@chakra-ui/react';
+import { CircularProgress } from '@chakra-ui/react';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { addDays, format } from 'date-fns';
 import dynamic from 'next/dynamic';
 import { useEffect, useRef } from 'react';
 import useWindowSize from '@/hooks/windowSize';
+import MapBtn from '@/components/common/fixedButtons/mapBtn';
 const ErrorComponent = dynamic(() => import('@/components/common/404'));
 
 const SearchPage = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const searchValue = searchParams.get('searchValue');
   const category = searchParams.get('category');
   const page = searchParams.get('page');
@@ -59,6 +61,21 @@ const SearchPage = () => {
     }
     return;
   }, [size.width]);
+  const createQueryString = (name: string, value: string | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (value !== null) {
+      params.set(name, value);
+    } else {
+      params.delete(name);
+    }
+    return params.toString();
+  };
+  useEffect(() => {
+    router.replace(`/search?${createQueryString('page', `1`)}`, {
+      scroll: false,
+    });
+  }, [min, max, services, category]);
+
   const { data, loading, error } = useRequest(
     () => {
       return fetchCheckHotel({
@@ -87,8 +104,6 @@ const SearchPage = () => {
     { refreshDeps: [searchParams] },
   );
 
-  console.log(searchData);
-
   const handleScrollToTop = () => {
     divRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -103,6 +118,7 @@ const SearchPage = () => {
           ver={'search'}
           formattedDate={null}
           searchData={searchData}
+          hotelData={data?.allhotels}
         />
         {appState.logOrSign === 'log' ||
         appState.logOrSign === 'forgotPassword' ? (
@@ -110,6 +126,9 @@ const SearchPage = () => {
         ) : null}
         {appState.logOrSign === 'sign' ? <SignUp /> : null}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
+        <div className='fixed  bottom-[24px] left-[0%] z-[899]  flex w-auto animate-fade flex-row items-stretch justify-between gap-[16px] px-[16px] text-white sm:px-[42px] sm:pl-[39px] md:px-[32px] lg:bottom-[12px]'>
+          {appState.map === '' ? <MapBtn ver={'default'} /> : null}
+        </div>
         <BottomSection
           ver={'search'}
           handleScrollToTopVer={handleScrollToTop}
@@ -136,6 +155,7 @@ const SearchPage = () => {
             ver={'headerSearch'}
             formattedDate={null}
             searchData={searchData}
+            hotelData={data?.allhotels}
           />
           {appState.filter === 'mobile' ? (
             <FilterOptions
@@ -147,11 +167,9 @@ const SearchPage = () => {
           ) : null}
         </div>
         {loading === true ? (
-          <ChakraProvider>
             <div className='flex h-full w-full items-center justify-center pb-[100px]'>
               <CircularProgress isIndeterminate={true} color='#3C76FE' />
             </div>
-          </ChakraProvider>
         ) : appState.filter !== 'mobile' ? (
           <div
             className={`relative grid h-full w-full grid-cols-1 gap-[24px]  lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}

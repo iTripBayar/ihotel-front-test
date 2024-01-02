@@ -80,7 +80,6 @@ const SearchCards = ({
           total={parseInt(`${totalLength / 20}`)}
           initialPage={page? parseInt(page) : 1}
           onChange={(e) => {
-            console.log(e);
             router.replace(`/search?${createQueryString('page', `${e}`)}`, {
               scroll: false,
             });
@@ -88,7 +87,7 @@ const SearchCards = ({
           classNames={{
             base: 'flex justify-center py-0 px-[24px] m-0 w-full overflow-visible',
             cursor: 'bg-primary-blue rounded-full',
-            wrapper: 'max-w-[324px] w-full p-0 bg-black/[.05] overflow-visible',
+            wrapper: 'max-w-[324px] w-full p-0 bg-black/[.05] overflow-visible w-auto',
             item: 'bg-transparent',
             next: 'bg-transparent',
             prev: 'bg-transparent',

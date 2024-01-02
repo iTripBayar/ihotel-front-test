@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
+import { toast } from 'sonner';
 
 interface Props {
   data: roomData.room;
@@ -83,6 +84,10 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
   for (let i = 0; i < data.number; i++) {
     roomAmount.push({ id: data?.id, amount: i + 1 });
   }
+
+  const showToast = (e:{roomName: string, amount: string}) => {
+    toast.success(`${e.amount} ${e.roomName} ${lang === 'en' ? 'added' : 'нэмэгдлээ'}`);
+  };
 
   return (
     <div className=' flex flex-col rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)]'>
@@ -382,6 +387,7 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
                     )}`,
                     { scroll: false },
                   );
+                  showToast({ roomName: data.name, amount: updatedAmount.split('$')[1]});
                 }
               }}
             >

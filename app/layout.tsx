@@ -5,6 +5,7 @@ import { Montserrat } from 'next/font/google';
 import { AppCtxProvider } from '@/contexts/app';
 import AuthProvider from '@/contexts/auth';
 import { CookiesProvider } from 'react-cookie';
+import { ChakraProvider } from '@chakra-ui/react';
 
 // import type { Metadata } from 'next';
 
@@ -27,18 +28,18 @@ export default function RootLayout({
     <AppCtxProvider>
       <AuthProvider>
         <CookiesProvider>
-            <html lang='en'>
-              <head>
-                <link rel='icon' type='image/x-icon' href='/favicon.png'></link>
-                <meta
-                  name='viewport'
-                  content='width=device-width, initial-scale=1, maximum-scale=1'
-                ></meta>
-              </head>
-              <body className={`relative overscroll-y-none ${inter.className}`}>
-                {children}
-              </body>
-            </html>
+          <html lang='en'>
+            <head>
+              <link rel='icon' type='image/x-icon' href='/favicon.png'></link>
+              <meta
+                name='viewport'
+                content='width=device-width, initial-scale=1, maximum-scale=1'
+              ></meta>
+            </head>
+            <body className={`relative overscroll-y-none ${inter.className}`}>
+              <ChakraProvider>{children}</ChakraProvider>
+            </body>
+          </html>
         </CookiesProvider>
       </AuthProvider>
     </AppCtxProvider>
