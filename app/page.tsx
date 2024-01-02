@@ -89,7 +89,8 @@ const Home = () => {
         ) : null}
         {appState.logOrSign === 'sign' ? <SignUp /> : null}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
-        <BottomSection ver={headerVer} />
+            
+        <BottomSection ver={headerVer} handleScrollToTopVer={()=>{}}/>
         {loading ? (
           <ChakraProvider>
             <div className='flex h-[111px] w-full items-center justify-center 2xs:h-[100px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[225px] 2xl:h-[250px]'>

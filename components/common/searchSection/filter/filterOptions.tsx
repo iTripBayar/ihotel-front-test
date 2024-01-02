@@ -48,81 +48,7 @@ const FilterOptions = ({ categories, services }: Props) => {
     filterServices ? filterServices : '',
   );
 
-  let sampleCat: SearchData.Categories[] = [
-    {
-      id: 0,
-      name: 'Зочид буудал',
-      nameEn: '',
-      createdAt: '',
-      image: '',
-      updatedAt: '',
-    },
-    {
-      id: 1,
-      name: 'Гэст хаус',
-      nameEn: '',
-      createdAt: '',
-      image: '',
-      updatedAt: '',
-    },
-    {
-      id: 2,
-      name: 'Амралтын газар',
-      nameEn: '',
-      createdAt: '',
-      image: '',
-      updatedAt: '',
-    },
-    {
-      id: 3,
-      name: 'Рашаан сувилал',
-      nameEn: '',
-      createdAt: '',
-      image: '',
-      updatedAt: '',
-    },
-    {
-      id: 4,
-      name: 'Жуулчны бааз',
-      nameEn: '',
-      createdAt: '',
-      image: '',
-      updatedAt: '',
-    },
-    { id: 5, name: 'Айл', nameEn: '', createdAt: '', image: '', updatedAt: '' },
-    {
-      id: 6,
-      name: 'Ресорт',
-      nameEn: '',
-      createdAt: '',
-      image: '',
-      updatedAt: '',
-    },
-  ];
-  if (categories) {
-    sampleCat = categories;
-  }
-
-  let sampleServices: SearchData.HotelServices[] = [
-    {
-      createdAt: null,
-      facilityCategoryId: 1,
-      icon: null,
-      id: 1,
-      image: null,
-      isDefault: 0,
-      isFilter: 1,
-      isMost: 1,
-      mobileIcon: null,
-      name: 'Sample',
-      nameEn: 'Sample',
-      syncId: 1,
-      updatedAt: null,
-    },
-  ];
-  if (services) {
-    sampleServices = services;
-  }
+  
 
   const createAdditionalQueryString = (
     name: string,
@@ -196,7 +122,7 @@ const FilterOptions = ({ categories, services }: Props) => {
             {/* Categories */}
             <CategoryFilter
               iconRotateDuration={0}
-              data={sampleCat}
+              data={categories}
               value={cat}
               changeValue={(e: SearchData.Categories) => changeCat(e)}
               ver='web'
@@ -214,7 +140,7 @@ const FilterOptions = ({ categories, services }: Props) => {
             {/* services */}
             <ServiceFilter
               iconRotateDuration={iconRotateDuration}
-              data={sampleServices}
+              data={services}
               value={serv}
               changeValue={(e: string) => changeServ(e)}
               ver='web'
@@ -286,7 +212,7 @@ const FilterOptions = ({ categories, services }: Props) => {
         {/* Categories */}
         <CategoryFilter
           iconRotateDuration={0}
-          data={sampleCat}
+          data={categories}
           value={cat}
           changeValue={(e: SearchData.Categories) => changeCat(e)}
           ver='mobile'
@@ -304,7 +230,7 @@ const FilterOptions = ({ categories, services }: Props) => {
         {/* services */}
         <ServiceFilter
           iconRotateDuration={iconRotateDuration}
-          data={sampleServices}
+          data={services}
           value={serv}
           changeValue={(e: string) => changeServ(e)}
           ver='mobile'
@@ -349,9 +275,9 @@ const FilterOptions = ({ categories, services }: Props) => {
                 )}`,
                 { scroll: false },
               );
-                setCat(null);
-                setMinMax(null);
-                setServices('');
+              setCat(null);
+              setMinMax(null);
+              setServices('');
               dispatch({
                 type: 'CHANGE_APP_STATE',
                 payload: { filter: '' },

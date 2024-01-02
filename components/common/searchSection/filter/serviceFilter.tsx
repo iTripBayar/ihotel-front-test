@@ -27,39 +27,45 @@ export default function ServiceFilter({
     }
   }, [services]);
 
+  console.log(data)
+
   if (ver === 'web')
     return (
       <div className='flex h-full w-full flex-col items-center justify-start gap-[12px]'>
         <p className='text-[18px] font-medium'>
           {lang === 'en' ? 'Additional' : 'Нэмэлтээр'}
         </p>
-        <div className='grid w-full grid-cols-2 gap-[8px] text-[15px] text-sub-text'>
-          {data.map((index, i) => (
-            <div
-              onClick={() => changeValue(`"${index.id}"`)}
-              key={i}
-              id='additionalLink'
-              className='flex w-full items-center gap-[8px]'
-            >
-              <input
-                id={`serv${index.id}`}
-                type='checkBox'
-                value={index.name}
-                checked={value.split(',').includes(`"${index.id}"`)}
-                readOnly
-                className='h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 '
-              />
-              <label
-                className='text-[14px] leading-[16px]'
-                onClick={() => {
-                  document.getElementById(`${index.id}`)?.click();
-                }}
+        {data.length > 0 ? (
+          <div className='grid w-full grid-cols-2 gap-[12px] text-[15px] leading-[15px] text-sub-text'>
+            {data.map((index, i) => (
+              <div
+                onClick={() => changeValue(`"${index.id}"`)}
+                key={i}
+                id='additionalLink'
+                className='flex w-full items-center gap-[8px]'
               >
-                {index.name}
-              </label>
-            </div>
-          ))}
-        </div>
+                <input
+                  id={`serv${index.id}`}
+                  type='checkBox'
+                  value={index.name}
+                  checked={value.split(',').includes(`"${index.id}"`)}
+                  readOnly
+                  className='h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 '
+                />
+                <label
+                  className='text-[14px] leading-[16px]'
+                  onClick={() => {
+                    document.getElementById(`${index.id}`)?.click();
+                  }}
+                >
+                  {index.name}
+                </label>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div>{lang === 'en' ? 'Empty' : 'Хоосон байна'}</div>
+        )}
       </div>
     );
   return (
@@ -99,7 +105,7 @@ export default function ServiceFilter({
           isOpen === true ? '!mt-[8px] !pb-[16px] sm:pb-[20px]' : 'h-0'
         }`}
       >
-        {data.map((index, i) => (
+        {data.length > 0 ? data.map((index, i) => (
           <div
             onClick={() => changeValue(`"${index.id}"`)}
             key={i}
@@ -116,7 +122,7 @@ export default function ServiceFilter({
             />
             <label className='text-[14px] leading-[16px]'>{index.name}</label>
           </div>
-        ))}
+        )) : <div>{lang === 'en' ? 'Empty' : 'Хоосон байна'}</div>}
       </Collapse>
     </div>
   );

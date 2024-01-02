@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+const { nextui } = require('@nextui-org/react');
 
 const config: Config = {
   content: [
@@ -6,6 +7,7 @@ const config: Config = {
     './pages/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   mode: 'jit',
   theme: {
@@ -137,6 +139,6 @@ const config: Config = {
       '2xl': '1536px', // => @media (min-width: 1536px) { ... }
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [require('@tailwindcss/forms'), nextui()],
 };
 export default config;

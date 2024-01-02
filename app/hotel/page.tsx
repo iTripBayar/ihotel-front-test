@@ -249,7 +249,7 @@ const HotelPage = () => {
         ) : null}
         {appState.logOrSign === 'sign' ? <SignUp /> : null}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
-        <BottomSection ver={'fixed'} />
+        <BottomSection ver={'fixed'} handleScrollToTopVer={() => {}} />
         <Dialogs
           roomPrices={roomPrices}
           stat={stat}

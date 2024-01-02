@@ -107,7 +107,7 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
               {lang === 'en' ? data.nameEn : data.name}
             </p>
             <p
-              className={`line-clamp-2 min-h-[28px] md:min-h-[30px] text-[12px] leading-[12px] text-sub-text/60 2xs:text-[14px] 2xs:leading-[14px]`}
+              className={`line-clamp-2 min-h-[28px] 2xs:min-h-[32px] md:min-h-[30px] text-[12px] leading-[14px] text-sub-text/60 2xs:text-[14px] 2xs:leading-[16px]`}
             >
               {lang === 'en' ? data?.addressEn : data?.address}
             </p>

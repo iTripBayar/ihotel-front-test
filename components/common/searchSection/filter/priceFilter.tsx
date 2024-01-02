@@ -30,42 +30,46 @@ export default function PriceFilter({
 
   if (ver === 'web')
     return (
-      <div className='flex h-full w-[70%] flex-col items-center justify-start gap-[12px]'>
+      <div className='flex h-full w-[70%] flex-col items-center justify-center gap-[12px]'>
         <p className='text-[18px] font-medium'>
           {lang === 'en' ? 'Price' : 'Үнэ'}
         </p>
-        <div className='grid w-full grid-cols-1 gap-[8px] text-[15px] text-sub-text'>
-          {data.map((index, i) => (
-            <div
-              onClick={() => changeValue(index)}
-              key={i}
-              className='flex w-full items-center gap-[8px]'
-            >
-              <input
-                id={`price${index.id}`}
-                type='checkBox'
-                value={index.max}
-                checked={value && index.id === value.id ? true : false}
-                readOnly
-                className='h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 '
-              />
-              <label
-                onClick={() => {
-                  document.getElementById(`${index.id}`)?.click();
-                }}
+        {data.length > 0 ? (
+          <div className='grid w-full grid-cols-1 gap-[12px] text-[15px] leading-[15px] text-sub-text'>
+            {data.map((index, i) => (
+              <div
+                onClick={() => changeValue(index)}
+                key={i}
+                className='flex w-full items-center gap-[8px]'
               >
-                {index.min.toLocaleString()} {lang === 'en' ? '$' : '₮'}
-                {index.max !== 0 ? '-' : null}{' '}
-                {index.max !== 0 ? (
-                  index.max.toLocaleString()
-                ) : (
-                  <span className='text-[18px]'>+</span>
-                )}
-                {index.max !== 0 ? (lang === 'en' ? '$' : '₮') : null}
-              </label>
-            </div>
-          ))}
-        </div>
+                <input
+                  id={`price${index.id}`}
+                  type='checkBox'
+                  value={index.max}
+                  checked={value && index.id === value.id ? true : false}
+                  readOnly
+                  className='h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 '
+                />
+                <label
+                  onClick={() => {
+                    document.getElementById(`${index.id}`)?.click();
+                  }}
+                >
+                  {index.min.toLocaleString()} {lang === 'en' ? '$' : '₮'}
+                  {index.max !== 0 ? '-' : null}{' '}
+                  {index.max !== 0 ? (
+                    index.max.toLocaleString()
+                  ) : (
+                    <span className='text-[18px]'>+</span>
+                  )}
+                  {index.max !== 0 ? (lang === 'en' ? '$' : '₮') : null}
+                </label>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div>{lang === 'en' ? 'Empty' : 'Хоосон байна'}</div>
+        )}
       </div>
     );
   return (
@@ -102,40 +106,44 @@ export default function PriceFilter({
           isOpen === true ? '!mt-[8px] !pb-[16px] sm:pb-[20px]' : 'h-0'
         }`}
       >
-        {data.map((index, i) => (
-          <div
-            onClick={() => changeValue(index)}
-            key={i}
-            className='flex w-full items-center gap-[8px]'
-          >
-            <input
-              id={`price${index.id}`}
-              type='checkBox'
-              value={index.max}
-              checked={
-                value && index.min === value.min && index.max === value.max
-                  ? true
-                  : false
-              }
-              readOnly
-              className='h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 '
-            />
-            <label
-              onClick={() => {
-                document.getElementById(`${index.id}`)?.click();
-              }}
+        {data.length > 0 ? (
+          data.map((index, i) => (
+            <div
+              onClick={() => changeValue(index)}
+              key={i}
+              className='flex w-full items-center gap-[8px]'
             >
-              {index.min.toLocaleString()} {lang === 'en' ? '$' : '₮'}
-              {index.max !== 0 ? '-' : null}{' '}
-              {index.max !== 0 ? (
-                index.max.toLocaleString()
-              ) : (
-                <span className='text-[18px]'>+</span>
-              )}
-              {index.max !== 0 ? (lang === 'en' ? '$' : '₮') : null}
-            </label>
-          </div>
-        ))}
+              <input
+                id={`price${index.id}`}
+                type='checkBox'
+                value={index.max}
+                checked={
+                  value && index.min === value.min && index.max === value.max
+                    ? true
+                    : false
+                }
+                readOnly
+                className='h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 '
+              />
+              <label
+                onClick={() => {
+                  document.getElementById(`${index.id}`)?.click();
+                }}
+              >
+                {index.min.toLocaleString()} {lang === 'en' ? '$' : '₮'}
+                {index.max !== 0 ? '-' : null}{' '}
+                {index.max !== 0 ? (
+                  index.max.toLocaleString()
+                ) : (
+                  <span className='text-[18px]'>+</span>
+                )}
+                {index.max !== 0 ? (lang === 'en' ? '$' : '₮') : null}
+              </label>
+            </div>
+          ))
+        ) : (
+          <div>{lang === 'en' ? 'Empty' : 'Хоосон байна'}</div>
+        )}
       </Collapse>
     </div>
   );

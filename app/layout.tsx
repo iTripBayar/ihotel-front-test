@@ -27,18 +27,18 @@ export default function RootLayout({
     <AppCtxProvider>
       <AuthProvider>
         <CookiesProvider>
-          <html lang='en'>
-            <head>
-              <link rel='icon' type='image/x-icon' href='/favicon.png'></link>
-              <meta
-                name='viewport'
-                content='width=device-width, initial-scale=1, maximum-scale=1'
-              ></meta>
-            </head>
-            <body className={`relative overscroll-y-none ${inter.className}`}>
-              {children}
-            </body>
-          </html>
+            <html lang='en'>
+              <head>
+                <link rel='icon' type='image/x-icon' href='/favicon.png'></link>
+                <meta
+                  name='viewport'
+                  content='width=device-width, initial-scale=1, maximum-scale=1'
+                ></meta>
+              </head>
+              <body className={`relative overscroll-y-none ${inter.className}`}>
+                {children}
+              </body>
+            </html>
         </CookiesProvider>
       </AuthProvider>
     </AppCtxProvider>

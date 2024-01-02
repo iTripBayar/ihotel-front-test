@@ -69,9 +69,9 @@ const MapContainer = ({ data, lat, lng, zoom, dollarRate }: iProps) => {
         cluster: false,
         pointId: data.id,
         price:
-          data.roomTypes &&
+          data.roomTypes.length > 0 ?
           data.roomTypes.sort((a, b) => b.priceDayUse - a.priceDayUse)[0]
-            .priceDayUse,
+            .priceDayUse : 0,
       },
       geometry: {
         type: 'Point',

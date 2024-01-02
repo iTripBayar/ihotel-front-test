@@ -15,7 +15,7 @@ import SignUp from '@/components/common/signIn/signUp';
 import { useSearchParams } from 'next/navigation';
 import { addDays, format } from 'date-fns';
 import dynamic from 'next/dynamic';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import useWindowSize from '@/hooks/windowSize';
 const ErrorComponent = dynamic(() => import('@/components/common/404'));
 
@@ -31,6 +31,7 @@ const SearchPage = () => {
   const lng = searchParams.get('lng');
   const { appState, dispatch } = useAppCtx();
   const size = useWindowSize();
+  const divRef = useRef<HTMLDivElement>(null);
 
   const newDate = new Date();
   const nextDay = addDays(newDate, 1);
@@ -86,6 +87,12 @@ const SearchPage = () => {
     { refreshDeps: [searchParams] },
   );
 
+  console.log(searchData);
+
+  const handleScrollToTop = () => {
+    divRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   if (!error)
     return (
       <main
@@ -103,11 +110,14 @@ const SearchPage = () => {
         ) : null}
         {appState.logOrSign === 'sign' ? <SignUp /> : null}
         {appState.menu === 'open' ? <BurgerMenu /> : null}
-        <BottomSection ver={'search'} />
+        <BottomSection
+          ver={'search'}
+          handleScrollToTopVer={handleScrollToTop}
+        />
         <div
           className={`${
             appState.filter === 'webFilter'
-              ? 'absolute left-[50%] top-[55px] z-[200] translate-x-[-50%]'
+              ? 'absolute left-[50%] top-[55px] z-[500] translate-x-[-50%]'
               : 'hidden'
           }`}
         >
@@ -120,6 +130,7 @@ const SearchPage = () => {
           className={`lg:hidden ${
             appState.filter === 'mobile' ? 'flex flex-col gap-[24px]' : ''
           }`}
+          ref={divRef}
         >
           <SearchSection
             ver={'headerSearch'}
@@ -143,11 +154,12 @@ const SearchPage = () => {
           </ChakraProvider>
         ) : appState.filter !== 'mobile' ? (
           <div
-            className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
+            className={`relative grid h-full w-full grid-cols-1 gap-[24px]  lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
           >
             <SearchCards
               data={data ? data.data : []}
               dollarRate={searchData ? searchData.rate : '1'}
+              totalLength={data ? data.result : 0}
             />
             {appState.map === 'open' ? (
               <MapContainer
