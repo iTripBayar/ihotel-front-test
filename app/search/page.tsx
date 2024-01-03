@@ -1,12 +1,12 @@
 'use client';
 import { useRequest } from 'ahooks';
-import { fetchDataSearch, fetchCheckHotel } from '@/utils';
+import { fetchCheckHotel } from '@/utils';
 import HeaderVariants from '@/components/common/headerVariants';
 import BurgerMenu from '@/components/common/burgermenu';
 import BottomSection from '@/components/common/bottomSection';
 import SearchSection from '@/components/common/searchSection';
 import SearchCards from '@/components/pageComponents/searchPage/searchCards';
-import MapContainer from '@/components/common/map/map';
+import MapContainer from '@/components/pageComponents/searchPage/map/map';
 import FilterOptions from '@/components/common/searchSection/filter/filterOptions';
 import { useAppCtx } from '@/contexts/app';
 import { CircularProgress } from '@chakra-ui/react';
@@ -44,9 +44,6 @@ const SearchPage = () => {
   const place =
     searchValue?.split('$')[1] === 'place' ? searchValue?.split('$')[2] : '';
 
-  const { data: searchData } = useRequest(() => {
-    return fetchDataSearch();
-  });
   useEffect(() => {
     if (size.width && size.width >= 1024) {
       dispatch({
@@ -90,7 +87,7 @@ const SearchPage = () => {
         page: page !== null ? page : '1',
         prices:
           min && max
-            ? encodeURIComponent(`["[${min}${max !== '0' ? `,${max}` : ''}]"]`)
+            ? encodeURIComponent(`["[${min}${max !== '0' ? `, ${max}` : ''}]"]`)
             : '',
         filterstar: '',
         rating1: '',
@@ -111,81 +108,81 @@ const SearchPage = () => {
   if (!error)
     return (
       <main
-        className={`relative flex h-screen w-full flex-col gap-[20px] overflow-y-auto`}
-        id='container'
+        className={`relative flex h-screen w-full flex-col gap-[20px] overflow-y-auto ${
+          appState.map === "open" ? " overflow-hidden pb-[25px]" : ""
+        }`}
+        id="container"
       >
         <HeaderVariants
-          ver={'search'}
+          ver={"search"}
           formattedDate={null}
-          searchData={searchData}
-          hotelData={data?.allhotels}
+          placesData={data ? data.places : []}
+          cityData={data ? data.cities : []}
         />
-        {appState.logOrSign === 'log' ||
-        appState.logOrSign === 'forgotPassword' ? (
+        {appState.logOrSign === "log" ||
+        appState.logOrSign === "forgotPassword" ? (
           <LogIn />
         ) : null}
-        {appState.logOrSign === 'sign' ? <SignUp /> : null}
-        {appState.menu === 'open' ? <BurgerMenu /> : null}
-        <div className='fixed  bottom-[24px] left-[0%] z-[899]  flex w-auto animate-fade flex-row items-stretch justify-between gap-[16px] px-[16px] text-white sm:px-[42px] sm:pl-[39px] md:px-[32px] lg:bottom-[12px]'>
-          {appState.map === '' ? <MapBtn ver={'default'} /> : null}
+        {appState.logOrSign === "sign" ? <SignUp /> : null}
+        {appState.menu === "open" ? <BurgerMenu /> : null}
+        <div className="fixed  bottom-[24px] left-[0%] z-[899]  flex w-auto animate-fade flex-row items-stretch justify-between gap-[16px] px-[16px] text-white sm:px-[42px] sm:pl-[39px] md:px-[32px] lg:bottom-[12px]">
+          {appState.map === "" ? <MapBtn ver={"default"} /> : null}
         </div>
         <BottomSection
-          ver={'search'}
+          ver={"search"}
           handleScrollToTopVer={handleScrollToTop}
         />
         <div
           className={`${
-            appState.filter === 'webFilter'
-              ? 'absolute left-[50%] top-[55px] z-[500] translate-x-[-50%]'
-              : 'hidden'
+            appState.filter === "webFilter"
+              ? "absolute left-[50%] top-[55px] z-[500] translate-x-[-50%]"
+              : "hidden"
           }`}
         >
           <FilterOptions
-            categories={searchData?.categories ? searchData?.categories : []}
-            services={searchData?.hotelServices ? searchData.hotelServices : []}
+            categories={data?.categories ? data?.categories : []}
+            services={data?.hotelServices ? data.hotelServices : []}
           />
         </div>
         <div
           className={`lg:hidden ${
-            appState.filter === 'mobile' ? 'flex flex-col gap-[24px]' : ''
+            appState.filter === "mobile" ? "flex flex-col gap-[24px]" : ""
           }`}
           ref={divRef}
         >
           <SearchSection
-            ver={'headerSearch'}
+            ver={"headerSearch"}
             formattedDate={null}
-            searchData={searchData}
-            hotelData={data?.allhotels}
+            placesData={data ? data.places : []}
+            cityData={data ? data.cities : []}
           />
-          {appState.filter === 'mobile' ? (
+          {appState.filter === "mobile" ? (
             <FilterOptions
-              categories={searchData?.categories ? searchData?.categories : []}
-              services={
-                searchData?.hotelServices ? searchData.hotelServices : []
-              }
+              categories={data?.categories ? data?.categories : []}
+              services={data?.hotelServices ? data.hotelServices : []}
             />
           ) : null}
         </div>
         {loading === true ? (
-            <div className='flex h-full w-full items-center justify-center pb-[100px]'>
-              <CircularProgress isIndeterminate={true} color='#3C76FE' />
-            </div>
-        ) : appState.filter !== 'mobile' ? (
+          <div className="flex h-full w-full items-center justify-center pb-[100px]">
+            <CircularProgress isIndeterminate={true} color="#3C76FE" />
+          </div>
+        ) : appState.filter !== "mobile" ? (
           <div
             className={`relative grid h-full w-full grid-cols-1 gap-[24px]  lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
           >
             <SearchCards
               data={data ? data.data : []}
-              dollarRate={searchData ? searchData.rate : '1'}
+              dollarRate={data ? data.dollarRate : "1"}
               totalLength={data ? data.result : 0}
             />
-            {appState.map === 'open' ? (
+            {appState.map === "open" ? (
               <MapContainer
                 data={data ? data.data : []}
                 zoom={lat && lng ? 8 : 11}
-                lat={lat ? parseInt(lat) : searchData?.mapCenter.lat}
-                lng={lng ? parseInt(lng) : searchData?.mapCenter.lng}
-                dollarRate={searchData ? searchData.rate : '1'}
+                lat={lat ? parseInt(lat) : data?.mapCenter.lat}
+                lng={lng ? parseInt(lng) : data?.mapCenter.lng}
+                dollarRate={data ? data.dollarRate : "1"}
               />
             ) : null}
           </div>

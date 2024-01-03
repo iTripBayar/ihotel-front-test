@@ -26,48 +26,48 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
     stat = 'data';
   }
 
-  const displayPrice = [];
+  const defaultPrice = [];
   for (let i = 0; i < data?.roomTypes?.length; i++) {
-    displayPrice.push(data.roomTypes[i].priceDayUse);
+    defaultPrice.push(data.roomTypes[i].defaultPrice);
   }
-  displayPrice.sort((a, b) => b - a);
+  defaultPrice.sort((a, b) => a - b);
   return (
     <div className={`relative w-full`}>
       <svg
-        xmlns='http://www.w3.org/2000/svg'
-        fill={fav === false ? 'rgb(255 255 255/50%)' : '#3C76FE'}
-        viewBox='0 0 24 24'
+        xmlns="http://www.w3.org/2000/svg"
+        fill={fav === false ? "rgb(255 255 255/50%)" : "#3C76FE"}
+        viewBox="0 0 24 24"
         strokeWidth={2}
-        stroke={fav === false ? '#3C76FE' : 'rgb(255 255 255/75%)'}
+        stroke={fav === false ? "#3C76FE" : "rgb(255 255 255/75%)"}
         className={`absolute right-[16px] top-[16px] z-[100] h-[24px] w-[24px] cursor-pointer text-primary-blue ${
-          fav === true ? ' scale-125 duration-500' : ''
+          fav === true ? " scale-125 duration-500" : ""
         }`}
         onClick={() => {
           setFav(!fav);
         }}
       >
         <path
-          strokeLinecap='round'
-          strokeLinejoin='round'
-          d='M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z'
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
         />
       </svg>
       <Link
         href={{
-          pathname: '/hotel',
+          pathname: "/hotel",
           query: { slug: data.slug },
         }}
-        target='_blank'
+        target="_blank"
         className={`flex w-full flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] bg-white shadow-[0px_2px_12px_2px_rgb(0,0,0,0.20)] xl:gap-[20px] ${
-          stat === 'data' ? 'max-h-[350px] pb-[10px]' : ''
-        } ${fromMap === false ? 'w-full' : 'w-[110%]'} `}
+          stat === "data" ? "max-h-[350px] pb-[10px]" : ""
+        } ${fromMap === false ? "w-full" : "w-[110%]"} `}
       >
         {/* image */}
         <div
           className={`relative h-[200px] w-full overflow-hidden rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] xs:h-[225px] md:h-[225px] lg:h-[225px]  ${
-            ver === 'home'
-              ? 'sm:h-[175px] 2xl:h-[300px]'
-              : '2xs:h-[250px] sm:h-[200px] xl:h-[250px] 2xl:h-[250px]'
+            ver === "home"
+              ? "sm:h-[175px] 2xl:h-[300px]"
+              : "2xs:h-[250px] sm:h-[200px] xl:h-[250px] 2xl:h-[250px]"
           }`}
         >
           {/* favourites icon */}
@@ -75,20 +75,20 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
             src={
               data?.image
                 ? `${process.env.IMAGE_URL}/${data?.image}`
-                : '/samples/camp.png'
+                : "/samples/camp.png"
             }
-            alt='/hotel'
+            alt="/hotel"
             fill={true}
-            loading='lazy'
-            sizes=' 60vw'
-            placeholder='blur'
+            loading="lazy"
+            sizes=" 60vw"
+            placeholder="blur"
             blurDataURL={
               data.image
                 ? `"_next/image/?url=${data?.image}"`
-                : '/samples/camp.png'
+                : "/samples/camp.png"
             }
             className={`h-auto w-auto select-none object-cover duration-700 ${
-              ver !== 'map' ? 'hover:scale-110' : ''
+              ver !== "map" ? "hover:scale-110" : ""
             }`}
             draggable={false}
           />
@@ -96,85 +96,85 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
         {/* bottom section */}
         <div
           className={`flex w-full flex-col gap-[12px] pl-[14px] ${
-            stat === 'data' ? 'opacity-50' : ''
+            stat === "data" ? "opacity-50" : ""
           }`}
         >
           {/* name & location */}
-          <div className='flex w-full flex-col gap-[12px] pr-[14px]'>
+          <div className="flex w-full flex-col gap-[12px] pr-[14px]">
             <p
               className={`line-clamp-1 text-[16px] font-medium leading-[16px] text-main-text 2xs:text-[18px] 2xs:leading-[18px] sm:text-[14px] sm:leading-[14px] md:text-[16px] md:leading-[16px]`}
             >
-              {lang === 'en' ? data.nameEn : data.name}
+              {lang === "en" ? data.nameEn : data.name}
             </p>
             <p
               className={`line-clamp-2 min-h-[28px] 2xs:min-h-[32px] md:min-h-[30px] text-[12px] leading-[14px] text-sub-text/60 2xs:text-[14px] 2xs:leading-[16px]`}
             >
-              {lang === 'en' ? data?.addressEn : data?.address}
+              {lang === "en" ? data?.addressEn : data?.address}
             </p>
           </div>
           {/* review & stat */}
           <div
             className={`relative flex w-full gap-[12px] pr-[8px] font-medium text-white ${
-              stat === 'data'
-                ? 'justify-between pr-[24px] md:mb-[8px] md:pr-[32px]'
-                : 'justify-start'
+              stat === "data"
+                ? "justify-between pr-[24px] md:mb-[8px] md:pr-[32px]"
+                : "justify-start"
             }`}
           >
             {/* review */}
-            <div className='flex h-[31px] min-w-[40px] items-center justify-center gap-[4px] rounded-[8px] bg-primary-blue text-[12px] 2xs:min-w-[50px] 2xs:text-[14px] sm:min-w-[38px] sm:gap-[2px] sm:text-[12px] md:min-w-[40px] md:text-[14px]'>
+            <div className="flex h-[31px] min-w-[40px] items-center justify-center gap-[4px] rounded-[8px] bg-primary-blue text-[12px] 2xs:min-w-[50px] 2xs:text-[14px] sm:min-w-[38px] sm:gap-[2px] sm:text-[12px] md:min-w-[40px] md:text-[14px]">
               <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='white'
-                viewBox='0 1 24 24'
+                xmlns="http://www.w3.org/2000/svg"
+                fill="white"
+                viewBox="0 1 24 24"
                 strokeWidth={1}
-                stroke='white'
-                className='h-[12px] w-[12px]'
+                stroke="white"
+                className="h-[12px] w-[12px]"
               >
                 <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z'
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
                 />
               </svg>
               <p>{data.rating}</p>
             </div>
             {/* stat */}
-            {stat !== 'data' ? (
+            {stat !== "data" ? (
               <div
                 className={`flex h-[31px] items-center justify-center gap-[4px] rounded-[8px] text-center ${
-                  stat === 'online'
-                    ? 'bg-main-online px-[16px] text-[14px] sm:text-[11px] sm:leading-[12px] md:text-[14px] md:leading-[14px]'
-                    : stat === 'pending'
-                    ? 'bg-main-pending px-[6px] text-[11px] leading-[11px] text-main-text 2xs:px-[8px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[6px] sm:text-[10px] sm:leading-[10px] md:px-[8px] md:text-[14px] md:leading-[14px]'
-                    : 'bg-main-offline px-[6px] text-[11px] leading-[11px] 2xs:px-[12px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[4px] sm:text-[10px] sm:leading-[10px] md:px-[6px] md:text-[14px] md:leading-[14px]'
+                  stat === "online"
+                    ? "bg-main-online px-[16px] text-[14px] sm:text-[11px] sm:leading-[12px] md:text-[14px] md:leading-[14px]"
+                    : stat === "pending"
+                    ? "bg-main-pending px-[6px] text-[11px] leading-[11px] text-main-text 2xs:px-[8px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[6px] sm:text-[10px] sm:leading-[10px] md:px-[8px] md:text-[14px] md:leading-[14px]"
+                    : "bg-main-offline px-[6px] text-[11px] leading-[11px] 2xs:px-[12px] 2xs:text-[12px] 2xs:leading-[12px] sm:px-[4px] sm:text-[10px] sm:leading-[10px] md:px-[6px] md:text-[14px] md:leading-[14px]"
                 }`}
               >
-                {lang === 'en' ? (
+                {lang === "en" ? (
                   <p>
-                    {stat === 'online'
-                      ? 'Instant confirmation'
-                      : stat === 'pending'
-                      ? 'Confirmation delay: '
-                      : stat === 'offline'
-                      ? 'Booking unavailable'
-                      : ''}
-                    {stat === 'pending' ? (
-                      <span className='text-[14px] font-semibold sm:text-[11px] md:text-[14px]'>
+                    {stat === "online"
+                      ? "Instant confirmation"
+                      : stat === "pending"
+                      ? "Confirmation delay: "
+                      : stat === "offline"
+                      ? "Booking unavailable"
+                      : ""}
+                    {stat === "pending" ? (
+                      <span className="text-[14px] font-semibold sm:text-[11px] md:text-[14px]">
                         1-3 hours
                       </span>
                     ) : null}
                   </p>
                 ) : (
                   <p>
-                    {stat === 'online'
-                      ? 'Шууд баталгаажна'
-                      : stat === 'pending'
-                      ? 'Баталгаажих хугацаа: '
-                      : stat === 'offline'
-                      ? 'Онлайн захиалга боломжгүй'
-                      : ''}
-                    {stat === 'pending' ? (
-                      <span className='text-[14px] font-semibold sm:text-[11px] md:text-[14px]'>
+                    {stat === "online"
+                      ? "Шууд баталгаажна"
+                      : stat === "pending"
+                      ? "Баталгаажих хугацаа: "
+                      : stat === "offline"
+                      ? "Онлайн захиалга боломжгүй"
+                      : ""}
+                    {stat === "pending" ? (
+                      <span className="text-[14px] font-semibold sm:text-[11px] md:text-[14px]">
                         1-3 цаг
                       </span>
                     ) : null}
@@ -183,86 +183,86 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
               </div>
             ) : (
               // price if stat === 'data'
-              <div className='self-end'>
-                <p className='text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]'>
-                  {lang === 'en'
+              <div className="self-end">
+                <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]">
+                  {lang === "en"
                     ? `${
                         dollarRate
                           ? `${
-                              displayPrice.length > 0
+                              defaultPrice.length > 0
                                 ? (
-                                    displayPrice[0] / parseInt(dollarRate)
+                                    defaultPrice[0] / parseInt(dollarRate)
                                   ).toLocaleString()
                                 : 70000 / parseInt(dollarRate)
                             } $`
                           : `${(70000).toLocaleString()}`
                       } $`
                     : `${
-                        displayPrice.length > 0
-                          ? displayPrice[0].toLocaleString()
+                        defaultPrice.length > 0
+                          ? defaultPrice[0].toLocaleString()
                           : (70000).toLocaleString()
                       }₮`}
-                  <span className='text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]'>
-                    / {lang === 'en' ? 'day' : 'хоног'}
+                  <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
+                    / {lang === "en" ? "day" : "хоног"}
                   </span>
                 </p>
               </div>
             )}
           </div>
           {/* price & orderBtn */}
-          {stat !== 'data' ? (
+          {stat !== "data" ? (
             <div
               className={`flex items-center justify-between ${
-                stat === 'data' ? 'h-0' : ''
+                stat === "data" ? "h-0" : ""
               }`}
             >
-              <p className='text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]'>
-                {lang === 'en'
+              <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]">
+                {lang === "en"
                   ? `${
                       dollarRate
                         ? `${
-                            displayPrice.length > 0
+                            defaultPrice.length > 0
                               ? (
-                                  displayPrice[0] / parseInt(dollarRate)
+                                  defaultPrice[0] / parseInt(dollarRate)
                                 ).toLocaleString()
                               : (70000 / parseInt(dollarRate)).toLocaleString()
                           } $`
                         : `${(70000).toLocaleString()} $`
                     } `
                   : `${
-                      displayPrice.length > 0
-                        ? displayPrice[0].toLocaleString()
+                      defaultPrice.length > 0
+                        ? defaultPrice[0].toLocaleString()
                         : (70000).toLocaleString()
                     }₮`}
 
-                <span className='text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]'>
-                  / {lang === 'en' ? 'day' : 'хоног'}
+                <span className="text-[12px] text-sub-text/75 xs:text-[14px] sm:text-[11px] md:text-[14px]">
+                  / {lang === "en" ? "day" : "хоног"}
                 </span>
               </p>
               <div
                 className={`m-0 flex items-center justify-center gap-[4px] self-end rounded-tl-[20px] bg-primary-blue py-[10px] text-[12px] font-medium text-white xs:text-[14px] sm:text-[13px] md:text-[14px] lg:py-[8px] ${
-                  stat === 'offline'
-                    ? 'px-[18px] 2xs:px-[24px] lg:px-[16px]'
-                    : 'px-[12px] 2xs:px-[16px] sm:px-[10px] md:px-[20px]'
+                  stat === "offline"
+                    ? "px-[18px] 2xs:px-[24px] lg:px-[16px]"
+                    : "px-[12px] 2xs:px-[16px] sm:px-[10px] md:px-[20px]"
                 }`}
               >
-                {lang === 'en' ? (
-                  <p>{stat === 'offline' ? 'View' : 'Order'}</p>
+                {lang === "en" ? (
+                  <p>{stat === "offline" ? "View" : "Order"}</p>
                 ) : (
-                  <p>{stat === 'offline' ? 'Харах' : 'Захиалах'}</p>
+                  <p>{stat === "offline" ? "Харах" : "Захиалах"}</p>
                 )}
                 <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 2 20 20'
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 2 20 20"
                   strokeWidth={3}
-                  stroke='white'
-                  className='h-[12px] w-[12px]'
+                  stroke="white"
+                  className="h-[12px] w-[12px]"
                 >
                   <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M8.25 4.5l7.5 7.5-7.5 7.5'
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
                   />
                 </svg>
               </div>

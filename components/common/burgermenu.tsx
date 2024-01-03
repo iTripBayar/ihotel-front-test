@@ -50,64 +50,64 @@ const BurgerMenu = () => {
     >
       <div
         className={`relative flex h-full w-[210px] animate-slide-left flex-col justify-between bg-[#181818] px-[20px] pb-[32px] pt-[48px] text-[14px] font-medium text-white duration-500 lg:w-[250px] lg:px-[24px] ${
-          closeAnimation == true ? ' animate-slide-right' : ''
+          closeAnimation == true ? " animate-slide-right" : ""
         }`}
       >
         <svg
-          xmlns='http://www.w3.org/2000/svg'
-          fill='none'
-          viewBox='0 0 24 24'
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
           strokeWidth={2}
-          stroke='currentColor'
-          className='absolute right-[18px] top-[18px] h-[28px] w-[28px] cursor-pointer'
+          stroke="currentColor"
+          className="absolute right-[18px] top-[18px] h-[28px] w-[28px] cursor-pointer"
           onClick={() => {
             close();
           }}
         >
           <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='M6 18L18 6M6 6l12 12'
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
           />
         </svg>
         {/* top section */}
-        <div className='flex w-full flex-col justify-start gap-[24px]'>
+        <div className="flex w-full flex-col justify-start gap-[24px]">
           {/* logIn */}
           {!session?.user ? (
             <button
-              className='flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]'
+              className="flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]"
               onClick={() => {
                 close();
                 setTimeout(() => {
                   dispatch({
-                    type: 'CHANGE_APP_STATE',
+                    type: "CHANGE_APP_STATE",
                     payload: {
-                      logOrSign: appState.logOrSign !== 'log' ? 'log' : '',
+                      logOrSign: appState.logOrSign !== "log" ? "log" : "",
                     },
                   });
                 }, 400);
               }}
             >
-              {lang === 'en' ? 'Log In' : 'Нэвтрэх'}
+              {lang === "en" ? "Log In" : "Нэвтрэх"}
             </button>
           ) : null}
 
           {!session?.user ? (
             <button
-              className='flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]'
+              className="flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]"
               onClick={() => {
                 close();
                 setTimeout(() => {
                   dispatch({
-                    type: 'CHANGE_APP_STATE',
+                    type: "CHANGE_APP_STATE",
                     payload: {
-                      logOrSign: appState.logOrSign !== 'sign' ? 'sign' : '',
+                      logOrSign: appState.logOrSign !== "sign" ? "sign" : "",
                     },
                   });
                 }, 400);
               }}
             >
-              {lang === 'en' ? 'Sign up' : 'Бүртгүүлэх'}
+              {lang === "en" ? "Sign up" : "Бүртгүүлэх"}
             </button>
           ) : null}
 
@@ -115,61 +115,65 @@ const BurgerMenu = () => {
 
           {session?.user ? (
             <Link
-              href='/profile'
-              className='flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]'
+              href="/profile"
+              className="flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]"
             >
               {session.user.name}
             </Link>
           ) : null}
           {/* add hotel */}
           <Link
-            href={`${process.env.TEMPORARY_URL}/hotel/create`}
-            className='flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]'
+            href={`${process.env.TEMPORARY_URL2}`}
+            target="_blank"
+            className="flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]"
           >
-            {lang === 'en' ? 'Add hotel' : 'Буудал нэмэх'}
+            {lang === "en" ? "Add hotel" : "Буудал нэмэх"}
           </Link>
         </div>
         {/* bottom section */}
-        <div className='flex w-full flex-col justify-end gap-[24px]'>
+        <div className="flex w-full flex-col justify-end gap-[24px]">
           {/* phone */}
-          <div className='flex h-[43px] w-full items-center justify-end gap-[8px]  border-b-[1px] border-white/[.15]'>
+          <Link
+            href={`tel:${appState.phone}`}
+            className="flex h-[43px] w-full items-center justify-end gap-[8px]  border-b-[1px] border-white/[.15]"
+          >
             <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='white'
-              viewBox='0 0 24 24'
+              xmlns="http://www.w3.org/2000/svg"
+              fill="white"
+              viewBox="0 0 24 24"
               strokeWidth={0}
-              stroke='currentColor'
-              className='h-[18px] w-[18px]'
+              stroke="currentColor"
+              className="h-[18px] w-[18px]"
             >
               <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z'
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
               />
             </svg>
-            <p className='leading-[16px]'>{appState.phone}</p>
-          </div>
+            <p className="leading-[16px]">{appState.phone}</p>
+          </Link>
           {/* lang */}
           <button
             onClick={() => {
-              const nextLang = lang === 'en' ? 'mn' : 'en';
-              router.push(`${pathname}?${createQueryString('lang', nextLang)}`);
+              const nextLang = lang === "en" ? "mn" : "en";
+              router.push(`${pathname}?${createQueryString("lang", nextLang)}`);
             }}
-            className='flex h-[43px] w-full items-center justify-end gap-[8px]  border-b-[1px] border-white/[.15]'
+            className="flex h-[43px] w-full items-center justify-end gap-[8px]  border-b-[1px] border-white/[.15]"
           >
             <Image
               src={
-                lang === 'en'
-                  ? '/images/mongolian-flag.png'
-                  : '/images/uk-flag.png'
+                lang === "en"
+                  ? "/images/mongolian-flag.png"
+                  : "/images/uk-flag.png"
               }
-              alt='/lang'
+              alt="/lang"
               width={22}
               height={22}
-              sizes='10vw'
-              className='object-fit max-h-[22px] max-w-[22px] cursor-pointer'
+              sizes="10vw"
+              className="object-fit max-h-[22px] max-w-[22px] cursor-pointer"
             />
-            {lang === 'en' ? 'MN' : 'EN'}
+            {lang === "en" ? "MN" : "EN"}
           </button>
         </div>
       </div>

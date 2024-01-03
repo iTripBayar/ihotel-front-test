@@ -23,6 +23,9 @@ declare namespace HotelData {
     specialServices: [];
     startdate: string;
     things: number;
+    places: SearchData.Places[];
+    cities: SearchData.Cities[];
+    categories: SearchData.Categories[];
   }
   interface Activities {
     createdAt: string;

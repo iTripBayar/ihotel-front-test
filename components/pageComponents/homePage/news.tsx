@@ -31,9 +31,10 @@ const News = ({ data }: iProps) => {
         </h3>
         {/* cardContainer */}
         <div
-          className={`grid grid-cols-1 grid-rows-${cap} gap-[18px] 2xs:grid-rows-${
-            cap / 2
-          } 2xs:grid-cols-2  md:gap-[24px] lg:grid-cols-3 lg:grid-rows-2 2xl:gap-[48px]`}
+          // className={`grid grid-cols-1 grid-rows-${cap} gap-[18px] 2xs:grid-rows-${
+          //   cap / 2
+          // } 2xs:grid-cols-2  md:gap-[24px] lg:grid-cols-3 lg:grid-rows-2 2xl:gap-[48px]`}
+          className={`grid grid-cols-1 gap-[32px] sm:gap-[24px] sm:grid-cols-2 md:gap-[32px] xl:grid-cols-3 xl:gap-[24px] 2xl:gap-[48px]`}
         >
           {data.map((index) => (
             <Link
@@ -42,7 +43,7 @@ const News = ({ data }: iProps) => {
               className='flex w-full flex-col justify-start gap-[8px] overflow-hidden rounded-[20px] pb-[8px] shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]'
             >
               {/* image */}
-              <div className='relative h-[175px] w-full overflow-hidden md:h-[175px] lg:h-[225px] xl:h-[250px]'>
+              <div className='relative h-[175px] 2xs:h-[200px] sm:h-[175px] w-full overflow-hidden md:h-[200px] lg:h-[225px] xl:h-[250px]'>
                 <Image
                   // src={`https://ihotel.mn/${unserialize(index.photos)[0]}`}
                   src={`${process.env.WEB_URL}/${unserialize(index.photos)[0]}`}

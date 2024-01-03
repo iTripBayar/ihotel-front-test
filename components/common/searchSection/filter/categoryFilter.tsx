@@ -64,16 +64,16 @@ export default function CategoryFilter({
       </div>
     );
   return (
-    <div className='flex h-auto w-full flex-col rounded-[20px] px-[20px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)]'>
+    <div className="flex h-auto w-full flex-col rounded-[20px] px-[20px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)]">
       <Button
         onClick={onToggle}
-        className='!m-0 flex h-[41px] w-full items-center !justify-between sm:h-[46px]'
+        className="!m-0 flex h-[41px] w-full items-center !justify-between sm:h-[46px] !bg-transparent !px-0"
       >
-        <p className='text-[18px] font-medium text-sub-text'>
-          {lang === 'en' ? 'Category' : 'Төрөл'}
+        <p className="text-[18px] font-medium text-sub-text">
+          {lang === "en" ? "Category" : "Төрөл"}
         </p>
         {/* spinning + Icon */}
-        <div className='relative h-[24px] w-[24px] rounded-full bg-primary-blue/25'>
+        <div className="relative h-[24px] w-[24px] rounded-full bg-primary-blue/25">
           <div
             className={`absolute left-[50%] top-[50%] h-[3px] w-[18px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
               isOpen === true
@@ -94,7 +94,7 @@ export default function CategoryFilter({
         in={isOpen}
         animateOpacity
         className={` !grid h-auto w-full grid-cols-2 !gap-[20px] text-[15px] font-medium leading-[16px] text-sub-text sm:!gap-[20px]  ${
-          isOpen === true ? '!mt-[8px] !pb-[16px] sm:pb-[20px]' : 'h-0'
+          isOpen === true ? "!mt-[8px] !pb-[16px] sm:pb-[20px]" : "h-0"
         }`}
       >
         {data.length > 0 ? (
@@ -102,15 +102,15 @@ export default function CategoryFilter({
             <div
               onClick={() => changeValue(index)}
               key={i}
-              className='flex w-full items-center gap-[8px]'
+              className="flex w-full items-center gap-[8px]"
             >
               <input
                 id={`cat${index.id}`}
-                type='checkbox'
+                type="checkbox"
                 readOnly
                 value={index.name}
                 checked={value && index.id === value.id ? true : false}
-                className='h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0'
+                className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0"
               />
               <label
                 onClick={() => {
@@ -122,7 +122,7 @@ export default function CategoryFilter({
             </div>
           ))
         ) : (
-          <div>{lang === 'en' ? 'Empty' : 'Хоосон байна'}</div>
+          <div>{lang === "en" ? "Empty" : "Хоосон байна"}</div>
         )}
       </Collapse>
     </div>

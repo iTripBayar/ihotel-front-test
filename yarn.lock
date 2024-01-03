@@ -4718,6 +4718,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-select-country-list@npm:^2.2.3":
+  version: 2.2.3
+  resolution: "@types/react-select-country-list@npm:2.2.3"
+  checksum: 015e7e92d35cada047ff45edf4e319d0f3c6648c603e48267d86e757dbd75a4de4c83da6ac191a7dcbcdfdfd46b3134ddde98956d54f9a4c48cffd0b54a54bef
+  languageName: node
+  linkType: hard
+
 "@types/react-slick@npm:^0.23.10":
   version: 0.23.10
   resolution: "@types/react-slick@npm:0.23.10"
@@ -7454,6 +7461,7 @@ __metadata:
     "@types/qrcode": ^1.5.5
     "@types/react": ^18
     "@types/react-dom": ^18
+    "@types/react-select-country-list": ^2.2.3
     "@types/react-slick": ^0.23.10
     "@typescript-eslint/eslint-plugin": 6.7.4
     "@typescript-eslint/parser": ^6.13.2
@@ -7482,6 +7490,7 @@ __metadata:
     react-day-picker: ^8.9.1
     react-dom: ^18
     react-map-gl: ^7.1.6
+    react-select-country-list: ^2.2.3
     react-slick: ^0.29.0
     serialize-php: ^1.1.2
     slick-carousel: ^1.8.1
@@ -9532,6 +9541,13 @@ __metadata:
     "@types/react":
       optional: true
   checksum: e0dbb6856beaed2cff4996d9ca62d775686ff72e3e9de34043034d932223b588993b2fc7a18644750dd3d73eb19bd3f2cedb8d91f0e424c1ef8403010da24b1d
+  languageName: node
+  linkType: hard
+
+"react-select-country-list@npm:^2.2.3":
+  version: 2.2.3
+  resolution: "react-select-country-list@npm:2.2.3"
+  checksum: 3cf76c661f1b9fd4ffded8747fad522aed3b2487dac2f8b9e17a0ed36023917c751621fcfd3cff7c564bf42cfcf1f16d92cdf3972042148f1fea99195ce76d94
   languageName: node
   linkType: hard
 

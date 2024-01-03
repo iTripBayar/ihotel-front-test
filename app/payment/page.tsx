@@ -5,7 +5,7 @@ import SocialPayOption from '@/components/pageComponents/paymentPage/socialPayOp
 import PassOption from '@/components/pageComponents/paymentPage/passOption';
 import QpayOption from '@/components/pageComponents/paymentPage/qpayOption';
 import { useAppCtx } from '@/contexts/app';
-import PaymentMethod from '@/components/pageComponents/reservationPage/paymentMethod';
+import PaymentMethod from '@/components/pageComponents/paymentPage/paymentMethod';
 import { useRouter } from 'next/navigation';
 import { Alert, AlertIcon } from '@chakra-ui/react';
 import { useState } from 'react';

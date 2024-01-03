@@ -7,7 +7,7 @@ import BurgerMenu from '@/components/common/burgermenu';
 import { useState, useRef, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import HeaderVariants from '@/components/common/headerVariants';
-import { fetchCheckHotel, fetchData, fetchDataSearch } from '@/utils';
+import { fetchData } from '@/utils';
 import SearchSection from '@/components/common/searchSection';
 import Header from '@/components/common/header';
 import BottomSection from '@/components/common/bottomSection';
@@ -26,30 +26,6 @@ const Home = () => {
   const { data, loading, error } = useRequest(() => {
     return fetchData();
   });
-  const { data: searchData } = useRequest(() => {
-    return fetchDataSearch();
-  });
-
-  const { data: hotelData} = useRequest(
-    () => {
-      return fetchCheckHotel({
-        hotel: '',
-        place: '',
-        city: '',
-        checkin: '',
-        checkout: '',
-        isClosed: '',
-        page: '1',
-        prices:'',
-        filterstar: '',
-        rating1: '',
-        rating2: '',
-        hotelServices: '',
-        roomServices: '',
-        categories:'',
-      });
-    }
-  );
 
   const { appState } = useAppCtx();
 
@@ -87,73 +63,71 @@ const Home = () => {
 
   if (!error)
     return (
-      <main className='relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px] '>
+      <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px] ">
         <Header
           user={
             session
               ? `${session.user?.name
                   ?.charAt(0)
                   .toUpperCase()}${session.user?.name?.slice(1)}`
-              : ''
+              : ""
           }
         />
-        {headerVer === 'fixed' ? (
+        {headerVer === "fixed" ? (
           <HeaderVariants
             ver={headerVer}
             formattedDate={null}
-            searchData={searchData}
-            hotelData={hotelData?.allhotels}
+            placesData={data ? data.places : []}
+            cityData={data ? data.cities : []}
           />
         ) : null}
-        {appState.logOrSign === 'log' ||
-        appState.logOrSign === 'forgotPassword' ? (
+        {appState.logOrSign === "log" ||
+        appState.logOrSign === "forgotPassword" ? (
           <LogIn />
         ) : null}
-        {appState.logOrSign === 'sign' ? <SignUp /> : null}
-        {appState.menu === 'open' ? <BurgerMenu /> : null}
+        {appState.logOrSign === "sign" ? <SignUp /> : null}
+        {appState.menu === "open" ? <BurgerMenu /> : null}
 
         <BottomSection ver={headerVer} handleScrollToTopVer={() => {}} />
         {loading ? (
-            <div className='flex h-[111px] w-full items-center justify-center 2xs:h-[100px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[225px] 2xl:h-[250px]'>
-              <CircularProgress isIndeterminate={true} color='#3C76FE' />
-            </div>
+          <div className="flex h-[111px] w-full items-center justify-center 2xs:h-[100px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[225px] 2xl:h-[250px]">
+            <CircularProgress isIndeterminate={true} color="#3C76FE" />
+          </div>
         ) : (
           <HeroCategory data={data ? data.propertyTypes : []} />
         )}
         <div ref={searchBoxRef}>
-          {headerVer !== 'fixed' ? (
-            <SearchSection
-              ver={'normal'}
-              formattedDate={null}
-              searchData={searchData}
-              hotelData={hotelData?.allhotels}
-            />
-          ) : null}
+          <SearchSection
+            ver={"normal"}
+            formattedDate={null}
+            placesData={data ? data.places : []}
+            cityData={data ? data.cities : []}
+          />
         </div>
         {loading ? (
-            <div className='flex h-[500px] w-full items-center justify-center'>
-              <CircularProgress isIndeterminate={true} color='#3C76FE' />
-            </div>
+          <div className="flex h-[500px] w-full items-center justify-center">
+            <CircularProgress isIndeterminate={true} color="#3C76FE" />
+          </div>
         ) : (
-          <div className='relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px] '>
+          <div className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px] ">
             <CommonLocation
               data={data ? data.destCategories : []}
               destinations={data ? data.topDestinations : []}
             />
             <CardsContainer
-              title={'cheap'}
+              title={"cheap"}
               data={data ? data.cheapHotels : []}
-              dollarRate={data ? data.dollarRate : '1'}
+              dollarRate={data ? data.dollarRate : "1"}
             />
             <CardsContainer
-              title={'hotels'}
+              title={"hotels"}
               data={data ? data.hotels : []}
-              dollarRate={data ? data.dollarRate : '1'}
+              dollarRate={data ? data.dollarRate : "1"}
             />
             <CardsContainer
-              title={'camps'}
+              title={"camps"}
               data={data ? data.camps : []}
-              dollarRate={data ? data.dollarRate : '1'}
+              dollarRate={data ? data.dollarRate : "1"}
             />
             <News data={data ? data.posts : []} />
           </div>

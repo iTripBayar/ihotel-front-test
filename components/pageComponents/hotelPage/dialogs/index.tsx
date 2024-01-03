@@ -5,6 +5,7 @@ import { useAppCtx } from "@/contexts/app";
 import ScrollTopBtn from "@/components/common/fixedButtons/scrollTopBtn";
 import RoomSelectionDrawer from "./roomSelectionDrawer";
 import useWindowSize from "@/hooks/windowSize";
+import LangBtn from "@/components/common/fixedButtons/langBtn";
 
 interface Props {
   roomPrices: number[];
@@ -29,10 +30,13 @@ export default function Dialogs({
   const size = useWindowSize();
 
   return (
-    <div className="fixed bottom-0 z-[900] flex w-full flex-col justify-end sm:px-[50px] md:px-[72px] lg:hidden">
-      <div className="flex w-auto flex-col gap-[8px] self-end pb-[12px] pr-[14px] text-white">
-        <ScrollTopBtn ver={"fixed"} handleScrollToTopVer={() => {}} />
-      </div>
+    <div className="fixed bottom-0 z-[999] flex w-full flex-col justify-end sm:px-[50px] md:px-[72px] lg:hidden">
+      {appState.calendar === "" && !appState.selectedRoom ? (
+        <div className="flex w-auto flex-col gap-[8px] self-end pb-[12px] pr-[14px] text-white">
+          <LangBtn/> 
+          <ScrollTopBtn ver={"fixed"} handleScrollToTopVer={() => {}} />
+        </div>
+      ) : null}
       {size.width && size.width < 1024 && appState.selectedRoom ? (
         <RoomSelectionDrawer
           roomData={

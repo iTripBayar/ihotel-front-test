@@ -17,7 +17,17 @@ export async function fetchDataSearch(): Promise<SearchData.Data> {
 
   return result;
 }
+// ihotel/dest/search?query=ibis
 
+export async function fetchSearchQuery(query: string): Promise<SearchQuery.Result> {
+  const response = await fetch(
+    `${process.env.WEB_URL}/ihotel/dest/search?query=${query}`,
+    // { cache: 'force-cache' },
+  );
+  const result = await response.json();
+
+  return result;
+}
 export async function fetchCheckHotel(e: {
   hotel: string;
   place: string;

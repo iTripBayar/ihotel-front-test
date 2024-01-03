@@ -79,3 +79,19 @@ declare namespace SearchData {
     updatedAt: string | null;
   }
 }
+declare namespace SearchQuery{
+  interface Result {
+    hotels: Items[];
+    query: string
+  }
+  interface Items {
+    id: number;
+    includedServiceMessage: string;
+    isNew: boolean;
+    isNewXroom: boolean;
+    name: string;
+    nameEn: string;
+    slug: string;
+    type: string;
+  }
+}

@@ -1,11 +1,9 @@
-import HotelCard from '../../common/hotelCard';
-import { useRef } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useAppCtx } from '@/contexts/app';
-import {
-  Pagination,
-} from '@nextui-org/react';
-import { NextUIProvider } from '@nextui-org/react';
+import HotelCard from "../../common/hotelCard";
+import { useRef } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useAppCtx } from "@/contexts/app";
+import { Pagination } from "@nextui-org/react";
+import { NextUIProvider } from "@nextui-org/react";
 
 interface iProps {
   data: HotelData.Hotel[];
@@ -13,20 +11,17 @@ interface iProps {
   totalLength: number;
 }
 
-const SearchCards = ({
-  data,
-  dollarRate,
-  totalLength,
-}: iProps) => {
+const SearchCards = ({ data, dollarRate, totalLength }: iProps) => {
   const searchParams = useSearchParams();
-  const toggle = searchParams.get('toggle');
+  const lang = searchParams.get("lang");
+  const toggle = searchParams.get("toggle");
   const { appState } = useAppCtx();
   const router = useRouter();
-  const page = searchParams.get('page');
+  const page = searchParams.get("page");
 
   const divRef = useRef<HTMLDivElement>(null);
 
-  if (toggle === 'true') {
+  if (toggle === "true") {
     data = data.filter(
       (index) => index.isOnline === 1 && index.isOffline === 0,
     );
@@ -40,25 +35,24 @@ const SearchCards = ({
     }
     return params.toString();
   };
-   divRef.current?.addEventListener('scroll', (e) => {
-     e.preventDefault();
-   });
-
+  divRef.current?.addEventListener("scroll", (e) => {
+    e.preventDefault();
+  });
 
   return (
     <div
       className={` flex h-auto w-full flex-col gap-[32px] overflow-x-visible lg:h-[calc(100vh-60px)] lg:overflow-y-scroll lg:px-[12px] lg:pb-[28px]  ${
-        appState.map === 'open'
-          ? 'hidden lg:col-span-4 lg:flex xl:col-span-3 2xl:col-span-4'
-          : 'lg:col-span-6 xl:col-span-5 2xl:col-span-6'
+        appState.map === "open"
+          ? "hidden lg:col-span-4 lg:flex xl:col-span-3 2xl:col-span-4"
+          : "lg:col-span-6 xl:col-span-5 2xl:col-span-6"
       }`}
       ref={divRef}
     >
       <div
         className={`grid h-auto grid-cols-1 gap-[22px] px-[16px] pt-[16px] sm:grid-cols-2 sm:px-[42px] md:px-[72px] lg:px-0 ${
-          appState.map === ''
-            ? 'lg:grid-cols-3 2xl:grid-cols-4'
-            : '2xl:grid-cols-3'
+          appState.map === ""
+            ? "lg:grid-cols-3 2xl:grid-cols-4"
+            : "2xl:grid-cols-3"
         }`}
       >
         {data.length > 0
@@ -67,34 +61,42 @@ const SearchCards = ({
                 data={data}
                 key={i}
                 fromMap={false}
-                ver='search'
+                ver="search"
                 dollarRate={dollarRate}
               />
             ))
           : null}
       </div>
-      <NextUIProvider>
-        <Pagination
-          isCompact
-          showControls
-          total={parseInt(`${totalLength / 20}`)}
-          initialPage={page? parseInt(page) : 1}
-          onChange={(e) => {
-            router.replace(`/search?${createQueryString('page', `${e}`)}`, {
-              scroll: false,
-            });
-          }}
-          classNames={{
-            base: 'flex justify-center py-0 px-[24px] m-0 w-full overflow-visible',
-            cursor: 'bg-primary-blue rounded-full',
-            wrapper: 'max-w-[324px] w-full p-0 bg-black/[.05] overflow-visible w-auto',
-            item: 'bg-transparent',
-            next: 'bg-transparent',
-            prev: 'bg-transparent',
-          }}
-        />
-      </NextUIProvider>
-      <div className='w-full h-[200px] lg:hidden bg-none'></div>
+      {totalLength > 20 ? (
+        <NextUIProvider>
+          <Pagination
+            isCompact
+            showControls
+            total={parseInt(`${totalLength / 20}`)}
+            initialPage={page ? parseInt(page) : 1}
+            onChange={(e) => {
+              router.replace(`/search?${createQueryString("page", `${e}`)}`, {
+                scroll: false,
+              });
+            }}
+            classNames={{
+              base: "flex justify-center py-0 px-[24px] m-0 w-full overflow-visible",
+              cursor: "bg-primary-blue rounded-full",
+              wrapper:
+                "max-w-[324px] w-full p-0 bg-black/[.05] overflow-visible w-auto",
+              item: "bg-transparent",
+              next: "bg-transparent",
+              prev: "bg-transparent",
+            }}
+          />
+        </NextUIProvider>
+      ) : (
+        <p className="text-[16px] text-center text-sub-text/75 font-medium">
+          {lang === "en" ? "All results" : "Бүх илэрцүүд"}
+        </p>
+      )}
+
+      <div className="w-full h-[200px] lg:hidden bg-none"></div>
     </div>
   );
 };

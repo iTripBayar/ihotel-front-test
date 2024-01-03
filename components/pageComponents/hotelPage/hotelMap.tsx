@@ -28,25 +28,35 @@ const HotelMap = ({ lat, lng }: Props) => {
           zoom: 13,
         }}
         style={{
-          width: '100%',
-          height: '100%',
+          width: "100%",
+          height: "100%",
           borderRadius: 12,
-          border: 'solid 1px rgb(0,0,0,0.15)',
-          overflow: 'hidden',
+          border: "solid 1px rgb(0,0,0,0.15)",
+          overflow: "hidden",
         }}
         id="mapBox"
         mapStyle="mapbox://styles/ihotel-dev/clnwysb8a005b01qx38a9hgh0"
       >
         <Marker
-          key={'hotel'}
+          key={"hotel"}
           latitude={lat}
           longitude={lng}
           style={{
-            width: '14px',
-            height: '14px',
-            backgroundColor: '#3C76FE',
-            borderRadius: '100%',
+            width: "14px",
+            height: "14px",
+            backgroundColor: "#3C76FE",
+            borderRadius: "100%",
+            cursor: 'pointer'
           }}
+          onClick={() =>
+            mapRef?.current?.flyTo({
+              center: [lng, lat],
+              zoom: 15,
+              duration: 1500,
+              speed: 0.5,
+              curve: 2,
+            })
+          }
         >
           <div className="flex h-[14px] w-[14px] animate-ping items-center justify-center rounded-full border-[1px] bg-primary-blue">
             <div className="h-[4px] w-[4px] rounded-full bg-white/75"></div>

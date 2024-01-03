@@ -44,6 +44,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
     prevArrow: <SamplePrevArrow />,
     // afterChange: (current: number) => setActive({ current }),
   };
+  console.log(destinations);
 
   return (
     <div className='flex w-full flex-col gap-[20px]'>
