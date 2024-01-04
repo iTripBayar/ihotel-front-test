@@ -23,11 +23,12 @@ import { useSession } from 'next-auth/react';
 const Home = () => {
   const [headerVer, setHeaderVer] = useState('default');
   const searchBoxRef = useRef(null);
+
   const { data, loading, error } = useRequest(() => {
     return fetchData();
   });
 
-  const { appState } = useAppCtx();
+  const { appState, dispatch } = useAppCtx();
 
   useEffect(() => {
     const options = {
@@ -35,6 +36,10 @@ const Home = () => {
       rootMargin: '0px',
       threshold: 0,
     };
+    dispatch({
+      type: "CHANGE_APP_STATE",
+      payload: { map: "" },
+    });
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -61,9 +66,10 @@ const Home = () => {
     required: false,
   });
 
+
   if (!error)
     return (
-      <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px] ">
+      <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
         <Header
           user={
             session

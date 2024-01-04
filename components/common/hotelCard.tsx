@@ -64,9 +64,9 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
       >
         {/* image */}
         <div
-          className={`relative h-[200px] w-full overflow-hidden rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] xs:h-[225px] md:h-[225px] lg:h-[225px]  ${
+          className={`relative h-[200px] w-full overflow-hidden rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] xs:h-[225px] 2xs:h-[250px] md:h-[225px] lg:h-[250px]  ${
             ver === "home"
-              ? "sm:h-[175px] 2xl:h-[300px]"
+              ? "sm:h-[175px] "
               : "2xs:h-[250px] sm:h-[200px] xl:h-[250px] 2xl:h-[250px]"
           }`}
         >

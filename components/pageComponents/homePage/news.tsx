@@ -15,9 +15,9 @@ const News = ({ data }: iProps) => {
   if (size.width && size.width >= 1024) {
     cap = 6;
   }
-  if (cap != 0) {
-    data = data.slice(0, cap);
-  }
+  // if (cap != 0) {
+  //   data = data.slice(0, cap);
+  // }
   
   return (
     <div className='w-full px-[16px] pt-[32px] sm:px-[42px] md:px-[72px] lg:px-[150px] lg:py-[0] 2xl:px-[200px]'>
@@ -36,7 +36,7 @@ const News = ({ data }: iProps) => {
           // } 2xs:grid-cols-2  md:gap-[24px] lg:grid-cols-3 lg:grid-rows-2 2xl:gap-[48px]`}
           className={`grid grid-cols-1 gap-[32px] sm:gap-[24px] sm:grid-cols-2 md:gap-[32px] xl:grid-cols-3 xl:gap-[24px] 2xl:gap-[48px]`}
         >
-          {data.map((index) => (
+          {data.slice(0, cap).map((index) => (
             <Link
               href={{ pathname: `${process.env.WEB_URL}/ihotel/post/${index.slug}` }}
               key={index.id}

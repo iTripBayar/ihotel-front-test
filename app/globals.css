@@ -21,7 +21,7 @@
 .mapboxgl-ctrl-attrib-inner {
   display: none !important;
 }
-.slick-slide>div{
+.slick-slide > div {
   padding: 0 0 !important;
 }
 
@@ -48,12 +48,13 @@
   border: none;
   border-radius: 20px;
 }
-.rdp{
+.rdp {
   --rdp-cell-size: 36px !important;
   --rdp-caption-font-size: 16px !important;
-  --rdp-accent-color: #3C76FE !important
+  --rdp-accent-color: #3c76fe !important
+;
 }
-.rdp-months{
+.rdp-months {
   flex-direction: row;
   margin: 0;
   padding: 0;
@@ -62,36 +63,35 @@
   justify-content: center;
   min-height: 300px;
 }
-.rdp-month{
+.rdp-month {
   margin: 0 !important;
   padding: 0;
 }
-.rdp-table{
+.rdp-table {
   margin: 0 auto !important;
 }
-.rdp-day_today:not(.rdp-day_outside){
+.rdp-day_today:not(.rdp-day_outside) {
   font-weight: 400 !important;
 }
-.swiper-pagination{
+.swiper-pagination {
   bottom: 50px !important;
   font-size: medium !important;
 }
-.roomImages .swiper-pagination{
+.roomImages .swiper-pagination {
   bottom: 0 !important;
 }
-.roomImages .swiper-pagination-bullet{
+.roomImages .swiper-pagination-bullet {
   border: 2px solid #ffffff !important;
-  background-color: #3C76FE;
+  background-color: #3c76fe;
   width: 10px;
   height: 10px;
 }
 
-@media (max-width: 1023px){
-  .rdp-months{
-  flex-direction: column !important;
-  margin: 0;
-  padding: 0;
-  gap: 24px;
+@media (max-width: 1023px) {
+  .rdp-months {
+    flex-direction: column !important;
+    margin: 0;
+    padding: 0;
+    gap: 24px;
+  }
 }
-}
-

@@ -72,6 +72,7 @@ const HeaderVariants = ({
           className="absolute cursor-pointer object-contain"
         />
       </Link>
+      {/* {ver === 'hotel' || ver === 'reservation' ? : null} */}
       <div
         className={`${
           ver === "hotel" || ver === "reservation" ? "" : "hidden"

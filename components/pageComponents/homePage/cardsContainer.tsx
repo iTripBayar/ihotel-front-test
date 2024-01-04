@@ -1,4 +1,4 @@
-import useWindowSize from '@/hooks/windowSize';
+// import useWindowSize from '@/hooks/windowSize';
 import HotelCard from '../../common/hotelCard';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -12,19 +12,18 @@ interface iProps {
 const CardsContainer = ({ title, data, dollarRate }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const size = useWindowSize();
-
+  // const size = useWindowSize();
   let cap = 6;
-  if (title === 'cheap') {
-    if (size.width && size.width <= 1280 && size.width >= 576) {
-      cap = 2;
-    } else {
-      cap = 3;
-    }
-  }
-  if (cap != 0) {
-    data = data.slice(0, cap);
-  }
+  // if (title === 'cheap') {
+  //   if (size.width && size.width <= 1280 && size.width >= 576) {
+  //     cap = 4;
+  //   } else {
+  //     cap = 6;
+  //   }
+  // }
+  // if (cap != 0) {
+  //   data = data.slice(0, cap);
+  // }
 
   return (
     <div
@@ -59,7 +58,7 @@ const CardsContainer = ({ title, data, dollarRate }: iProps) => {
             cap / 3
           } xl:grid-cols-3 xl:gap-[24px] 2xl:gap-[48px] `}
         >
-          {data.map((data, i: number) => (
+          {data.slice(0,cap).map((data, i: number) => (
             <HotelCard
               ver='home'
               data={data}
@@ -77,8 +76,7 @@ const CardsContainer = ({ title, data, dollarRate }: iProps) => {
             }}
             className='flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white'
           >
-            <p className='flex gap-[4px]'>
-              {/* {state.language === 'mn' ? 'Цааш үзэх' : 'More'}{' '} */}
+            <p className='flex gap-[4px] font-medium'>
               {lang === 'en' ? 'More' : 'Цааш үзэх'}
               {data.length - cap > 0 ? (
                 <span>({data.length - cap}+)</span>

@@ -1,5 +1,6 @@
+"use client";
 import React, { useState, useRef, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -24,11 +25,13 @@ const SearchBox = ({
 }: iProps) => {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(false);
+  const [showDefault, setShowDefault] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
   const searchValue = searchParams.get("searchValue");
+  const [currentIndex, setCurrentIndex] = useState(0);
   const { appState, dispatch } = useAppCtx();
 
   const { data: queryData, run } = useRequest(
@@ -37,9 +40,9 @@ const SearchBox = ({
     },
     {
       manual: true,
-      onSuccess: (res) => {
-        console.log(res);
-      },
+      // onSuccess: (res) => {
+      //   console.log(res);
+      // },
     },
   );
 
@@ -82,7 +85,6 @@ const SearchBox = ({
 
   if (typeof window !== "undefined") {
     recentSearch = localStorage.getItem("recentSearch");
-    // Perform localStorage action
   }
 
   useEffect(() => {
@@ -119,16 +121,35 @@ const SearchBox = ({
     cssEase: "fade",
   };
 
+  useEffect(() => {
+    document
+      .getElementById("searchBoxContainer")
+      ?.addEventListener("click", () => {
+        setShowDefault(true);
+        document.getElementById("searchInput")?.focus();
+      });
+    document.addEventListener("click", (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.classList.contains("within")) {
+        setShowDefault(false);
+      } else {
+        setShowDefault(true);
+      }
+      console.log(target);
+    });
+  }, []);
+
   return (
     <div
-      className={`relative flex w-full  flex-col gap-[10px] ${
+      className={`relative flex w-full  flex-col gap-[10px] within cursor-text ${
         ver === "normal" ? "lg:max-w-[500px] xl:max-w-none" : "lg:max-w-[500px]"
       }`}
+      id="searchBoxContainer"
     >
       <div
-        className={`flex w-full  items-center bg-white px-[12px] ${
+        className={`flex w-full within items-center bg-white px-[12px] ${
           ver === "normal"
-            ? "h-[46px] justify-start gap-[2px] rounded-[8px] border border-black/[.25]  2xs:gap-[4px] lg:min-w-[280px] xl:min-w-[306px] "
+            ? "h-[46px] justify-start rounded-[8px] border border-black/[.25]  2xs:gap-[4px] lg:min-w-[280px] xl:min-w-[306px] "
             : ver === "fixed"
             ? "h-[36px] justify-start rounded-full"
             : ver === "headerSearch"
@@ -139,16 +160,24 @@ const SearchBox = ({
             ? "h-[36px] min-w-[225px] justify-between overflow-hidden rounded-full shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] lg:pr-0 xl:min-w-[400px] 2xl:min-w-[500px]"
             : ""
         }`}
+        // onClick={(e) => {
+        //   if (ver === "normal" || ver == "fixed") {
+        //     e.preventDefault();
+        //     inputRef.current?.focus();
+        //   }
+        // }}
         ref={searchRef}
       >
         <div
-          className={`flex items-center gap-[8px]  ${
+          className={`flex items-center gap-[8px] within  ${
             query !== "" ? "w-full " : "w-auto"
           }`}
-          onClick={(e) => {
-            e.preventDefault();
-            inputRef.current?.focus();
-          }}
+          // onClick={(e) => {
+          //   if (ver === "search" || ver === "headerSearch") {
+          //     e.preventDefault();
+          //     inputRef.current?.focus();
+          //   }
+          // }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -156,7 +185,7 @@ const SearchBox = ({
             viewBox="0 0 24 24"
             strokeWidth={2}
             stroke="currentColor"
-            className="max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] text-primary-blue"
+            className="max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] text-primary-blue within"
           >
             <path
               strokeLinecap="round"
@@ -169,8 +198,9 @@ const SearchBox = ({
             name="searchInput"
             id="searchInput"
             placeholder={
-              lang === "en" ? "Search destinations" : "Хайх газар оруулах"
+              lang === "en" ? "Search destinations" : `Хайх газар оруулах`
             }
+            autoComplete="off"
             onChange={(event) => {
               // event.target.value.trim();
               setQuery(event.target.value);
@@ -188,12 +218,17 @@ const SearchBox = ({
             value={query}
             ref={inputRef}
             onFocus={(e) => {
+              // setShowDefault(true);
+              // console.log("focus");
+              // e.target.classList.add('w-full')
               e.preventDefault();
             }}
             onClick={(e) => {
               e.preventDefault();
             }}
-            className={`h-full border-transparent px-0 text-[16px] placeholder:text-[12px] text-sub-text/75 placeholder-sub-text/75 focus:border-transparent focus:ring-0 2xs:placeholder:text-[13px] sm:placeholder:text-[14px] lg:text-[12px] xl:text-[14px]
+            // className={` w-full within h-full border-transparent px-0 text-[16px] placeholder:text-[12px] text-sub-text/75 placeholder-sub-text/75 focus:border-transparent focus:ring-0 2xs:placeholder:text-[13px] sm:placeholder:text-[14px] lg:text-[12px] xl:text-[14px]
+            // `}
+            className={`within h-full border-transparent px-0 text-[16px] placeholder:text-[12px] text-sub-text/75 placeholder-sub-text/75 focus:border-transparent focus:ring-0 2xs:placeholder:text-[13px] sm:placeholder:text-[14px] lg:text-[12px] xl:text-[14px]
             ${
               query === ""
                 ? "w-[124px] 2xs:w-[134px] sm:w-[144px] lg:w-[124px] xl:w-[144px]"
@@ -265,12 +300,12 @@ const SearchBox = ({
         ver !== "search" &&
         ver !== "headerSearch" &&
         ver !== "hotel" ? (
-          <div className=" max-w-[125px] overflow-hidden">
+          <div className=" max-w-[125px] overflow-hidden within">
             <Slider {...settings} ref={sliderRef}>
               {suggestion.map((index, i) => (
                 <p
                   key={i}
-                  className={` w-full text-[12px] leading-[12px] 2xs:text-[13px] 2xs:leading-[13px] sm:text-[14px] sm:leading-[14px] lg:text-[12px] lg:leading-[12px] xl:text-[14px] xl:leading-[14px]`}
+                  className={` w-full within text-[12px] leading-[12px] 2xs:text-[13px] 2xs:leading-[13px] sm:text-[14px] sm:leading-[14px] lg:text-[12px] lg:leading-[12px] xl:text-[14px] xl:leading-[14px]`}
                 >
                   &ldquo;
                   {lang === "en" ? index.en : index.mn}
@@ -281,9 +316,10 @@ const SearchBox = ({
           </div>
         ) : null}
       </div>
-      {query !== "" && selected == false ? (
+      {selected === false && showDefault === true ? (
         <div
-          className={` flex h-[150px] w-full flex-col justify-start gap-[12px] overflow-x-hidden overflow-y-scroll
+          id="resultsContainer"
+          className={` flex h-[150px] w-full flex-col justify-start gap-[12px] overflow-x-hidden overflow-y-scroll within
            rounded-[8px] border border-black/20 bg-white px-[12px] text-main-text md:grid md:grid-cols-2 md:gap-[24px] md:px-[20px] lg:absolute lg:top-[50px] lg:h-[250px] lg:min-w-[400px] lg:gap-[16px] lg:px-[10px] xl:gap-[24px] xl:px-[20px] lg:max-w-[${searchRef.current?.clientWidth}px] lg:z-50`}
         >
           {queryData && query.trim().length >= 1 ? (
@@ -297,7 +333,7 @@ const SearchBox = ({
                     setSelected(true);
                   }}
                   key={i}
-                  className="flex max-h-[50px] min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
+                  className="flex within max-h-[50px] min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
                 >
                   {index.type === "place" ? (
                     <svg
@@ -359,7 +395,7 @@ const SearchBox = ({
             <>
               {/* {recentSearch ? } */}
               {recentSearch ? (
-                <div className="flex max-h-[40px] min-h-[39px]  items-end justify-center text-[16px] leading-[16px] md:col-span-2">
+                <div className="flex max-h-[40px] within min-h-[39px]  items-end justify-center text-[16px] leading-[16px] md:col-span-2 font-medium">
                   {lang === "en" ? "Recent search" : "Өмнөх хайлтууд"}
                 </div>
               ) : null}
@@ -374,7 +410,7 @@ const SearchBox = ({
                     setSelected(true);
                   }}
                   key={i}
-                  className=" flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
+                  className=" flex max-h-[50px] within min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
                 >
                   {index.split("$")[1] === "place" ? (
                     <svg
@@ -432,7 +468,7 @@ const SearchBox = ({
                 </div>
               ))}
               {placesData.length > 0 ? (
-                <div className="flex max-h-[40px] min-h-[39px]  items-end justify-center text-[16px] leading-[16px] md:col-span-2">
+                <div className="flex max-h-[40px] min-h-[39px]within items-end justify-center text-[16px] leading-[16px] md:col-span-2 font-medium">
                   {lang === "en" ? "Popular destination" : "Түгээмэл байршил"}
                 </div>
               ) : null}
@@ -445,7 +481,7 @@ const SearchBox = ({
                     setSelected(true);
                   }}
                   key={i}
-                  className=" flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
+                  className=" flex max-h-[50px] within min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -471,7 +507,7 @@ const SearchBox = ({
                 </div>
               ))}
               {cityData.length > 0 ? (
-                <div className="flex max-h-[40px] min-h-[39px]  items-end justify-center text-[16px] leading-[16px] md:col-span-2">
+                <div className="flex max-h-[40px] min-h-[39px] within items-end justify-center text-[16px] leading-[16px] md:col-span-2 font-medium">
                   {lang === "en" ? "City (Province)" : "Хот (Аймаг)"}
                 </div>
               ) : null}
@@ -484,7 +520,7 @@ const SearchBox = ({
                     setSelected(true);
                   }}
                   key={i}
-                  className=" flex max-h-[50px]  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
+                  className=" flex max-h-[50px] within  min-h-[49px] cursor-pointer items-center justify-start gap-[24px] border-b-[1px] border-black/[.1] text-[12px] leading-[12px] sm:text-[14px] sm:leading-[14px] md:text-[12px] md:leading-[12px] lg:gap-[12px] xl:text-[13px] xl:leading-[13px]"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
