@@ -13,7 +13,7 @@ const CardsContainer = ({ title, data, dollarRate }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   // const size = useWindowSize();
-  let cap = 6;
+  const cap = 6;
   // if (title === 'cheap') {
   //   if (size.width && size.width <= 1280 && size.width >= 576) {
   //     cap = 4;

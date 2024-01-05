@@ -99,14 +99,14 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
-            onKeyDown={(e) => {
-              const regex = /^[A-Za-z]+$/;
-              const isValid = regex.test(e.key);
+            // onKeyDown={(e) => {
+            //   const regex = /^[A-Za-z]+$/;
+            //   const isValid = regex.test(e.key);
 
-              if (!isValid) {
-                e.preventDefault();
-              }
-            }}
+            //   if (!isValid) {
+            //     e.preventDefault();
+            //   }
+            // }}
             placeholder={lang === "en" ? "Given name" : "Нэр"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
@@ -126,14 +126,14 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
-            onKeyDown={(e) => {
-              const regex = /^[A-Za-z]+$/;
-              const isValid = regex.test(e.key);
+            // onKeyDown={(e) => {
+            //   const regex = /^[A-Za-z]+$/;
+            //   const isValid = regex.test(e.key);
 
-              if (!isValid) {
-                e.preventDefault();
-              }
-            }}
+            //   if (!isValid) {
+            //     e.preventDefault();
+            //   }
+            // }}
             placeholder={lang === "en" ? "Family name" : "Овог"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
@@ -162,16 +162,16 @@ export default function UserInfo({
             name={`phone`}
             pattern="[0-9]+"
             required
-            onKeyDown={(e) => {
-              // Allow only numeric characters (0-9)
-              const isNumericOrBackspace =
-                /^[0-9]$/.test(e.key) ||
-                e.key === "Backspace" ||
-                e.key === "Tab";
-              if (!isNumericOrBackspace) {
-                e.preventDefault();
-              }
-            }}
+            // onKeyDown={(e) => {
+            //   // Allow only numeric characters (0-9)
+            //   const isNumericOrBackspace =
+            //     /^[0-9]$/.test(e.key) ||
+            //     e.key === "Backspace" ||
+            //     e.key === "Tab";
+            //   if (!isNumericOrBackspace) {
+            //     e.preventDefault();
+            //   }
+            // }}
             onChange={(e) => {
               const value = {
                 name: clients.name,
@@ -299,13 +299,13 @@ export default function UserInfo({
                       });
                     }
                   }}
-                  onKeyDown={(e) => {
-                    const regex = /^[A-Za-z]+$/;
-                    const isValid = regex.test(e.key);
-                    if (!isValid) {
-                      e.preventDefault();
-                    }
-                  }}
+                  // onKeyDown={(e) => {
+                  //   const regex = /^[A-Za-z]+$/;
+                  //   const isValid = regex.test(e.key);
+                  //   if (!isValid) {
+                  //     e.preventDefault();
+                  //   }
+                  // }}
                   placeholder={lang === "en" ? "Given name" : "Нэр"}
                   className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
                 />
@@ -331,14 +331,14 @@ export default function UserInfo({
                       });
                     }
                   }}
-                  onKeyDown={(e) => {
-                    const regex = /^[A-Za-z]+$/;
-                    const isValid = regex.test(e.key);
+                  // onKeyDown={(e) => {
+                  //   const regex = /^[A-Za-z]+$/;
+                  //   const isValid = regex.test(e.key);
 
-                    if (!isValid) {
-                      e.preventDefault();
-                    }
-                  }}
+                  //   if (!isValid) {
+                  //     e.preventDefault();
+                  //   }
+                  // }}
                   placeholder={lang === "en" ? "Family name" : "Овог"}
                   className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
                 />
@@ -373,16 +373,16 @@ export default function UserInfo({
                   name={`phone-${i}`}
                   pattern="[0-9]+"
                   required
-                  onKeyDown={(e) => {
-                    // Allow only numeric characters (0-9)
-                    const isNumericOrBackspace =
-                      /^[0-9]$/.test(e.key) ||
-                      e.key === "Backspace" ||
-                      e.key === "Tab";
-                    if (!isNumericOrBackspace) {
-                      e.preventDefault();
-                    }
-                  }}
+                  // onKeyDown={(e) => {
+                  //   // Allow only numeric characters (0-9)
+                  //   const isNumericOrBackspace =
+                  //     /^[0-9]$/.test(e.key) ||
+                  //     e.key === "Backspace" ||
+                  //     e.key === "Tab";
+                  //   if (!isNumericOrBackspace) {
+                  //     e.preventDefault();
+                  //   }
+                  // }}
                   onChange={(e) => {
                     if (parseInt(e.target.name.split("-")[1]) === i) {
                       setAdditionalClients((prevClients) => {
@@ -476,14 +476,14 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
-            onKeyDown={(e) => {
-              const regex = /^[A-Za-z]+$/;
-              const isValid = regex.test(e.key);
+            // onKeyDown={(e) => {
+            //   const regex = /^[A-Za-z]+$/;
+            //   const isValid = regex.test(e.key);
 
-              if (!isValid) {
-                e.preventDefault();
-              }
-            }}
+            //   if (!isValid) {
+            //     e.preventDefault();
+            //   }
+            // }}
             placeholder={lang === "en" ? "Given name" : "Нэр"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
@@ -503,14 +503,14 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
-            onKeyDown={(e) => {
-              const regex = /^[A-Za-z]+$/;
-              const isValid = regex.test(e.key);
+            // onKeyDown={(e) => {
+            //   const regex = /^[A-Za-z]+$/;
+            //   const isValid = regex.test(e.key);
 
-              if (!isValid) {
-                e.preventDefault();
-              }
-            }}
+            //   if (!isValid) {
+            //     e.preventDefault();
+            //   }
+            // }}
             placeholder={lang === "en" ? "Family name" : "Овог"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
@@ -539,16 +539,16 @@ export default function UserInfo({
             name={`phone`}
             pattern="[0-9]+"
             required
-            onKeyDown={(e) => {
-              // Allow only numeric characters (0-9)
-              const isNumericOrBackspace =
-                /^[0-9]$/.test(e.key) ||
-                e.key === "Backspace" ||
-                e.key === "Tab";
-              if (!isNumericOrBackspace) {
-                e.preventDefault();
-              }
-            }}
+            // onKeyDown={(e) => {
+            //   // Allow only numeric characters (0-9)
+            //   const isNumericOrBackspace =
+            //     /^[0-9]$/.test(e.key) ||
+            //     e.key === "Backspace" ||
+            //     e.key === "Tab";
+            //   if (!isNumericOrBackspace) {
+            //     e.preventDefault();
+            //   }
+            // }}
             onChange={(e) => {
               const value = {
                 name: clients.name,
@@ -672,14 +672,14 @@ export default function UserInfo({
                     };
                     updateClients(value);
                   }}
-                  onKeyDown={(e) => {
-                    const regex = /^[A-Za-z]+$/;
-                    const isValid = regex.test(e.key);
+                  // onKeyDown={(e) => {
+                  //   const regex = /^[A-Za-z]+$/;
+                  //   const isValid = regex.test(e.key);
 
-                    if (!isValid) {
-                      e.preventDefault();
-                    }
-                  }}
+                  //   if (!isValid) {
+                  //     e.preventDefault();
+                  //   }
+                  // }}
                   placeholder={lang === "en" ? "Given name" : "Нэр"}
                   className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
                 />
@@ -699,14 +699,14 @@ export default function UserInfo({
                     };
                     updateClients(value);
                   }}
-                  onKeyDown={(e) => {
-                    const regex = /^[A-Za-z]+$/;
-                    const isValid = regex.test(e.key);
+                  // onKeyDown={(e) => {
+                  //   const regex = /^[A-Za-z]+$/;
+                  //   const isValid = regex.test(e.key);
 
-                    if (!isValid) {
-                      e.preventDefault();
-                    }
-                  }}
+                  //   if (!isValid) {
+                  //     e.preventDefault();
+                  //   }
+                  // }}
                   placeholder={lang === "en" ? "Family name" : "Овог"}
                   className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
                 />
@@ -735,14 +735,14 @@ export default function UserInfo({
                   name={`phone${i}`}
                   pattern="[0-9]+"
                   required
-                  onKeyDown={(e) => {
-                    // Allow only numeric characters (0-9)
-                    const isNumericOrBackspace =
-                      /^[0-9]$/.test(e.key) || e.key === "Backspace";
-                    if (!isNumericOrBackspace) {
-                      e.preventDefault();
-                    }
-                  }}
+                  // onKeyDown={(e) => {
+                  //   // Allow only numeric characters (0-9)
+                  //   const isNumericOrBackspace =
+                  //     /^[0-9]$/.test(e.key) || e.key === "Backspace";
+                  //   if (!isNumericOrBackspace) {
+                  //     e.preventDefault();
+                  //   }
+                  // }}
                   onChange={(e) => {
                     const value = {
                       name: clients.name,

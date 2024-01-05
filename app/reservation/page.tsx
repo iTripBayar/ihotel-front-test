@@ -7,7 +7,7 @@ import CancelTerm from '@/components/pageComponents/reservationPage/cancelTerm';
 import GeneralInfo from '@/components/pageComponents/reservationPage/generalInfo';
 import OrderInfo from '@/components/pageComponents/reservationPage/orderInfo';
 import UserInfo from '@/components/pageComponents/reservationPage/userInfo';
-import { fetchDataHotel, fetchCreateOrder, fetchDataSearch, fetchCheckHotel } from '@/utils';
+import { fetchDataHotel, fetchCreateOrder } from '@/utils';
 import { useRequest } from 'ahooks';
 import Footer from '@/components/common/footer';
 import BurgerMenu from '@/components/common/burgermenu';

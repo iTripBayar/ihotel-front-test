@@ -66,7 +66,6 @@ const Home = () => {
     required: false,
   });
 
-
   if (!error)
     return (
       <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">

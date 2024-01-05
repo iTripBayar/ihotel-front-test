@@ -1,36 +1,36 @@
-'use client';
-import { useRequest } from 'ahooks';
-import { fetchCheckHotel } from '@/utils';
-import HeaderVariants from '@/components/common/headerVariants';
-import BurgerMenu from '@/components/common/burgermenu';
-import BottomSection from '@/components/common/bottomSection';
-import SearchSection from '@/components/common/searchSection';
-import SearchCards from '@/components/pageComponents/searchPage/searchCards';
-import MapContainer from '@/components/pageComponents/searchPage/map/map';
-import FilterOptions from '@/components/common/searchSection/filter/filterOptions';
-import { useAppCtx } from '@/contexts/app';
-import { CircularProgress } from '@chakra-ui/react';
-import LogIn from '@/components/common/signIn/logIn';
-import SignUp from '@/components/common/signIn/signUp';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { addDays, format } from 'date-fns';
-import dynamic from 'next/dynamic';
-import { useEffect, useRef } from 'react';
-import useWindowSize from '@/hooks/windowSize';
-import MapBtn from '@/components/common/fixedButtons/mapBtn';
-const ErrorComponent = dynamic(() => import('@/components/common/404'));
+"use client";
+import { useRequest } from "ahooks";
+import { fetchCheckHotel } from "@/utils";
+import HeaderVariants from "@/components/common/headerVariants";
+import BurgerMenu from "@/components/common/burgermenu";
+import BottomSection from "@/components/common/bottomSection";
+import SearchSection from "@/components/common/searchSection";
+import SearchCards from "@/components/pageComponents/searchPage/searchCards";
+import MapContainer from "@/components/pageComponents/searchPage/map/map";
+import FilterOptions from "@/components/common/searchSection/filter/filterOptions";
+import { useAppCtx } from "@/contexts/app";
+import { CircularProgress } from "@chakra-ui/react";
+import LogIn from "@/components/common/signIn/logIn";
+import SignUp from "@/components/common/signIn/signUp";
+import { useSearchParams, useRouter } from "next/navigation";
+import { addDays, format } from "date-fns";
+import dynamic from "next/dynamic";
+import { useEffect, useRef } from "react";
+import useWindowSize from "@/hooks/windowSize";
+import MapBtn from "@/components/common/fixedButtons/mapBtn";
+const ErrorComponent = dynamic(() => import("@/components/common/404"));
 
 const SearchPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const searchValue = searchParams.get('searchValue');
-  const category = searchParams.get('category');
-  const page = searchParams.get('page');
-  const min = searchParams.get('min');
-  const max = searchParams.get('max');
-  const services = searchParams.get('services');
-  const lat = searchParams.get('lat');
-  const lng = searchParams.get('lng');
+  const searchValue = searchParams.get("searchValue");
+  const category = searchParams.get("category");
+  const page = searchParams.get("page");
+  const min = searchParams.get("min");
+  const max = searchParams.get("max");
+  const services = searchParams.get("services");
+  const lat = searchParams.get("lat");
+  const lng = searchParams.get("lng");
   const { appState, dispatch } = useAppCtx();
   const size = useWindowSize();
   const divRef = useRef<HTMLDivElement>(null);
@@ -38,22 +38,22 @@ const SearchPage = () => {
   const newDate = new Date();
   const nextDay = addDays(newDate, 1);
   const hotel =
-    searchValue?.split('$')[1] === 'hotel' ? searchValue?.split('$')[2] : '';
+    searchValue?.split("$")[1] === "hotel" ? searchValue?.split("$")[2] : "";
   const city =
-    searchValue?.split('$')[1] === 'city' ? searchValue?.split('$')[2] : '';
+    searchValue?.split("$")[1] === "city" ? searchValue?.split("$")[2] : "";
   const place =
-    searchValue?.split('$')[1] === 'place' ? searchValue?.split('$')[2] : '';
+    searchValue?.split("$")[1] === "place" ? searchValue?.split("$")[2] : "";
 
   useEffect(() => {
     if (size.width && size.width >= 1024) {
       dispatch({
-        type: 'CHANGE_APP_STATE',
-        payload: { map: 'open' },
+        type: "CHANGE_APP_STATE",
+        payload: { map: "open" },
       });
     } else {
       dispatch({
-        type: 'CHANGE_APP_STATE',
-        payload: { map: '' },
+        type: "CHANGE_APP_STATE",
+        payload: { map: "" },
       });
     }
     return;
@@ -68,7 +68,7 @@ const SearchPage = () => {
     return params.toString();
   };
   useEffect(() => {
-    router.replace(`/search?${createQueryString('page', `1`)}`, {
+    router.replace(`/search?${createQueryString("page", `1`)}`, {
       scroll: false,
     });
   }, [min, max, services, category]);
@@ -79,30 +79,48 @@ const SearchPage = () => {
         hotel: hotel,
         place: place,
         city: city,
-        checkin: encodeURIComponent(format(newDate, 'MM/dd/yyyy')),
+        checkin: encodeURIComponent(format(newDate, "MM/dd/yyyy")),
         // checkin: '',
-        checkout: encodeURIComponent(format(nextDay, 'MM/dd/yyyy')),
+        checkout: encodeURIComponent(format(nextDay, "MM/dd/yyyy")),
         // checkout: '',
-        isClosed: '',
-        page: page !== null ? page : '1',
+        isClosed: "",
+        page: page !== null ? page : "1",
         prices:
           min && max
-            ? encodeURIComponent(`["[${min}${max !== '0' ? `, ${max}` : ''}]"]`)
-            : '',
-        filterstar: '',
-        rating1: '',
-        rating2: '',
-        hotelServices: services ? encodeURIComponent(`[${services}]`) : '',
+            ? encodeURIComponent(`["[${min}${max !== "0" ? `, ${max}` : ""}]"]`)
+            : "",
+        filterstar: "",
+        rating1: "",
+        rating2: "",
+        hotelServices: services ? encodeURIComponent(`[${services}]`) : "",
         // hotelServices: services ? encodeURI(`[${services}]`) : '',
-        roomServices: '',
-        categories: category ? encodeURIComponent(`["${category}"]`) : '',
+        roomServices: "",
+        categories: category ? encodeURIComponent(`["${category}"]`) : "",
       });
     },
     { refreshDeps: [searchParams] },
   );
 
+  useEffect(() => {
+    if (appState.filter === "webFilter") {
+      document.addEventListener("click", (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
+        if (!target.classList.contains("filter")) {
+          dispatch({
+            type: "CHANGE_APP_STATE",
+            payload: {
+              filter: "",
+              logOrSign: "",
+              menu: "",
+            },
+          });
+        }
+      });
+    }
+  }, [appState.filter]);
+
   const handleScrollToTop = () => {
-    divRef.current?.scrollIntoView({ behavior: 'smooth' });
+    divRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   if (!error)

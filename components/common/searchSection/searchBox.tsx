@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { useSearchParams, usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -31,7 +31,6 @@ const SearchBox = ({
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
   const searchValue = searchParams.get("searchValue");
-  const [currentIndex, setCurrentIndex] = useState(0);
   const { appState, dispatch } = useAppCtx();
 
   const { data: queryData, run } = useRequest(
@@ -135,10 +134,10 @@ const SearchBox = ({
       } else {
         setShowDefault(true);
       }
-      console.log(target);
+      
+        
     });
   }, []);
-
   return (
     <div
       className={`relative flex w-full  flex-col gap-[10px] within cursor-text ${
@@ -254,7 +253,7 @@ const SearchBox = ({
                 },
               });
             }}
-            className={`flex h-full cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue ${
+            className={`flex h-full cursor-pointer items-center justify-center gap-[4px] rounded-full bg-primary-blue filter ${
               ver === "headerSearch" ? "px-[8px]" : "px-[12px]"
             } text-[13px] font-medium text-white ring-1 ring-primary-blue xl:px-[14px] xl:text-[14px] ${
               query !== "" || appState.filter !== ""
@@ -271,7 +270,7 @@ const SearchBox = ({
               className={
                 query !== ""
                   ? "max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px]"
-                  : " 2x:min-w-[24px] max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] 2xs:max-h-[24px] 2xs:min-h-[24px] 2xs:max-w-[24px]"
+                  : " 2x:min-w-[24px] max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] 2xs:max-h-[24px] 2xs:min-h-[24px] 2xs:max-w-[24px] filter"
               }
             >
               <path
@@ -286,7 +285,7 @@ const SearchBox = ({
                   appState.filter === "on" || appState.filter === ""
                     ? ""
                     : "hidden"
-                }`}
+                } filter`}
               >
                 {lang === "en" ? "Filter" : "Шүүлтүүр"}
               </p>

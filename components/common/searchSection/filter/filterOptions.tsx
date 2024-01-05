@@ -115,11 +115,11 @@ const FilterOptions = ({ categories, services }: Props) => {
   if (appState.filter === 'webFilter')
     return (
       <div
-        className="flex max-h-[300px] w-[85vw] animate-fade500 items-end"
+        className="flex max-h-[300px] w-[85vw] animate-fade500 items-end filter"
         id="container"
       >
-        <div className="flex h-[95%] w-full flex-col items-center gap-[8px] rounded-[20px] border border-black/20 bg-white px-[24px] py-[12px]">
-          <div className="flex h-full w-full items-start justify-between gap-[24px]">
+        <div className="flex h-[95%] w-full flex-col items-center gap-[8px] rounded-[20px] border border-black/20 bg-white px-[24px] py-[12px] filter">
+          <div className="flex h-full w-full items-start justify-between gap-[24px] filter">
             {/* Categories */}
             <CategoryFilter
               iconRotateDuration={iconRotateDuration}
@@ -148,7 +148,7 @@ const FilterOptions = ({ categories, services }: Props) => {
             />
           </div>
           {/* search Btn */}
-          <div className="flex gap-[16px] self-end">
+          <div className="flex gap-[16px] self-end filter">
             <div
               onClick={() => {
                 router.replace(
@@ -169,7 +169,7 @@ const FilterOptions = ({ categories, services }: Props) => {
                   payload: { filter: "" },
                 });
               }}
-              className="flex max-w-[180px] items-center  justify-center self-end rounded-full bg-primary-blue px-[14px] py-[4px] text-[13px] font-medium uppercase text-white"
+              className="flex max-w-[180px] items-center  justify-center self-end rounded-full bg-primary-blue px-[14px] py-[4px] text-[13px] font-medium uppercase text-white filter"
             >
               {lang === "en" ? "Filter" : "Шүүх"}
             </div>
@@ -196,7 +196,7 @@ const FilterOptions = ({ categories, services }: Props) => {
                   payload: { filter: "" },
                 });
               }}
-              className="flex max-w-[180px] items-center  justify-center self-end rounded-full bg-primary-blue px-[14px] py-[4px] text-[13px] font-medium uppercase text-white"
+              className="flex max-w-[180px] items-center  justify-center self-end rounded-full bg-primary-blue px-[14px] py-[4px] text-[13px] font-medium uppercase text-white filter"
             >
               {lang === "en" ? "Clear" : "Цэвэрлэх"}
             </div>
@@ -207,7 +207,7 @@ const FilterOptions = ({ categories, services }: Props) => {
   else
     return (
       <div
-        className="flex w-full animate-fade500 flex-col gap-[24px] px-[20px] pb-[150px] sm:px-[50px] md:px-[72px]"
+        className="flex w-full animate-fade500 flex-col gap-[24px] px-[20px] pb-[150px] sm:px-[50px] md:px-[72px] filter"
         id="container"
       >
         {/* Categories */}
@@ -236,7 +236,7 @@ const FilterOptions = ({ categories, services }: Props) => {
           changeValue={(e: string) => changeServ(e)}
           ver="mobile"
         />
-        <div className="flex items-center justify-center gap-[16px]">
+        <div className="flex items-center justify-center gap-[16px] filter">
           <div
             onClick={() => {
               router.replace(
@@ -257,7 +257,7 @@ const FilterOptions = ({ categories, services }: Props) => {
                 payload: { filter: "" },
               });
             }}
-            className="flex min-h-[40px] w-auto min-w-[90px] items-center justify-center self-center rounded-full bg-primary-blue px-[12px] pt-[2px] text-[14px] font-medium uppercase tracking-wider text-white"
+            className="flex min-h-[40px] w-auto min-w-[90px] items-center justify-center self-center rounded-full bg-primary-blue px-[12px] pt-[2px] text-[14px] font-medium uppercase tracking-wider text-white filter"
           >
             {lang === "en" ? "Filter" : "Шүүх"}
           </div>
@@ -284,7 +284,7 @@ const FilterOptions = ({ categories, services }: Props) => {
                 payload: { filter: "" },
               });
             }}
-            className="flex min-h-[40px] w-auto min-w-[90px] items-center justify-center self-center rounded-full bg-primary-blue px-[12px] pt-[2px] text-[14px] font-medium uppercase tracking-wider text-white"
+            className="flex min-h-[40px] w-auto min-w-[90px] items-center justify-center self-center rounded-full bg-primary-blue px-[12px] pt-[2px] text-[14px] font-medium uppercase tracking-wider text-white filter"
           >
             {lang === "en" ? "Clear" : "Цэвэрлэх"}
           </div>

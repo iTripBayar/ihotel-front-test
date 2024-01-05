@@ -298,7 +298,6 @@ const HotelRooms = ({
                       },
                       pathname: "/reservation",
                     }}
-                    target="_blank"
                     className="flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white"
                   >
                     {lang === "en" ? "Order" : "Захиалах"}

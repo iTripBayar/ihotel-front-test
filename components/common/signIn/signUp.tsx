@@ -105,19 +105,29 @@ export default function SignUp() {
     }
   };
 
-  const [arePasswordsValid, setArePasswordsValid] = useState(false);
+  const [arePasswordsValid, setArePasswordsValid] = useState('');
 
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    // const { value } = event.target;
+    // setUserInfo({ ...userInfo, password: value });
+    // setArePasswordsValid(event.target.checkValidity());
+
     const { value } = event.target;
+    // setPass({ password: value, confirm: pass.confirm });
     setUserInfo({ ...userInfo, password: value });
-    setArePasswordsValid(event.target.checkValidity());
+    const regex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!#@$%^&*()]).{8,}$/;
+    setArePasswordsValid(regex.test(value) === true ? "patternOk" : "");
   };
 
   const handlePasswordConfirmChange = (
     event: ChangeEvent<HTMLInputElement>,
   ) => {
+    // const { value } = event.target;
+    // setUserInfo({ ...userInfo, passwordConfirmation: value });
     const { value } = event.target;
+    // setPass({ password: pass.password, confirm: value });
     setUserInfo({ ...userInfo, passwordConfirmation: value });
+    setArePasswordsValid(userInfo.password === value ? "match" : "nomatch");
   };
   if (message !== "") {
     setTimeout(() => {
@@ -191,7 +201,6 @@ export default function SignUp() {
               onChange={handlePasswordChange}
               placeholder={lang === "en" ? "Password" : "Нууц үг"}
               minLength={8}
-              pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&()#])[\w@$!%*?&()#]{8,}$"
               className="h-[34px] w-full rounded-[4px] border-black/[.15]"
             />
             <button
@@ -306,21 +315,18 @@ export default function SignUp() {
                 : "* И-мэйл хаяг бүртгэлтэй байна *"}
             </p>
           )}
-          {arePasswordsValid === false && (
+          {arePasswordsValid === '' ? (
             <p className="mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]">
               {lang === "en"
                 ? "* Password must have an uppercase letter, a number, a symbol, and be at least 8 characters long *"
                 : "* Нууц үг дор хаяж 1 том үсэг, 1 тоо, 1 тусгай тэмдэгт агуулсан хамгийн багадаа 8 тэмдэгт байх хэрэгтэй *"}
             </p>
-          )}
-          {arePasswordsValid === true &&
-            userInfo.password !== userInfo.passwordConfirmation && (
-              <p className="mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]">
+          ) : arePasswordsValid === 'nomatch' ? <p className="mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]">
                 {lang === "en"
                   ? "* Passwords does not match *"
-                  : "* Нууц үг таарахгүй байна. *"}
-              </p>
-            )}
+                  : "* Нууц үгнүүд хоорондоо таарахгүй байна *"}
+              </p> : null}
+          
           <div className="flex w-full items-center justify-between">
             <div className="h-[1px] w-[33%] bg-black/[.15]"></div>
             <p className="text-[14px] font-medium uppercase text-black/[.25] sm:text-[16px]">

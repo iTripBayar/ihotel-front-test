@@ -137,7 +137,9 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
         {/* name */}
         <p className="text-[18px] font-bold text-main-text">
           {lang === "en" ? data.nameEn : data.name}{" "}
-          <span className="text-[14px] text-sub-text">({data.bedNumber})</span>
+          {data.bedType ? <span className="text-[14px] text-sub-text">
+            ({lang === "en" ? data.bedType.nameEn ? data.bedType.nameEn : '' : data.bedType.name ? data.bedType.name : ''})
+          </span> : null}
         </p>
         {/* bed, size, occupancy */}
         <div className="flex w-full justify-start gap-[16px] text-[16px] font-medium text-main-text">
@@ -153,7 +155,7 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
                 fill="#212529"
               />
             </svg>
-            <p>{data.bedNumber}</p>
+            {data.bedType ? <p>{data.bedType.bedCount ? data.bedType.bedCount : ''}</p> : null}
           </div>
           <div className="flex items-center gap-[8px] rounded-[8px] bg-black/10 px-[16px] py-[8px] ">
             <svg
@@ -419,7 +421,6 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
                   },
                   pathname: "/reservation",
                 }}
-                target="_blank"
                 className="flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white"
               >
                 {lang === "en" ? "Order" : "Захиалах"}

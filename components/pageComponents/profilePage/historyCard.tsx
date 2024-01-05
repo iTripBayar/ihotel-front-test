@@ -1,47 +1,50 @@
-import Image from "next/image"
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
-import { useAppCtx } from "@/contexts/app"
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
+import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 interface Props {
-  data: {
-    id: number;
-    name: string;
-    nameEn: string;
-    img: string;
-    orderId: string;
-    checkIn: string;
-    checkOut: string;
-    status: string;
-  };
+  data: User.Order
 }
-export default function HistoryCard({data}:Props) {
-    const searchParams = useSearchParams()
-    const lang = searchParams.get('lang')
-    const {appState} = useAppCtx()
+export default function HistoryCard({ data }: Props) {
+  const searchParams = useSearchParams();
+  const lang = searchParams.get("lang");
   return (
     <div className="w-full rounded-[20px] shadow-[0px_0px_12px_4px_rgb(0,0,0,0.15)] flex flex-col gap-[12px] overflow-hidden ">
       {/* img */}
-      <div className="relative h-[200px] 2xs:h-[225px] sm:h-[250px] md:h-[225px] lg:h-[250px] w-full">
+      <div className="relative h-[200px] 2xs:h-[225px] sm:h-[250px] md:h-[225px] lg:h-[250px] xl:h-[300px] w-full flex justify-center items-center">
         <Image
-          src={data.img}
+          src={
+            data.hotel.image
+              ? `${process.env.IMAGE_URL}/${data.hotel.image}`
+              : "/samples/camp.png"
+          }
+          // src="/samples/camp.png"
           alt="/resImg"
           fill={true}
           sizes="60vw"
-          className={`h-auto w-auto select-none object-cover`}
+          className={`h-auto w-auto select-none object-cover absolute z-10`}
           draggable={false}
         />
+        {data.isOrderRequest === 1 ? (
+          <div className="px-[20px] absolute bottom-0 font-semibold left-[50%] translate-x-[-50%] z-[100] py-[8px] text-[12px] md:text-[14px] md:leading-[14px] leading-[12px] uppercase bg-primary-blue text-white rounded-t-[12px]">
+            {lang === "en" ? "Coupon" : "Купон"}
+          </div>
+        ) : null}
       </div>
       {/* details */}
       <div className="flex flex-col w-full gap-[12px]">
         {/* name and orderID */}
         <div className="flex flex-col gap-[2px] px-[12px]">
           <p className="text-[18px] leading-[18px] font-medium text-main-text">
-            {lang === "en" ? data.nameEn : data.name}
+            {lang === "en"
+              ? `${
+                  data.hotel.nameEn !== "" || data.hotel.nameEn !== null
+                    ? data.hotel.nameEn
+                    : "English name missing"
+                }`
+              : data.hotel.name}
           </p>
           <p className="text-sub-text text-[14px] leading-[14px]">
-            RN-{data.orderId}
+            RN-{data.id}
           </p>
         </div>
         {/* checkIn & checkOut */}
@@ -52,7 +55,7 @@ export default function HistoryCard({data}:Props) {
               {lang === "en" ? "Check in" : "Орох өдөр"}
             </p>
             <p className="text-[18px] leading-[18px] font-medium">
-              {data.checkIn}
+              {data.checkIn.split(" ")[0]}
             </p>
           </div>
           <svg
@@ -76,20 +79,20 @@ export default function HistoryCard({data}:Props) {
               {lang === "en" ? "Check out" : "Гарах өдөр"}
             </p>
             <p className="text-[18px] leading-[18px] font-medium">
-              {data.checkOut}
+              {data.checkOut.split(" ")[0]}
             </p>
           </div>
         </div>
         {/* stat and btns */}
-        <div className="w-full flex flex-col pl-[12px] gap-[6px]">
+        <div className="w-full flex flex-col pl-[12px] gap-[10px]">
           {/* stat */}
           <div
-            className={`px-[10px] py-[6px] w-fit rounded-[8px] text-[12px] uppercase ${
-              data.status === "paid"
-                ? "bg-main-online text-white font-medium"
+            className={`px-[10px] py-[6px] w-fit rounded-[8px] text-[12px] uppercase font-semibold ${
+              data.status === "checked-out"
+                ? "bg-main-online text-white"
                 : data.status === "pending"
                 ? "bg-main-pending"
-                : "bg-main-offline"
+                : "bg-main-offline text-white"
             }`}
           >
             {data.status}
@@ -99,10 +102,12 @@ export default function HistoryCard({data}:Props) {
             {/* <button className="bg-[#f2711c] rounded-tl"></button> */}
             <div
               className={`flex ${
-                data.status === "paid" ? "bg-[#f2711c] rounded-tl-[16px]" : ""
+                data.status === "checked-out"
+                  ? "bg-[#f2711c] rounded-tl-[16px]"
+                  : ""
               }`}
             >
-              {data.status === "paid" ? (
+              {data.status === "checked-out" ? (
                 <button className="px-[10px] py-[8px] bg-[#f2711c] gap-[2px] rounded-tl-[16px] font-semibold text-white text-[12px] uppercase flex justify-center items-center">
                   {lang === "en" ? "Add review" : "Үнэлгээ өгөх"}
                   <svg
@@ -145,4 +150,3 @@ export default function HistoryCard({data}:Props) {
     </div>
   );
 }
-

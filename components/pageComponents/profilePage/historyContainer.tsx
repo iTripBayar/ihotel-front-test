@@ -9,47 +9,12 @@ import {
 } from "@chakra-ui/react";
 import HistoryCard from "./historyCard";
 
-interface Props {}
-export default function HistoryContainer({}: Props) {
+interface Props {
+  data: User.Order[]
+}
+export default function HistoryContainer({ data }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
-
-  const sampleCoupon = []
-  const sampleReservations = [
-    {
-      id: 0,
-      name: "Sample1",
-      nameEn: "Sample1",
-      img: "/samples/camp.png",
-      orderId: "11405",
-      checkIn: "2024-01-04",
-      checkOut: "2024-01-06",
-      status: "pending",
-    },
-    {
-      id: 1,
-      name: "Sample2",
-      nameEn: "Sample2",
-      img: "/samples/camp.png",
-      orderId: "11405",
-      checkIn: "2024-01-04",
-      checkOut: "2024-01-06",
-      status: "paid",
-    },
-    {
-      id: 2,
-      name: "Sample3",
-      nameEn: "Sample3",
-      img: "/samples/camp.png",
-      orderId: "11405",
-      checkIn: "2024-01-04",
-      checkOut: "2024-01-06",
-      status: "pending",
-    },
-  ];
-  const sampleAll = [...sampleReservations]
-
-
   return (
     <div className="flex w-full flex-col text-primary-blue text-[16px]">
       <Tabs
@@ -70,7 +35,7 @@ export default function HistoryContainer({}: Props) {
             <div
               className={`px-[6px] py-[2px] font-medium  flex justify-between items-center bg-black/[.075] text-main-text rounded-full text-[12px]`}
             >
-              146
+              {data.length}
             </div>
           </Tab>
           <Tab
@@ -85,7 +50,7 @@ export default function HistoryContainer({}: Props) {
             <div
               className={`px-[6px] py-[2px] font-medium  flex justify-between items-center bg-black/[.075] text-main-text rounded-full text-[12px] `}
             >
-              3
+              {data.filter((index) => index.isOrderRequest === 1).length}
             </div>
           </Tab>
           <Tab
@@ -100,7 +65,7 @@ export default function HistoryContainer({}: Props) {
             <div
               className={`px-[6px] py-[2px] font-medium  flex justify-between items-center bg-black/[.075] text-main-text rounded-full text-[12px]`}
             >
-              146
+              {data.filter((index) => index.isOrderRequest === 0).length}
             </div>
           </Tab>
         </TabList>
@@ -113,17 +78,35 @@ export default function HistoryContainer({}: Props) {
         />
         <TabPanels className="md:pt-[20px]">
           <TabPanel className="grid grid-cols-1 md:grid-cols-2 gap-[20px] xl:grid-cols-3">
-            {sampleAll.map((index, i) => (
-              <HistoryCard key={i} data={index} />
-            ))}
+            {data.length > 0 ? (
+              data.map((index, i) => <HistoryCard key={i} data={index} />)
+            ) : (
+              <div className="w-full text-center col-span-1 md:col-span-2 xl:col-span-3">
+                {lang === "en" ? "Currently empty!" : "Одоогоор оосон байна!"}
+              </div>
+            )}
           </TabPanel>
-          <TabPanel className="grid grid-cols-1  md:grid-cols-2 gap-[20px] ">
-            <p>two!</p>
+          <TabPanel className="grid grid-cols-1 md:grid-cols-2 gap-[20px] xl:grid-cols-3">
+            {data.filter((index) => index.isOrderRequest === 1).length > 0 ? (
+              data
+                .filter((index) => index.isOrderRequest === 1)
+                .map((index, i) => <HistoryCard key={i} data={index} />)
+            ) : (
+              <div className="w-full text-center col-span-1 md:col-span-2 xl:col-span-3 font-medium text-sub-text/75">
+                {lang === "en" ? "Currently empty!" : "Одоогоор оосон байна!"}
+              </div>
+            )}
           </TabPanel>
-          <TabPanel className="grid grid-cols-1  md:grid-cols-2 gap-[20px] ">
-            {sampleReservations.map((index, i) => (
-              <HistoryCard key={i} data={index} />
-            ))}
+          <TabPanel className="grid grid-cols-1 md:grid-cols-2 gap-[20px] xl:grid-cols-3 font-medium text-sub-text/75">
+            {data.filter((index) => index.isOrderRequest === 0).length > 0 ? (
+              data
+                .filter((index) => index.isOrderRequest === 0)
+                .map((index, i) => <HistoryCard key={i} data={index} />)
+            ) : (
+              <div className="w-full text-center col-span-1 md:col-span-2 xl:col-span-3 font-medium text-sub-text/75">
+                {lang === "en" ? "Currently empty!" : "Одоогоор оосон байна!"}
+              </div>
+            )}
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -131,8 +114,8 @@ export default function HistoryContainer({}: Props) {
   );
 }
 
-
-{/* <div className="flex w-full justify-between items-center border-b-black/[.2] border-b pt-[12px] relative">
+{
+  /* <div className="flex w-full justify-between items-center border-b-black/[.2] border-b pt-[12px] relative">
   <div
     className={`flex gap-[4px] w-full justify-start items-center pb-[12px] relative`}
     onClick={() => {
@@ -228,4 +211,5 @@ export default function HistoryContainer({}: Props) {
       146
     </div>
   </div>
-</div>; */}
+</div>; */
+}

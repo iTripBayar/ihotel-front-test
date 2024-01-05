@@ -1,6 +1,14 @@
 declare namespace roomData {
   interface room {
     bedNumber: number;
+    bedType: {
+      bedCount: number;
+      createdAt: string;
+      id: number;
+      name: string;
+      nameEn: string;
+      updatedAt: string;
+    };
     bedTypeId: number;
     byPerson: boolean;
     createdAt: string;

@@ -161,7 +161,6 @@ const HotelPage = () => {
   ) {
     stat = "data";
   }
-
   const roomPrices: any[] = [];
   if (data?.rooms && data?.rooms.length) {
     for (let i = 0; i < data?.rooms.length; i++) {
@@ -199,7 +198,7 @@ const HotelPage = () => {
     if (ver === "rooms") {
       toast.warning(
         `${
-          lang === "en" ? "Please select a room." : "Захиалах өрөө сонгоно уу."
+          lang === "en" ? "Please add a room into the cart!." : "Захиалах өрөө сонгож сагсанд хийнэ үү!."
         }`,
       );
       // Get the DOM element from the ref
