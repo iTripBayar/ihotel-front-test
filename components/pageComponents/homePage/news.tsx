@@ -66,12 +66,11 @@ const News = ({ data }: iProps) => {
         </div>
         <Link
           href={`${process.env.TEMPORARY_URL}/posts`}
-          className='flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white'
+          className='flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white font-medium'
         >
           <p className='flex gap-[4px]'>
             {/* {state.language === 'mn' ? 'Цааш үзэх' : 'More'}{' '} */}
-            {lang === 'en' ? 'More' : 'Цааш үзэх'}{' '}
-            {data.length - cap > 0 ? <span>({data.length - cap}+)</span> : null}
+            {lang === 'en' ? 'More' : 'Цааш үзэх'}
           </p>
         </Link>
       </div>

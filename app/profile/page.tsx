@@ -31,7 +31,12 @@ export default function ProfilePage() {
       redirect("/");
     },
   });
-  const { data: profileData, run, loading, error } = useRequest(
+  const {
+    data: profileData,
+    run,
+    loading,
+    error,
+  } = useRequest(
     (e: { email: string }) => {
       return fetchProfileInto({ email: e.email });
     },
@@ -40,7 +45,7 @@ export default function ProfilePage() {
       onSuccess: (res) => {
         console.log(res);
       },
-      refreshDeps: [action === 'saved']
+      refreshDeps: [action === "saved"],
     },
   );
   useEffect(() => {
@@ -48,61 +53,89 @@ export default function ProfilePage() {
       run({ email: session?.user?.email });
     }
   }, [session]);
-  // const { data: userData } = useRequest(() => {
-  //   return fetchUserData({ email: "orgil@ihotel.mn", password: "Wave920110@" });
-  // });
+  useEffect(() => {
+    if (action === "saved") {
+      console.log("s");
+      // window.refresh()
+      window.location.reload();
+    }
+  }, [action]);
 
   const handleSignOut = () => {
     signOut({ callbackUrl: "/" });
   };
 
   if (!error)
-    if(loading === true){
+    if (loading === true) {
       return (
-        <div className="flex h-[111px] w-full items-center justify-center 2xs:h-[100px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[225px] 2xl:h-[250px]">
-          <CircularProgress isIndeterminate={true} color="#3C76FE" />
-        </div>
-      );
-    }else{
-      return (
-        <main className="flex flex-col relative gap-[20px]">
+        <div className="flex flex-col">
           <Header
             user={`${session?.user?.name
               ?.charAt(0)
               .toUpperCase()}${session?.user?.name?.slice(1)}`}
           />
-          <BottomSection ver={"fixed"} handleScrollToTopVer={() => {}} />
-          <Toaster position="top-right" richColors />
-          <div className="flex w-full flex-col items-center gap-[24px] min-h-screen px-[16px] sm:px-[50px] md:px-[72px] lg:px-[100px] md:gap-[32px] lg:gap-[36px] ">
-            <ProfileInfo
-              userData={profileData?.user}
-              totalOrders={profileData?.totalOrders}
-              totalReviews={profileData?.totalReviews}
-              handleSignOut={handleSignOut}
-              handleAction={(e: string) => setAction(e)}
-              action={action}
-            />
-            {action === "" || action === "saved" ? (
-              <HistoryContainer data={profileData?.orders ? profileData.orders : []}/>
-            ) : (
-              <EdtiSection
-                action={action}
-                handleAction={(e: string) => setAction(e)}
-                userData={profileData?.user}
-              />
-            )}
-            <button
-              onClick={() => router.back()}
-              className="text-primary-blue font-medium py-[12px]"
-            >
-              {lang === "en" ? "Back" : "Буцах"}
-            </button>
+          <div className="flex h-screen justify-center items-center">
+            <CircularProgress isIndeterminate={true} color="#3C76FE" />
           </div>
-          <Footer />
-        </main>
+        </div>
       );
+    } else {
+      if (profileData) {
+        return (
+          <main className="flex flex-col relative gap-[20px]">
+            <Header
+              user={`${session?.user?.name
+                ?.charAt(0)
+                .toUpperCase()}${session?.user?.name?.slice(1)}`}
+            />
+            <BottomSection ver={"fixed"} handleScrollToTopVer={() => {}} />
+            <Toaster position="top-right" richColors />
+            <div className="flex w-full flex-col items-center gap-[24px] min-h-screen px-[16px] sm:px-[50px] md:px-[72px] lg:px-[100px] md:gap-[32px] lg:gap-[36px] ">
+              <ProfileInfo
+                userData={profileData?.user}
+                totalOrders={profileData?.totalOrders}
+                totalReviews={profileData?.totalReviews}
+                handleSignOut={handleSignOut}
+                handleAction={(e: string) => setAction(e)}
+                action={action}
+              />
+              {action === "" || action === "saved" ? (
+                <HistoryContainer
+                  data={profileData?.orders ? profileData.orders : []}
+                />
+              ) : (
+                <EdtiSection
+                  action={action}
+                  handleAction={(e: string) => setAction(e)}
+                  userData={profileData?.user}
+                />
+              )}
+              <button
+                onClick={() => router.back()}
+                className="text-primary-blue font-medium py-[12px]"
+              >
+                {lang === "en" ? "Back" : "Буцах"}
+              </button>
+            </div>
+            <Footer />
+          </main>
+        );
+      } else {
+        return (
+          <div className="flex flex-col">
+            <Header
+              user={`${session?.user?.name
+                ?.charAt(0)
+                .toUpperCase()}${session?.user?.name?.slice(1)}`}
+            />
+            <div className="flex h-screen justify-center items-center">
+              <CircularProgress isIndeterminate={true} color="#3C76FE" />
+            </div>
+          </div>
+        );
+      }
     }
-    
+
   return <ErrorComponent />;
 }
 

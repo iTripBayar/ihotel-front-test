@@ -312,7 +312,7 @@ export default function EdtiSection({ action, handleAction, userData }: Props) {
                       aria-label="Sex"
                       name="sex"
                       placeholder={lang === "en" ? "Sex" : "Хүйс"}
-                      // defaultSelectedKeys={["Mongolia"]}
+                      defaultSelectedKeys={[`${userInfo.sex}`]}
                       onChange={(e) => {
                         const value = {
                           surname: userInfo.surname,
