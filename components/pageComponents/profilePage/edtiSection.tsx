@@ -1,5 +1,5 @@
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState, ChangeEvent, FormEvent } from "react";
+import { useMemo, useState, ChangeEvent, FormEvent, useEffect } from "react";
 import Image from "next/image";
 import { Select, SelectItem } from "@nextui-org/react";
 import countryList from "react-select-country-list";
@@ -8,55 +8,83 @@ import { useRequest } from "ahooks";
 import { CircularProgress } from "@chakra-ui/react";
 import { toast } from "sonner";
 
-
 interface Props {
   action: string;
   handleAction: (e: string) => void;
   userData: User.User | undefined;
+  updatedData: User.Update | undefined;
+  run: (e: {
+    id: string;
+    name: string;
+    surname: string;
+    gender: string;
+    phone_number: string;
+    country: string;
+    password: string;
+  }) => void;
+  loading: boolean
 }
 
-export default function EdtiSection({ action, handleAction, userData }: Props) {
+export default function EdtiSection({
+  action,
+  handleAction,
+  userData,
+  updatedData,
+  run,
+  loading,
+}: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
-  const [userInfo, setUserInfo] = useState({
-    surname: userData?.surname ? userData.surname : "",
-    name: userData?.name ? userData.name : "",
-    image: userData?.avatar ? userData.avatar : "",
-    sex: userData?.gender ? userData.gender : "",
-    nationality: userData?.country ? userData.country : "",
-    phone: userData?.phoneNumber ? userData.phoneNumber : "",
-    email: userData?.email ? userData.email : "",
-  });
+
   const options = useMemo(() => countryList().getData(), []);
   const [pass, setPass] = useState({ password: "", confirm: "" });
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordVisible1, setPasswordVisible1] = useState(false);
   const [arePasswordsValid, setArePasswordsValid] = useState("");
 
-  const {
-    run,
-    loading,
-  } = useRequest(
-    (e: {
-      id: string;
-      name: string;
-      surname: string;
-      gender: string;
-      phone_number: string;
-      country: string;
-      password: string;
-    }) => {
-      return changeProfileInfo(e);
-    },
-    {
-      manual: true,
-      onSuccess: (res) => {
-        console.log(res);
-        handleAction("saved");
-        toast.success(`${lang === "en" ? "Changes applied!" : "Таны мэдээлэл өөрчлөгдлөө!"}`);
-      },
-    },
-  );
+  const [userInfo, setUserInfo] = useState({
+    surname: updatedData?.user.surname
+      ? updatedData.user.surname
+      : userData?.surname
+      ? userData.surname
+      : "",
+    name: updatedData?.user.name
+      ? updatedData.user.name
+      : userData?.name
+      ? userData.name
+      : "",
+    image: updatedData?.user.avatar
+      ? updatedData.user.avatar
+      : userData?.avatar
+      ? userData.avatar
+      : "",
+    sex: updatedData?.user.gender
+      ? updatedData.user.gender
+      : userData?.gender
+      ? userData.gender
+      : "",
+    nationality: updatedData?.user.country
+      ? updatedData.user.country
+      : userData?.country
+      ? userData.country
+      : "",
+    phone: updatedData?.user.phoneNumber
+      ? updatedData.user.phoneNumber
+      : userData?.phoneNumber
+      ? userData.phoneNumber
+      : "",
+    email: updatedData?.user.email
+      ? updatedData.user.email
+      : userData?.email
+      ? userData.email
+      : "",
+  });
+
+  useEffect(() => {
+    if (updatedData) {
+      console.log("change");
+    }
+  }, [updatedData]);
 
   const handlePassWordChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -97,9 +125,9 @@ export default function EdtiSection({ action, handleAction, userData }: Props) {
   const handlePasswordUpdate = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // const data = new FormData(e.currentTarget);
-    if (arePasswordsValid === 'match') {
+    if (arePasswordsValid === "match") {
       const value = {
-      id: userData?.id ? userData?.id.toString() : "",
+        id: userData?.id ? userData?.id.toString() : "",
         name: "",
         surname: "",
         gender: "",
@@ -444,7 +472,6 @@ export default function EdtiSection({ action, handleAction, userData }: Props) {
                       type="text"
                       id="email"
                       name="email"
-                      // pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                       required
                       onChange={(e) => {
                         const value = {

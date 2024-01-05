@@ -141,7 +141,6 @@ export default function UserInfo({
             type="text"
             id={`email`}
             name={`email`}
-            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
             required
             onChange={(e) => {
               const value = {
@@ -346,7 +345,6 @@ export default function UserInfo({
                   type="text"
                   id={`email-${i}`}
                   name={`email-${i}`}
-                  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                   required
                   onChange={(e) => {
                     if (parseInt(e.target.name.split("-")[1]) === i) {
@@ -518,7 +516,6 @@ export default function UserInfo({
             type="text"
             id={`email`}
             name={`email`}
-            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
             required
             onChange={(e) => {
               const value = {
@@ -714,7 +711,6 @@ export default function UserInfo({
                   type="text"
                   id={`email${i}`}
                   name={`email${i}`}
-                  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                   required
                   onChange={(e) => {
                     const value = {

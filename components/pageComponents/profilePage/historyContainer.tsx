@@ -61,7 +61,7 @@ export default function HistoryContainer({ data }: Props) {
               transform: "scale(1)",
             }}
           >
-            {lang === "en" ? "reservations" : "Захиалгууд"}
+            {lang === "en" ? "Reservations" : "Захиалгууд"}
             <div
               className={`px-[6px] py-[2px] font-medium  flex justify-between items-center bg-black/[.075] text-main-text rounded-full text-[12px]`}
             >

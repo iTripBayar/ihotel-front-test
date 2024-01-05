@@ -44,6 +44,13 @@ const SearchPage = () => {
   const place =
     searchValue?.split("$")[1] === "place" ? searchValue?.split("$")[2] : "";
 
+    useEffect(()=>{
+      dispatch({
+        type: "CHANGE_APP_STATE",
+        payload: { logOrSign: "" },
+      });
+    },[])
+
   useEffect(() => {
     if (size.width && size.width >= 1024) {
       dispatch({

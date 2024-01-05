@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 import { useRequest } from "ahooks";
 // import { useCookies } from "react-cookie";
 import Header from "@/components/common/header";
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
 import ProfileInfo from "@/components/pageComponents/profilePage/profileInfo";
 import ErrorComponent from "@/components/common/404";
 import HistoryContainer from "@/components/pageComponents/profilePage/historyContainer";
@@ -15,7 +15,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import BottomSection from "@/components/common/bottomSection";
 import { useEffect, useState } from "react";
 import EdtiSection from "@/components/pageComponents/profilePage/edtiSection";
-import { fetchProfileInto } from "@/utils/user";
+import { changeProfileInfo, fetchProfileInto } from "@/utils/user";
 import { CircularProgress } from "@chakra-ui/react";
 
 export default function ProfilePage() {
@@ -56,10 +56,51 @@ export default function ProfilePage() {
   useEffect(() => {
     if (action === "saved") {
       console.log("s");
-      // window.refresh()
-      window.location.reload();
+      router.refresh();
+      // window.location.reload();
     }
   }, [action]);
+
+  const {
+    data: updatedData,
+    run: runUpdate,
+    loading: loadingUpdate,
+  } = useRequest(
+    (e: {
+      id: string;
+      name: string;
+      surname: string;
+      gender: string;
+      phone_number: string;
+      country: string;
+      password: string;
+    }) => {
+      return changeProfileInfo(e);
+    },
+    {
+      manual: true,
+      onSuccess: (res) => {
+        console.log(res);
+        // handleAction("saved");
+        toast.success(
+          `${
+            lang === "en" ? "Changes applied!" : "Таны мэдээлэл өөрчлөгдлөө!"
+          }`,
+        );
+
+        // const val = {
+        //   surname: res.user.surname,
+        //   name: res.user.name,
+        //   image: res.user.avatar,
+        //   sex: res.user.gender,
+        //   nationality: res.user.country
+        //   phone: res.user.phoneNumber ? res.user.phoneNumber : userInfo.phone,
+        //   email: res.user.email,
+        // };
+        // setUserInfo(val);
+      },
+    },
+  );
 
   const handleSignOut = () => {
     signOut({ callbackUrl: "/" });
@@ -108,6 +149,9 @@ export default function ProfilePage() {
                   action={action}
                   handleAction={(e: string) => setAction(e)}
                   userData={profileData?.user}
+                  updatedData={updatedData}
+                  run={runUpdate}
+                  loading={loadingUpdate}
                 />
               )}
               <button
@@ -139,15 +183,3 @@ export default function ProfilePage() {
   return <ErrorComponent />;
 }
 
-// <div>
-//   <Link href={{ pathname: "/" }}>Go to HomePage</Link>
-//   {session?.user ? `Welcome ${session.user.name}!` : "Profile Page"}
-//   <button
-//     onClick={() => {
-//       removeCookie("accessToken");
-//       signOut({ callbackUrl: "http://localhost:3000/" });
-//     }}
-//   >
-//     Sign Out
-//   </button>
-// </div>

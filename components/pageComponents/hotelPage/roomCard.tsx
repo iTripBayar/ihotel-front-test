@@ -421,6 +421,7 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
                   },
                   pathname: "/reservation",
                 }}
+                target='_blank'
                 className="flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white"
               >
                 {lang === "en" ? "Order" : "Захиалах"}

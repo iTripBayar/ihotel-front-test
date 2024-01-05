@@ -38,7 +38,7 @@ const Home = () => {
     };
     dispatch({
       type: "CHANGE_APP_STATE",
-      payload: { map: "" },
+      payload: { map: "", logOrSign: '' },
     });
 
     const observer = new IntersectionObserver((entries) => {
@@ -61,6 +61,8 @@ const Home = () => {
       }
     };
   }, []);
+
+
 
   const { data: session, status } = useSession({
     required: false,

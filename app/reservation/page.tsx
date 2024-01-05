@@ -18,7 +18,7 @@ import { CircularProgress } from '@chakra-ui/react';
 import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 const ErrorComponent = dynamic(() => import('@/components/common/404'));
 
 const ReservationPage = () => {
@@ -30,6 +30,8 @@ const ReservationPage = () => {
   const checkOut = searchParams.get('checkOut');
   const days = searchParams.get('days');
   const cart = searchParams.getAll('cart');
+  const { appState, dispatch } = useAppCtx();
+
 
   const [clients, setClients] = useState({
     name: '',
@@ -55,7 +57,13 @@ const ReservationPage = () => {
     setClients(value);
   };
 
-  const { appState } = useAppCtx();
+  useEffect(() => {
+    dispatch({
+      type: "CHANGE_APP_STATE",
+      payload: { logOrSign: "" },
+    });
+  }, []);
+
 
   const { data, loading, error } = useRequest(() => {
     if (slug)

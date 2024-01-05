@@ -38,7 +38,7 @@ const HotelPage = () => {
   const checkOut = searchParams.get("checkOut");
   const cart = searchParams.getAll("cart");
 
-  const { appState } = useAppCtx();
+  const { appState, dispatch } = useAppCtx();
   const roomsContainer = useRef<HTMLDivElement>(null);
   const reviewsContainer = useRef<HTMLDivElement>(null);
 
@@ -131,6 +131,12 @@ const HotelPage = () => {
       );
     }
   }, [!checkIn]);
+  useEffect(() => {
+    dispatch({
+      type: "CHANGE_APP_STATE",
+      payload: { logOrSign: "" },
+    });
+  }, []);
 
 
   const { data, loading, error } = useRequest(() => {

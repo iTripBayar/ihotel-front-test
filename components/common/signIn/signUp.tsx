@@ -177,7 +177,6 @@ export default function SignUp() {
               onChange={handleEmailChange}
               placeholder={lang === "en" ? "E-mail" : "И-мэйл хаяг"}
               required
-              pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
               className={`h-[34px] w-full rounded-[4px] border ${
                 isEmailValid ? "border-black/[.15]" : "border-red-600"
               }`}

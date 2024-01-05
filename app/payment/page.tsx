@@ -8,7 +8,7 @@ import { useAppCtx } from '@/contexts/app';
 import PaymentMethod from '@/components/pageComponents/paymentPage/paymentMethod';
 import { useRouter } from 'next/navigation';
 import { Alert, AlertIcon } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ErrorComponent from '@/components/common/404';
 
 export default function PaymentPage() {
@@ -28,6 +28,12 @@ export default function PaymentPage() {
       router.back();
     }, 5000);
   };
+  useEffect(() => {
+    dispatch({
+      type: "CHANGE_APP_STATE",
+      payload: { logOrSign: "" },
+    });
+  }, []);
 const handleError = () => {
   setError(true);
 };
