@@ -1,6 +1,7 @@
 import { useSearchParams } from 'next/navigation';
 import { Collapse, Button, useDisclosure } from '@chakra-ui/react';
 import format from 'date-fns/format';
+import subDays from "date-fns/subDays";
 
 interface Props {
   data: { day: string; fee: string }[] | undefined;
@@ -15,27 +16,8 @@ export default function CancelTerm({
 }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
-  const dateFrom = searchParams.get('dateFrom');
-  const dateTo = searchParams.get('dateTo');
-  const days = searchParams.get('days');
+  const checkIn = searchParams.get("checkIn");
   const { isOpen, onToggle } = useDisclosure();
-
-  const newDate = new Date();
-  const date = newDate.getDate();
-  const month = newDate.getMonth() + 1;
-  const year = newDate.getFullYear();
-
-  const displayDate1 = new Date(
-    year,
-    (!dateFrom && !dateTo
-      ? month
-      : parseInt(dateFrom ? dateFrom?.split('|')[0].split('/')[0] : '0')) - 1,
-    dateFrom && dateTo && days && data && data[0].day
-      ? parseInt(dateFrom ? dateFrom?.split('|')[0].split('/')[1] : '0') +
-        parseInt(days) -
-        parseInt(data[0].day)
-      : date,
-  );
 
   return (
     <div className="flex h-auto w-full flex-col  rounded-[20px] px-[20px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] lg:rounded-none lg:border-t lg:border-dashed lg:border-t-black/[.15] lg:px-0 lg:pt-[32px] lg:shadow-none">
@@ -43,7 +25,7 @@ export default function CancelTerm({
         <p className="text-[18px] font-medium leading-[18px] text-sub-text">
           {lang === "en" ? "Term of cancellation" : "Цуцлалтын нөхцөл"}
         </p>
-        <div className="flex w-full">
+        {checkIn ? <div className="flex w-full">
           <div className="relative w-full overflow-hidden rounded-[20px] border border-black/[.15] px-[8px] text-center">
             <div className="absolute left-0 top-0 h-[60px] w-full bg-black/5"></div>
             <table className="w-full px-[12px] text-[10px] leading-[12px] text-sub-text/75  2xs:text-[12px] lg:text-[14px] lg:leading-[16px]">
@@ -68,8 +50,18 @@ export default function CancelTerm({
                       <tr className="h-[60px]" key={i}>
                         <td>
                           {lang === "en"
-                            ? `Until ${format(displayDate1, "MMM dd yyyy")}`
-                            : `${format(displayDate1, "yyyy-MM-dd")} хүртэл`}
+                            ? `Until ${format(
+                                subDays(new Date(checkIn), parseInt(index.day)),
+                                `${
+                                  lang === "en" ? "MMM dd yyyy" : "yyyy-MM-dd"
+                                }`,
+                              )}`
+                            : `${format(
+                                subDays(new Date(checkIn), parseInt(index.day)),
+                                `${
+                                  lang === "en" ? "MMM dd yyyy" : "yyyy-MM-dd"
+                                }`,
+                              )} хүртэл`}
                         </td>
                         <td>{index.fee}%</td>
                         <td>
@@ -90,7 +82,8 @@ export default function CancelTerm({
               </tbody>
             </table>
           </div>
-        </div>
+        </div> : null}
+        
       </div>
       <div className="flex flex-col lg:hidden">
         {/* title */}

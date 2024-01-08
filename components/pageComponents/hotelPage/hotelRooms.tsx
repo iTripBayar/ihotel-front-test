@@ -1,7 +1,8 @@
-import { useSearchParams, useRouter } from 'next/navigation';
-import RoomCard from './roomCard';
-import { useAppCtx } from '@/contexts/app';
-import Link from 'next/link';
+import { useSearchParams, useRouter } from "next/navigation";
+import RoomCard from "./roomCard";
+import { useAppCtx } from "@/contexts/app";
+import Link from "next/link";
+import format from "date-fns/format";
 
 interface Props {
   data: roomData.room[] | undefined;
@@ -9,12 +10,6 @@ interface Props {
   totalPrice: number;
   stat: string;
   dollarRate: string;
-  formattedDate: {
-    from: { year: string; month: string; date: string };
-    fromEn: { year: string; month: string; date: string };
-    to: { year: string; month: string; date: string };
-    toEn: { year: string; month: string; date: string };
-  };
 }
 
 const HotelRooms = ({
@@ -23,16 +18,15 @@ const HotelRooms = ({
   totalPrice,
   stat,
   dollarRate,
-  formattedDate,
 }: Props) => {
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang');
-  const cart = searchParams.getAll('cart');
+  const lang = searchParams.get("lang");
+  const cart = searchParams.getAll("cart");
   const router = useRouter();
-  const checkIn = searchParams.get('checkIn');
-  const checkOut = searchParams.get('checkOut');
-  const days = searchParams.get('days');
-  const slug = searchParams.get('slug');
+  const checkIn = searchParams.get("checkIn");
+  const checkOut = searchParams.get("checkOut");
+  const days = searchParams.get("days");
+  const slug = searchParams.get("slug");
   const { dispatch } = useAppCtx();
 
   const createQueryString = (name: string, index: number) => {
@@ -41,48 +35,27 @@ const HotelRooms = ({
     return params.toString();
   };
 
-  let displayDate = { mn: '', en: '', days: '' };
+  const mnDate =
+    checkIn?.split("/")[0] === checkOut?.split("/")[0]
+      ? `${checkIn?.split("/")[0]}-р сар ${checkIn?.split(
+          "/",
+        )[1]}-${checkOut?.split("/")[1]}`
+      : `${checkIn?.split("/")[0]}.${checkIn?.split("/")[1]}-${checkOut?.split(
+          "/",
+        )[0]}.${checkOut?.split("/")[1]}`;
 
-  const mnDate = {
-    from: {
-      month: checkIn?.split('|')[0].split('/')[0],
-      date: checkIn?.split('|')[0].split('/')[1],
-    },
-    to: {
-      month: checkOut?.split('|')[0].split('/')[0],
-      date: checkOut?.split('|')[0].split('/')[1],
-    },
-  };
-  const enDate = {
-    from: {
-      month: checkIn?.split('|')[1]?.split('-')[0],
-      date: checkIn?.split('|')[1]?.split('-')[1],
-    },
-    to: {
-      month: checkOut?.split('|')[1].split('-')[0],
-      date: checkOut?.split('|')[1].split('-')[1],
-    },
-  };
-  if (mnDate.from.month === mnDate.to.month) {
-    displayDate = {
-      mn: `${mnDate.from.month}-р сар ${mnDate.from.date}-${mnDate.to.date}`,
-      en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.date}`,
-      days: `${
-        parseInt(mnDate.to.date ? mnDate.to.date : '0') -
-        parseInt(mnDate.from.date ? mnDate.from.date : '0') +
-        1
-      }`,
-    };
-  } else {
-    displayDate = {
-      mn: `${mnDate.from.month}.${mnDate.from.date}-${mnDate.to.month}.${mnDate.to.date}`,
-      en: `${enDate.from.month} ${enDate.from.date}-${enDate.to.month} ${enDate.to.date}`,
-      days: `${
-        parseInt(mnDate.to.date ? mnDate.to.date : '0') -
-        parseInt(mnDate.from.date ? mnDate.from.date : '0') +
-        1
-      }`,
-    };
+  let enDate = "";
+  if (checkIn && checkOut) {
+    const dateFrom = format(new Date(checkIn), "MMM dd yyyy");
+    const dateTo = format(new Date(checkOut), "MMM dd yyyy");
+    enDate =
+      checkIn?.split("/")[0] === checkOut?.split("/")[0]
+        ? `${dateFrom.split(" ")[0]} ${dateFrom.split(" ")[1]}-${
+            dateTo.split(" ")[1]
+          }`
+        : `${dateFrom.split(" ")[0]} ${dateFrom.split(" ")[1]}-${
+            dateTo.split(" ")[0]
+          } ${dateTo.split(" ")[1]}`;
   }
 
   return (
@@ -120,9 +93,7 @@ const HotelRooms = ({
               d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
             />
           </svg>
-          <p className="text-sub-text">
-            {`${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year} - ${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}`}
-          </p>
+          <p className="text-sub-text">{`${checkIn} - ${checkOut}`}</p>
         </div>
         {/* selected days */}
         <div className="text-sub-text">
@@ -174,9 +145,7 @@ const HotelRooms = ({
                   d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
                 />
               </svg>
-              <p className="text-sub-text">
-                {`${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year} - ${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}`}
-              </p>
+              <p className="text-sub-text">{`${checkIn} - ${checkOut}`}</p>
             </div>
           </div>
           {/* inside cart */}
@@ -186,8 +155,8 @@ const HotelRooms = ({
                 <div className="mb-[12px] flex h-[50px] flex-col items-center gap-[8px]">
                   <p className="text-[12px] font-medium leading-[13px] text-sub-text/75 2xs:text-[14px] 2xs:leading-[15px] 2xs:tracking-wide">
                     {lang === "en"
-                      ? `${displayDate.en} (${days ? days : 1} days)`
-                      : `${displayDate.mn} (${days ? days : 1} хоног)`}
+                      ? `${enDate} (${days ? days : 1} days)`
+                      : `${mnDate} (${days ? days : 1} хоног)`}
                   </p>
                   <div className="flex w-full items-center justify-between text-[20px] font-medium leading-[20px] text-main-text">
                     <p>{lang === "en" ? "Total price:" : "Нийт үнэ:"}</p>
@@ -266,7 +235,7 @@ const HotelRooms = ({
                                   (room) =>
                                     room.id === parseInt(index.split("$")[0]),
                                 )[0]
-                                .priceDayUse.toLocaleString()}{" "}
+                                .defaultPrice.toLocaleString()}{" "}
                               {lang === "en" ? "$" : "₮"}
                               <span> x{index.split("$")[1]}</span>
                             </p>
@@ -298,7 +267,7 @@ const HotelRooms = ({
                       },
                       pathname: "/reservation",
                     }}
-                    target='_blank'
+                    target="_blank"
                     className="flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white"
                   >
                     {lang === "en" ? "Order" : "Захиалах"}
@@ -313,22 +282,6 @@ const HotelRooms = ({
                 {lang === "en" ? "Order" : "Захиалаx"}
               </button>
             )}
-            {/* <div
-              onClick={() => {
-                if (!cart || cart.length === 0) {
-                  handleScrollToRooms('rooms');
-                } else {
-                  handleOrder();
-                }
-              }}
-              className={`flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online ${
-                orderLoading === true ? 'text-[16px]' : 'text-[22px]'
-              } font-medium text-white`}
-            >
-              {orderLoading === true
-                ? `${lang === 'en' ? 'Loading...' : 'Уншиж байна...'}`
-                : `${lang === 'en' ? 'Order' : 'Захиалах'}`}
-            </div> */}
           </div>
         </div>
       </div>

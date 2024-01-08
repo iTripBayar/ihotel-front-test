@@ -199,7 +199,7 @@ const Footer = () => {
               fill='white'
             />
           </svg>{' '}
-          <span>2023</span>
+          <span>2024</span>
         </p>
         <p>iHotel LLC. All rights reserved</p>
       </div>

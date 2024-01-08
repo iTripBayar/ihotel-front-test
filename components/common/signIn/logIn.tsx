@@ -1,19 +1,18 @@
 import { useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useAppCtx } from "@/contexts/app";
 import { signIn } from "next-auth/react";
 import { FormEvent } from "react";
 import { FacebookSignInButton, GoogleSignInButton } from "./authButtons";
-import { Alert, AlertIcon, CircularProgress } from "@chakra-ui/react";
+import { CircularProgress } from "@chakra-ui/react";
+import { Toaster, toast } from "sonner";
 
 export default function LogIn() {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
   const { appState, dispatch } = useAppCtx();
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const close = () => {
@@ -40,15 +39,15 @@ export default function LogIn() {
     });
 
     if (signInResponse && !signInResponse.error) {
-      setMessage("success");
+      toast.success(`${lang === "en" ? "Log in successful!" : "Амжилттай нэвтэрлээ!"}`);
       console.log(signInResponse);
       setTimeout(() => {
         setLoading(false);
-        router.push("/profile");
-      }, 3000);
+        close();
+      }, 2500);
     } else {
       console.log("Error: ", signInResponse);
-      setMessage("invalid");
+      toast.error(`${lang === "en" ? "Error!" : "Алдаа гарлаа!"}`);
       setLoading(false);
       setError("Your Email or Password is wrong!");
     }
@@ -71,7 +70,13 @@ export default function LogIn() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const result = await response.json();
-      setMessage("emailed");
+      toast.info(
+        `${
+          lang === "en"
+            ? "Password reset link has been sent to your email!"
+            : "Нууц үг сэргээх холбоосыг таны и-мэйл хаяг руу илгээлээ!"
+        }`,
+      );
       return result;
     } catch (error) {
       console.error("Error registering user:", error);
@@ -82,39 +87,13 @@ export default function LogIn() {
     // }
   };
 
-  if (message !== "") {
-    setTimeout(() => {
-      setMessage("");
-    }, 3000);
-  }
   return (
     <div
       className="fixed z-[999] flex h-screen w-full animate-fade items-center justify-center bg-black/[.35]"
       onClick={handleClick}
     >
-      {message !== "" ? (
-        <div className="absolute top-[60px]">
-          <Alert
-            status={
-              message === "success" || message === "emailed"
-                ? "success"
-                : "error"
-            }
-            className="rounded-lg "
-          >
-            <AlertIcon />
-            {message === "success"
-              ? `${lang === "en" ? "Successful!" : "Амжилттай нэвтэрлээ!"}`
-              : message === "emailed"
-              ? `${
-                  lang === "en"
-                    ? "We have e-mailed your password reset link!"
-                    : "Нууц үг сэргээх холбоосыг таны и-мэйл хаяг руу илгээлээ!"
-                }`
-              : `${lang === "en" ? "Error!" : "Алдаа гарлаа!"}`}
-          </Alert>
-        </div>
-      ) : null}
+      
+      <Toaster position="top-right" richColors />
       <div className="flex h-auto w-[calc(100%-32px)] max-w-[370px] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:max-w-[400px]">
         <div className="flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px] text-main-text">
           {appState.logOrSign === "log" ? (
@@ -162,7 +141,6 @@ export default function LogIn() {
                 required
                 placeholder={lang === "en" ? "Password" : "Нууц үг"}
                 minLength={8}
-                // pattern='^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&()#])[\w@$!%*?&()#]{8,}$'
                 className="h-[34px] w-full rounded-[4px] border-black/[.15]"
               />
               <button

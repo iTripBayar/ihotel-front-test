@@ -10,7 +10,6 @@ import UserInfo from '@/components/pageComponents/reservationPage/userInfo';
 import { fetchDataHotel, fetchCreateOrder } from '@/utils';
 import { useRequest } from 'ahooks';
 import Footer from '@/components/common/footer';
-import BurgerMenu from '@/components/common/burgermenu';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAppCtx } from '@/contexts/app';
 import { unserialize } from 'serialize-php';
@@ -19,6 +18,7 @@ import LogIn from '@/components/common/signIn/logIn';
 import SignUp from '@/components/common/signIn/signUp';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import SideMenu from '@/components/common/sidemenu';
 const ErrorComponent = dynamic(() => import('@/components/common/404'));
 
 const ReservationPage = () => {
@@ -60,7 +60,7 @@ const ReservationPage = () => {
   useEffect(() => {
     dispatch({
       type: "CHANGE_APP_STATE",
-      payload: { logOrSign: "" },
+      payload: { logOrSign: "", menu: '' },
     });
   }, []);
 
@@ -69,8 +69,10 @@ const ReservationPage = () => {
     if (slug)
       return fetchDataHotel({
         slug: slug,
-        checkIn: checkIn ? checkIn.split('|')[0] : '',
-        checkOut: checkOut ? checkOut.split('|')[0] : '',
+        // checkIn: checkIn ? checkIn.split("|")[0] : "",
+        // checkOut: checkOut ? checkOut.split("|")[0] : "",
+        checkIn: "",
+        checkOut: "",
       });
     return fetchDataHotel({ slug: '', checkIn: '', checkOut: '' });
   });
@@ -206,21 +208,6 @@ const ReservationPage = () => {
     router.back();
   }
 
-  const displayDate = {
-    from: `${checkIn?.split('|')[0].split('/')[2]}-${checkIn
-      ?.split('|')[0]
-      .split('/')[0]}-${checkIn?.split('|')[0].split('/')[1]}`,
-    fromEn: `${checkIn?.split('|')[1].split('-')[0]} ${checkIn
-      ?.split('|')[1]
-      .split('-')[1]} ${checkIn?.split('|')[1].split('-')[2]}`,
-    to: `${checkOut?.split('|')[0].split('/')[2]}-${checkOut
-      ?.split('|')[0]
-      .split('/')[0]}-${checkOut?.split('|')[0].split('/')[1]}`,
-    toEn: `${checkOut?.split('|')[1].split('-')[0]} ${checkOut
-      ?.split('|')[1]
-      .split('-')[1]} ${checkOut?.split('|')[1].split('-')[2]}`,
-  };
-
 
   const serializedData: string | undefined = data?.hotel.cancellationPolicies;
   let unserializedData: { day: string; fee: string }[] = [{ day: '', fee: '' }];
@@ -233,7 +220,6 @@ const ReservationPage = () => {
       <div>
         <HeaderVariants
           ver={"hotel"}
-          formattedDate={null}
           placesData={data ? data.places : []}
           cityData={data ? data.cities : []}
         />
@@ -245,7 +231,7 @@ const ReservationPage = () => {
           <LogIn />
         ) : null}
         {appState.logOrSign === "sign" ? <SignUp /> : null}
-        {appState.menu === "open" ? <BurgerMenu /> : null}
+        {appState.menu === "open" ? <SideMenu /> : null}
         <div className="fixed bottom-0 z-[800] w-full sm:px-[50px] md:px-[72px] lg:hidden ">
           {appState.calendar === "open" ? (
             <CalendarDialog ver={"mobile"} />
@@ -273,7 +259,6 @@ const ReservationPage = () => {
                 addressEn={data ? data.hotel.addressEn : null}
                 phone={data ? data.hotel.phone : null}
                 email={data ? data.hotel.email : null}
-                displayDate={displayDate}
               />
               <OrderInfo
                 rooms={data ? data.rooms : []}

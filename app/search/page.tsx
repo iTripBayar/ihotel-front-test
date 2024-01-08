@@ -2,7 +2,6 @@
 import { useRequest } from "ahooks";
 import { fetchCheckHotel } from "@/utils";
 import HeaderVariants from "@/components/common/headerVariants";
-import BurgerMenu from "@/components/common/burgermenu";
 import BottomSection from "@/components/common/bottomSection";
 import SearchSection from "@/components/common/searchSection";
 import SearchCards from "@/components/pageComponents/searchPage/searchCards";
@@ -18,6 +17,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
 import useWindowSize from "@/hooks/windowSize";
 import MapBtn from "@/components/common/fixedButtons/mapBtn";
+import SideMenu from "@/components/common/sidemenu";
 const ErrorComponent = dynamic(() => import("@/components/common/404"));
 
 const SearchPage = () => {
@@ -44,12 +44,12 @@ const SearchPage = () => {
   const place =
     searchValue?.split("$")[1] === "place" ? searchValue?.split("$")[2] : "";
 
-    useEffect(()=>{
-      dispatch({
-        type: "CHANGE_APP_STATE",
-        payload: { logOrSign: "" },
-      });
-    },[])
+  useEffect(() => {
+    dispatch({
+      type: "CHANGE_APP_STATE",
+      payload: { logOrSign: "", menu: '' },
+    });
+  }, []);
 
   useEffect(() => {
     if (size.width && size.width >= 1024) {
@@ -140,7 +140,6 @@ const SearchPage = () => {
       >
         <HeaderVariants
           ver={"search"}
-          formattedDate={null}
           placesData={data ? data.places : []}
           cityData={data ? data.cities : []}
         />
@@ -149,7 +148,7 @@ const SearchPage = () => {
           <LogIn />
         ) : null}
         {appState.logOrSign === "sign" ? <SignUp /> : null}
-        {appState.menu === "open" ? <BurgerMenu /> : null}
+        {appState.menu === "open" ? <SideMenu /> : null}
         <div className="fixed  bottom-[24px] left-[0%] z-[899]  flex w-auto animate-fade flex-row items-stretch justify-between gap-[16px] px-[16px] text-white sm:px-[42px] sm:pl-[39px] md:px-[32px] lg:bottom-[12px]">
           {appState.map === "" ? <MapBtn ver={"default"} /> : null}
         </div>
@@ -177,7 +176,6 @@ const SearchPage = () => {
         >
           <SearchSection
             ver={"headerSearch"}
-            formattedDate={null}
             placesData={data ? data.places : []}
             cityData={data ? data.cities : []}
           />

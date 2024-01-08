@@ -1,12 +1,9 @@
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { useMemo, useState, ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
 import { Select, SelectItem } from "@nextui-org/react";
 import countryList from "react-select-country-list";
-import { changeProfileInfo } from "@/utils/user";
-import { useRequest } from "ahooks";
 import { CircularProgress } from "@chakra-ui/react";
-import { toast } from "sonner";
 
 interface Props {
   action: string;
@@ -79,12 +76,6 @@ export default function EdtiSection({
       ? userData.email
       : "",
   });
-
-  useEffect(() => {
-    if (updatedData) {
-      console.log("change");
-    }
-  }, [updatedData]);
 
   const handlePassWordChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -306,7 +297,6 @@ export default function EdtiSection({
                   type="file"
                   id="imageInput"
                   name="imageInput"
-                  onChange={(e) => console.log(e.target.value)}
                   className="hidden"
                   accept=".jpg, .jpeg, .png"
                 />

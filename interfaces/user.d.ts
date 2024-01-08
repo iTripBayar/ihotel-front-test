@@ -79,7 +79,7 @@ declare namespace User {
     reviewId: number | null;
     roomCloneId: number;
     roomTypeCloneId: number;
-    rooms: [] | null;
+    rooms: string;
     socialpayDeeplink: string | null;
     sourceCloneId: number;
     status: string;
@@ -91,7 +91,7 @@ declare namespace User {
     updatedAt: string;
     userCloneId: number;
     userId: number | null;
-    userdata: [] | null;
+    userdata: string;
     xroomReservationId: number | null;
   }
   interface Reviews{}

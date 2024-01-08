@@ -1,12 +1,22 @@
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 interface Props {
-  data: User.Order
+  data: User.Order;
 }
 export default function HistoryCard({ data }: Props) {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const lang = searchParams.get("lang");
+  const createAdditionalQueryString = (name: string, value: string | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (value !== null) {
+      params.set(name, value);
+    } else {
+      params.delete(name);
+    }
+    return params.toString();
+  };
   return (
     <div className="w-full rounded-[20px] shadow-[0px_0px_12px_4px_rgb(0,0,0,0.15)] flex flex-col gap-[12px] overflow-hidden ">
       {/* img */}
@@ -33,7 +43,7 @@ export default function HistoryCard({ data }: Props) {
       {/* details */}
       <div className="flex flex-col w-full gap-[12px]">
         {/* name and orderID */}
-        <div className="flex flex-col gap-[2px] px-[12px]">
+        <div className="flex flex-col gap-[2px] px-[16px]">
           <p className="text-[18px] leading-[18px] font-medium text-main-text">
             {lang === "en"
               ? `${
@@ -48,7 +58,7 @@ export default function HistoryCard({ data }: Props) {
           </p>
         </div>
         {/* checkIn & checkOut */}
-        <div className="flex justify-between items-center w-[calc(100%-24px)] mx-auto text-primary-blue px-[18px] py-[8px] rounded-[20px] border border-black/[.15]">
+        <div className="flex justify-between items-center w-[calc(100%-24px)] mx-auto text-primary-blue px-[18px] py-[8px] rounded-[20px] border border-primary-blue/[.5]">
           {/* checkIn */}
           <div className="flex flex-col gap-[2px]">
             <p className="text-[14px] leading-[14px] text-sub-text">
@@ -87,7 +97,7 @@ export default function HistoryCard({ data }: Props) {
         <div className="w-full flex flex-col pl-[12px] gap-[10px]">
           {/* stat */}
           <div
-            className={`px-[10px] py-[6px] w-fit rounded-[8px] text-[12px] uppercase font-semibold ${
+            className={`px-[12px] py-[6px] w-fit rounded-[8px] text-[12px] uppercase font-semibold ${
               data.status === "checked-out"
                 ? "bg-main-online text-white"
                 : data.status === "pending"
@@ -95,7 +105,11 @@ export default function HistoryCard({ data }: Props) {
                 : "bg-main-offline text-white"
             }`}
           >
-            {data.status}
+            {data.status === "check-out"
+              ? `${lang === "en" ? "Confirmed" : "Баталгаажсан"}`
+              : data.status === "pending"
+              ? `${lang === "en" ? "Pending" : "Хүлээгдэж байна"}`
+              : `${lang === "en" ? "Canceled" : "Цуцлагдсан"}`}
           </div>
           {/* btns */}
           <div className="flex w-full justify-end">
@@ -108,8 +122,8 @@ export default function HistoryCard({ data }: Props) {
               }`}
             >
               {data.status === "checked-out" ? (
-                <button className="px-[10px] py-[8px] bg-[#f2711c] gap-[2px] rounded-tl-[16px] font-semibold text-white text-[12px] uppercase flex justify-center items-center">
-                  {lang === "en" ? "Add review" : "Үнэлгээ өгөх"}
+                <button className="px-[16px] py-[8px] bg-[#f2711c] gap-[2px] rounded-tl-[16px] font-semibold text-white text-[12px] uppercase flex justify-center items-center">
+                  {lang === "en" ? "Leave review" : "Үнэлгээ өгөх"}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -126,7 +140,18 @@ export default function HistoryCard({ data }: Props) {
                   </svg>
                 </button>
               ) : null}
-              <button className="px-[10px] py-[8px] bg-primary-blue gap-[2px] rounded-tl-[16px] font-semibold text-white text-[12px] uppercase flex justify-center items-center">
+              <button
+                onClick={() => {
+                  router.push(
+                    `/profile/?${createAdditionalQueryString(
+                      "id",
+                      data.id ? `${data.id}` : null,
+                    )}`,
+                    { scroll: true },
+                  );
+                }}
+                className="px-[16px] py-[8px] bg-primary-blue gap-[2px] rounded-tl-[16px] font-semibold text-white text-[12px] uppercase flex justify-center items-center"
+              >
                 {lang === "en" ? "More" : "Дэлгэрэнгүй"}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

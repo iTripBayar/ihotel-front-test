@@ -4,6 +4,7 @@ import { useAppCtx } from "@/contexts/app";
 import { FormEvent } from "react";
 import { FacebookSignInButton, GoogleSignInButton } from "./authButtons";
 import { Toaster, toast } from "sonner";
+import { CircularProgress } from "@chakra-ui/react";
 
 export default function SignUp() {
   const searchParams = useSearchParams();
@@ -18,6 +19,7 @@ export default function SignUp() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordVisible1, setPasswordVisible1] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const close = () => {
     dispatch({
@@ -40,6 +42,7 @@ export default function SignUp() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     const data = new FormData(e.currentTarget);
 
     try {
@@ -60,9 +63,12 @@ export default function SignUp() {
       );
       if (!registerResponse.ok) {
         setMessage("invalid");
+        setLoading(false);
         toast.error(`${lang === "en" ? "Invalid!" : "Алдаа гарлаа"}`);
       } else {
         setMessage("success");
+        setLoading(false);
+
         toast.success(
           `${
             lang === "en" ? "Register successful!" : "Амжилттай бүртгэгдлээ!"
@@ -83,6 +89,7 @@ export default function SignUp() {
                     type: "CHANGE_APP_STATE",
                     payload: { logOrSign: "log" },
                   }),
+                  
               },
             },
           );
@@ -105,7 +112,7 @@ export default function SignUp() {
     }
   };
 
-  const [arePasswordsValid, setArePasswordsValid] = useState('');
+  const [arePasswordsValid, setArePasswordsValid] = useState("");
 
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     // const { value } = event.target;
@@ -260,7 +267,6 @@ export default function SignUp() {
                 lang === "en" ? "Confirm Password" : "Нууц үг дахин оруулна уу"
               }
               className="h-[34px] w-full rounded-[4px] border-black/[.15]"
-              pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&()#])[\w@$!%*?&()#]{8,}$"
             />
             <button
               type="button"
@@ -314,18 +320,20 @@ export default function SignUp() {
                 : "* И-мэйл хаяг бүртгэлтэй байна *"}
             </p>
           )}
-          {arePasswordsValid === '' ? (
+          {arePasswordsValid === "" ? (
             <p className="mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]">
               {lang === "en"
                 ? "* Password must have an uppercase letter, a number, a symbol, and be at least 8 characters long *"
                 : "* Нууц үг дор хаяж 1 том үсэг, 1 тоо, 1 тусгай тэмдэгт агуулсан хамгийн багадаа 8 тэмдэгт байх хэрэгтэй *"}
             </p>
-          ) : arePasswordsValid === 'nomatch' ? <p className="mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]">
-                {lang === "en"
-                  ? "* Passwords does not match *"
-                  : "* Нууц үгнүүд хоорондоо таарахгүй байна *"}
-              </p> : null}
-          
+          ) : arePasswordsValid === "nomatch" ? (
+            <p className="mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]">
+              {lang === "en"
+                ? "* Passwords does not match *"
+                : "* Нууц үгнүүд хоорондоо таарахгүй байна *"}
+            </p>
+          ) : null}
+
           <div className="flex w-full items-center justify-between">
             <div className="h-[1px] w-[33%] bg-black/[.15]"></div>
             <p className="text-[14px] font-medium uppercase text-black/[.25] sm:text-[16px]">
@@ -349,7 +357,15 @@ export default function SignUp() {
                 lang === "en" ? "min-w-[100px] px-[14px]" : ""
               }`}
             >
-              {lang === "en" ? "Sign Up" : "Бүртгүүлэх"}
+              {loading === true ? (
+                <CircularProgress
+                  isIndeterminate={true}
+                  color="#ffffff"
+                  size="20px"
+                />
+              ) : (
+                <p>{lang === "en" ? "Sign Up" : "Бүртгүүлэх"}</p>
+              )}
             </button>
             <button
               className="justify-self-end text-[13px] text-primary-blue sm:text-[14px]"

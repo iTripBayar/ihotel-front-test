@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Collapse, Button, useDisclosure } from '@chakra-ui/react';
 import useWindowSize from '@/hooks/windowSize';
 import { useAppCtx } from '@/contexts/app';
+import { format } from 'date-fns';
 
 interface Props {
   name: string | null;
@@ -12,7 +13,6 @@ interface Props {
   addressEn: string | null;
   phone: string | null;
   email: string | null;
-  displayDate: {from: string, fromEn: string, to: string, toEn: string}
 }
 
 export default function GeneralInfo({
@@ -23,10 +23,11 @@ export default function GeneralInfo({
   addressEn,
   phone,
   email,
-  displayDate,
 }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
+  const checkIn = searchParams.get("checkIn");
+  const checkOut = searchParams.get("checkOut");
   const { isOpen, onToggle } = useDisclosure();
   const size = useWindowSize();
   const { dispatch } = useAppCtx();
@@ -38,74 +39,78 @@ export default function GeneralInfo({
       </h3>
       <div className="flex w-full flex-col gap-[24px] lg:flex-col-reverse ">
         {/* calendar */}
-        <div className="flex w-full flex-col gap-[24px] lg:grid lg:grid-cols-6 lg:items-center">
-          <div className="flex w-full items-center justify-between gap-[20px] rounded-[20px] bg-white px-[16px] py-[12px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] 2xs:gap-[36px] lg:col-span-4 lg:px-0 lg:shadow-none">
-            {/* checkIn */}
-            <div className="flex flex-col items-center justify-center gap-[4px] sm:gap-[8px] lg:items-start">
-              <p className="text-[12px] leading-[14px] text-sub-text/75 sm:text-[14px]">
-                {lang === "en" ? "Check In" : "Ирэх өдөр"}
+        {checkIn && checkOut ? (
+          <div className="flex w-full flex-col gap-[24px] lg:grid lg:grid-cols-6 lg:items-center">
+            <div className="flex w-full items-center justify-between gap-[20px] rounded-[20px] bg-white px-[16px] py-[12px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] 2xs:gap-[36px] lg:col-span-4 lg:px-0 lg:shadow-none">
+              {/* checkIn */}
+              <div className="flex flex-col items-center justify-center gap-[4px] sm:gap-[8px] lg:items-start">
+                <p className="text-[12px] leading-[14px] text-sub-text/75 sm:text-[14px]">
+                  {lang === "en" ? "Check In" : "Ирэх өдөр"}
+                </p>
+                <h4 className="text-[18px] font-medium leading-[20px] text-primary-blue sm:text-[20px]">
+                  {lang === "en" ? format(new Date(checkIn), 'MMM dd yyyy') : checkIn}
+                </h4>
+              </div>
+              {/* arrow */}
+              <div className="flex items-center justify-center text-primary-blue">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="2 2 24 20"
+                  strokeWidth="2.15"
+                  stroke="currentColor"
+                  className="max-h-[20px] min-h-[20px] min-w-[24px] max-w-[24px]"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                  />
+                </svg>
+              </div>
+              {/* checkOut */}
+              <div className="flex flex-col items-center justify-center gap-[4px] sm:gap-[8px] lg:items-start">
+                <p className="text-[12px] leading-[14px] text-sub-text/75 sm:text-[14px]">
+                  {lang === "en" ? "Check Out" : "Гарах өдөр"}
+                </p>
+                <h4 className="text-[18px] font-medium  leading-[20px] text-primary-blue sm:text-[20px]">
+                  {lang === "en"
+                    ? format(new Date(checkOut), "MMM dd yyyy")
+                    : checkOut}
+                </h4>
+              </div>
+            </div>
+            <button
+              className="relative flex min-h-[42px] w-full items-center justify-center rounded-full bg-primary-blue px-[20px]  text-[16px] font-medium text-white sm:min-h-[46px] sm:text-[18px] lg:col-span-2 lg:min-h-[20px] lg:max-w-[165px] lg:justify-between lg:justify-self-end lg:px-[16px] lg:py-[12px] lg:text-[15px] lg:leading-[14px]"
+              onClick={() => {
+                dispatch({
+                  type: "CHANGE_APP_STATE",
+                  payload: { calendar: "open" },
+                });
+              }}
+            >
+              <p className="justify-self-center">
+                {lang === "en" ? "Change dates" : "Өдөр солих"}
               </p>
-              <h4 className="text-[18px] font-medium leading-[20px] text-primary-blue sm:text-[20px]">
-                {lang === "en" ? displayDate.fromEn : displayDate.from}
-              </h4>
-            </div>
-            {/* arrow */}
-            <div className="flex items-center justify-center text-primary-blue">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="2 2 24 20"
-                strokeWidth="2.15"
-                stroke="currentColor"
-                className="max-h-[20px] min-h-[20px] min-w-[24px] max-w-[24px]"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                />
-              </svg>
-            </div>
-            {/* checkOut */}
-            <div className="flex flex-col items-center justify-center gap-[4px] sm:gap-[8px] lg:items-start">
-              <p className="text-[12px] leading-[14px] text-sub-text/75 sm:text-[14px]">
-                {lang === "en" ? "Check Out" : "Гарах өдөр"}
-              </p>
-              <h4 className="text-[18px] font-medium  leading-[20px] text-primary-blue sm:text-[20px]">
-                {lang === "en" ? displayDate.toEn : displayDate.to}
-              </h4>
-            </div>
+              <div className="absolute right-[16px] top-[50%] flex translate-y-[-50%] items-center justify-center lg:static lg:right-[8px] lg:translate-y-0">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="2 2 24 20"
+                  strokeWidth="2"
+                  stroke="currentColor"
+                  className="lg:max-w[20px] max-h-[16px] min-h-[16px] min-w-[20px] max-w-[20px] sm:max-h-[18px] sm:min-h-[18px] sm:min-w-[22px] sm:max-w-[22px] lg:max-h-[16px] lg:min-h-[16px] lg:min-w-[20px]"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                  />
+                </svg>
+              </div>
+            </button>
           </div>
-          <button
-            className="relative flex min-h-[42px] w-full items-center justify-center rounded-full bg-primary-blue px-[20px]  text-[16px] font-medium text-white sm:min-h-[46px] sm:text-[18px] lg:col-span-2 lg:min-h-[20px] lg:max-w-[165px] lg:justify-between lg:justify-self-end lg:px-[16px] lg:py-[12px] lg:text-[15px] lg:leading-[14px]"
-            onClick={() => {
-              dispatch({
-                type: "CHANGE_APP_STATE",
-                payload: { calendar: "open" },
-              });
-            }}
-          >
-            <p className="justify-self-center">
-              {lang === "en" ? "Change dates" : "Өдөр солих"}
-            </p>
-            <div className="absolute right-[16px] top-[50%] flex translate-y-[-50%] items-center justify-center lg:static lg:right-[8px] lg:translate-y-0">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="2 2 24 20"
-                strokeWidth="2"
-                stroke="currentColor"
-                className="lg:max-w[20px] max-h-[16px] min-h-[16px] min-w-[20px] max-w-[20px] sm:max-h-[18px] sm:min-h-[18px] sm:min-w-[22px] sm:max-w-[22px] lg:max-h-[16px] lg:min-h-[16px] lg:min-w-[20px]"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                />
-              </svg>
-            </div>
-          </button>
-        </div>
+        ) : null}
         {size.width && size.width >= 1024 ? (
           <p className="text-[18px] font-medium leading-[18px] text-sub-text lg:mb-[-12px]">
             {lang === "en" ? "Order information" : "Захиалгийн мэдээлэл"}
@@ -154,7 +159,7 @@ export default function GeneralInfo({
                   : "h-0"
               }`}
             >
-              <div className="relative h-[200px] w-full overflow-hidden rounded-[12px] sm:h-[250px]">
+              <div className="relative h-[200px] w-full overflow-hidden rounded-[12px] sm:h-[250px] xl:h-[300px]">
                 <Image
                   src={
                     image

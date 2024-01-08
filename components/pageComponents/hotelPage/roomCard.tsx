@@ -22,8 +22,8 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
   const router = useRouter();
   const cart = searchParams.getAll('cart');
   const slug = searchParams.get('slug');
-  const dateFrom = searchParams.get('dateFrom');
-  const dateTo = searchParams.get('dateTo');
+  const checkIn = searchParams.get("checkIn");
+  const checkOut = searchParams.get("checkOut");
   const days = searchParams.get('days');
   const { appState, dispatch } = useAppCtx();
   const [openDesc, setOpenDesc] = useState(false);
@@ -95,6 +95,8 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
         pagination={{
           dynamicBullets: true,
         }}
+        grabCursor
+        rewind
         modules={[Pagination]}
         className=" roomImages h-[225px] w-full rounded-t-[16px] 2xs:h-[275px] sm:h-[325px] md:h-[225px] xl:h-[250px] 2xl:h-[275px]"
       >
@@ -137,9 +139,19 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
         {/* name */}
         <p className="text-[18px] font-bold text-main-text">
           {lang === "en" ? data.nameEn : data.name}{" "}
-          {data.bedType ? <span className="text-[14px] text-sub-text">
-            ({lang === "en" ? data.bedType.nameEn ? data.bedType.nameEn : '' : data.bedType.name ? data.bedType.name : ''})
-          </span> : null}
+          {data.bedType ? (
+            <span className="text-[14px] text-sub-text">
+              (
+              {lang === "en"
+                ? data.bedType.nameEn
+                  ? data.bedType.nameEn
+                  : ""
+                : data.bedType.name
+                ? data.bedType.name
+                : ""}
+              )
+            </span>
+          ) : null}
         </p>
         {/* bed, size, occupancy */}
         <div className="flex w-full justify-start gap-[16px] text-[16px] font-medium text-main-text">
@@ -155,7 +167,9 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
                 fill="#212529"
               />
             </svg>
-            {data.bedType ? <p>{data.bedType.bedCount ? data.bedType.bedCount : ''}</p> : null}
+            {data.bedType ? (
+              <p>{data.bedType.bedCount ? data.bedType.bedCount : ""}</p>
+            ) : null}
           </div>
           <div className="flex items-center gap-[8px] rounded-[8px] bg-black/10 px-[16px] py-[8px] ">
             <svg
@@ -414,14 +428,14 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
                 href={{
                   query: {
                     slug: slug,
-                    dateFrom: dateFrom,
-                    dateTo: dateTo,
+                    checkIn: checkIn,
+                    checkOut: checkOut,
                     days: days,
                     cart: cart,
                   },
                   pathname: "/reservation",
                 }}
-                target='_blank'
+                target="_blank"
                 className="flex h-[40px] w-full items-center justify-center rounded-[8px] bg-main-online text-[18px] font-medium leading-[18px] text-white"
               >
                 {lang === "en" ? "Order" : "Захиалах"}

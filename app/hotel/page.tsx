@@ -10,7 +10,6 @@ import HotelMap from "@/components/pageComponents/hotelPage/hotelMap";
 import OrderCount from "@/components/pageComponents/hotelPage/orderCount";
 import Services from "@/components/pageComponents/hotelPage/services";
 import HotelRooms from "@/components/pageComponents/hotelPage/hotelRooms";
-import BurgerMenu from "@/components/common/burgermenu";
 import Description from "@/components/pageComponents/hotelPage/description";
 import HotelCard from "@/components/common/hotelCard";
 import Footer from "@/components/common/footer";
@@ -25,9 +24,10 @@ import { CircularProgress } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import ImagesDialog from "@/components/pageComponents/hotelPage/imagesDialog";
 import BottomSection from "@/components/common/bottomSection";
-import { addDays, format } from "date-fns";
+import { format } from "date-fns";
 const ErrorComponent = dynamic(() => import("@/components/common/404"));
 import { Toaster, toast } from "sonner";
+import SideMenu from "@/components/common/sidemenu";
 
 const HotelPage = () => {
   const searchParams = useSearchParams();
@@ -42,54 +42,6 @@ const HotelPage = () => {
   const roomsContainer = useRef<HTMLDivElement>(null);
   const reviewsContainer = useRef<HTMLDivElement>(null);
 
-  const newDate = new Date();
-  const nextDay = addDays(newDate, 1);
-  const formattedDate = {
-    from: {
-      year: !checkIn
-        ? `${format(newDate, "yyyy-MM-dd").split("-")[0]}`
-        : checkIn.split("|")[0].split("/")[2],
-      month: !checkIn
-        ? `${format(newDate, "yyyy-MM-dd").split("-")[1]}`
-        : checkIn.split("|")[0].split("/")[0],
-      date: !checkIn
-        ? `${format(newDate, "yyyy-MM-dd").split("-")[2]}`
-        : checkIn.split("|")[0].split("/")[1],
-    },
-    fromEn: {
-      year: !checkIn
-        ? `${format(newDate, "MMM-dd-yyyy").split("-")[2]}`
-        : checkIn?.split("|")[1]?.split("-")[2],
-      month: !checkIn
-        ? `${format(newDate, "MMM-dd-yyyy").split("-")[0]}`
-        : checkIn?.split("|")[1]?.split("-")[0],
-      date: !checkIn
-        ? `${format(newDate, "MMM-dd-yyyy").split("-")[1]}`
-        : checkIn?.split("|")[1]?.split("-")[1],
-    },
-    to: {
-      year: !checkOut
-        ? `${format(newDate, "yyyy-MM-dd").split("-")[0]}`
-        : checkOut.split("|")[0].split("/")[2],
-      month: !checkOut
-        ? `${format(nextDay, "yyyy-MM-dd").split("-")[1]}`
-        : checkOut.split("|")[0].split("/")[0],
-      date: !checkOut
-        ? `${format(nextDay, "yyyy-MM-dd").split("-")[2]}`
-        : checkOut.split("|")[0].split("/")[1],
-    },
-    toEn: {
-      year: !checkOut
-        ? `${format(nextDay, "MMM-dd-yyyy").split("-")[2]}`
-        : checkOut.split("|")[1].split("-")[2],
-      month: !checkOut
-        ? `${format(nextDay, "MMM-dd-yyyy").split("-")[0]}`
-        : checkOut.split("|")[1].split("-")[0],
-      date: !checkOut
-        ? `${format(nextDay, "MMM-dd-yyyy").split("-")[1]}`
-        : checkOut.split("|")[1].split("-")[1],
-    },
-  };
   const createQueryString = (
     name: string,
     value: string | null,
@@ -117,37 +69,36 @@ const HotelPage = () => {
     return params.toString();
   };
   useEffect(() => {
-    if (!checkIn && !checkOut) {
-      router.replace(
-        `/hotel?${createQueryString(
-          "checkIn",
-          `${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year}|${formattedDate.fromEn.month}-${formattedDate.fromEn.date}-${formattedDate.fromEn.year}`,
-          "checkOut",
-          `${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}|${formattedDate.toEn.month}-${formattedDate.toEn.date}-${formattedDate.toEn.year}`,
-          "days",
-          "1",
-        )}`,
-        { scroll: false },
-      );
-    }
-  }, [!checkIn]);
-  useEffect(() => {
     dispatch({
       type: "CHANGE_APP_STATE",
-      payload: { logOrSign: "" },
+      payload: { logOrSign: "", menu: '' },
     });
   }, []);
 
 
-  const { data, loading, error } = useRequest(() => {
-    if (slug)
-      return fetchDataHotel({
-        slug: slug,
-        checkIn: checkIn ? checkIn.split("|")[0] : "",
-        checkOut: checkOut ? checkOut.split("|")[0] : "",
-      });
-    return fetchDataHotel({ slug: "", checkIn: "", checkOut: "" });
-  });
+  const { data, loading, error } = useRequest(
+    () => {
+      if (slug)
+        return fetchDataHotel({
+          slug: slug,
+          checkIn: checkIn ? checkIn.split("|")[0] : "",
+          checkOut: checkOut ? checkOut.split("|")[0] : "",
+        });
+      return fetchDataHotel({ slug: "", checkIn: "", checkOut: "" });
+    },
+    {onSuccess: (res) => {
+      router.replace(
+        `/hotel?${createQueryString(
+          "checkIn",
+          `${format(new Date(res.startdate), "MM/dd/yyyy")}`,
+          "checkOut",
+          `${format(new Date(res.enddate), "MM/dd/yyyy")}`,
+          "days",
+          "1",
+        )}`,
+      );
+    }}
+  );
 
   let stat = "";
   if (data?.hotel.isOnline == 1 && data?.hotel.isOffline == 0) {
@@ -235,7 +186,6 @@ const HotelPage = () => {
       <main className="relative">
         <HeaderVariants
           ver={"hotel"}
-          formattedDate={formattedDate}
           // searchData={searchData}
           placesData={data ? data.places : []}
           cityData={data ? data.cities : []}
@@ -251,7 +201,7 @@ const HotelPage = () => {
           <LogIn />
         ) : null}
         {appState.logOrSign === "sign" ? <SignUp /> : null}
-        {appState.menu === "open" ? <BurgerMenu /> : null}
+        {appState.menu === "open" ? <SideMenu /> : null}
         <BottomSection ver={"hotel"} handleScrollToTopVer={() => {}} />
         <Dialogs
           roomPrices={roomPrices}
@@ -441,7 +391,6 @@ const HotelPage = () => {
                 totalPrice={totalPrice}
                 stat={stat}
                 dollarRate={data ? data?.rate : ""}
-                formattedDate={formattedDate}
               />
             </div>
             <Description

@@ -60,7 +60,7 @@ export default function OrderInfo({ rooms, dollarRate, totalPrice }: Props) {
             {/* price per room */}
             <div className="leadin-[14px] flex w-full items-center justify-between text-[14px] font-medium">
               <p className="  text-main-text/[.65]">
-                {lang === "en" ? "price per day for 1 room" : "Нэгж үнэ"}
+                {lang === "en" ? "Price per day for 1 room" : "Нэгж үнэ"}
               </p>
               <p className="text-[16px] text-main-text">
                 {rooms

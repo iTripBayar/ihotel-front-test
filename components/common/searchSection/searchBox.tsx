@@ -42,6 +42,7 @@ const SearchBox = ({
       // onSuccess: (res) => {
       //   console.log(res);
       // },
+      debounceWait: 500
     },
   );
 
@@ -217,16 +218,11 @@ const SearchBox = ({
             value={query}
             ref={inputRef}
             onFocus={(e) => {
-              // setShowDefault(true);
-              // console.log("focus");
-              // e.target.classList.add('w-full')
               e.preventDefault();
             }}
             onClick={(e) => {
               e.preventDefault();
             }}
-            // className={` w-full within h-full border-transparent px-0 text-[16px] placeholder:text-[12px] text-sub-text/75 placeholder-sub-text/75 focus:border-transparent focus:ring-0 2xs:placeholder:text-[13px] sm:placeholder:text-[14px] lg:text-[12px] xl:text-[14px]
-            // `}
             className={`within h-full border-transparent px-0 text-[16px] placeholder:text-[12px] text-sub-text/75 placeholder-sub-text/75 focus:border-transparent focus:ring-0 2xs:placeholder:text-[13px] sm:placeholder:text-[14px] lg:text-[12px] xl:text-[14px]
             ${
               query === ""

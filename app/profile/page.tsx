@@ -17,12 +17,17 @@ import { useEffect, useState } from "react";
 import EdtiSection from "@/components/pageComponents/profilePage/edtiSection";
 import { changeProfileInfo, fetchProfileInto } from "@/utils/user";
 import { CircularProgress } from "@chakra-ui/react";
+import SideMenu from "@/components/common/sidemenu";
+import { useAppCtx } from "@/contexts/app";
+import AboutOrder from "@/components/pageComponents/profilePage/aboutOrder";
 
 export default function ProfilePage() {
   // const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
   const searchParams = useSearchParams();
   const router = useRouter();
   const lang = searchParams.get("lang");
+  const id = searchParams.get("id");
+  const { appState, dispatch } = useAppCtx();
   const [action, setAction] = useState("");
 
   const { data: session } = useSession({
@@ -42,22 +47,26 @@ export default function ProfilePage() {
     },
     {
       manual: true,
-      onSuccess: (res) => {
-        console.log(res);
-      },
-      refreshDeps: [action === "saved"],
+      refreshDeps: [action],
     },
   );
+  // appState.menu
+
   useEffect(() => {
     if (session?.user?.email) {
       run({ email: session?.user?.email });
     }
+    dispatch({
+      type: "CHANGE_APP_STATE",
+      payload: {
+        menu: "",
+      },
+    });
   }, [session]);
+
   useEffect(() => {
     if (action === "saved") {
-      console.log("s");
       router.refresh();
-      // window.location.reload();
     }
   }, [action]);
 
@@ -81,26 +90,18 @@ export default function ProfilePage() {
       manual: true,
       onSuccess: (res) => {
         console.log(res);
-        // handleAction("saved");
         toast.success(
           `${
             lang === "en" ? "Changes applied!" : "Таны мэдээлэл өөрчлөгдлөө!"
           }`,
         );
-
-        // const val = {
-        //   surname: res.user.surname,
-        //   name: res.user.name,
-        //   image: res.user.avatar,
-        //   sex: res.user.gender,
-        //   nationality: res.user.country
-        //   phone: res.user.phoneNumber ? res.user.phoneNumber : userInfo.phone,
-        //   email: res.user.email,
-        // };
-        // setUserInfo(val);
       },
     },
   );
+
+  const showOrder: User.Order | undefined = id
+    ? profileData?.orders.filter((index) => index.id.toString() === id)[0]
+    : undefined;
 
   const handleSignOut = () => {
     signOut({ callbackUrl: "/" });
@@ -130,37 +131,45 @@ export default function ProfilePage() {
                 .toUpperCase()}${session?.user?.name?.slice(1)}`}
             />
             <BottomSection ver={"fixed"} handleScrollToTopVer={() => {}} />
+            {appState.menu === "open" ? <SideMenu /> : null}
             <Toaster position="top-right" richColors />
-            <div className="flex w-full flex-col items-center gap-[24px] min-h-screen px-[16px] sm:px-[50px] md:px-[72px] lg:px-[100px] md:gap-[32px] lg:gap-[36px] ">
-              <ProfileInfo
-                userData={profileData?.user}
-                totalOrders={profileData?.totalOrders}
-                totalReviews={profileData?.totalReviews}
-                handleSignOut={handleSignOut}
-                handleAction={(e: string) => setAction(e)}
-                action={action}
+            {id && showOrder ? (
+              <AboutOrder
+                data={showOrder}
               />
-              {action === "" || action === "saved" ? (
-                <HistoryContainer
-                  data={profileData?.orders ? profileData.orders : []}
-                />
-              ) : (
-                <EdtiSection
-                  action={action}
-                  handleAction={(e: string) => setAction(e)}
+            ) : (
+              <div className="flex w-full flex-col items-center gap-[24px] min-h-screen px-[16px] sm:px-[50px] md:px-[72px] lg:px-[100px] md:gap-[32px] lg:gap-[36px] ">
+                <ProfileInfo
                   userData={profileData?.user}
-                  updatedData={updatedData}
-                  run={runUpdate}
-                  loading={loadingUpdate}
+                  totalOrders={profileData?.totalOrders}
+                  totalReviews={profileData?.totalReviews}
+                  handleSignOut={handleSignOut}
+                  handleAction={(e: string) => setAction(e)}
+                  action={action}
                 />
-              )}
-              <button
-                onClick={() => router.back()}
-                className="text-primary-blue font-medium py-[12px]"
-              >
-                {lang === "en" ? "Back" : "Буцах"}
-              </button>
-            </div>
+                {action === "" || action === "saved" ? (
+                  <HistoryContainer
+                    data={profileData?.orders ? profileData.orders : []}
+                  />
+                ) : (
+                  <EdtiSection
+                    action={action}
+                    handleAction={(e: string) => setAction(e)}
+                    userData={profileData?.user}
+                    updatedData={updatedData}
+                    run={runUpdate}
+                    loading={loadingUpdate}
+                  />
+                )}
+                <button
+                  onClick={() => router.back()}
+                  className="text-primary-blue font-medium py-[12px]"
+                >
+                  {lang === "en" ? "Back" : "Буцах"}
+                </button>
+              </div>
+            )}
+
             <Footer />
           </main>
         );
@@ -182,4 +191,3 @@ export default function ProfilePage() {
 
   return <ErrorComponent />;
 }
-

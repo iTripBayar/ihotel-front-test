@@ -139,6 +139,10 @@ const config: Config = {
       "2xl": "1536px", // => @media (min-width: 1536px) { ... }
     },
   },
-  plugins: [require("@tailwindcss/forms"), nextui()],
+  plugins: [
+    require("@tailwindcss/forms"),
+    nextui(),
+    require("tailwindcss-debug-screens"),
+  ],
 };
 export default config;

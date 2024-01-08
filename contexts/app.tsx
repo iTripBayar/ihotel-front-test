@@ -10,7 +10,8 @@ export type AppCtxState = {
   selectedAmount: string[];
   calendar: string;
   biggerImage: string[];
-  userToken: string
+  imageIndex: number;
+  userToken: string;
   paymentMethod: string;
 };
 
@@ -34,6 +35,7 @@ const defaultValue: AppCtxProps = {
     selectedAmount: [],
     calendar: '',
     biggerImage: [],
+    imageIndex: 0,
     userToken: '',
     paymentMethod: '',
   },

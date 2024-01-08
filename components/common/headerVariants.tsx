@@ -5,13 +5,6 @@ import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
   ver: string;
-  formattedDate: {
-    from: { year: string; month: string; date: string };
-    fromEn: { year: string; month: string; date: string };
-    to: { year: string; month: string; date: string };
-    toEn: { year: string; month: string; date: string };
-  } | null;
-
   placesData: SearchData.Places[];
   cityData: SearchData.Cities[];
 }
@@ -19,7 +12,6 @@ interface iProps {
 
 const HeaderVariants = ({
   ver,
-  formattedDate,
   placesData,
   cityData,
 }: iProps) => {
@@ -80,7 +72,6 @@ const HeaderVariants = ({
       >
         <SearchSection
           ver={ver}
-          formattedDate={formattedDate}
           placesData={placesData ? placesData : []}
           cityData={cityData ? cityData : []}
         />

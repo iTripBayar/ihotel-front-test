@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { addDays } from "date-fns";
+import { addDays, format } from "date-fns";
 import { DateRange, DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { useAppCtx } from "@/contexts/app";
@@ -134,19 +134,9 @@ export default function CalendarDialog({ ver }: Props) {
               router.replace(
                 `${pathname}/?${multipleCreateQueryString(
                   "checkIn",
-                  `${range?.from?.toLocaleDateString()}|${range?.from
-                    ?.toDateString()
-                    .split(" ")[1]}-${range?.from
-                    ?.toDateString()
-                    .split(" ")[2]}-${range?.from
-                    ?.toDateString()
-                    .split(" ")[3]}`,
+                  `${format(range.from, "MM/dd/yyyy")}`,
                   "checkOut",
-                  `${range?.to?.toLocaleDateString()}|${range?.to
-                    ?.toDateString()
-                    .split(" ")[1]}-${range?.to
-                    ?.toDateString()
-                    .split(" ")[2]}-${range?.to?.toDateString().split(" ")[3]}`,
+                  `${format(range.to, "MM/dd/yyyy")}`,
                   "days",
                   `${
                     (range?.to?.getTime() - range?.from?.getTime()) /
@@ -229,17 +219,9 @@ export default function CalendarDialog({ ver }: Props) {
             router.replace(
               `${pathname}/?${multipleCreateQueryString(
                 "checkIn",
-                `${range?.from?.toLocaleDateString()}|${range?.from
-                  ?.toDateString()
-                  .split(" ")[1]}-${range?.from
-                  ?.toDateString()
-                  .split(" ")[2]}-${range?.from?.toDateString().split(" ")[3]}`,
+                `${format(range.from, "MM/dd/yyyy")}`,
                 "checkOut",
-                `${range?.to?.toLocaleDateString()}|${range?.to
-                  ?.toDateString()
-                  .split(" ")[1]}-${range?.to
-                  ?.toDateString()
-                  .split(" ")[2]}-${range?.to?.toDateString().split(" ")[3]}`,
+                `${format(range.to, "MM/dd/yyyy")}`,
                 "days",
                 `${
                   (range?.to?.getTime() - range?.from?.getTime()) /

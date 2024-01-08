@@ -9,6 +9,7 @@ import PrevBtn from "./prevBtn";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
+
 interface iProps {
   data: HomeData.DestCategories[];
   destinations: HomeData.TopDestinations[];
@@ -19,7 +20,6 @@ const CommonLocation = ({ data, destinations }: iProps) => {
   const lang = searchParams.get("lang");
   const sliderRef = useRef<Slider>(null);
   const [currentSlide, setCurrentSlide] = useState(1);
-
   function SampleNextArrow(props: any) {
     const { onClick } = props;
     return <NextBtn onClick={onClick} />;

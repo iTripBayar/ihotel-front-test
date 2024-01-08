@@ -1,16 +1,17 @@
-import Image from 'next/image';
-import { useState } from 'react';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { useAppCtx } from '@/contexts/app';
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
+import Image from "next/image";
+import { useState } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useAppCtx } from "@/contexts/app";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { signOut } from "next-auth/react";
 
-const BurgerMenu = () => {
+const SideMenu = () => {
   const [closeAnimation, setCloseAnimation] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const lang = searchParams.get('lang');
+  const lang = searchParams.get("lang");
   const { appState, dispatch } = useAppCtx();
   const { data: session } = useSession({
     required: false,
@@ -30,15 +31,15 @@ const BurgerMenu = () => {
     setCloseAnimation(true);
     setTimeout(() => {
       dispatch({
-        type: 'CHANGE_APP_STATE',
-        payload: { menu: '' },
+        type: "CHANGE_APP_STATE",
+        payload: { menu: "" },
       });
     }, 500);
   };
 
   const handleClick = (event: React.MouseEvent) => {
     const target = event.target as HTMLElement;
-    if (target.classList.contains('bg-black/50')) {
+    if (target.classList.contains("bg-black/50")) {
       close();
     }
   };
@@ -118,9 +119,12 @@ const BurgerMenu = () => {
               href="/profile"
               className="flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]"
             >
-              {session.user.name}
+              {`${session.user.name
+                ?.charAt(0)
+                .toUpperCase()}${session.user.name?.slice(1)}`}
             </Link>
           ) : null}
+
           {/* add hotel */}
           <Link
             href={`${process.env.TEMPORARY_URL2}`}
@@ -129,6 +133,15 @@ const BurgerMenu = () => {
           >
             {lang === "en" ? "Add hotel" : "Буудал нэмэх"}
           </Link>
+          {/* Log out */}
+          {session?.user ? (
+            <button
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="flex h-[43px] w-full items-center justify-start  border-b-[1px] border-white/[.15]"
+            >
+              {lang === "en" ? "Log out" : "Гарах"}
+            </button>
+          ) : null}
         </div>
         {/* bottom section */}
         <div className="flex w-full flex-col justify-end gap-[24px]">
@@ -181,4 +194,4 @@ const BurgerMenu = () => {
   );
 };
 
-export default BurgerMenu;
+export default SideMenu;

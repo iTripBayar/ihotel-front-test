@@ -3,7 +3,6 @@ import HeroCategory from '@/components/pageComponents/homePage/heroCategory';
 import CommonLocation from '@/components/pageComponents/homePage/commonLocation';
 import News from '@/components/pageComponents/homePage/news';
 import Footer from '@/components/common/footer';
-import BurgerMenu from '@/components/common/burgermenu';
 import { useState, useRef, useEffect } from 'react';
 import { useRequest } from 'ahooks';
 import HeaderVariants from '@/components/common/headerVariants';
@@ -19,6 +18,7 @@ import { CircularProgress } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 const ErrorComponent = dynamic(() => import('@/components/common/404'));
 import { useSession } from 'next-auth/react';
+import SideMenu from '@/components/common/sidemenu';
 
 const Home = () => {
   const [headerVer, setHeaderVer] = useState('default');
@@ -38,7 +38,7 @@ const Home = () => {
     };
     dispatch({
       type: "CHANGE_APP_STATE",
-      payload: { map: "", logOrSign: '' },
+      payload: { map: "", logOrSign: '', menu: '' },
     });
 
     const observer = new IntersectionObserver((entries) => {
@@ -62,8 +62,6 @@ const Home = () => {
     };
   }, []);
 
-
-
   const { data: session, status } = useSession({
     required: false,
   });
@@ -83,7 +81,6 @@ const Home = () => {
         {headerVer === "fixed" ? (
           <HeaderVariants
             ver={headerVer}
-            formattedDate={null}
             placesData={data ? data.places : []}
             cityData={data ? data.cities : []}
           />
@@ -93,7 +90,7 @@ const Home = () => {
           <LogIn />
         ) : null}
         {appState.logOrSign === "sign" ? <SignUp /> : null}
-        {appState.menu === "open" ? <BurgerMenu /> : null}
+        {appState.menu === "open" ? <SideMenu /> : null}
 
         <BottomSection ver={headerVer} handleScrollToTopVer={() => {}} />
         {loading ? (
@@ -106,7 +103,6 @@ const Home = () => {
         <div ref={searchBoxRef}>
           <SearchSection
             ver={"normal"}
-            formattedDate={null}
             placesData={data ? data.places : []}
             cityData={data ? data.cities : []}
           />

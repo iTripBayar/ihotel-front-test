@@ -6,28 +6,20 @@ import { useAppCtx } from '@/contexts/app';
 
 interface iProps {
   ver: string;
-  formattedDate: {
-    from: { year: string; month: string; date: string };
-    fromEn: { year: string; month: string; date: string };
-    to: { year: string; month: string; date: string };
-    toEn: { year: string; month: string; date: string };
-  } | null;
-  // searchData: SearchData.Data | undefined;
   placesData: SearchData.Places[];
   cityData: SearchData.Cities[];
-  // placesData={data ? data.places : []}
-  //             cityData={data ? data.cities : []}
 }
 
 const SearchSection = ({
   ver,
-  formattedDate,
   placesData,
   cityData,
 }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
   const filter = searchParams.get("filter");
+  const checkIn = searchParams.get("checkIn");
+  const checkOut = searchParams.get("checkOut");
   const router = useRouter();
   const { appState, dispatch } = useAppCtx();
 
@@ -147,7 +139,7 @@ const SearchSection = ({
           ) : null}
         </div>
       ) : null}
-      {ver === "hotel" && formattedDate !== null ? (
+      {ver === "hotel" && checkIn && checkOut ? (
         <div className="flex gap-[24px]">
           <div className="hidden lg:flex">
             <SearchBox
@@ -189,7 +181,7 @@ const SearchSection = ({
               />
             </svg>
             <p>
-              {`${formattedDate.from.month}/${formattedDate.from.date}/${formattedDate.from.year} - ${formattedDate.to.month}/${formattedDate.to.date}/${formattedDate.to.year}`}
+              {`${checkIn} - ${checkOut}`}
             </p>
           </button>
         </div>

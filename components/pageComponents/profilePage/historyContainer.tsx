@@ -10,7 +10,7 @@ import {
 import HistoryCard from "./historyCard";
 
 interface Props {
-  data: User.Order[]
+  data: User.Order[];
 }
 export default function HistoryContainer({ data }: Props) {
   const searchParams = useSearchParams();
@@ -79,7 +79,12 @@ export default function HistoryContainer({ data }: Props) {
         <TabPanels className="md:pt-[20px]">
           <TabPanel className="grid grid-cols-1 md:grid-cols-2 gap-[20px] xl:grid-cols-3">
             {data.length > 0 ? (
-              data.map((index, i) => <HistoryCard key={i} data={index} />)
+              data.map((index, i) => (
+                <HistoryCard
+                  key={i}
+                  data={index}
+                />
+              ))
             ) : (
               <div className="w-full text-center col-span-1 md:col-span-2 xl:col-span-3">
                 {lang === "en" ? "Currently empty!" : "Одоогоор оосон байна!"}
@@ -90,7 +95,12 @@ export default function HistoryContainer({ data }: Props) {
             {data.filter((index) => index.isOrderRequest === 1).length > 0 ? (
               data
                 .filter((index) => index.isOrderRequest === 1)
-                .map((index, i) => <HistoryCard key={i} data={index} />)
+                .map((index, i) => (
+                  <HistoryCard
+                    key={i}
+                    data={index}
+                  />
+                ))
             ) : (
               <div className="w-full text-center col-span-1 md:col-span-2 xl:col-span-3 font-medium text-sub-text/75">
                 {lang === "en" ? "Currently empty!" : "Одоогоор оосон байна!"}
@@ -101,7 +111,12 @@ export default function HistoryContainer({ data }: Props) {
             {data.filter((index) => index.isOrderRequest === 0).length > 0 ? (
               data
                 .filter((index) => index.isOrderRequest === 0)
-                .map((index, i) => <HistoryCard key={i} data={index} />)
+                .map((index, i) => (
+                  <HistoryCard
+                    key={i}
+                    data={index}
+                  />
+                ))
             ) : (
               <div className="w-full text-center col-span-1 md:col-span-2 xl:col-span-3 font-medium text-sub-text/75">
                 {lang === "en" ? "Currently empty!" : "Одоогоор оосон байна!"}
