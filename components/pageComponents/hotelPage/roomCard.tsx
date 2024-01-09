@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import Image from 'next/image';
-import { useSearchParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { useAppCtx } from '@/contexts/app';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import { Pagination } from 'swiper/modules';
-import { toast } from 'sonner';
+import { useState } from "react";
+import Image from "next/image";
+import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import { useAppCtx } from "@/contexts/app";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
+import { toast } from "sonner";
 
 interface Props {
   data: roomData.room;
@@ -18,13 +18,13 @@ interface Props {
 
 const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang');
+  const lang = searchParams.get("lang");
   const router = useRouter();
-  const cart = searchParams.getAll('cart');
-  const slug = searchParams.get('slug');
+  const cart = searchParams.getAll("cart");
+  const slug = searchParams.get("slug");
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
-  const days = searchParams.get('days');
+  const days = searchParams.get("days");
   const { appState, dispatch } = useAppCtx();
   const [openDesc, setOpenDesc] = useState(false);
 
@@ -41,16 +41,16 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
     if (value !== null && !params.get(name)) {
       params.set(name, value);
     } else if (value !== null && params.get(name)) {
-      if (value.split('$')[1] !== '0') {
+      if (value.split("$")[1] !== "0") {
         for (let i = 0; i < cart.length; i++) {
-          if (cart[i].split('$')[0] === data.id.toString()) {
+          if (cart[i].split("$")[0] === data.id.toString()) {
             params.delete(name, cart[i]);
           }
         }
         params.append(name, value);
       } else {
         for (let i = 0; i < cart.length; i++) {
-          if (appState.selectedAmount[i].split('$')[0] === data.id.toString()) {
+          if (appState.selectedAmount[i].split("$")[0] === data.id.toString()) {
             params.delete(name, cart[i]);
           }
         }
@@ -72,10 +72,10 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
     return params.toString();
   };
 
-  let updatedAmount = '';
+  let updatedAmount = "";
   if (appState.selectedAmount.length > 0) {
     for (let i = 0; i < appState.selectedAmount.length; i++) {
-      if (appState.selectedAmount[i].split('$')[0] === data.id.toString()) {
+      if (appState.selectedAmount[i].split("$")[0] === data.id.toString()) {
         updatedAmount = appState.selectedAmount[i];
       }
     }
@@ -85,8 +85,10 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
     roomAmount.push({ id: data?.id, amount: i + 1 });
   }
 
-  const showToast = (e:{roomName: string, amount: string}) => {
-    toast.success(`${e.amount} ${e.roomName} ${lang === 'en' ? 'added' : 'нэмэгдлээ'}`);
+  const showToast = (e: { roomName: string; amount: string }) => {
+    toast.success(
+      `${e.amount} ${e.roomName} ${lang === "en" ? "added" : "нэмэгдлээ"}`,
+    );
   };
 
   return (
@@ -100,7 +102,7 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
         modules={[Pagination]}
         className=" roomImages h-[225px] w-full rounded-t-[16px] 2xs:h-[275px] sm:h-[325px] md:h-[225px] xl:h-[250px] 2xl:h-[275px]"
       >
-        {data.images &&
+        {data.images ? (
           data.images.map((index, i) => (
             <SwiperSlide
               className="relative h-full w-full overflow-hidden"
@@ -118,6 +120,7 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
                     ? `${process.env.IMAGE_URL}${index}`
                     : "/samples/camp.png"
                 }
+                // src={index ? `${process.env.IMAGE_URL}${index}` : '/samples/camp.png'}
                 alt="/hotel"
                 fill={true}
                 quality={75}
@@ -133,7 +136,33 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
                 draggable={false}
               />
             </SwiperSlide>
-          ))}
+          ))
+        ) : (
+          <SwiperSlide
+            className="relative h-full w-full overflow-hidden"
+            // key={i}
+            onClick={() => {
+              dispatch({
+                type: "CHANGE_APP_STATE",
+                payload: { biggerImage: data.images },
+              });
+            }}
+          >
+            <Image
+              src={"/samples/camp.png"}
+              // src={index ? `${process.env.IMAGE_URL}${index}` : '/samples/camp.png'}
+              alt="/hotel"
+              fill={true}
+              quality={75}
+              loading="lazy"
+              sizes="50vw"
+              placeholder="blur"
+              blurDataURL={"/samples/camp.png"}
+              className="absolute h-auto w-auto select-none object-cover duration-700 blur-[2px]"
+              draggable={false}
+            />
+          </SwiperSlide>
+        )}
       </Swiper>
       <div className="flex w-full flex-col gap-[20px] px-[16px] pb-[20px] pt-[24px]">
         {/* name */}

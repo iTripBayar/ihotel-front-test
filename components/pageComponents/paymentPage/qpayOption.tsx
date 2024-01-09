@@ -11,9 +11,10 @@ import Success from './success';
 interface Props {
   handleError: () => void;
   handleTimeOut: () => void;
+  time: Date;
 }
 
-export default function QpayOption({ handleError, handleTimeOut }: Props) {
+export default function QpayOption({ handleError, handleTimeOut, time }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang');
   const id = searchParams.get('id');
@@ -91,7 +92,7 @@ export default function QpayOption({ handleError, handleTimeOut }: Props) {
                 </p>
               </div>
             </div>
-            <Timer time={data.createdAt} handleTimeOut={handleStop} />
+            <Timer time={time} handleTimeOut={handleStop} />
           </div>
           {!paymentData?.response.rows[0] ||
           paymentData?.response.rows[0].paymentStatus !== "PAID" ? (

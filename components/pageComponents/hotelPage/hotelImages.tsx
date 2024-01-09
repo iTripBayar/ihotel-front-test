@@ -26,27 +26,32 @@ const HotelImages = ({ images, image }: Props) => {
   const { dispatch } = useAppCtx();
   const swiper = useSwiper();
 
-  let aditionalImages = [
-    "/images/imageSample.png",
-    "/images/imageSample.png",
-    "/images/imageSample.png",
-    "/images/imageSample.png",
-    "/images/imageSample.png",
-    "/images/imageSample.png",
-    "/images/imageSample.png",
-    "/images/imageSample.png",
+  const moreImages = [
+    "/samples/camp.png",
+    "/samples/camp.png",
+    "/samples/camp.png",
+    "/samples/camp.png",
+    "/samples/camp.png",
+    "/samples/camp.png",
+    "/samples/camp.png",
+    "/samples/camp.png",
+    "/samples/camp.png",
+    "/samples/camp.png",
   ];
-  if (images.length < 10) {
-    aditionalImages = aditionalImages.slice(0, 10 - images.length);
-  }
 
   const [thumbsSwiper, setThumbsSwiper] = useState<typeof swiper | null>(null);
 
-  const allImages = [image, ...images];
+  let allImages = [image, ...images];
+  if (allImages.length === 1 && allImages[0] === "") {
+    allImages = [...moreImages];
+  } else if (allImages.length < 9) {
+    allImages = [...allImages, ...moreImages.splice(0, 9 - allImages.length)];
+  }
   return (
     <div className="flex w-full flex-col gap-[4px] overflow-hidden rounded-b-[6px] rounded-t-[12px]">
       <Swiper
-        loop
+        rewind
+        // loop
         spaceBetween={0}
         navigation={false}
         keyboard={true}
@@ -62,21 +67,37 @@ const HotelImages = ({ images, image }: Props) => {
             onClick={() => {
               dispatch({
                 type: "CHANGE_APP_STATE",
-                payload: { biggerImage: [image, ...images], imageIndex: i },
+                payload: { biggerImage: allImages, imageIndex: i },
               });
             }}
             className="relative h-[200px] w-full 2xs:h-[250px] sm:h-[300px] md:h-[375px] lg:h-[400px] xl:h-[425px] 2xl:h-[500px]"
           >
+            {index}
             <Image
-              src={`${process.env.IMAGE_URL}${index}`}
+              // src={
+              //   [image, ...images].length === 1 && [image, ...images][0] === ""
+              //     ? index
+              //     : `${process.env.IMAGE_URL}${index}`
+              // }
+              src={
+                index === "/samples/camp.png"
+                  ? index
+                  : `${process.env.IMAGE_URL}${index}`
+              }
               alt="/hotel"
               fill={true}
               quality={90}
               loading="lazy"
               sizes="50vw"
               placeholder="blur"
-              blurDataURL={`"_next/image/?url=${index}"`}
-              className="absolute h-auto w-auto select-none object-cover"
+              blurDataURL={
+                index === "/samples/camp.png"
+                  ? "/samples/camp.png"
+                  : `"_next/image/?url=${index}"`
+              }
+              className={`absolute h-auto w-auto select-none object-cover ${
+                index === "/samples/camp.png" ? " blur-[3px]" : ""
+              }`}
               draggable={false}
             />
           </SwiperSlide>
@@ -85,11 +106,24 @@ const HotelImages = ({ images, image }: Props) => {
       <Swiper
         onSwiper={setThumbsSwiper}
         loop={true}
+        // rewind={true}
         spaceBetween={4}
         slidesPerView={5}
         breakpoints={{
           640: {
             slidesPerView: 6,
+          },
+          768: {
+            slidesPerView: 7,
+          },
+          1024: {
+            slidesPerView: 8,
+          },
+          1280: {
+            slidesPerView: 9,
+          },
+          1536: {
+            slidesPerView: 9,
           },
         }}
         freeMode={true}
@@ -104,14 +138,29 @@ const HotelImages = ({ images, image }: Props) => {
             className="relative h-[60px] w-[60px] min-w-[60px] cursor-pointer 2xs:h-[75px] 2xs:w-[75px] 2xs:min-w-[75px] md:h-[100px]  md:min-w-[100px] lg:max-w-[100px] "
           >
             <Image
-              src={`${process.env.IMAGE_URL}${index}`}
+              // src={
+              //   [image, ...images].length === 1 && [image, ...images][0] === ""
+              //     ? index
+              //     : `${process.env.IMAGE_URL}${index}`
+              // }
+              src={
+                index === "/samples/camp.png"
+                  ? index
+                  : `${process.env.IMAGE_URL}${index}`
+              }
               alt="/hotel"
               fill={true}
               loading="lazy"
               sizes="50vw"
               placeholder="blur"
-              blurDataURL={`"_next/image/?url=${index}"`}
-              className="absolute h-auto w-auto select-none object-fill"
+              blurDataURL={
+                index === "/samples/camp.png"
+                  ? "/samples/camp.png"
+                  : `"_next/image/?url=${index}"`
+              }
+              className={`absolute h-auto w-auto select-none object-fill ${
+                index === "/samples/camp.png" ? "blur-[2px]" : ""
+              }`}
               draggable={false}
             />
           </SwiperSlide>

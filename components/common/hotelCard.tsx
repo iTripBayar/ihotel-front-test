@@ -88,7 +88,7 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
             }
             className={`h-auto w-auto select-none object-cover duration-700 ${
               ver !== "map" ? "hover:scale-110" : ""
-            }`}
+            } ${data?.image ? '' : 'blur-[1px]'}`}
             draggable={false}
           />
         </div>

@@ -10,9 +10,10 @@ import Success from "./success";
 interface Props {
   handleTimeOut: () => void;
   handleError: () => void;
+  time: Date
 }
 
-export default function PassOption({ handleTimeOut, handleError }: Props) {
+export default function PassOption({ handleTimeOut, handleError,time }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
   const id = searchParams.get("id");
@@ -148,7 +149,7 @@ export default function PassOption({ handleTimeOut, handleError }: Props) {
                 </p>
               </div>
             </div>
-            <Timer time={data.order.createdAt} handleTimeOut={handleStop} />
+            <Timer time={time} handleTimeOut={handleStop} />
           </div>
           {/* {paymentData?.response ? <>
           

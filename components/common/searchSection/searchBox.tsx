@@ -1,12 +1,13 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useAppCtx } from "@/contexts/app";
 import { useRequest } from "ahooks";
 import { fetchSearchQuery } from "@/utils";
+import { toggle } from "@nextui-org/react";
 
 interface iProps {
   placesData: SearchData.Places[];
@@ -28,8 +29,11 @@ const SearchBox = ({
   const [showDefault, setShowDefault] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
+  const toggle = searchParams.get("toggle");
+  const filter = searchParams.get("filter");
   const searchValue = searchParams.get("searchValue");
   const { appState, dispatch } = useAppCtx();
 
@@ -39,12 +43,43 @@ const SearchBox = ({
     },
     {
       manual: true,
-      // onSuccess: (res) => {
-      //   console.log(res);
-      // },
-      debounceWait: 500
+      debounceWait: 500,
     },
   );
+
+  const multipleCreateQueryString = (
+    name: string,
+    value: string | null,
+    name1: string,
+    value1: string | null,
+    name2: string,
+    value2: string | null,
+    name3: string,
+    value3: string | null,
+  ) => {
+    const params = new URLSearchParams(searchParams);
+    if (value !== null) {
+      params.set(name, value);
+    } else {
+      params.delete(name);
+    }
+    if (value1 !== null) {
+      params.set(name1, value1);
+    } else {
+      params.delete(name1);
+    }
+    if (value2 !== null) {
+      params.set(name2, value2);
+    } else {
+      params.delete(name2);
+    }
+    if (value3 !== null) {
+      params.set(name3, value3);
+    } else {
+      params.delete(name3);
+    }
+    return params.toString();
+  };
 
   const data: any[] = [];
   const suggestion = [
@@ -135,10 +170,36 @@ const SearchBox = ({
       } else {
         setShowDefault(true);
       }
-      
-        
     });
   }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        router.push(
+          `/search/?${multipleCreateQueryString(
+            "lang",
+            lang,
+            "toggle",
+            toggle,
+            "filter",
+            filter,
+            "searchValue",
+            query,
+          )}`,
+        );
+      }
+    };
+    if (value !== "") {
+      document.addEventListener("keydown", handleKeyDown);
+    } else {
+      document.removeEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [value]);
+
   return (
     <div
       className={`relative flex w-full  flex-col gap-[10px] within cursor-text ${
@@ -160,24 +221,12 @@ const SearchBox = ({
             ? "h-[36px] min-w-[225px] justify-between overflow-hidden rounded-full shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] lg:pr-0 xl:min-w-[400px] 2xl:min-w-[500px]"
             : ""
         }`}
-        // onClick={(e) => {
-        //   if (ver === "normal" || ver == "fixed") {
-        //     e.preventDefault();
-        //     inputRef.current?.focus();
-        //   }
-        // }}
         ref={searchRef}
       >
         <div
           className={`flex items-center gap-[8px] within  ${
             query !== "" ? "w-full " : "w-auto"
           }`}
-          // onClick={(e) => {
-          //   if (ver === "search" || ver === "headerSearch") {
-          //     e.preventDefault();
-          //     inputRef.current?.focus();
-          //   }
-          // }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -202,7 +251,6 @@ const SearchBox = ({
             }
             autoComplete="off"
             onChange={(event) => {
-              // event.target.value.trim();
               setQuery(event.target.value);
               setSelected(false);
               if (value && event.target.value.length < value.length) {
@@ -265,7 +313,7 @@ const SearchBox = ({
               stroke="currentColor"
               className={
                 query !== ""
-                  ? "max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px]"
+                  ? "max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px] filter"
                   : " 2x:min-w-[24px] max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px] 2xs:max-h-[24px] 2xs:min-h-[24px] 2xs:max-w-[24px] filter"
               }
             >

@@ -6,11 +6,6 @@ import "react-day-picker/dist/style.css";
 import { useAppCtx } from "@/contexts/app";
 import { toast } from "sonner";
 
-const newDate = new Date();
-const date = newDate.getDate();
-const month = newDate.getMonth() + 1;
-const year = newDate.getFullYear();
-
 interface Props {
   ver: string;
 }
@@ -23,6 +18,11 @@ export default function CalendarDialog({ ver }: Props) {
   const checkOut = searchParams.get("checkOut");
   const days = searchParams.get("days");
   const { dispatch } = useAppCtx();
+
+  const newDate = new Date();
+  const date = newDate.getDate();
+  const month = newDate.getMonth() + 1;
+  const year = newDate.getFullYear();
 
   const pathname = usePathname();
   const pastMonth = new Date(
@@ -111,12 +111,8 @@ export default function CalendarDialog({ ver }: Props) {
           mode="range"
           defaultMonth={pastMonth}
           selected={range}
-          // footer={footer}
           onSelect={setRange}
           numberOfMonths={2}
-          // fromDate={new Date()}
-          // components={{ Row: OnlyFutureRow }}
-          // hidden={isPastDate}
           showOutsideDays
           style={{
             width: "76%",

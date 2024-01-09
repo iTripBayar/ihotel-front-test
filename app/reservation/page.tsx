@@ -34,19 +34,15 @@ const ReservationPage = () => {
   const cart = searchParams.getAll("cart");
   const { appState, dispatch } = useAppCtx();
 
-  
-
   const { data: session } = useSession({
     required: false,
   });
   const {
     data: profileData,
     run,
-    loading: loadingProfileData,
-    error: errorProfileData,
   } = useRequest(
     (e: { email: string }) => {
-      return fetchProfileInto({ email: e.email });
+      return fetchProfileInto({ email: e.email, order_page: 1, review_page: 1 });
     },
     {
       manual: true,
@@ -62,8 +58,6 @@ const ReservationPage = () => {
       },
     },
   );
-
-
 
   const [clients, setClients] = useState({
     name: "",
@@ -92,24 +86,22 @@ const ReservationPage = () => {
   useEffect(() => {
     dispatch({
       type: "CHANGE_APP_STATE",
-      payload: { logOrSign: "", menu: "" },
+      payload: { logOrSign: "", menu: "", calendar: '' },
     });
   }, []);
   useEffect(() => {
     if (session?.user?.email) {
       run({ email: session?.user?.email });
-      
     }
   }, [session]);
-
   const { data, loading, error } = useRequest(() => {
     if (slug)
       return fetchDataHotel({
         slug: slug,
-        // checkIn: checkIn ? checkIn.split("|")[0] : "",
-        // checkOut: checkOut ? checkOut.split("|")[0] : "",
-        checkIn: "",
-        checkOut: "",
+        checkIn: checkIn ? checkIn.split("|")[0] : "",
+        checkOut: checkOut ? checkOut.split("|")[0] : "",
+        // checkIn: "",
+        // checkOut: "",
       });
     return fetchDataHotel({ slug: "", checkIn: "", checkOut: "" });
   });
@@ -121,7 +113,7 @@ const ReservationPage = () => {
         if (parseInt(cart[i].split("$")[0]) === data.rooms[j].id) {
           totalPrice =
             totalPrice +
-            data.rooms[j].priceDayUse *
+            data.rooms[j].defaultPrice *
               parseInt(cart[i].split("$")[1]) *
               parseInt(days);
         }
@@ -156,14 +148,13 @@ const ReservationPage = () => {
       hotel_id: data?.hotel.id ? `${data?.hotel.id}` : "",
       room_id: cart[i].split("$")[0],
       room_number: cart[i].split("$")[1],
-      person_number: "", //Зарим өрөөнүүд хүнээр захиалга үүсгэдэг. Энэ үед room_number 0 person_person хүний тоо байна
-
+      person_number: "1", //Зарим өрөөнүүд хүнээр захиалга үүсгэдэг. Энэ үед room_number 0 person_person хүний тоо байна
       room_price: data?.rooms.filter(
         (index) => index.id === parseInt(cart[i].split("$")[0]),
       )[0]
         ? data?.rooms
             .filter((index) => index.id === parseInt(cart[i].split("$")[0]))[0]
-            .priceDayUse.toString()
+            .defaultPrice.toString()
         : "",
       room_type: data?.rooms.filter(
         (index) => index.id === parseInt(cart[i].split("$")[0]),
@@ -185,7 +176,7 @@ const ReservationPage = () => {
         )[0] && days
           ? data?.rooms.filter(
               (index) => index.id === parseInt(cart[i].split("$")[0]),
-            )[0].priceDayUse *
+            )[0].defaultPrice *
             parseInt(cart[i].split("$")[1]) *
             parseInt(days)
           : ""
@@ -250,8 +241,6 @@ const ReservationPage = () => {
   if (serializedData) {
     unserializedData = unserialize(serializedData);
   }
-  console.log(clients)
-
   if (!error)
     return (
       <div>
@@ -304,8 +293,6 @@ const ReservationPage = () => {
               />
               <div className="lg:hidden">
                 <UserInfo
-                  session={session}
-                  country={profileData?.user.country}
                   ver={"mobile"}
                   stat={""}
                   clients={clients}
@@ -351,8 +338,6 @@ const ReservationPage = () => {
             <div className="relative hidden h-full w-full lg:col-span-2 lg:flex">
               <div className="sticky top-[72px] h-fit">
                 <UserInfo
-                  session={session}
-                  country={profileData?.user.country}
                   ver={"web"}
                   stat={stat}
                   clients={clients}

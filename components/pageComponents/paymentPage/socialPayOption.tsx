@@ -12,9 +12,10 @@ import { useAppCtx } from '@/contexts/app';
 interface Props {
   handleTimeOut: () => void;
   handleError: () => void;
+  time: Date
 }
 
-export default function SocialPayOption({ handleTimeOut, handleError }: Props) {
+export default function SocialPayOption({ handleTimeOut, handleError, time }: Props) {
   const searchParams = useSearchParams();
   const { appState } = useAppCtx();
   const pathname = usePathname();
@@ -94,7 +95,7 @@ export default function SocialPayOption({ handleTimeOut, handleError }: Props) {
                 </p>
               </div>
             </div>
-            <Timer time={data.order.createdAt} handleTimeOut={handleStop} />
+            <Timer time={time} handleTimeOut={handleStop} />
           </div>
           {paymentData?.response.status !== "SENT" ? (
             <div className="flex flex-col items-center justify-center gap-[24px]">

@@ -1,14 +1,19 @@
 export async function fetchProfileInto(e: {
   email: string | undefined;
+  order_page: number;
+  review_page: number;
 }): Promise<User.Data> {
   try {
-    const response = await fetch(`${process.env.WEB_URL}/ihotel/profile/info`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${process.env.WEB_URL}/ihotel/profile/info?order_page=${e.order_page}&review_page=${e.review_page}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: e.email }),
       },
-      body: JSON.stringify({ email: e.email }),
-    });
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);

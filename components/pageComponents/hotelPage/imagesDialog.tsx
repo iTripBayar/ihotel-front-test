@@ -139,9 +139,14 @@ export default function ImagesDialog() {
               }}
             >
               <img
-                src={`${process.env.IMAGE_URL}${index}`}
+                // src={`${process.env.IMAGE_URL}${index}`}
+                src={
+                  index === "/samples/camp.png"
+                    ? index
+                    : `${process.env.IMAGE_URL}${index}`
+                }
                 alt="Hotel images"
-                className="w-full h-auto"
+                className={`w-full h-auto ${index === '/samples/camp.png' ? 'blur-[3px]' : ''}`}
                 loading="lazy"
               />
             </SwiperSlide>

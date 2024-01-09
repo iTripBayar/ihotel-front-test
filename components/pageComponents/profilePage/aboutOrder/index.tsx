@@ -84,7 +84,12 @@ export default function AboutOrder({ data }: Props) {
     }
   };
 
-  console.log(data)
+  const handlePayment = () => {
+    router.push(
+      `/payment?id=${data.id}&tkn=${data.token}}&totalPrice=${totalPrice}`,
+    );
+  };
+
   return (
     <div className="flex flex-col w-full items-start sm:items-center gap-[16px] sm:gap-[20px] sm:pt-[8px] md:pt-[12px] md:gap-[24px] min-h-screen px-[16px] 2xs:px-[20px] sm:px-[50px] md:px-[72px] lg:px-[150px]">
       <h3 className="text-[16px] leading-[17px] text-main-text/75 font-medium md:text-[18px] md:leading-[20px]">
@@ -96,10 +101,12 @@ export default function AboutOrder({ data }: Props) {
           <Order
             data={data}
             handleCancelOrder={(id: number) => handleCancelOrder(id)}
+            handlePayment={handlePayment}
           />
           <Payment
             data={data}
             handleCancelOrder={(id: number) => handleCancelOrder(id)}
+            handlePayment={handlePayment}
           />
           <TermOfCancel
             data={data.hotel.cancellationPolicies}

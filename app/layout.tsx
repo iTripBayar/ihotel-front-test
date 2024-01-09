@@ -6,7 +6,6 @@ import { AppCtxProvider } from '@/contexts/app';
 import AuthProvider from '@/contexts/auth';
 import { CookiesProvider } from 'react-cookie';
 import { ChakraProvider } from '@chakra-ui/react';
-
 // import type { Metadata } from 'next';
 
 // export const metadata: Metadata = {

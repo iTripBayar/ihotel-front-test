@@ -2,7 +2,6 @@ import Image from "next/image";
 import { useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useAppCtx } from "@/contexts/app";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { Session } from "next-auth";

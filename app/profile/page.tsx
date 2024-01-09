@@ -26,6 +26,8 @@ export default function ProfilePage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const lang = searchParams.get("lang");
+  const order_page = searchParams.get("order_page");
+  const review_page = searchParams.get("review_page");
   const id = searchParams.get("id");
   const { appState, dispatch } = useAppCtx();
   const [action, setAction] = useState("");
@@ -43,18 +45,31 @@ export default function ProfilePage() {
     error,
   } = useRequest(
     (e: { email: string }) => {
-      return fetchProfileInto({ email: e.email });
+      return fetchProfileInto({
+        email: e.email,
+        order_page: order_page ? parseInt(order_page) : 1,
+        review_page: review_page ? parseInt(review_page) : 1,
+      });
     },
     {
       manual: true,
-      refreshDeps: [action],
+      // refreshDeps: [action, order_page, review_page],
+      onSuccess: (res) => console.log(res),
     },
   );
-  // appState.menu
+  useEffect(() => {
+    if (session?.user?.email) {
+      run({
+        email: session?.user?.email,
+      });
+    }
+  }, [order_page, review_page]);
 
   useEffect(() => {
     if (session?.user?.email) {
-      run({ email: session?.user?.email });
+      run({
+        email: session?.user?.email,
+      });
     }
     dispatch({
       type: "CHANGE_APP_STATE",
@@ -107,7 +122,7 @@ export default function ProfilePage() {
     signOut({ callbackUrl: "/" });
   };
 
-  if (!error)
+  if (!error) {
     if (loading === true) {
       return (
         <div className="flex flex-col">
@@ -122,70 +137,143 @@ export default function ProfilePage() {
         </div>
       );
     } else {
-      if (profileData) {
-        return (
-          <main className="flex flex-col relative gap-[20px]">
-            <Header
-              user={`${session?.user?.name
-                ?.charAt(0)
-                .toUpperCase()}${session?.user?.name?.slice(1)}`}
-            />
-            <BottomSection ver={"fixed"} handleScrollToTopVer={() => {}} />
-            {appState.menu === "open" ? <SideMenu session={session} /> : null}
-            <Toaster position="top-right" richColors />
-            {id && showOrder ? (
-              <AboutOrder data={showOrder} />
-            ) : (
-              <div className="flex w-full flex-col items-center gap-[24px] min-h-screen px-[16px] sm:px-[50px] md:px-[72px] lg:px-[100px] md:gap-[32px] lg:gap-[36px] ">
-                <ProfileInfo
-                  userData={profileData?.user}
+      return (
+        <main className="flex flex-col relative gap-[20px]">
+          <Header
+            user={`${session?.user?.name
+              ?.charAt(0)
+              .toUpperCase()}${session?.user?.name?.slice(1)}`}
+          />
+          <BottomSection ver={"fixed"} handleScrollToTopVer={() => {}} />
+          {appState.menu === "open" ? <SideMenu session={session} /> : null}
+          <Toaster position="top-right" richColors />
+          {id && showOrder ? (
+            <AboutOrder data={showOrder} />
+          ) : (
+            <div className="flex w-full flex-col items-center gap-[24px] min-h-screen px-[16px] sm:px-[50px] md:px-[72px] lg:px-[100px] md:gap-[32px] lg:gap-[36px] ">
+              <ProfileInfo
+                userData={profileData?.user}
+                totalOrders={profileData?.totalOrders}
+                totalReviews={profileData?.totalReviews}
+                handleSignOut={handleSignOut}
+                handleAction={(e: string) => setAction(e)}
+                action={action}
+              />
+              {action === "" || action === "saved" ? (
+                <HistoryContainer
+                  orderData={profileData?.orders ? profileData.orders : []}
+                  couponData={profileData?.coupons ? profileData.coupons : []}
                   totalOrders={profileData?.totalOrders}
-                  totalReviews={profileData?.totalReviews}
-                  handleSignOut={handleSignOut}
-                  handleAction={(e: string) => setAction(e)}
-                  action={action}
+                  totalCoupon={profileData?.totalCoupons}
                 />
-                {action === "" || action === "saved" ? (
-                  <HistoryContainer
-                    data={profileData?.orders ? profileData.orders : []}
-                  />
-                ) : (
-                  <EdtiSection
-                    action={action}
-                    handleAction={(e: string) => setAction(e)}
-                    userData={profileData?.user}
-                    updatedData={updatedData}
-                    run={runUpdate}
-                    loading={loadingUpdate}
-                  />
-                )}
-                <button
-                  onClick={() => router.back()}
-                  className="text-primary-blue font-medium py-[12px]"
-                >
-                  {lang === "en" ? "Back" : "Буцах"}
-                </button>
-              </div>
-            )}
-
-            <Footer />
-          </main>
-        );
-      } else {
-        return (
-          <div className="flex flex-col">
-            <Header
-              user={`${session?.user?.name
-                ?.charAt(0)
-                .toUpperCase()}${session?.user?.name?.slice(1)}`}
-            />
-            <div className="flex h-screen justify-center items-center">
-              <CircularProgress isIndeterminate={true} color="#3C76FE" />
+              ) : (
+                <EdtiSection
+                  action={action}
+                  handleAction={(e: string) => setAction(e)}
+                  userData={profileData?.user}
+                  updatedData={updatedData}
+                  run={runUpdate}
+                  loading={loadingUpdate}
+                />
+              )}
+              <button
+                onClick={() => router.back()}
+                className="text-primary-blue font-medium py-[12px]"
+              >
+                {lang === "en" ? "Back" : "Буцах"}
+              </button>
             </div>
-          </div>
-        );
-      }
+          )}
+          <Footer />
+        </main>
+      );
     }
+  } else {
+    return <ErrorComponent />;
+  }
 
-  return <ErrorComponent />;
+  // if (!error)
+  //   if (loading === true) {
+  //     return (
+  //       <div className="flex flex-col">
+  //         <Header
+  //           user={`${session?.user?.name
+  //             ?.charAt(0)
+  //             .toUpperCase()}${session?.user?.name?.slice(1)}`}
+  //         />
+  //         <div className="flex h-screen justify-center items-center">
+  //           <CircularProgress isIndeterminate={true} color="#3C76FE" />
+  //         </div>
+  //       </div>
+  //     );
+  //   } else {
+  //     if (profileData) {
+  //       return (
+  //         <main className="flex flex-col relative gap-[20px]">
+  //           <Header
+  //             user={`${session?.user?.name
+  //               ?.charAt(0)
+  //               .toUpperCase()}${session?.user?.name?.slice(1)}`}
+  //           />
+  //           <BottomSection ver={"fixed"} handleScrollToTopVer={() => {}} />
+  //           {appState.menu === "open" ? <SideMenu session={session} /> : null}
+  //           <Toaster position="top-right" richColors />
+  //           {id && showOrder ? (
+  //             <AboutOrder data={showOrder} />
+  //           ) : (
+  //             <div className="flex w-full flex-col items-center gap-[24px] min-h-screen px-[16px] sm:px-[50px] md:px-[72px] lg:px-[100px] md:gap-[32px] lg:gap-[36px] ">
+  //               <ProfileInfo
+  //                 userData={profileData?.user}
+  //                 totalOrders={profileData?.totalOrders}
+  //                 totalReviews={profileData?.totalReviews}
+  //                 handleSignOut={handleSignOut}
+  //                 handleAction={(e: string) => setAction(e)}
+  //                 action={action}
+  //               />
+  //               {action === "" || action === "saved" ? (
+  //                 <HistoryContainer
+  //                   orderData={profileData?.orders ? profileData.orders : []}
+  //                   couponData={profileData.coupons ? profileData.coupons : []}
+  //                   totalOrders={profileData.totalOrders}
+  //                   totalCoupon={profileData.totalCoupons}
+  //                 />
+  //               ) : (
+  //                 <EdtiSection
+  //                   action={action}
+  //                   handleAction={(e: string) => setAction(e)}
+  //                   userData={profileData?.user}
+  //                   updatedData={updatedData}
+  //                   run={runUpdate}
+  //                   loading={loadingUpdate}
+  //                 />
+  //               )}
+  //               <button
+  //                 onClick={() => router.back()}
+  //                 className="text-primary-blue font-medium py-[12px]"
+  //               >
+  //                 {lang === "en" ? "Back" : "Буцах"}
+  //               </button>
+  //             </div>
+  //           )}
+
+  //           <Footer />
+  //         </main>
+  //       );
+  //     } else {
+  //       return (
+  //         <div className="flex flex-col">
+  //           <Header
+  //             user={`${session?.user?.name
+  //               ?.charAt(0)
+  //               .toUpperCase()}${session?.user?.name?.slice(1)}`}
+  //           />
+  //           <div className="flex h-screen justify-center items-center">
+  //             <CircularProgress isIndeterminate={true} color="#3C76FE" />
+  //           </div>
+  //         </div>
+  //       );
+  //     }
+  //   }
+
+  // return <ErrorComponent />;
 }

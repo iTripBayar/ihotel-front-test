@@ -68,8 +68,8 @@ declare namespace HotelData {
     hotelCategoryId: number;
     hotelTypeId: number;
     id: number;
-    image: string;
-    images: string[];
+    image: string | null;
+    images: string[] | null;
     includedPrice: string | null;
     includedServiceMessage: string;
     introduction: string;

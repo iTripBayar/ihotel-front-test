@@ -24,17 +24,14 @@ interface OrderRooms {
 
 interface Props {
   data: User.Order;
+  handlePayment: () => void;
   handleCancelOrder: (id: number) => void;
 }
 
-export default function Payment({
-  data,
-  handleCancelOrder,
-}: Props) {
+export default function Payment({ data, handleCancelOrder, handlePayment }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
 
-  
   let totalPrice = { value: 0, value_en: 0 };
   const roomsData: OrderRooms[] = unserialize(data.rooms);
 
@@ -48,8 +45,6 @@ export default function Payment({
     subHours(new Date(data.checkIn), 3),
     `${lang === "en" ? "MMM dd, yyyy HH:mm:ss" : "yyyy-MM-dd HH:mm:ss"}`,
   );
-
-  console.log();
 
   return (
     <div className="flex flex-col gap-[16px] w-full items-center">
@@ -165,7 +160,10 @@ export default function Payment({
         </div>
         {data.status === "pending" ? (
           <div className="hidden gap-[12px] w-full pt-[16px] text-[16px] md:pt-0 m-auto md:flex md:flex-row md:max-w-[450px] justify-center items-center leading-[15px] ">
-            <button className="w-full rounded-full bg-main-online flex justify-center items-center text-white font-semibold uppercase h-[42px]">
+            <button
+              className="w-full rounded-full bg-main-online flex justify-center items-center text-white font-semibold uppercase h-[42px]"
+              onClick={handlePayment}
+            >
               {lang === "en" ? "Proceed to payment" : "Төлбөр төлөх"}
             </button>
             <button

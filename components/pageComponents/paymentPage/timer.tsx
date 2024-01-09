@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface Props {
-  time: string;
+  time: Date;
   handleTimeOut: () => void;
 }
 

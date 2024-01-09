@@ -39,9 +39,9 @@ const HotelPage = () => {
   const checkOut = searchParams.get("checkOut");
   const cart = searchParams.getAll("cart");
 
-   const { data: session } = useSession({
-     required: false,
-   });
+  const { data: session } = useSession({
+    required: false,
+  });
   const { appState, dispatch } = useAppCtx();
   const roomsContainer = useRef<HTMLDivElement>(null);
   const reviewsContainer = useRef<HTMLDivElement>(null);
@@ -75,10 +75,9 @@ const HotelPage = () => {
   useEffect(() => {
     dispatch({
       type: "CHANGE_APP_STATE",
-      payload: { logOrSign: "", menu: '' },
+      payload: { logOrSign: "", menu: "", calendar: "" },
     });
   }, []);
-
 
   const { data, loading, error } = useRequest(
     () => {
@@ -90,18 +89,21 @@ const HotelPage = () => {
         });
       return fetchDataHotel({ slug: "", checkIn: "", checkOut: "" });
     },
-    {onSuccess: (res) => {
-      router.replace(
-        `/hotel?${createQueryString(
-          "checkIn",
-          `${format(new Date(res.startdate), "MM/dd/yyyy")}`,
-          "checkOut",
-          `${format(new Date(res.enddate), "MM/dd/yyyy")}`,
-          "days",
-          "1",
-        )}`,
-      );
-    }}
+    {
+      onSuccess: (res) => {
+        router.replace(
+          `/hotel?${createQueryString(
+            "checkIn",
+            `${format(new Date(res.startdate), "MM/dd/yyyy")}`,
+            "checkOut",
+            `${format(new Date(res.enddate), "MM/dd/yyyy")}`,
+            "days",
+            "1",
+          )}`,
+        );
+      },
+      // refreshDeps: [checkIn, checkOut],
+    },
   );
 
   let stat = "";
@@ -159,7 +161,9 @@ const HotelPage = () => {
     if (ver === "rooms") {
       toast.warning(
         `${
-          lang === "en" ? "Please add a room into the cart!." : "Захиалах өрөө сонгож сагсанд хийнэ үү!."
+          lang === "en"
+            ? "Please add a room into the cart!."
+            : "Захиалах өрөө сонгож сагсанд хийнэ үү!."
         }`,
       );
       // Get the DOM element from the ref
@@ -185,12 +189,12 @@ const HotelPage = () => {
       imagesData.push(data.hotel.images[i]);
     }
   }
+
   if (!error)
     return (
       <main className="relative">
         <HeaderVariants
           ver={"hotel"}
-          // searchData={searchData}
           placesData={data ? data.places : []}
           cityData={data ? data.cities : []}
         />
@@ -275,10 +279,6 @@ const HotelPage = () => {
                             4,
                           )}-${data?.hotel?.phone.slice(4)}`}`
                         : "empty"}
-                      {/* {`${data?.hotel?.phone.slice(
-                        0,
-                        4,
-                      )}-${data?.hotel?.phone.slice(4)}`} */}
                     </p>
                   </div>
                   {/* mail */}
@@ -415,7 +415,6 @@ const HotelPage = () => {
                 />
               </div>
             ) : null}
-
             {/* recommended places */}
             {data?.offerHotels && data?.offerHotels.length > 0 ? (
               <div className="flex w-full flex-col gap-[24px] border-t-[1px] border-black/[.15] pt-[24px] lg:gap-[32px] lg:pt-[32px]">

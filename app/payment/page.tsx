@@ -1,16 +1,16 @@
-'use client';
-import Header from '@/components/common/header';
-import Footer from '@/components/common/footer';
-import SocialPayOption from '@/components/pageComponents/paymentPage/socialPayOption';
-import PassOption from '@/components/pageComponents/paymentPage/passOption';
-import QpayOption from '@/components/pageComponents/paymentPage/qpayOption';
-import { useAppCtx } from '@/contexts/app';
-import PaymentMethod from '@/components/pageComponents/paymentPage/paymentMethod';
-import { useRouter } from 'next/navigation';
-import { Alert, AlertIcon } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import ErrorComponent from '@/components/common/404';
-import SideMenu from '@/components/common/sidemenu';
+"use client";
+import Header from "@/components/common/header";
+import Footer from "@/components/common/footer";
+import SocialPayOption from "@/components/pageComponents/paymentPage/socialPayOption";
+import PassOption from "@/components/pageComponents/paymentPage/passOption";
+import QpayOption from "@/components/pageComponents/paymentPage/qpayOption";
+import { useAppCtx } from "@/contexts/app";
+import PaymentMethod from "@/components/pageComponents/paymentPage/paymentMethod";
+import { useRouter } from "next/navigation";
+import { Alert, AlertIcon } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import ErrorComponent from "@/components/common/404";
+import SideMenu from "@/components/common/sidemenu";
 import { useSession } from "next-auth/react";
 
 export default function PaymentPage() {
@@ -18,12 +18,13 @@ export default function PaymentPage() {
   const { appState, dispatch } = useAppCtx();
   const [showAlert, setShowAlert] = useState(false);
   const [error, setError] = useState(false);
+  const [currentTime] = useState(new Date());
 
   const handleTimeOut = () => {
     setShowAlert(true);
     dispatch({
-      type: 'CHANGE_APP_STATE',
-      payload: { paymentMethod: '' },
+      type: "CHANGE_APP_STATE",
+      payload: { paymentMethod: "" },
     });
     setTimeout(() => {
       setShowAlert(false);
@@ -33,15 +34,16 @@ export default function PaymentPage() {
   useEffect(() => {
     dispatch({
       type: "CHANGE_APP_STATE",
-      payload: { logOrSign: "", menu: '' },
+      payload: { logOrSign: "", menu: "" },
     });
   }, []);
-const handleError = () => {
-  setError(true);
-};
-const { data: session } = useSession({
-  required: false,
-});
+
+  const handleError = () => {
+    setError(true);
+  };
+  const { data: session } = useSession({
+    required: false,
+  });
   if (error === false) {
     return (
       <div className="flex min-h-screen w-full flex-col items-center justify-between relative">
@@ -71,16 +73,19 @@ const { data: session } = useSession({
                 <SocialPayOption
                   handleTimeOut={handleTimeOut}
                   handleError={handleError}
+                  time={currentTime}
                 />
               ) : appState.paymentMethod === "pass" ? (
                 <PassOption
                   handleTimeOut={handleTimeOut}
                   handleError={handleError}
+                  time={currentTime}
                 />
               ) : appState.paymentMethod === "qPay" ? (
                 <QpayOption
                   handleError={handleError}
                   handleTimeOut={handleTimeOut}
+                  time={currentTime}
                 />
               ) : null}
             </div>

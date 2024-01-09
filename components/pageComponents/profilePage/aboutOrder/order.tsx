@@ -3,9 +3,10 @@ import { useSearchParams } from "next/navigation";
 interface Props {
   data: User.Order;
   handleCancelOrder: (id: number)=> void;
+  handlePayment: ()=>void
 }
 
-export default function Order({ data, handleCancelOrder }: Props) {
+export default function Order({ data, handleCancelOrder, handlePayment }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
   const clientData = JSON.parse(data.userdata);
@@ -14,7 +15,10 @@ export default function Order({ data, handleCancelOrder }: Props) {
     <div className="flex flex-col gap-[12px] w-full md:flex-col-reverse md:items-center">
       {data.status === "pending" ? (
         <div className="flex flex-col gap-[12px] w-full pt-[16px] text-[16px] md:pt-0 md:hidden md:max-w-[450px] justify-center leading-[15px] ">
-          <button className="w-full rounded-full bg-main-online flex justify-center items-center text-white font-semibold uppercase h-[42px]">
+          <button
+            className="w-full rounded-full bg-main-online flex justify-center items-center text-white font-semibold uppercase h-[42px]"
+            onClick={handlePayment}
+          >
             {lang === "en" ? "Proceed to payment" : "Төлбөр төлөх"}
           </button>
           <button

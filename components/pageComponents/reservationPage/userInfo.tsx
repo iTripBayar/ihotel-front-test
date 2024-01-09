@@ -1,11 +1,8 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useState, useMemo, Fragment } from "react";
+import React, { useState, useMemo } from "react";
 import { Select, SelectItem } from "@nextui-org/react";
 import countryList from "react-select-country-list";
-import { Session } from "next-auth";
-import { Listbox, Transition, Combobox } from "@headlessui/react";
-// import Select from "react-select";
 
 interface Props {
   ver: string;
@@ -26,8 +23,6 @@ interface Props {
   }) => void; 
   handleSubmit: () => void;
   orderLoading: boolean;
-  session: Session | null;
-  country: string | null | undefined;
 }
 export default function UserInfo({
   ver,
@@ -36,8 +31,6 @@ export default function UserInfo({
   updateClients,
   handleSubmit,
   orderLoading,
-  session,
-  country,
 }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");

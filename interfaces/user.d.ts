@@ -2,10 +2,12 @@ declare namespace User {
   interface Data {
     message: string;
     orders: Order[];
+    coupons: Order[];
     reviews: Reviews[];
     success: boolean;
     totalOrders: number;
     totalReviews: number;
+    totalCoupons: number;
     user: User;
   }
   interface User {
