@@ -1,58 +1,19 @@
 import { useSearchParams } from "next/navigation";
-import { toast } from "sonner";
 
 interface Props {
   data: User.Order;
+  handleCancelOrder: (id: number)=> void;
 }
 
-export default function Order({ data }: Props) {
+export default function Order({ data, handleCancelOrder }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
   const clientData = JSON.parse(data.userdata);
 
-  const handleCancelOrder = async (id: number) => {
-    try {
-      const response = await fetch(
-        `${process.env.WEB_URL}/ihotel/order/cancel/${id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          // body: JSON.stringify({
-          //   id: id
-          // }),
-        },
-      );
-      if (!response.ok) {
-        toast.error(`${lang === "en" ? "Error!" : "Алдаа гарлаа"}`);
-      } else {
-        toast.success(
-          `${
-            lang === "en" ? "Cancellation successful!" : "Амжилттай цуцлагдлаа!"
-          }`,
-        );
-      }
-      // const res = await response.json();
-      // console.log(res);
-    } catch (error: any) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error("HTTP error! Status:", error.response.status);
-        // You can also access the response data (if available)
-        console.error("Response data:", error.response.data);
-      } else {
-        // The request was made but no response was received
-        console.error("Request error:", error.message);
-      }
-    }
-  };
   return (
     <div className="flex flex-col gap-[12px] w-full md:flex-col-reverse md:items-center">
       {data.status === "pending" ? (
-        <div className="flex flex-col gap-[12px] w-full pt-[16px] text-[16px] md:pt-0 md:flex-row md:max-w-[450px] justify-center leading-[15px] ">
+        <div className="flex flex-col gap-[12px] w-full pt-[16px] text-[16px] md:pt-0 md:hidden md:max-w-[450px] justify-center leading-[15px] ">
           <button className="w-full rounded-full bg-main-online flex justify-center items-center text-white font-semibold uppercase h-[42px]">
             {lang === "en" ? "Proceed to payment" : "Төлбөр төлөх"}
           </button>

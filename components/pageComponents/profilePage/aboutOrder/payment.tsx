@@ -1,4 +1,6 @@
 import { useSearchParams } from "next/navigation";
+import { format, subHours } from "date-fns";
+import { unserialize } from "serialize-php";
 
 interface OrderRooms {
   by_person: boolean;
@@ -21,15 +23,33 @@ interface OrderRooms {
 }
 
 interface Props {
-  data: OrderRooms[];
-  duration: number;
-  totalPrice: { value: number; value_en: number };
-  status: string;
+  data: User.Order;
+  handleCancelOrder: (id: number) => void;
 }
 
-export default function Payment({ data, duration, totalPrice, status }: Props) {
+export default function Payment({
+  data,
+  handleCancelOrder,
+}: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
+
+  
+  let totalPrice = { value: 0, value_en: 0 };
+  const roomsData: OrderRooms[] = unserialize(data.rooms);
+
+  for (let i = 0; i < roomsData.length; i++) {
+    totalPrice = {
+      value: totalPrice.value + roomsData[i].rates[0].value,
+      value_en: totalPrice.value_en + roomsData[i].rates[0].value_en,
+    };
+  }
+  const payBy = format(
+    subHours(new Date(data.checkIn), 3),
+    `${lang === "en" ? "MMM dd, yyyy HH:mm:ss" : "yyyy-MM-dd HH:mm:ss"}`,
+  );
+
+  console.log();
 
   return (
     <div className="flex flex-col gap-[16px] w-full items-center">
@@ -37,15 +57,15 @@ export default function Payment({ data, duration, totalPrice, status }: Props) {
         {lang === "en" ? "Payment information" : "Төлбөрийн мэдээлэл"}
       </p>
       <div className="flex flex-col w-full gap-[16px]">
-        {data.length > 0
-          ? data.map((index, i) => (
+        {roomsData.length > 0
+          ? roomsData.map((index, i) => (
               <div
                 className={`flex flex-col gap-[16px] 
                 `}
                 key={i}
               >
                 {/* room number */}
-                {data.length > 1 ? (
+                {roomsData.length > 1 ? (
                   <div className="flex justify-between items-center gap-[12px]">
                     <div className="w-full h-[1px] border-t-sub-text/25 border-t border-dashed"></div>
                     <p className="text-sub-text/50 uppercase text-[14px] leading-[14px] flex justify-center items-center gap-[6px]">
@@ -102,8 +122,8 @@ export default function Payment({ data, duration, totalPrice, status }: Props) {
           </p>
           <p className="text-main-text">
             {lang === "en"
-              ? `${duration} ${duration > 1 ? "days" : "day"}`
-              : `${duration} хоног`}
+              ? `${data.day} ${data.day > 1 ? "days" : "day"}`
+              : `${data.day} хоног`}
           </p>
         </div>
         <div
@@ -118,8 +138,52 @@ export default function Payment({ data, duration, totalPrice, status }: Props) {
               : `${totalPrice.value.toLocaleString()} ₮`}
           </p>
         </div>
-        {status === "pending" ? (
-          <button className="w-full rounded-full bg-main-online my-[12px] flex justify-center items-center text-white font-semibold uppercase h-[42px] md:hidden">
+        <div
+          className={`flex flex-col w-full gap-[16px] items-center ${
+            data.status === "pending"
+              ? "md:grid md:grid-cols-2  md:items-start"
+              : ""
+          }`}
+        >
+          <p
+            className={`w-full flex justify-center items-center p-[16px] text-sub-text md:h-full md:items-start font-medium text-[14px] border border-sub-text/50 rounded-[12px] text-justify ${
+              data.status !== "pending" ? "max-w-[450px]" : ""
+            }`}
+          >
+            {lang === "en"
+              ? "Above amount is to be paid to the Property (Hotel & Tourist Camp) and iHotel.mn does not charge you any additional fee such as booking or administration fee."
+              : "Дээрх дүн нь зочид буудал (амралтын газар) төлөгдөх дүн бөгөөд iHotel.mn нь танаас ямар нэгэн нэмэлт төлбөр авахгүй болно."}
+          </p>
+
+          {data.status === "pending" ? (
+            <p className="w-full flex justify-center items-center p-[16px] text-primary-blue ] font-medium text-[14px] border border-primary-blue rounded-[12px] text-justify">
+              {lang === "en"
+                ? `Your reservation will be confirmed once your payment is completed before ${payBy}. If your payment is not confirmed, please be noted that your reservation will be cancelled automatically.`
+                : `Та ${payBy} өдрөөс өмнө дээрх төлбөрийг төлж захиалгаа баталгаажуулна уу. Дурдсан хугацаанд төлбөр хийгдээгүй тохиолдолд таны захиалга автоматаар цуцлагдах болно.`}
+            </p>
+          ) : null}
+        </div>
+        {data.status === "pending" ? (
+          <div className="hidden gap-[12px] w-full pt-[16px] text-[16px] md:pt-0 m-auto md:flex md:flex-row md:max-w-[450px] justify-center items-center leading-[15px] ">
+            <button className="w-full rounded-full bg-main-online flex justify-center items-center text-white font-semibold uppercase h-[42px]">
+              {lang === "en" ? "Proceed to payment" : "Төлбөр төлөх"}
+            </button>
+            <button
+              className="w-full rounded-full border-[2px] border-main-offline uppercase text-main-offline h-[42px] flex justify-center items-center font-medium"
+              onClick={() => {
+                handleCancelOrder(data.id);
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1500);
+              }}
+            >
+              {lang === "en" ? "Cancel" : "Цуцлах"}
+            </button>
+          </div>
+        ) : null}
+
+        {data.status === "pending" ? (
+          <button className="w-full rounded-full bg-main-online mt-[6px] flex justify-center items-center text-white font-semibold uppercase h-[42px] md:hidden">
             {lang === "en" ? "Proceed to payment" : "Төлбөр төлөх"}
           </button>
         ) : null}

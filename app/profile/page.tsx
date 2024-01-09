@@ -131,12 +131,10 @@ export default function ProfilePage() {
                 .toUpperCase()}${session?.user?.name?.slice(1)}`}
             />
             <BottomSection ver={"fixed"} handleScrollToTopVer={() => {}} />
-            {appState.menu === "open" ? <SideMenu /> : null}
+            {appState.menu === "open" ? <SideMenu session={session} /> : null}
             <Toaster position="top-right" richColors />
             {id && showOrder ? (
-              <AboutOrder
-                data={showOrder}
-              />
+              <AboutOrder data={showOrder} />
             ) : (
               <div className="flex w-full flex-col items-center gap-[24px] min-h-screen px-[16px] sm:px-[50px] md:px-[72px] lg:px-[100px] md:gap-[32px] lg:gap-[36px] ">
                 <ProfileInfo

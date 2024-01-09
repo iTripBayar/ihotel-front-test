@@ -11,6 +11,7 @@ import { Alert, AlertIcon } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import ErrorComponent from '@/components/common/404';
 import SideMenu from '@/components/common/sidemenu';
+import { useSession } from "next-auth/react";
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -38,11 +39,19 @@ export default function PaymentPage() {
 const handleError = () => {
   setError(true);
 };
+const { data: session } = useSession({
+  required: false,
+});
   if (error === false) {
     return (
       <div className="flex min-h-screen w-full flex-col items-center justify-between relative">
-        <Header user={""} />
-        {appState.menu === "open" ? <SideMenu /> : null}
+        <Header
+          user={`${session?.user?.name
+            ?.charAt(0)
+            .toUpperCase()}${session?.user?.name?.slice(1)}`}
+        />
+        {appState.menu === "open" ? <SideMenu session={session} /> : null}
+
         <div className="2xl:px[200px] relative flex min-h-[50vh] w-full flex-col items-center justify-start px-[16px] pt-[16px] sm:px-[42px] sm:pt-[24px] md:px-[72px] lg:px-[150px]">
           {showAlert === true ? (
             <div className="fixed top-[62px] z-[100] max-w-[250px]">

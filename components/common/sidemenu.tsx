@@ -5,17 +5,20 @@ import { useAppCtx } from "@/contexts/app";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import { Session } from "next-auth";
 
-const SideMenu = () => {
+interface Props {
+  session: Session | null;
+}
+
+const SideMenu = ({ session }: Props) => {
   const [closeAnimation, setCloseAnimation] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const lang = searchParams.get("lang");
   const { appState, dispatch } = useAppCtx();
-  const { data: session } = useSession({
-    required: false,
-  });
+
   const createQueryString = (name: string, value: string | null) => {
     const params = new URLSearchParams(searchParams);
     if (value !== null) {

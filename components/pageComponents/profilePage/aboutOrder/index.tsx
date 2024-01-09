@@ -4,6 +4,7 @@ import Order from "./order";
 import Payment from "./payment";
 import TermOfCancel from "./termOfCancel";
 import { unserialize } from "serialize-php";
+import { toast } from "sonner";
 
 interface OrderRooms {
   by_person: boolean;
@@ -42,6 +43,48 @@ export default function AboutOrder({ data }: Props) {
       value_en: totalPrice.value_en + roomsData[i].rates[0].value_en,
     };
   }
+
+  const handleCancelOrder = async (id: number) => {
+    try {
+      const response = await fetch(
+        `${process.env.WEB_URL}/ihotel/order/cancel/${id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          // body: JSON.stringify({
+          //   id: id
+          // }),
+        },
+      );
+      if (!response.ok) {
+        toast.error(`${lang === "en" ? "Error!" : "Алдаа гарлаа"}`);
+      } else {
+        toast.success(
+          `${
+            lang === "en" ? "Cancellation successful!" : "Амжилттай цуцлагдлаа!"
+          }`,
+        );
+      }
+      // const res = await response.json();
+      // console.log(res);
+    } catch (error: any) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error("HTTP error! Status:", error.response.status);
+        // You can also access the response data (if available)
+        console.error("Response data:", error.response.data);
+      } else {
+        // The request was made but no response was received
+        console.error("Request error:", error.message);
+      }
+    }
+  };
+
+  console.log(data)
   return (
     <div className="flex flex-col w-full items-start sm:items-center gap-[16px] sm:gap-[20px] sm:pt-[8px] md:pt-[12px] md:gap-[24px] min-h-screen px-[16px] 2xs:px-[20px] sm:px-[50px] md:px-[72px] lg:px-[150px]">
       <h3 className="text-[16px] leading-[17px] text-main-text/75 font-medium md:text-[18px] md:leading-[20px]">
@@ -50,12 +93,13 @@ export default function AboutOrder({ data }: Props) {
       <div className="flex flex-col rounded-[20px] lg:rounded-none w-full gap-[24px] lg:gap-[32px] md:gap-[16px] pb-[16px] sm:pb-[20px]">
         <General data={data.hotel} />
         <div className="flex flex-col rounded-[20px] w-full gap-[24px] md:gap-[16px] shadow-[0px_0px_12px_4px_rgb(0,0,0,0.15)] md:px-[24px] sm:px-[20px] px-[16px] lg:px-[32px] pb-[16px] lg:pb-[20px] xl:px-[50px] xl:pb-[32px] 2xl:px-[100px] 2xl:pb-[48px]">
-          <Order data={data} />
+          <Order
+            data={data}
+            handleCancelOrder={(id: number) => handleCancelOrder(id)}
+          />
           <Payment
-            data={roomsData}
-            duration={data.day}
-            totalPrice={totalPrice}
-            status={data.status}
+            data={data}
+            handleCancelOrder={(id: number) => handleCancelOrder(id)}
           />
           <TermOfCancel
             data={data.hotel.cancellationPolicies}

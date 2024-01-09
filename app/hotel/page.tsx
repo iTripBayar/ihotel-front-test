@@ -28,6 +28,7 @@ import { format } from "date-fns";
 const ErrorComponent = dynamic(() => import("@/components/common/404"));
 import { Toaster, toast } from "sonner";
 import SideMenu from "@/components/common/sidemenu";
+import { useSession } from "next-auth/react";
 
 const HotelPage = () => {
   const searchParams = useSearchParams();
@@ -38,6 +39,9 @@ const HotelPage = () => {
   const checkOut = searchParams.get("checkOut");
   const cart = searchParams.getAll("cart");
 
+   const { data: session } = useSession({
+     required: false,
+   });
   const { appState, dispatch } = useAppCtx();
   const roomsContainer = useRef<HTMLDivElement>(null);
   const reviewsContainer = useRef<HTMLDivElement>(null);
@@ -201,7 +205,8 @@ const HotelPage = () => {
           <LogIn />
         ) : null}
         {appState.logOrSign === "sign" ? <SignUp /> : null}
-        {appState.menu === "open" ? <SideMenu /> : null}
+        {appState.menu === "open" ? <SideMenu session={session} /> : null}
+
         <BottomSection ver={"hotel"} handleScrollToTopVer={() => {}} />
         <Dialogs
           roomPrices={roomPrices}

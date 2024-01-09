@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, Fragment } from "react";
 import { Select, SelectItem } from "@nextui-org/react";
 import countryList from "react-select-country-list";
+import { Session } from "next-auth";
+import { Listbox, Transition, Combobox } from "@headlessui/react";
 // import Select from "react-select";
 
 interface Props {
@@ -21,9 +23,11 @@ interface Props {
     email: string;
     phone: string;
     nationality: string;
-  }) => void;
+  }) => void; 
   handleSubmit: () => void;
   orderLoading: boolean;
+  session: Session | null;
+  country: string | null | undefined;
 }
 export default function UserInfo({
   ver,
@@ -32,6 +36,8 @@ export default function UserInfo({
   updateClients,
   handleSubmit,
   orderLoading,
+  session,
+  country,
 }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
@@ -99,14 +105,7 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
-            // onKeyDown={(e) => {
-            //   const regex = /^[A-Za-z]+$/;
-            //   const isValid = regex.test(e.key);
-
-            //   if (!isValid) {
-            //     e.preventDefault();
-            //   }
-            // }}
+            value={clients.name}
             placeholder={lang === "en" ? "Given name" : "Нэр"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
@@ -126,14 +125,7 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
-            // onKeyDown={(e) => {
-            //   const regex = /^[A-Za-z]+$/;
-            //   const isValid = regex.test(e.key);
-
-            //   if (!isValid) {
-            //     e.preventDefault();
-            //   }
-            // }}
+            value={clients.surName}
             placeholder={lang === "en" ? "Family name" : "Овог"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
@@ -152,6 +144,7 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
+            value={clients.email}
             placeholder={lang === "en" ? "Email" : "И-мэйл"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
@@ -161,16 +154,6 @@ export default function UserInfo({
             name={`phone`}
             pattern="[0-9]+"
             required
-            // onKeyDown={(e) => {
-            //   // Allow only numeric characters (0-9)
-            //   const isNumericOrBackspace =
-            //     /^[0-9]$/.test(e.key) ||
-            //     e.key === "Backspace" ||
-            //     e.key === "Tab";
-            //   if (!isNumericOrBackspace) {
-            //     e.preventDefault();
-            //   }
-            // }}
             onChange={(e) => {
               const value = {
                 name: clients.name,
@@ -181,33 +164,23 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
+            value={clients.phone}
             placeholder={lang === "en" ? "Phone number" : "Утасны дугаар"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
-          {/* <input
-            type="text"
-            id={`nationality`}
-            name={`nationality`}
-            pattern="[A-Za-z]+"
-            required
-            onChange={(e) => {
-              const value = {
-                name: clients.name,
-                surName: clients.surName,
-                email: clients.email,
-                phone: clients.phone,
-                nationality: e.target.value,
-              };
-              updateClients(value);
-            }}
-            placeholder={lang === "en" ? "Nationality" : "Иргэншил"}
-            className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
-          /> */}
           <Select
             isRequired
             aria-label="Nationality"
             placeholder={lang === "en" ? "Nationality" : "Иргэншил"}
-            defaultSelectedKeys={["Mongolia"]}
+            // defaultSelectedKeys={[
+            //   `${
+            //     clients.nationality !== ""
+            //       ? clients.nationality
+            //       : 'Mongolia'
+            //   }`,
+            // ]}
+            defaultSelectedKeys={[clients.nationality]}
+            value={clients.nationality}
             onChange={(e) => {
               const value = {
                 name: clients.name,
@@ -474,14 +447,7 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
-            // onKeyDown={(e) => {
-            //   const regex = /^[A-Za-z]+$/;
-            //   const isValid = regex.test(e.key);
-
-            //   if (!isValid) {
-            //     e.preventDefault();
-            //   }
-            // }}
+            value={clients.name}
             placeholder={lang === "en" ? "Given name" : "Нэр"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
@@ -501,14 +467,7 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
-            // onKeyDown={(e) => {
-            //   const regex = /^[A-Za-z]+$/;
-            //   const isValid = regex.test(e.key);
-
-            //   if (!isValid) {
-            //     e.preventDefault();
-            //   }
-            // }}
+            value={clients.surName}
             placeholder={lang === "en" ? "Family name" : "Овог"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
@@ -527,6 +486,7 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
+            value={clients.email}
             placeholder={lang === "en" ? "Email" : "И-мэйл"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
@@ -536,16 +496,6 @@ export default function UserInfo({
             name={`phone`}
             pattern="[0-9]+"
             required
-            // onKeyDown={(e) => {
-            //   // Allow only numeric characters (0-9)
-            //   const isNumericOrBackspace =
-            //     /^[0-9]$/.test(e.key) ||
-            //     e.key === "Backspace" ||
-            //     e.key === "Tab";
-            //   if (!isNumericOrBackspace) {
-            //     e.preventDefault();
-            //   }
-            // }}
             onChange={(e) => {
               const value = {
                 name: clients.name,
@@ -556,34 +506,15 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
+            value={clients.phone}
             placeholder={lang === "en" ? "Phone number" : "Утасны дугаар"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
-          {/* <input
-            type="text"
-            id={`nationality`}
-            name={`nationality`}
-            pattern="[A-Za-z]+"
-            required
-            onChange={(e) => {
-              const value = {
-                name: clients.name,
-                surName: clients.surName,
-                email: clients.email,
-                phone: clients.phone,
-                nationality: e.target.value,
-              };
-              updateClients(value);
-            }}
-            placeholder={lang === "en" ? "Nationality" : "Иргэншил"}
-            className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
-          /> */}
           <Select
             isRequired
             aria-label="Nationality"
             placeholder={lang === "en" ? "Nationality" : "Иргэншил"}
-            defaultSelectedKeys={["Mongolia"]}
-            // onOpenChange={}
+            defaultSelectedKeys={[clients.nationality]}
             disableAnimation={true}
             onChange={(e) => {
               const value = {

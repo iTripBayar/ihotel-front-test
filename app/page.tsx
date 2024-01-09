@@ -23,6 +23,9 @@ import SideMenu from '@/components/common/sidemenu';
 const Home = () => {
   const [headerVer, setHeaderVer] = useState('default');
   const searchBoxRef = useRef(null);
+  const { data: session } = useSession({
+    required: false,
+  });
 
   const { data, loading, error } = useRequest(() => {
     return fetchData();
@@ -62,9 +65,7 @@ const Home = () => {
     };
   }, []);
 
-  const { data: session, status } = useSession({
-    required: false,
-  });
+  
 
   if (!error)
     return (
@@ -90,7 +91,7 @@ const Home = () => {
           <LogIn />
         ) : null}
         {appState.logOrSign === "sign" ? <SignUp /> : null}
-        {appState.menu === "open" ? <SideMenu /> : null}
+        {appState.menu === "open" ? <SideMenu session={session} /> : null}
 
         <BottomSection ver={headerVer} handleScrollToTopVer={() => {}} />
         {loading ? (

@@ -18,6 +18,7 @@ import { useEffect, useRef } from "react";
 import useWindowSize from "@/hooks/windowSize";
 import MapBtn from "@/components/common/fixedButtons/mapBtn";
 import SideMenu from "@/components/common/sidemenu";
+import { useSession } from "next-auth/react";
 const ErrorComponent = dynamic(() => import("@/components/common/404"));
 
 const SearchPage = () => {
@@ -34,6 +35,10 @@ const SearchPage = () => {
   const { appState, dispatch } = useAppCtx();
   const size = useWindowSize();
   const divRef = useRef<HTMLDivElement>(null);
+
+   const { data: session } = useSession({
+     required: false,
+   });
 
   const newDate = new Date();
   const nextDay = addDays(newDate, 1);
@@ -148,7 +153,8 @@ const SearchPage = () => {
           <LogIn />
         ) : null}
         {appState.logOrSign === "sign" ? <SignUp /> : null}
-        {appState.menu === "open" ? <SideMenu /> : null}
+        {appState.menu === "open" ? <SideMenu session={session} /> : null}
+
         <div className="fixed  bottom-[24px] left-[0%] z-[899]  flex w-auto animate-fade flex-row items-stretch justify-between gap-[16px] px-[16px] text-white sm:px-[42px] sm:pl-[39px] md:px-[32px] lg:bottom-[12px]">
           {appState.map === "" ? <MapBtn ver={"default"} /> : null}
         </div>

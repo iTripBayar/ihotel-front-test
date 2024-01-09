@@ -1,44 +1,76 @@
-'use client';
-import HeaderVariants from '@/components/common/headerVariants';
-import CalendarDialog from '@/components/pageComponents/hotelPage/dialogs/calendarDialog';
-import AdditionalRequest from '@/components/pageComponents/reservationPage/additionalRequest';
-import BottomDialog from '@/components/pageComponents/reservationPage/bottomDialog';
-import CancelTerm from '@/components/pageComponents/reservationPage/cancelTerm';
-import GeneralInfo from '@/components/pageComponents/reservationPage/generalInfo';
-import OrderInfo from '@/components/pageComponents/reservationPage/orderInfo';
-import UserInfo from '@/components/pageComponents/reservationPage/userInfo';
-import { fetchDataHotel, fetchCreateOrder } from '@/utils';
-import { useRequest } from 'ahooks';
-import Footer from '@/components/common/footer';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useAppCtx } from '@/contexts/app';
-import { unserialize } from 'serialize-php';
-import { CircularProgress } from '@chakra-ui/react';
-import LogIn from '@/components/common/signIn/logIn';
-import SignUp from '@/components/common/signIn/signUp';
-import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
-import SideMenu from '@/components/common/sidemenu';
-const ErrorComponent = dynamic(() => import('@/components/common/404'));
+"use client";
+import HeaderVariants from "@/components/common/headerVariants";
+import CalendarDialog from "@/components/pageComponents/hotelPage/dialogs/calendarDialog";
+import AdditionalRequest from "@/components/pageComponents/reservationPage/additionalRequest";
+import BottomDialog from "@/components/pageComponents/reservationPage/bottomDialog";
+import CancelTerm from "@/components/pageComponents/reservationPage/cancelTerm";
+import GeneralInfo from "@/components/pageComponents/reservationPage/generalInfo";
+import OrderInfo from "@/components/pageComponents/reservationPage/orderInfo";
+import UserInfo from "@/components/pageComponents/reservationPage/userInfo";
+import { fetchDataHotel, fetchCreateOrder } from "@/utils";
+import { useRequest } from "ahooks";
+import Footer from "@/components/common/footer";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useAppCtx } from "@/contexts/app";
+import { unserialize } from "serialize-php";
+import { CircularProgress } from "@chakra-ui/react";
+import LogIn from "@/components/common/signIn/logIn";
+import SignUp from "@/components/common/signIn/signUp";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import SideMenu from "@/components/common/sidemenu";
+import { fetchProfileInto } from "@/utils/user";
+import { useSession } from "next-auth/react";
+const ErrorComponent = dynamic(() => import("@/components/common/404"));
 
 const ReservationPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const slug = searchParams.get('slug');
-  const lang = searchParams.get('lang');
-  const checkIn = searchParams.get('checkIn');
-  const checkOut = searchParams.get('checkOut');
-  const days = searchParams.get('days');
-  const cart = searchParams.getAll('cart');
+  const slug = searchParams.get("slug");
+  const lang = searchParams.get("lang");
+  const checkIn = searchParams.get("checkIn");
+  const checkOut = searchParams.get("checkOut");
+  const days = searchParams.get("days");
+  const cart = searchParams.getAll("cart");
   const { appState, dispatch } = useAppCtx();
+
+  
+
+  const { data: session } = useSession({
+    required: false,
+  });
+  const {
+    data: profileData,
+    run,
+    loading: loadingProfileData,
+    error: errorProfileData,
+  } = useRequest(
+    (e: { email: string }) => {
+      return fetchProfileInto({ email: e.email });
+    },
+    {
+      manual: true,
+      onSuccess: (res) => {
+        console.log(res);
+        setClients({
+          name: res.user.name,
+          surName: res.user.surname ? res.user.surname : "",
+          email: res.user.email,
+          phone: res.user.phoneNumber ? res.user.phoneNumber : "",
+          nationality: res.user.country ? res.user.country : "",
+        });
+      },
+    },
+  );
+
 
 
   const [clients, setClients] = useState({
-    name: '',
-    surName: '',
-    email: '',
-    phone: '',
-    nationality: 'Mongolia',
+    name: "",
+    surName:  "",
+    email: "",
+    phone: "",
+    nationality: profileData?.user.country ? profileData.user.country : "Mongolia",
   });
   const updateClients = (e: {
     name: string;
@@ -60,10 +92,15 @@ const ReservationPage = () => {
   useEffect(() => {
     dispatch({
       type: "CHANGE_APP_STATE",
-      payload: { logOrSign: "", menu: '' },
+      payload: { logOrSign: "", menu: "" },
     });
   }, []);
-
+  useEffect(() => {
+    if (session?.user?.email) {
+      run({ email: session?.user?.email });
+      
+    }
+  }, [session]);
 
   const { data, loading, error } = useRequest(() => {
     if (slug)
@@ -74,18 +111,18 @@ const ReservationPage = () => {
         checkIn: "",
         checkOut: "",
       });
-    return fetchDataHotel({ slug: '', checkIn: '', checkOut: '' });
+    return fetchDataHotel({ slug: "", checkIn: "", checkOut: "" });
   });
 
   let totalPrice = 0;
   for (let i = 0; i < cart.length; i++) {
     if (cart[i] && days && data) {
       for (let j = 0; j < data.rooms.length; j++) {
-        if (parseInt(cart[i].split('$')[0]) === data.rooms[j].id) {
+        if (parseInt(cart[i].split("$")[0]) === data.rooms[j].id) {
           totalPrice =
             totalPrice +
             data.rooms[j].priceDayUse *
-              parseInt(cart[i].split('$')[1]) *
+              parseInt(cart[i].split("$")[1]) *
               parseInt(days);
         }
       }
@@ -107,53 +144,53 @@ const ReservationPage = () => {
   for (let i = 0; i < cart.length; i++) {
     orderingRooms.push({
       startdate: checkIn
-        ? `${checkIn?.split('|')[0].split('/')[2]}-${checkIn
-            ?.split('|')[0]
-            .split('/')[0]}-${checkIn?.split('|')[0].split('/')[1]}`
-        : '',
+        ? `${checkIn?.split("|")[0].split("/")[2]}-${checkIn
+            ?.split("|")[0]
+            .split("/")[0]}-${checkIn?.split("|")[0].split("/")[1]}`
+        : "",
       enddate: checkOut
-        ? `${checkOut?.split('|')[0].split('/')[2]}-${checkOut
-            ?.split('|')[0]
-            .split('/')[0]}-${checkOut?.split('|')[0].split('/')[1]}`
-        : '',
-      hotel_id: data?.hotel.id ? `${data?.hotel.id}` : '',
-      room_id: cart[i].split('$')[0],
-      room_number: cart[i].split('$')[1],
-      person_number: '', //Зарим өрөөнүүд хүнээр захиалга үүсгэдэг. Энэ үед room_number 0 person_person хүний тоо байна
+        ? `${checkOut?.split("|")[0].split("/")[2]}-${checkOut
+            ?.split("|")[0]
+            .split("/")[0]}-${checkOut?.split("|")[0].split("/")[1]}`
+        : "",
+      hotel_id: data?.hotel.id ? `${data?.hotel.id}` : "",
+      room_id: cart[i].split("$")[0],
+      room_number: cart[i].split("$")[1],
+      person_number: "", //Зарим өрөөнүүд хүнээр захиалга үүсгэдэг. Энэ үед room_number 0 person_person хүний тоо байна
 
       room_price: data?.rooms.filter(
-        (index) => index.id === parseInt(cart[i].split('$')[0]),
+        (index) => index.id === parseInt(cart[i].split("$")[0]),
       )[0]
         ? data?.rooms
-            .filter((index) => index.id === parseInt(cart[i].split('$')[0]))[0]
+            .filter((index) => index.id === parseInt(cart[i].split("$")[0]))[0]
             .priceDayUse.toString()
-        : '',
+        : "",
       room_type: data?.rooms.filter(
-        (index) => index.id === parseInt(cart[i].split('$')[0]),
+        (index) => index.id === parseInt(cart[i].split("$")[0]),
       )[0].bedTypeId
         ? data?.rooms
-            .filter((index) => index.id === parseInt(cart[i].split('$')[0]))[0]
+            .filter((index) => index.id === parseInt(cart[i].split("$")[0]))[0]
             .bedTypeId.toString()
-        : '', // Нээх хамаагүй
+        : "", // Нээх хамаагүй
       room_name: data?.rooms.filter(
-        (index) => index.id === parseInt(cart[i].split('$')[0]),
+        (index) => index.id === parseInt(cart[i].split("$")[0]),
       )[0].name
         ? data?.rooms.filter(
-            (index) => index.id === parseInt(cart[i].split('$')[0]),
+            (index) => index.id === parseInt(cart[i].split("$")[0]),
           )[0].name
-        : '',
+        : "",
       total_price: `${
         data?.rooms.filter(
-          (index) => index.id === parseInt(cart[i].split('$')[0]),
+          (index) => index.id === parseInt(cart[i].split("$")[0]),
         )[0] && days
           ? data?.rooms.filter(
-              (index) => index.id === parseInt(cart[i].split('$')[0]),
+              (index) => index.id === parseInt(cart[i].split("$")[0]),
             )[0].priceDayUse *
-            parseInt(cart[i].split('$')[1]) *
+            parseInt(cart[i].split("$")[1]) *
             parseInt(days)
-          : ''
+          : ""
       }`,
-      by_person: '',
+      by_person: "",
     });
   }
 
@@ -165,21 +202,21 @@ const ReservationPage = () => {
         country: clients.nationality,
         phone_number: clients.phone,
         email_order: clients.email,
-        beneficiary_name: '',
-        beneficiary_account_number: '',
-        order_hotelid: data?.hotel.id ? `${data.hotel.id}` : '',
-        payment_option: '',
+        beneficiary_name: "",
+        beneficiary_account_number: "",
+        order_hotelid: data?.hotel.id ? `${data.hotel.id}` : "",
+        payment_option: "",
         order_roomdata: orderingRooms,
         order_startdate: checkIn
-          ? `${checkIn?.split('|')[0].split('/')[2]}-${checkIn
-              ?.split('|')[0]
-              .split('/')[0]}-${checkIn?.split('|')[0].split('/')[1]}`
-          : '',
+          ? `${checkIn?.split("|")[0].split("/")[2]}-${checkIn
+              ?.split("|")[0]
+              .split("/")[0]}-${checkIn?.split("|")[0].split("/")[1]}`
+          : "",
         order_enddate: checkOut
-          ? `${checkOut?.split('|')[0].split('/')[2]}-${checkOut
-              ?.split('|')[0]
-              .split('/')[0]}-${checkOut?.split('|')[0].split('/')[1]}`
-          : '',
+          ? `${checkOut?.split("|")[0].split("/")[2]}-${checkOut
+              ?.split("|")[0]
+              .split("/")[0]}-${checkOut?.split("|")[0].split("/")[1]}`
+          : "",
       });
     },
     {
@@ -199,21 +236,21 @@ const ReservationPage = () => {
     runCreateOrder();
   };
 
-  let stat = '';
+  let stat = "";
   if (data?.hotel.isOnline == 1 && data?.hotel.isOffline == 0) {
-    stat = 'online';
+    stat = "online";
   } else if (data?.hotel.isOnline == 0 && data?.hotel.isOffline == 0) {
-    stat = 'pending';
+    stat = "pending";
   } else {
     router.back();
   }
 
-
   const serializedData: string | undefined = data?.hotel.cancellationPolicies;
-  let unserializedData: { day: string; fee: string }[] = [{ day: '', fee: '' }];
+  let unserializedData: { day: string; fee: string }[] = [{ day: "", fee: "" }];
   if (serializedData) {
     unserializedData = unserialize(serializedData);
   }
+  console.log(clients)
 
   if (!error)
     return (
@@ -231,7 +268,7 @@ const ReservationPage = () => {
           <LogIn />
         ) : null}
         {appState.logOrSign === "sign" ? <SignUp /> : null}
-        {appState.menu === "open" ? <SideMenu /> : null}
+        {appState.menu === "open" ? <SideMenu session={session} /> : null}
         <div className="fixed bottom-0 z-[800] w-full sm:px-[50px] md:px-[72px] lg:hidden ">
           {appState.calendar === "open" ? (
             <CalendarDialog ver={"mobile"} />
@@ -267,6 +304,8 @@ const ReservationPage = () => {
               />
               <div className="lg:hidden">
                 <UserInfo
+                  session={session}
+                  country={profileData?.user.country}
                   ver={"mobile"}
                   stat={""}
                   clients={clients}
@@ -312,6 +351,8 @@ const ReservationPage = () => {
             <div className="relative hidden h-full w-full lg:col-span-2 lg:flex">
               <div className="sticky top-[72px] h-fit">
                 <UserInfo
+                  session={session}
+                  country={profileData?.user.country}
                   ver={"web"}
                   stat={stat}
                   clients={clients}

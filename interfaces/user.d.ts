@@ -11,12 +11,12 @@ declare namespace User {
   interface User {
     activationCode: number | null;
     affiliateId: number | null;
-    avatar: string;
+    avatar: string | null;
     country: string | null;
     createdAt: string;
     email: string;
     emailVerifiedAt: string | null;
-    gender: stringnull;
+    gender: string | null;
     hotelId: number | null;
     id: number;
     isActivated: number;
@@ -27,7 +27,7 @@ declare namespace User {
     position: string | null;
     rememberToken: string | null;
     roleId: number | null;
-    surname: string;
+    surname: string | null;
     sysRole: string;
     updatedAt: string;
   }
