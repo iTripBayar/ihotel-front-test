@@ -1,5 +1,5 @@
 import { useSearchParams } from "next/navigation";
-import { format, subHours } from "date-fns";
+import { addHours, format } from "date-fns";
 import { unserialize } from "serialize-php";
 
 interface OrderRooms {
@@ -42,7 +42,7 @@ export default function Payment({ data, handleCancelOrder, handlePayment }: Prop
     };
   }
   const payBy = format(
-    subHours(new Date(data.checkIn), 3),
+    addHours(new Date(data.createdAt), 3),
     `${lang === "en" ? "MMM dd, yyyy HH:mm:ss" : "yyyy-MM-dd HH:mm:ss"}`,
   );
 

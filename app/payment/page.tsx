@@ -6,7 +6,7 @@ import PassOption from "@/components/pageComponents/paymentPage/passOption";
 import QpayOption from "@/components/pageComponents/paymentPage/qpayOption";
 import { useAppCtx } from "@/contexts/app";
 import PaymentMethod from "@/components/pageComponents/paymentPage/paymentMethod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Alert, AlertIcon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import ErrorComponent from "@/components/common/404";
@@ -15,6 +15,10 @@ import { useSession } from "next-auth/react";
 
 export default function PaymentPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const lang = searchParams.get("lang");
+  const totalPrice = searchParams.get("totalPrice");
   const { appState, dispatch } = useAppCtx();
   const [showAlert, setShowAlert] = useState(false);
   const [error, setError] = useState(false);
@@ -34,7 +38,7 @@ export default function PaymentPage() {
   useEffect(() => {
     dispatch({
       type: "CHANGE_APP_STATE",
-      payload: { logOrSign: "", menu: "" },
+      payload: { logOrSign: "", menu: "", paymentMethod: "" },
     });
   }, []);
 
@@ -54,7 +58,11 @@ export default function PaymentPage() {
         />
         {appState.menu === "open" ? <SideMenu session={session} /> : null}
 
-        <div className="2xl:px[200px] relative flex min-h-[50vh] w-full flex-col items-center justify-start px-[16px] pt-[16px] sm:px-[42px] sm:pt-[24px] md:px-[72px] lg:px-[150px]">
+        <div
+          className={`2xl:px-[200px] relative flex ${
+            appState.paymentMethod === "" ? "" : ""
+          } w-full flex-col items-center justify-start min-h-[425px] gap-[24px] sm:gap-[32px] md:gap-[48px] px-[16px] pt-[16px] sm:px-[42px] sm:pt-[24px] md:px-[72px] lg:px-[150px]`}
+        >
           {showAlert === true ? (
             <div className="fixed top-[62px] z-[100] max-w-[250px]">
               <Alert
@@ -89,7 +97,39 @@ export default function PaymentPage() {
                 />
               ) : null}
             </div>
-          ) : null}
+          ) : (
+            <div className="flex w-full justify-center items-center flex-col gap-[16px] 2xs:gap-[20px] sm:gap-[24px] md:gap-[32px] px-[24px] pb-[20px] 2xs:px-[32px] sm:px-[75px]">
+              {/* info */}
+              <div className="flex gap-[32px] font-medium">
+                <div className="flex flex-col gap-[8px] items-center leading-[16px]">
+                  <p className=" opacity-60">Merchant</p>
+                  <p className=" font-medium">{`RN-${id}`}</p>
+                </div>
+                <div className="flex flex-col gap-[8px] items-center leading-[16px]">
+                  <p className=" opacity-60">
+                    {lang === "en" ? "Transfer amount" : "Мөнгөн дүн"}
+                  </p>
+                  <p className=" font-medium">
+                    MNT {totalPrice ? parseInt(totalPrice).toLocaleString() : 0}
+                  </p>
+                </div>
+              </div>
+              {/* text */}
+              <div className="w-full rounded-[12px] border border-primary-blue text-primary-blue p-[12px] max-w-[400px] text-[16px] leading-[20px] font-medium text-center">
+                {lang === "en"
+                  ? "To proceed to the payment, please select a payment method from above!"
+                  : "Та дээрх төлбөрийн сонголтуудаас сонгон төлбөрөө хийнэ үү!"}
+              </div>
+              <button
+                className="font-medium leading-[16px] text-primary-blue py-[20px]"
+                onClick={() => {
+                  router.back();
+                }}
+              >
+                {lang === "en" ? "Back" : "Буцах"}
+              </button>
+            </div>
+          )}
         </div>
         <Footer />
       </div>

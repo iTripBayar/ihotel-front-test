@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAppCtx } from "@/contexts/app";
 import { FormEvent } from "react";
@@ -111,6 +111,19 @@ export default function SignUp() {
       }
     }
   };
+  useEffect(() => {
+    // submitButton;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        // console.log("enter");
+        document.getElementById("submitButton")?.click();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const [arePasswordsValid, setArePasswordsValid] = useState("");
 
@@ -209,12 +222,12 @@ export default function SignUp() {
               minLength={8}
               className="h-[34px] w-full rounded-[4px] border-black/[.15]"
             />
-            <button
-              type="button"
+            <div
+              // type="button"
               onClick={() => {
                 setPasswordVisible(!passwordVisible);
               }}
-              className="absolute right-0 top-0 h-[34px] cursor-pointer px-2"
+              className="absolute right-0 top-0 h-[34px] flex justify-center items-center cursor-pointer px-2"
             >
               {passwordVisible === false ? (
                 <svg
@@ -252,7 +265,7 @@ export default function SignUp() {
                   />
                 </svg>
               )}
-            </button>
+            </div>
           </div>
 
           {/* Confirm password */}
@@ -268,12 +281,12 @@ export default function SignUp() {
               }
               className="h-[34px] w-full rounded-[4px] border-black/[.15]"
             />
-            <button
-              type="button"
+            <div
+              // type="button"
               onClick={() => {
                 setPasswordVisible1(!passwordVisible1);
               }}
-              className="absolute right-0 top-0 h-[34px] cursor-pointer px-2"
+              className="absolute right-0 top-0 flex justify-center items-center h-[34px] cursor-pointer px-2"
             >
               {passwordVisible1 === false ? (
                 <svg
@@ -311,7 +324,7 @@ export default function SignUp() {
                   />
                 </svg>
               )}
-            </button>
+            </div>
           </div>
           {message === "invalid" && (
             <p className="mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]">
@@ -353,6 +366,7 @@ export default function SignUp() {
             <div></div>
             <button
               type="submit"
+              id="submitButton"
               className={`flex h-[40px] w-auto items-center justify-center justify-self-center rounded-[8px] bg-primary-blue px-[20px] uppercase text-white ${
                 lang === "en" ? "min-w-[100px] px-[14px]" : ""
               }`}

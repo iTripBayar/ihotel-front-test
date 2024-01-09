@@ -86,7 +86,7 @@ export default function AboutOrder({ data }: Props) {
 
   const handlePayment = () => {
     router.push(
-      `/payment?id=${data.id}&tkn=${data.token}}&totalPrice=${totalPrice}`,
+      `/payment?id=${data.id}&tkn=${data.token}}&totalPrice=${totalPrice.value}`,
     );
   };
 

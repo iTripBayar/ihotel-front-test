@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAppCtx } from "@/contexts/app";
 import { signIn } from "next-auth/react";
@@ -52,6 +52,19 @@ export default function LogIn() {
       setError("Your Email or Password is wrong!");
     }
   };
+  useEffect(()=>{
+    // submitButton;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        // console.log('enter')
+        document.getElementById("submitButton")?.click();
+      }
+    };
+      document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  },[])
 
   const handleForgotPassword = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -82,10 +95,9 @@ export default function LogIn() {
       console.error("Error registering user:", error);
       throw error;
     }
-    // if (data.get('email') !== undefined) {
-    //   forgotPassword({ email: data.get('email')?.toString() });
-    // }
   };
+
+
 
   return (
     <div
@@ -143,12 +155,12 @@ export default function LogIn() {
                 minLength={8}
                 className="h-[34px] w-full rounded-[4px] border-black/[.15]"
               />
-              <button
-                type="button"
+              <div
+                // type="button"
                 onClick={() => {
                   setPasswordVisible(!passwordVisible);
                 }}
-                className="absolute right-0 top-0 h-[34px] cursor-pointer px-2"
+                className="absolute right-0 top-0 h-[34px] flex justify-center items-center cursor-pointer px-2"
               >
                 {passwordVisible === false ? (
                   <svg
@@ -186,10 +198,10 @@ export default function LogIn() {
                     />
                   </svg>
                 )}
-              </button>
+              </div>
             </div>
-            <p
-              className="text-[12px] font-bold text-primary-blue 2xs:text-[14px]"
+            <button
+              className="text-[12px] font-bold w-fit text-primary-blue 2xs:text-[14px]"
               onClick={() => {
                 dispatch({
                   type: "CHANGE_APP_STATE",
@@ -198,7 +210,7 @@ export default function LogIn() {
               }}
             >
               {lang === "en" ? "Forgot password?" : "Нууц үгээ мартсан?"}
-            </p>
+            </button>
             {error ? (
               <p className="mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]">
                 {lang === "en"
@@ -225,6 +237,7 @@ export default function LogIn() {
               <div></div>
               <button
                 type="submit"
+                id={'submitButton'}
                 className={`flex h-[40px] min-w-[100px] w-auto items-center justify-center justify-self-center rounded-[8px] bg-primary-blue px-[20px] uppercase text-white ${
                   lang === "en" ? "min-w-[100px] px-[14px]" : ""
                 }`}

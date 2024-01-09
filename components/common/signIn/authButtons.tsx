@@ -28,7 +28,7 @@ export function GoogleSignInButton() {
    }, []);
 
   return (
-    <button
+    <div
       onClick={handleClick}
       onMouseEnter={() =>
         document.removeEventListener('keydown', handleKeyDown as any)
@@ -48,7 +48,7 @@ export function GoogleSignInButton() {
         className='h-[70%] w-auto select-none object-cover duration-500 group-hover:scale-110'
         draggable={false}
       />
-    </button>
+    </div>
   );
 }
 
@@ -78,7 +78,7 @@ export function FacebookSignInButton() {
   }, []);
 
   return (
-    <button
+    <div
       onClick={handleClick}
       onMouseEnter={() =>
         document.removeEventListener('keydown', handleKeyDown as any)
@@ -98,7 +98,7 @@ export function FacebookSignInButton() {
         className='h-[70%] w-auto select-none object-cover duration-500 group-hover:scale-110'
         draggable={false}
       />
-    </button>
+    </div>
   );
 }
 
