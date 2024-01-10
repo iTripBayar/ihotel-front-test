@@ -48,7 +48,7 @@ const SideMenu = ({ session }: Props) => {
 
   return (
     <div
-      className={` fixed right-0 top-0 z-[999] flex h-full w-full justify-end bg-black/50`}
+      className={` fixed right-0 top-0 !z-[999] flex h-full w-full justify-end bg-black/50`}
       onClick={handleClick}
     >
       <div

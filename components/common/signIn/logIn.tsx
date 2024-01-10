@@ -39,7 +39,9 @@ export default function LogIn() {
     });
 
     if (signInResponse && !signInResponse.error) {
-      toast.success(`${lang === "en" ? "Log in successful!" : "Амжилттай нэвтэрлээ!"}`);
+      toast.success(
+        `${lang === "en" ? "Log in successful!" : "Амжилттай нэвтэрлээ!"}`,
+      );
       console.log(signInResponse);
       setTimeout(() => {
         setLoading(false);
@@ -52,19 +54,18 @@ export default function LogIn() {
       setError("Your Email or Password is wrong!");
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     // submitButton;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
-        // console.log('enter')
         document.getElementById("submitButton")?.click();
       }
     };
-      document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  },[])
+  }, []);
 
   const handleForgotPassword = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -97,14 +98,11 @@ export default function LogIn() {
     }
   };
 
-
-
   return (
     <div
       className="fixed z-[999] flex h-screen w-full animate-fade items-center justify-center bg-black/[.35]"
       onClick={handleClick}
     >
-      
       <Toaster position="top-right" richColors />
       <div className="flex h-auto w-[calc(100%-32px)] max-w-[370px] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:max-w-[400px]">
         <div className="flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px] text-main-text">
@@ -237,7 +235,7 @@ export default function LogIn() {
               <div></div>
               <button
                 type="submit"
-                id={'submitButton'}
+                id={"submitButton"}
                 className={`flex h-[40px] min-w-[100px] w-auto items-center justify-center justify-self-center rounded-[8px] bg-primary-blue px-[20px] uppercase text-white ${
                   lang === "en" ? "min-w-[100px] px-[14px]" : ""
                 }`}

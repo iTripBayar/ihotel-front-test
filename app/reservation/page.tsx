@@ -244,6 +244,17 @@ const ReservationPage = () => {
   if (!error)
     return (
       <div>
+        <>
+          <title>
+            {lang === "en"
+              ? "Reservation | iHotel"
+              : "Захиалга үүсгэх | iHotel"}
+          </title>
+          <meta
+            name="description"
+            content={lang === "en" ? "iHotel reservation page" : "iHotel захиалгын хуудас"}
+          />
+        </>
         <HeaderVariants
           ver={"hotel"}
           placesData={data ? data.places : []}

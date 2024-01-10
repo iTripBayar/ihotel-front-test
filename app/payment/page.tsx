@@ -51,6 +51,10 @@ export default function PaymentPage() {
   if (error === false) {
     return (
       <div className="flex min-h-screen w-full flex-col items-center justify-between relative">
+        <>
+          <title>{lang ==='en' ? "Payment | iHotel" : 'Төлбөр төлөх | iHotel'}</title>
+          <meta name="description" content={lang === 'en' ? "iHotel payment page" : 'iHotel төлбөрийн хуудас'} />
+        </>
         <Header
           user={`${session?.user?.name
             ?.charAt(0)

@@ -139,6 +139,15 @@ export default function ProfilePage() {
     } else {
       return (
         <main className="flex flex-col relative gap-[20px]">
+          <>
+            <title>
+              {lang === "en" ? "Profile | iHotel" : "Профайл | iHotel"}
+            </title>
+            <meta
+              name="description"
+              content={lang === "en" ? "iHotel profile page" : "iHotel профайл хуудас"}
+            />
+          </>
           <Header
             user={`${session?.user?.name
               ?.charAt(0)

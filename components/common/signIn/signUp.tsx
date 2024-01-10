@@ -115,7 +115,6 @@ export default function SignUp() {
     // submitButton;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
-        // console.log("enter");
         document.getElementById("submitButton")?.click();
       }
     };

@@ -30,7 +30,7 @@ export default function Dialogs({
   const size = useWindowSize();
 
   return (
-    <div className="fixed bottom-0 z-[999] flex w-full flex-col justify-end sm:px-[50px] md:px-[72px] lg:hidden">
+    <div className="fixed bottom-0 z-[888] flex w-full flex-col justify-end sm:px-[50px] md:px-[72px] lg:hidden">
       {appState.calendar === "" && !appState.selectedRoom ? (
         <div className="flex w-auto flex-col gap-[8px] self-end pb-[12px] pr-[14px] text-white">
           <LangBtn/> 

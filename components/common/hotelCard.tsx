@@ -54,8 +54,8 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
       </svg>
       <Link
         href={{
-          pathname: "/hotel",
-          query: { slug: data.slug },
+          pathname: `/hotel/${data.slug}`,
+          // query: { slug: data.slug },
         }}
         className={`flex w-full flex-col justify-between gap-[16px] overflow-hidden rounded-[20px] bg-white shadow-[0px_2px_12px_2px_rgb(0,0,0,0.20)] xl:gap-[20px] ${
           stat === "data" ? "max-h-[350px] pb-[10px]" : ""

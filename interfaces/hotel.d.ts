@@ -47,7 +47,29 @@ declare namespace HotelData {
     cancellationPolicies: string;
     checkInTime: string;
     checkOutTime: string;
-    commonLocationIds: string;
+    commonLocationIds: string | null;
+    commonLocations: {
+      coverPhoto: string | null;
+      createdAt: string;
+      description: string;
+      districtId: number;
+      id: number;
+      image: string | null;
+      isRecommended: number;
+      isSearch: number;
+      longitudeLatitude: {
+        lat: string;
+        lng: string;
+      };
+      name: string;
+      nameEn: string;
+      pivot: { hotelId: number; commonLocationId: number };
+      placeKey: number;
+      provinceId: number | null;
+      slug: string;
+      thumbnail: string;
+      updatedAt: string;
+    }[];
     companyName: string;
     contact: string;
     contactEn: string | null;

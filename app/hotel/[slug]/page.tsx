@@ -15,7 +15,7 @@ import HotelCard from "@/components/common/hotelCard";
 import Footer from "@/components/common/footer";
 import Dialogs from "@/components/pageComponents/hotelPage/dialogs";
 import CalendarDialog from "@/components/pageComponents/hotelPage/dialogs/calendarDialog";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useAppCtx } from "@/contexts/app";
 import { useEffect, useRef } from "react";
 import LogIn from "@/components/common/signIn/logIn";
@@ -33,7 +33,8 @@ import { useSession } from "next-auth/react";
 const HotelPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const slug = searchParams.get("slug");
+  const pathname = usePathname();
+  // const slug = searchParams.get("slug");
   const lang = searchParams.get("lang");
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
@@ -81,9 +82,9 @@ const HotelPage = () => {
 
   const { data, loading, error } = useRequest(
     () => {
-      if (slug)
+      if (pathname)
         return fetchDataHotel({
-          slug: slug,
+          slug: pathname.split("/")[2],
           checkIn: checkIn ? checkIn.split("|")[0] : "",
           checkOut: checkOut ? checkOut.split("|")[0] : "",
         });
@@ -92,7 +93,7 @@ const HotelPage = () => {
     {
       onSuccess: (res) => {
         router.replace(
-          `/hotel?${createQueryString(
+          `${pathname}?${createQueryString(
             "checkIn",
             `${format(new Date(res.startdate), "MM/dd/yyyy")}`,
             "checkOut",
@@ -190,9 +191,118 @@ const HotelPage = () => {
     }
   }
 
+  let metaCommonLoc = { mn: "", en: "" };
+  if (data?.hotel.commonLocations) {
+    for (let i = 0; i < data?.hotel.commonLocations.length; i++) {
+      metaCommonLoc = {
+        mn: [metaCommonLoc.mn, data.hotel.commonLocations[i].name].join(", "),
+        en: [metaCommonLoc.en, data.hotel.commonLocations[i].nameEn].join(", "),
+      };
+    }
+  }
+  
   if (!error)
     return (
       <main className="relative">
+        <>
+          <title>{lang === "en" ? data?.hotel.nameEn : data?.hotel.name}</title>
+          <meta
+            name="keywords"
+            content={`${
+              lang === "en" ? data?.hotel.nameEn : data?.hotel.name
+            } ${lang === "en" ? metaCommonLoc.en : metaCommonLoc.mn} , ${
+              lang === "en"
+                ? "hotel, book, ger, yurt, camp, Ger camp, tourist camp, resort, cheap, accommodation, group booking, Mongolia, Mongolian, travel, tour, offer, discount, deal"
+                : "Зочид буудал, амралтын газар, амралтын газар лавлах, zochid buudal, буудал, буудлууд, buudal, amraltiin gazar, жуулчны бааз, juulchnii baaz, аялал жуулчлал, гэр бүлийн амралт, зугаалга, гэр буудал, Ger buudal, гэр буудал, үнэ ханш, зочид буудлын үнэ, амралтын газрын үнэ ханш, хямд зочид буудал, hyamd zochid buudal, хонох газар, Зочид буудал захиалах, Амралтын газар захиалах, zochid buudal zahialah, amraltiin gazar zahialah, амралт сувилалын үнэ ханш, амралт сувилал, амралтын газруудын танилцуулга, Зочид буудлын үнэ тариф, өвлийн амралтын газар, зочид буудал үнэ ханш, эх хүүхдийн амралт сувилал, танилцуулга, байршил, утас, хаяг, utas, bairshil, taniltsuulga, hayag, hotod oir, hotod oirhon, буудал захиалга, буудал үнэ, buudal zahialga, hotel, resort, tourist camp"
+            }`}
+          />
+          <meta
+            name="description"
+            content={`${
+              lang === "en" ? data?.hotel.nameEn : data?.hotel.name
+            } ${lang === "en" ? metaCommonLoc.en : metaCommonLoc.mn}. ${
+              lang === "en"
+                ? data?.hotel.introductionEn
+                    ?.replace(/<\/?[^>]+(>|$)/g, "")
+                    .replace(/\s+/g, " ")
+                    .slice(0, 50)
+                : data?.hotel.introduction
+                    ?.replace(/<\/?[^>]+(>|$)/g, "")
+                    .replace(/\s+/g, " ")
+                    .slice(0, 50)
+            } , ${
+              lang === "en"
+                ? "hotel, book, ger, yurt, camp, Ger camp, tourist camp, resort, cheap, accommodation, group booking, Mongolia, Mongolian, travel, tour, offer, discount, deal"
+                : "Зочид буудал, амралтын газар, амралтын газар лавлах, zochid buudal, буудал, буудлууд, buudal, amraltiin gazar, жуулчны бааз, juulchnii baaz, аялал жуулчлал, гэр бүлийн амралт, зугаалга, гэр буудал, Ger buudal, гэр буудал, үнэ ханш, зочид буудлын үнэ, амралтын газрын үнэ ханш, хямд зочид буудал, hyamd zochid buudal, хонох газар, Зочид буудал захиалах, Амралтын газар захиалах, zochid buudal zahialah, amraltiin gazar zahialah, амралт сувилалын үнэ ханш, амралт сувилал, амралтын газруудын танилцуулга, Зочид буудлын үнэ тариф, өвлийн амралтын газар, зочид буудал үнэ ханш, эх хүүхдийн амралт сувилал, танилцуулга, байршил, утас, хаяг, utas, bairshil, taniltsuulga, hayag, hotod oir, hotod oirhon, буудал захиалга, буудал үнэ, buudal zahialga, hotel, resort, tourist camp"
+            }`}
+          ></meta>
+          {/* Facebook Metadata */}
+          <meta
+            property="og:url"
+            content={`${process.env.CURRENT_URL}/${pathname}`}
+          />
+          <meta
+            property="og:image"
+            content={`${process.env.IMAGE_URL}${data?.hotel.image}`}
+          />
+          <meta
+            property="og:title"
+            content={
+              lang === "en" ? `${data?.hotel.nameEn}` : `${data?.hotel.name}`
+            }
+          />
+          <meta
+            property="og:description"
+            content={`${
+              lang === "en" ? data?.hotel.nameEn : data?.hotel.name
+            } ${lang === "en" ? metaCommonLoc.en : metaCommonLoc.mn}. ${
+              lang === "en"
+                ? data?.hotel.introductionEn
+                    ?.replace(/<\/?[^>]+(>|$)/g, "")
+                    .replace(/\s+/g, " ")
+                    .slice(0, 50)
+                : data?.hotel.introduction
+                    ?.replace(/<\/?[^>]+(>|$)/g, "")
+                    .replace(/\s+/g, " ")
+                    .slice(0, 50)
+            } , ${
+              lang === "en"
+                ? "hotel, book, ger, yurt, camp, Ger camp, tourist camp, resort, cheap, accommodation, group booking, Mongolia, Mongolian, travel, tour, offer, discount, deal"
+                : "Зочид буудал, амралтын газар, амралтын газар лавлах, zochid buudal, буудал, буудлууд, buudal, amraltiin gazar, жуулчны бааз, juulchnii baaz, аялал жуулчлал, гэр бүлийн амралт, зугаалга, гэр буудал, Ger buudal, гэр буудал, үнэ ханш, зочид буудлын үнэ, амралтын газрын үнэ ханш, хямд зочид буудал, hyamd zochid buudal, хонох газар, Зочид буудал захиалах, Амралтын газар захиалах, zochid buudal zahialah, amraltiin gazar zahialah, амралт сувилалын үнэ ханш, амралт сувилал, амралтын газруудын танилцуулга, Зочид буудлын үнэ тариф, өвлийн амралтын газар, зочид буудал үнэ ханш, эх хүүхдийн амралт сувилал, танилцуулга, байршил, утас, хаяг, utas, bairshil, taniltsuulga, hayag, hotod oir, hotod oirhon, буудал захиалга, буудал үнэ, buudal zahialga, hotel, resort, tourist camp"
+            }`}
+          />
+          {/* Google Metadata */}
+          <meta
+            item-prop="name"
+            content={
+              lang === "en" ? `${data?.hotel.nameEn}` : `${data?.hotel.name}`
+            }
+          ></meta>
+          <meta
+            item-prop="image"
+            content={`${process.env.IMAGE_URL}${data?.hotel.image}`}
+          ></meta>
+          <meta
+            item-prop="description"
+            content={`${
+              lang === "en" ? data?.hotel.nameEn : data?.hotel.name
+            } ${lang === "en" ? metaCommonLoc.en : metaCommonLoc.mn}. ${
+              lang === "en"
+                ? data?.hotel.introductionEn
+                    ?.replace(/<\/?[^>]+(>|$)/g, "")
+                    .replace(/\s+/g, " ")
+                    .slice(0, 50)
+                : data?.hotel.introduction
+                    ?.replace(/<\/?[^>]+(>|$)/g, "")
+                    .replace(/\s+/g, " ")
+                    .slice(0, 50)
+            } , ${
+              lang === "en"
+                ? "hotel, book, ger, yurt, camp, Ger camp, tourist camp, resort, cheap, accommodation, group booking, Mongolia, Mongolian, travel, tour, offer, discount, deal"
+                : "Зочид буудал, амралтын газар, амралтын газар лавлах, zochid buudal, буудал, буудлууд, buudal, amraltiin gazar, жуулчны бааз, juulchnii baaz, аялал жуулчлал, гэр бүлийн амралт, зугаалга, гэр буудал, Ger buudal, гэр буудал, үнэ ханш, зочид буудлын үнэ, амралтын газрын үнэ ханш, хямд зочид буудал, hyamd zochid buudal, хонох газар, Зочид буудал захиалах, Амралтын газар захиалах, zochid buudal zahialah, amraltiin gazar zahialah, амралт сувилалын үнэ ханш, амралт сувилал, амралтын газруудын танилцуулга, Зочид буудлын үнэ тариф, өвлийн амралтын газар, зочид буудал үнэ ханш, эх хүүхдийн амралт сувилал, танилцуулга, байршил, утас, хаяг, utas, bairshil, taniltsuulga, hayag, hotod oir, hotod oirhon, буудал захиалга, буудал үнэ, buudal zahialga, hotel, resort, tourist camp"
+            }`}
+          ></meta>
+        </>
         <HeaderVariants
           ver={"hotel"}
           placesData={data ? data.places : []}
@@ -216,7 +326,7 @@ const HotelPage = () => {
           roomPrices={roomPrices}
           stat={stat}
           allRooms={data?.rooms ? data?.rooms : []}
-          slug={slug ? slug : ""}
+          slug={pathname ? pathname.split("/")[2] : ""}
           handleScrollToRooms={(ver: string) => handleScrollTo(ver)}
           totalPrice={totalPrice}
         />
@@ -373,10 +483,16 @@ const HotelPage = () => {
                 </div>
                 {/* map & orderCount */}
                 <div className="flex flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] lg:border-none lg:pt-0">
-                  <HotelMap
-                    lat={data?.hotel.lat ? data?.hotel.lat : 47.91823102891307}
-                    lng={data?.hotel.lng ? data?.hotel.lng : 106.92059918835042}
-                  />
+                  {data?.hotel.lat && data.hotel.lng ? (
+                    <HotelMap
+                      lat={
+                        data?.hotel.lat ? data?.hotel.lat : 47.91823102891307
+                      }
+                      lng={
+                        data?.hotel.lng ? data?.hotel.lng : 106.92059918835042
+                      }
+                    />
+                  ) : null}
                   <OrderCount
                     count={data?.orderCount ? data.orderCount : 783}
                   />

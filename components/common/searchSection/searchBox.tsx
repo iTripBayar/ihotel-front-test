@@ -7,7 +7,6 @@ import "slick-carousel/slick/slick-theme.css";
 import { useAppCtx } from "@/contexts/app";
 import { useRequest } from "ahooks";
 import { fetchSearchQuery } from "@/utils";
-import { toggle } from "@nextui-org/react";
 
 interface iProps {
   placesData: SearchData.Places[];
