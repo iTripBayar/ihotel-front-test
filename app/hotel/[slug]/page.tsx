@@ -326,7 +326,6 @@ const HotelPage = () => {
           roomPrices={roomPrices}
           stat={stat}
           allRooms={data?.rooms ? data?.rooms : []}
-          slug={pathname ? pathname.split("/")[2] : ""}
           handleScrollToRooms={(ver: string) => handleScrollTo(ver)}
           totalPrice={totalPrice}
         />

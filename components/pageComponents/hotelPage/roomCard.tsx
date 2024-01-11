@@ -18,11 +18,10 @@ interface Props {
 
 const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
   const searchParams = useSearchParams();
-  const pathname = usePathname()
+  const pathname = usePathname();
   const lang = searchParams.get("lang");
   const router = useRouter();
   const cart = searchParams.getAll("cart");
-  const slug = searchParams.get("slug");
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
   const days = searchParams.get("days");
@@ -457,7 +456,7 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
               <Link
                 href={{
                   query: {
-                    slug: pathname.split('/')[2],
+                    slug: pathname.split("/")[2],
                     checkIn: checkIn,
                     checkOut: checkOut,
                     days: days,

@@ -20,14 +20,13 @@ const HotelRooms = ({
   dollarRate,
 }: Props) => {
   const searchParams = useSearchParams();
-  const pathname = usePathname()
+  const pathname = usePathname();
   const lang = searchParams.get("lang");
   const cart = searchParams.getAll("cart");
   const router = useRouter();
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
   const days = searchParams.get("days");
-  const slug = searchParams.get("slug");
   const { dispatch } = useAppCtx();
 
   const createQueryString = (name: string, index: number) => {

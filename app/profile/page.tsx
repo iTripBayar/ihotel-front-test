@@ -28,6 +28,7 @@ export default function ProfilePage() {
   const lang = searchParams.get("lang");
   const order_page = searchParams.get("order_page");
   const review_page = searchParams.get("review_page");
+  // const fav_page = searchParams.get("fav_page");
   const id = searchParams.get("id");
   const { appState, dispatch } = useAppCtx();
   const [action, setAction] = useState("");
@@ -53,8 +54,7 @@ export default function ProfilePage() {
     },
     {
       manual: true,
-      // refreshDeps: [action, order_page, review_page],
-      onSuccess: (res) => console.log(res),
+      // onSuccess: (res) => console.log(res),
     },
   );
   useEffect(() => {
@@ -79,12 +79,6 @@ export default function ProfilePage() {
     });
   }, [session]);
 
-  useEffect(() => {
-    if (action === "saved") {
-      router.refresh();
-    }
-  }, [action]);
-
   const {
     data: updatedData,
     run: runUpdate,
@@ -103,8 +97,8 @@ export default function ProfilePage() {
     },
     {
       manual: true,
-      onSuccess: (res) => {
-        console.log(res);
+      onSuccess: () => {
+        // console.log(res);
         toast.success(
           `${
             lang === "en" ? "Changes applied!" : "Таны мэдээлэл өөрчлөгдлөө!"
@@ -123,7 +117,7 @@ export default function ProfilePage() {
   };
 
   if (!error) {
-    if (loading === true) {
+    if (loading === true && profileData === undefined) {
       return (
         <div className="flex flex-col">
           <Header

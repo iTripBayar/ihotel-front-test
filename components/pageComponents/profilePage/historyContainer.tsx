@@ -10,6 +10,23 @@ import {
 import HistoryCard from "./historyCard";
 import { NextUIProvider } from "@nextui-org/react";
 import { Pagination } from "@nextui-org/react";
+import { useEffect, useState } from "react";
+import FavCard from "./favCard";
+
+interface FavouriteHotels {
+  slug: string;
+  id: number;
+  image: string | null;
+  name: string;
+  nameEn: string | null;
+  address: string | null;
+  addressEn: string | null;
+  rating: number;
+  // for stats
+  stat: string;
+  displayPrice: number;
+  dollarRate: string;
+}
 
 interface Props {
   orderData: User.Order[];
@@ -28,12 +45,43 @@ export default function HistoryContainer({
   const lang = searchParams.get("lang");
   const order_page = searchParams.get("order_page");
   const coupon_page = searchParams.get("coupon_page");
+  const fav_page = searchParams.get("fav_page");
+  // const favArray = localStorage.getItem("favouriteHotels");
+  const [fav, setFav] = useState<FavouriteHotels[]>([]);
+  const [totalFav, setTotalFav] = useState(0);
+
+  useEffect(() => {
+    const favArray = localStorage.getItem("favouriteHotels");
+    setTotalFav(favArray ? JSON.parse(favArray).length : 0);
+    setFav(
+      favArray
+        ? JSON.parse(favArray).slice(
+            fav_page && fav_page !== "1" ? (parseInt(fav_page) - 1) * 8 : 0,
+            fav_page && fav_page !== "1" ? (parseInt(fav_page) - 1) * 2 * 8 : 8,
+          )
+        : [],
+    );
+  }, []);
+
+  useEffect(() => {
+    const favArray = localStorage.getItem("favouriteHotels");
+    setFav(
+      favArray
+        ? JSON.parse(favArray).slice(
+            fav_page && fav_page !== "1" ? (parseInt(fav_page) - 1) * 8 : 0,
+            fav_page && fav_page !== "1" ? (parseInt(fav_page) - 1) * 2 * 8 : 8,
+          )
+        : [],
+    );
+  }, [fav_page]);
 
   const multipleCreateQueryString = (
     name: string,
     value: string | null,
     name1: string,
     value1: string | null,
+    name2: string,
+    value2: string | null,
   ) => {
     const params = new URLSearchParams(searchParams);
     if (value !== null) {
@@ -46,6 +94,11 @@ export default function HistoryContainer({
     } else {
       params.delete(name1);
     }
+    if (value2 !== null) {
+      params.set(name2, value2);
+    } else {
+      params.delete(name2);
+    }
     return params.toString();
   };
 
@@ -56,7 +109,7 @@ export default function HistoryContainer({
           position="relative"
           variant="unstyled"
           className="!w-full text-sub-text"
-          defaultIndex={coupon_page ? 1 : 0}
+          defaultIndex={coupon_page ? 1 : fav_page ? 2 : 0}
         >
           <TabList className="font-medium w-full justify-between">
             {/* orders */}
@@ -90,6 +143,22 @@ export default function HistoryContainer({
               >
                 {/* {orderData.filter((index) => index.isOrderRequest === 1).length} */}
                 {totalCoupon}
+              </div>
+            </Tab>
+            {/* favourites */}
+            <Tab
+              className="w-full flex !justify-start !px-0 gap-[4px] opacity-50 scale-75 lg:!justify-center md:!text-[18px] lg:!text-[20px]"
+              _selected={{
+                color: "#3C76FE",
+                opacity: "100%",
+                transform: "scale(1)",
+              }}
+            >
+              {lang === "en" ? "Favourites" : "Хадгалсан"}
+              <div
+                className={`px-[6px] py-[2px] font-medium  flex justify-between items-center bg-black/[.075] text-main-text rounded-full text-[12px] `}
+              >
+                {totalFav}
               </div>
             </Tab>
           </TabList>
@@ -134,6 +203,8 @@ export default function HistoryContainer({
                         "order_page",
                         `${e}`,
                         "coupon_page",
+                        null,
+                        "fav_page",
                         null,
                       )}`,
                       {
@@ -187,11 +258,65 @@ export default function HistoryContainer({
                         null,
                         "coupon_page",
                         `${e}`,
+                        "fav_page",
+                        null,
                       )}`,
                       {
                         scroll: false,
                       },
                     );
+                  }}
+                  classNames={{
+                    base: "flex justify-center py-0 px-[24px] m-0 w-full overflow-visible",
+                    cursor: "bg-primary-blue rounded-full",
+                    wrapper:
+                      "max-w-[324px] w-full p-0 bg-black/[.05] overflow-visible w-auto",
+                    item: "bg-transparent",
+                    next: "bg-transparent",
+                    prev: "bg-transparent",
+                  }}
+                />
+              ) : null}
+            </TabPanel>
+            {/* favourites */}
+            <TabPanel className="flex flex-col gap-[20px] w-full">
+              {fav && fav.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-[20px] xl:grid-cols-3">
+                  {fav.map((index, i) => (
+                    <FavCard key={i} data={index} />
+                  ))}
+                </div>
+              ) : (
+                <div className="w-full text-center col-span-1 md:col-span-2 xl:col-span-3 font-medium text-sub-text/75">
+                  {lang === "en" ? "Currently empty!" : "Одоогоор оосон байна!"}
+                </div>
+              )}
+              {totalFav > 8 ? (
+                <Pagination
+                  isCompact
+                  showControls
+                  id="ordersPagination"
+                  total={Math.ceil(parseInt(`${totalFav}`) / 8)}
+                  initialPage={fav_page ? parseInt(fav_page) : 1}
+                  onChange={(e) => {
+                    router.replace(
+                      `/profile?${multipleCreateQueryString(
+                        "order_page",
+                        null,
+                        "coupon_page",
+                        null,
+                        "fav_page",
+                        `${e}`,
+                      )}`,
+                      {
+                        scroll: false,
+                      },
+                    );
+                    // setFav(
+                    //   favArray
+                    //     ? JSON.parse(favArray).slice((e-1)*8, e*8)
+                    //     : [],
+                    // );
                   }}
                   classNames={{
                     base: "flex justify-center py-0 px-[24px] m-0 w-full overflow-visible",

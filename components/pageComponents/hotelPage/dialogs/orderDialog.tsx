@@ -4,14 +4,12 @@ import format from 'date-fns/format';
 interface Props {
   roomPrices: number[];
   allRooms: roomData.room[];
-  slug: string;
   handleScrollToRooms: (ver: string) => void;
   totalPrice: number;
 }
 export default function OrderDialog({
   roomPrices,
   allRooms,
-  slug,
   handleScrollToRooms,
   totalPrice,
 }: Props) {

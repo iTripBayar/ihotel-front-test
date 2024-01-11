@@ -37,12 +37,13 @@ const ReservationPage = () => {
   const { data: session } = useSession({
     required: false,
   });
-  const {
-    data: profileData,
-    run,
-  } = useRequest(
+  const { data: profileData, run } = useRequest(
     (e: { email: string }) => {
-      return fetchProfileInto({ email: e.email, order_page: 1, review_page: 1 });
+      return fetchProfileInto({
+        email: e.email,
+        order_page: 1,
+        review_page: 1,
+      });
     },
     {
       manual: true,
@@ -61,10 +62,12 @@ const ReservationPage = () => {
 
   const [clients, setClients] = useState({
     name: "",
-    surName:  "",
+    surName: "",
     email: "",
     phone: "",
-    nationality: profileData?.user.country ? profileData.user.country : "Mongolia",
+    nationality: profileData?.user.country
+      ? profileData.user.country
+      : "Mongolia",
   });
   const updateClients = (e: {
     name: string;
@@ -86,7 +89,7 @@ const ReservationPage = () => {
   useEffect(() => {
     dispatch({
       type: "CHANGE_APP_STATE",
-      payload: { logOrSign: "", menu: "", calendar: '' },
+      payload: { logOrSign: "", menu: "", calendar: "" },
     });
   }, []);
   useEffect(() => {
@@ -241,6 +244,8 @@ const ReservationPage = () => {
   if (serializedData) {
     unserializedData = unserialize(serializedData);
   }
+
+  console.log(data);
   if (!error)
     return (
       <div>
@@ -252,7 +257,11 @@ const ReservationPage = () => {
           </title>
           <meta
             name="description"
-            content={lang === "en" ? "iHotel reservation page" : "iHotel захиалгын хуудас"}
+            content={
+              lang === "en"
+                ? "iHotel reservation page"
+                : "iHotel захиалгын хуудас"
+            }
           />
         </>
         <HeaderVariants

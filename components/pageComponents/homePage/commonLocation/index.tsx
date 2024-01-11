@@ -79,7 +79,7 @@ const CommonLocation = ({ data, destinations }: iProps) => {
           setCurrentSlide(currentSlideId);
         }}
       >
-        {data.map((index, i) => (
+        {data.map((index) => (
           <div
             className="relative h-[150px] !w-[calc(100%-12px)]  overflow-hidden rounded-[10px] text-center text-white xs:h-[200px] md:h-[275px] lg:h-[350px] lg:rounded-[20px]"
             key={`${index.coverPhoto}`}

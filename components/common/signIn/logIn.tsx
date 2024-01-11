@@ -69,6 +69,8 @@ export default function LogIn() {
 
   const handleForgotPassword = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+
     const data = new FormData(e.currentTarget);
     try {
       const response = await fetch(`${process.env.WEB_URL}/password/email`, {
@@ -81,7 +83,10 @@ export default function LogIn() {
         }),
       });
       if (!response.ok) {
+        setLoading(false);
         throw new Error(`HTTP error! Status: ${response.status}`);
+      } else {
+        setLoading(false);
       }
       const result = await response.json();
       toast.info(
@@ -286,11 +291,19 @@ export default function LogIn() {
               <div></div>
               <button
                 type="submit"
-                className={`flex h-[40px] w-auto items-center justify-center justify-self-center rounded-[8px] bg-primary-blue px-[20px] uppercase text-white ${
+                className={`flex h-[40px] w-auto  min-w-[100px] items-center justify-center justify-self-center rounded-[8px] bg-primary-blue px-[20px] uppercase text-white ${
                   lang === "en" ? "min-w-[100px] px-[14px]" : ""
                 }`}
               >
-                {lang === "en" ? "Proceed" : "Үргэлжлүүлэх"}
+                {loading === true ? (
+                  <CircularProgress
+                    isIndeterminate={true}
+                    color="#ffffff"
+                    size="20px"
+                  />
+                ) : (
+                  <p>{lang === "en" ? "Proceed" : "Үргэлжлүүлэх"}</p>
+                )}
               </button>
               <button
                 className="justify-self-end text-[13px] text-primary-blue 2xs:text-[14px]"

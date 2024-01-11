@@ -11,7 +11,6 @@ interface Props {
   roomPrices: number[];
   stat: string;
   allRooms: roomData.room[];
-  slug: string;
   handleScrollToRooms: (ver: string) => void;
   totalPrice: number;
 }
@@ -20,7 +19,6 @@ export default function Dialogs({
   roomPrices,
   stat,
   allRooms,
-  slug,
   handleScrollToRooms,
   totalPrice,
 }: Props) {
@@ -64,7 +62,6 @@ export default function Dialogs({
           <OrderDialog
             roomPrices={roomPrices}
             allRooms={allRooms}
-            slug={slug}
             handleScrollToRooms={(ver: string) => handleScrollToRooms(ver)}
             totalPrice={totalPrice}
           />

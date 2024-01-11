@@ -180,10 +180,40 @@ const SearchSection = ({
                   2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
               />
             </svg>
-            <p>
-              {`${checkIn} - ${checkOut}`}
-            </p>
+            <p>{`${checkIn} - ${checkOut}`}</p>
           </button>
+          {appState.filter !== "mobile" ? (
+            <div
+              onClick={() => {
+                router.push(
+                  `/search/?${multipleCreateQueryString(
+                    "lang",
+                    lang,
+                    "toggle",
+                    toggle === true ? "true" : null,
+                    "filter",
+                    filter,
+                    "searchValue",
+                    searchValue !== "" ? searchValue : null,
+                  )}`,
+                );
+              }}
+              className={`lg:flex cursor-pointer items-center justify-center pt-[2px] font-medium  uppercase lg:max-w-[130px] text-primary-blue bg-white px-[16px] rounded-full hidden `}
+              // className={`flex cursor-pointer items-center justify-center pt-[2px] font-medium  uppercase lg:max-w-[130px] ${
+              //   ver === "normal"
+              //     ? "h-[46px] w-full rounded-[8px] bg-primary-blue text-[16px] leading-[16px] text-white"
+              //     : ver === "fixed"
+              //     ? "h-[36px] rounded-full bg-white text-primary-blue lg:min-w-[80px] lg:text-[14px]"
+              //     : ver === "headerSearch"
+              //     ? "h-[36px] min-w-[100px] max-w-[130px] rounded-full bg-primary-blue text-[15px] text-white "
+              //     : ver === "search"
+              //     ? "h-[36px] rounded-full bg-white text-primary-blue shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] lg:min-w-[80px] lg:text-[14px]"
+              //     : ""
+              // }`}
+            >
+              <p>{lang === "en" ? "search" : "хайх"}</p>
+            </div>
+          ) : null}
         </div>
       ) : null}
     </div>
