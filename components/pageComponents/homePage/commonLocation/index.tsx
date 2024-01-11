@@ -65,7 +65,6 @@ const CommonLocation = ({ data, destinations }: iProps) => {
       thumbnail: "",
       updatedAt: "",
     };
-
   return (
     <div className="flex w-full flex-col gap-[20px]">
       <h3 className="mb-[-10px] self-center text-[16px] font-medium md:text-[18px] lg:text-[22px]">
@@ -83,8 +82,9 @@ const CommonLocation = ({ data, destinations }: iProps) => {
         {data.map((index, i) => (
           <div
             className="relative h-[150px] !w-[calc(100%-12px)]  overflow-hidden rounded-[10px] text-center text-white xs:h-[200px] md:h-[275px] lg:h-[350px] lg:rounded-[20px]"
-            key={i}
-            id={`${index.id}here`}
+            key={`${index.coverPhoto}`}
+            id={`${index.coverPhoto}`}
+            aria-hidden={true}
           >
             <Image
               // src={`https://ihotel.mn/${index.coverPhoto}`}

@@ -1,4 +1,4 @@
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import RoomCard from "./roomCard";
 import { useAppCtx } from "@/contexts/app";
 import Link from "next/link";
@@ -20,6 +20,7 @@ const HotelRooms = ({
   dollarRate,
 }: Props) => {
   const searchParams = useSearchParams();
+  const pathname = usePathname()
   const lang = searchParams.get("lang");
   const cart = searchParams.getAll("cart");
   const router = useRouter();
@@ -259,7 +260,7 @@ const HotelRooms = ({
                   <Link
                     href={{
                       query: {
-                        slug: slug,
+                        slug: pathname.split("/")[2],
                         checkIn: checkIn,
                         checkOut: checkOut,
                         days: days,

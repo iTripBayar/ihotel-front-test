@@ -1,49 +1,325 @@
-import React, { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 type iProps = {
   data: HotelData.Hotel;
   fromMap: boolean;
-  ver: string
-  dollarRate: string
+  ver: string;
+  dollarRate: string;
 };
 
-const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
-  const [fav, setFav] = useState(false);
-  const searchParams = useSearchParams();
-  const lang = searchParams.get('lang');
+interface FavouriteHotels {
+  slug: string;
+  id: number;
+  image: string | null;
+  name: string;
+  nameEn: string | null;
+  address: string | null;
+  addressEn: string | null;
+  rating: number;
+  // for stats
+  isOnline: number;
+  isOffline: number;
+  phone: string | null;
+  displayPrice: number;
+  dollarRate: string;
+}
 
-  let stat = '';
+const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
+  // const favArray = localStorage.getItem("favouriteHotels");
+  // const [fav, setFav] = useState<FavouriteHotels[]>(
+  //   favArray ? JSON.parse(favArray) : [],
+  // );
+  const searchParams = useSearchParams();
+  const lang = searchParams.get("lang");
+
+  let stat = "";
   if (data.isOnline == 1 && data.isOffline == 0) {
-    stat = 'online';
+    stat = "online";
   } else if (data.isOnline == 0 && data.isOffline == 0) {
-    stat = 'pending';
+    stat = "pending";
   } else if (data.isOnline == 0 && data.isOffline == 1 && data.phone != null) {
-    stat = 'offline';
+    stat = "offline";
   } else if (data.isOnline == 0 && data.isOffline == 1 && data.phone == null) {
-    stat = 'data';
+    stat = "data";
   }
 
-  const defaultPrice = [];
+  const defaultPrice: number[] = [];
   for (let i = 0; i < data?.roomTypes?.length; i++) {
     defaultPrice.push(data.roomTypes[i].defaultPrice);
   }
   defaultPrice.sort((a, b) => a - b);
+
+  // const handleFav = () => {
+  //   const currentHotel = {
+  //     name: data.name,
+  //     nameEn: data.nameEn,
+  //     slug: data.slug,
+  //     id: data.id,
+  //     image: data.image,
+  //     address: data.address,
+  //     addressEn: data.addressEn,
+  //     rating: data.rating,
+  //     // for stats
+  //     isOnline: data.isOnline,
+  //     isOffline: data.isOffline,
+  //     phone: data.phone,
+  //     displayPrice: defaultPrice[0],
+  //     dollarRate: dollarRate,
+  //   };
+  //   if (favArray === null) {
+  //     localStorage.setItem("favouriteHotels", JSON.stringify([currentHotel]));
+  //   }else{
+  //     const checkExists = JSON.parse(favArray).filter(
+  //       (index: FavouriteHotels) => index.id === data.id,
+  //     )[0];
+  //     if(checkExists){
+  //       console.log('yes')
+  //       // localStorage.setItem(
+  //       //   "favouriteHotels",
+  //       //   JSON.stringify(JSON.parse(favArray).push(currentHotel)),
+  //       // );
+  //       console.log(checkExists);
+  //     }else{
+  //       console.log('no')
+  //       // localStorage.setItem(
+  //       //   "favouriteHotels",
+  //       //   JSON.stringify(JSON.parse(favArray).push(currentHotel)),
+  //       // );
+  //     }
+  //   }
+  //   // localStorage.removeItem("favouriteHotels");
+  // };
+
+
+  // const favouriteHotels = localStorage.getItem
+
+  // useEffect(() => {
+  //   if (fav === true) {
+  //     console.log(fav, data.name);
+  //     const array = localStorage.getItem("favouriteHotels");
+  //     if (array !== null) {
+  //       console.log(JSON.parse(array));
+  //     } else {
+  //       const value: FavouriteHotels[] = [{
+  //         slug: data.slug,
+  //         id: data.id,
+  //         image: data.image,
+  //         name: data.name,
+  //         nameEn: data.nameEn,
+  //         address: data.address,
+  //         addressEn: data.addressEn,
+  //         rating: data.rating,
+  //         // for stats
+  //         isOnline: data.isOnline,
+  //         isOffline: data.isOffline,
+  //         phone: data.phone,
+  //         displayPrice: defaultPrice[0],
+  //         dollarRate: dollarRate,
+  //       }];
+  //       localStorage.setItem("favouriteHotels", JSON.stringify(value));
+  //     }
+  //   }
+  // }, [fav]);
+
+   
+  // useEffect(() => {
+  //    const array = localStorage.getItem("favouriteHotels");
+  //    let favorites: FavouriteHotels[] = array ? JSON.parse(array) : [];
+     
+  //   const currentHotel = {
+  //     name: data.name,
+  //     nameEn: data.nameEn,
+  //     slug: data.slug,
+  //     id: data.id,
+  //     image: data.image,
+  //     address: data.address,
+  //     addressEn: data.addressEn,
+  //     rating: data.rating,
+  //     isOnline: data.isOnline,
+  //     isOffline: data.isOffline,
+  //     phone: data.phone,
+  //     displayPrice: defaultPrice[0],
+  //     dollarRate: dollarRate,
+  //   };
+  //   const hotelExists = favorites.some(
+  //     (hotel: FavouriteHotels) => hotel.id === currentHotel.id,
+  //   );
+
+  //   if (fav === "add") {
+  //     if (!hotelExists) {
+  //       favorites.push(currentHotel);
+  //       localStorage.setItem("favouriteHotels", JSON.stringify(favorites));
+  //     } else {
+  //       setFav("remove");
+  //     }
+  //   } else if (fav === "remove") {
+  //     favorites = favorites.filter(
+  //       (hotel: FavouriteHotels) => hotel.id !== currentHotel.id,
+  //     );
+  //     localStorage.setItem("favouriteHotels", JSON.stringify(favorites));
+  //   }
+  // }, [fav]);
+
+// localStorage.removeItem("favouriteHotels");
+  // useEffect(() => {
+  //   const array = localStorage.getItem("favouriteHotels");
+  //   let favorites: FavouriteHotels[] = array ? JSON.parse(array) : [];
+  //   const currentHotel: FavouriteHotels = {
+  //     name: data.name,
+  //     nameEn: data.nameEn,
+  //     slug: data.slug,
+  //     id: data.id,
+  //     image: data.image,
+  //     address: data.address,
+  //     addressEn: data.addressEn,
+  //     rating: data.rating,
+  //     isOnline: data.isOnline,
+  //     isOffline: data.isOffline,
+  //     phone: data.phone,
+  //     displayPrice: defaultPrice[0],
+  //     dollarRate: dollarRate,
+  //   };
+  //   const hotelExists = favorites.some(
+  //     (hotel: FavouriteHotels) => hotel.id === currentHotel.id,
+  //   );
+  //   if (favorites.length > 0) {
+  //     if (fav) {
+  //       if (!hotelExists) {
+  //         favorites.push(currentHotel);
+  //         localStorage.setItem("favouriteHotels", JSON.stringify(favorites));
+  //       }
+  //     } else {
+  //       if (hotelExists) {
+  //         favorites = favorites.filter(
+  //           (hotel: FavouriteHotels) => hotel.id !== currentHotel.id,
+  //         );
+  //         localStorage.setItem("favouriteHotels", JSON.stringify(favorites));
+  //       }
+  //     }
+  //   }else{
+  //     if(fav){
+  //       if (!hotelExists) {
+  //         favorites.push(currentHotel);
+  //         localStorage.setItem("favouriteHotels", JSON.stringify(favorites));
+  //       }
+  //     }
+  //   }
+  // }, [fav]);
+
+  // useEffect(() => {
+  //   // Step 1: Fetch the current list of favourite hotels from localStorage.
+  //   const favourites = localStorage.getItem("favouriteHotels");
+  //   let favouriteHotels: FavouriteHotels[] = favourites
+  //     ? JSON.parse(favourites)
+  //     : [];
+
+  //   // Step 2: Check if the current hotel exists in the list.
+  //   const hotelExists = favouriteHotels.some((hotel) => hotel.id === data.id);
+
+  //   // Step 3: Add or remove the hotel based on the `fav` state and if it exists in the list.
+  //   if (fav && !hotelExists) {
+  //     // Add hotel to the list
+  //     favouriteHotels.push({
+  //       // ... data properties
+  //       slug: data.slug,
+  //       id: data.id,
+  //       image: data.image,
+  //       name: data.name,
+  //       nameEn: data.nameEn,
+  //       address: data.address,
+  //       addressEn: data.addressEn,
+  //       rating: data.rating,
+  //       isOnline: data.isOnline,
+  //       isOffline: data.isOffline,
+  //       phone: data.phone,
+  //       displayPrice: defaultPrice[0],
+  //       dollarRate: dollarRate,
+  //     });
+  //     localStorage.setItem("favouriteHotels", JSON.stringify(favouriteHotels));
+  //   } else if (!fav && hotelExists) {
+  //     // Remove hotel from the list
+  //     favouriteHotels = favouriteHotels.filter((hotel) => hotel.id !== data.id);
+  //     localStorage.setItem("favouriteHotels", JSON.stringify(favouriteHotels));
+  //   }
+  //   // Step 4: Update localStorage with the new list.
+
+  //   // No state update here; this useEffect is only responsible for updating localStorage.
+  // }, [fav, data, defaultPrice, dollarRate]); // Ensure all dependencies are listed
+
+  // useEffect(() => {
+  //   const array = localStorage.getItem("favouriteHotels");
+  //   let favorites: FavouriteHotels[] = array ? JSON.parse(array) : [];
+  //   const currentHotel = {
+  //     name: data.name,
+  //     nameEn: data.nameEn,
+  //     slug: data.slug,
+  //     id: data.id,
+  //     image: data.image,
+  //     address: data.address,
+  //     addressEn: data.addressEn,
+  //     rating: data.rating,
+  //     isOnline: data.isOnline,
+  //     isOffline: data.isOffline,
+  //     phone: data.phone,
+  //     displayPrice: defaultPrice[0],
+  //     dollarRate: dollarRate,
+  //   };
+
+  //   // Check if the current hotel is in the favorites and set fav accordingly
+  //   const hotelExists = favorites.some((hotel) => hotel.id === currentHotel.id);
+  //   setFav(hotelExists);
+
+  //   if (fav) {
+  //     if (!hotelExists) {
+  //       favorites.push(currentHotel);
+  //       localStorage.setItem("favouriteHotels", JSON.stringify(favorites));
+  //     }
+  //   } else {
+  //     favorites = favorites.filter((hotel) => hotel.id !== currentHotel.id);
+  //     localStorage.setItem("favouriteHotels", JSON.stringify(favorites));
+  //   }
+  // }, [data]); // Only re-run when data changes
+
+  const testObject = [
+    { one: 1, two: 1, three: 1 },
+    { one: 2, two: 2, three: 2 },
+    { one: 3, two: 3, three: 3 },
+  ];
+
+  // Put the object into storage
+  //    localStorage.setItem("testObject", JSON.stringify(testObject));
+  // const test = localStorage.getItem("testObject")
+  //    if (test) {
+  //      console.log(JSON.parse(test));
+  //    }
   return (
     <div className={`relative w-full`}>
-      <svg
+      {/* <svg
         xmlns="http://www.w3.org/2000/svg"
-        fill={fav === false ? "rgb(255 255 255/50%)" : "#3C76FE"}
+        fill={
+          fav.filter((index) => index.id !== data.id)[0]
+            ? "rgb(255 255 255/50%)"
+            : "#3C76FE"
+        }
         viewBox="0 0 24 24"
         strokeWidth={2}
-        stroke={fav === false ? "#3C76FE" : "rgb(255 255 255/75%)"}
+        stroke={
+          fav.filter((index) => index.id !== data.id)[0]
+            ? "#3C76FE"
+            : "rgb(255 255 255/75%)"
+        }
         className={`absolute right-[16px] top-[16px] z-[100] h-[24px] w-[24px] cursor-pointer text-primary-blue ${
-          fav === true ? " scale-125 duration-500" : ""
+          fav.filter((index) => index.id === data.id)[0]
+            ? "scale-125 duration-500"
+            : "scale-100 duration-500"
         }`}
+        // className={`absolute right-[16px] top-[16px] z-[100] h-[24px] w-[24px] cursor-pointer text-primary-blue`}
         onClick={() => {
-          setFav(!fav);
+          handleFav()
+          // setFav((prev) => prev !== '"exsits' ? '' : 'exists');
         }}
       >
         <path
@@ -51,7 +327,7 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
           strokeLinejoin="round"
           d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
         />
-      </svg>
+      </svg> */}
       <Link
         href={{
           pathname: `/hotel/${data.slug}`,
@@ -88,7 +364,7 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
             }
             className={`h-auto w-auto select-none object-cover duration-700 ${
               ver !== "map" ? "hover:scale-110" : ""
-            } ${data?.image ? '' : 'blur-[1px]'}`}
+            } ${data?.image ? "" : "blur-[1px]"}`}
             draggable={false}
           />
         </div>

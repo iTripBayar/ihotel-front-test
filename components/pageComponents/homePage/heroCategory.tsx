@@ -61,7 +61,7 @@ const HeroCategory = ({ data }: iProps) => {
                   ? "/samples/sampleCamp.jpg"
                   : "/samples/camp.png"
               }
-              sizes="50vw"
+              sizes="20vw"
               quality={100}
               className="z-[100] h-auto w-full object-cover duration-500 hover:scale-110"
             />

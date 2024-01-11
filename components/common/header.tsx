@@ -152,6 +152,7 @@ const Header = ({user}:Props) => {
         </div>
         <button
           className="relative flex h-[16px] w-[24px] flex-col items-center lg:hidden"
+          aria-label='animatedMenu'
           onClick={() => {
             dispatch({
               type: "CHANGE_APP_STATE",

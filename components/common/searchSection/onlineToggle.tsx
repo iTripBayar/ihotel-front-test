@@ -88,6 +88,7 @@ const OnlineToggle = ({ ver, changeToggle, value }: iProps) => {
         <Switch
           id="onlineToggle"
           checked={value}
+          aria-label='toggleSwitch'
           onChange={() => {
             changeToggle();
           }}

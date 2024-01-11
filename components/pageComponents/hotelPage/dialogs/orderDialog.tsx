@@ -1,4 +1,4 @@
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import format from 'date-fns/format';
 interface Props {
@@ -16,6 +16,7 @@ export default function OrderDialog({
   totalPrice,
 }: Props) {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const router = useRouter();
   const lang = searchParams.get('lang');
   const cart = searchParams.getAll('cart');
@@ -179,7 +180,7 @@ export default function OrderDialog({
           <Link
             href={{
               query: {
-                slug: slug,
+                slug: pathname.split('/')[2],
                 checkIn: checkIn,
                 checkOut: checkOut,
                 days: days,

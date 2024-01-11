@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useAppCtx } from "@/contexts/app";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -18,6 +18,7 @@ interface Props {
 
 const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
   const searchParams = useSearchParams();
+  const pathname = usePathname()
   const lang = searchParams.get("lang");
   const router = useRouter();
   const cart = searchParams.getAll("cart");
@@ -422,7 +423,7 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
               onClick={() => {
                 if (updatedAmount.length > 2) {
                   router.replace(
-                    `/hotel/?${multipleCreateQueryString(
+                    `${pathname}?${multipleCreateQueryString(
                       "cart",
                       updatedAmount,
                       "roomSelect",
@@ -456,7 +457,7 @@ const RoomCard = ({ data, handleScrollToRooms, stat, dollarRate }: Props) => {
               <Link
                 href={{
                   query: {
-                    slug: slug,
+                    slug: pathname.split('/')[2],
                     checkIn: checkIn,
                     checkOut: checkOut,
                     days: days,
