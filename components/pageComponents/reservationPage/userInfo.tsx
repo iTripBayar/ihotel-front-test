@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useState, useMemo } from "react";
-import { Select, SelectItem } from "@nextui-org/react";
 import countryList from "react-select-country-list";
+import { Listbox } from "@headlessui/react";
 
 interface Props {
   ver: string;
@@ -161,7 +161,80 @@ export default function UserInfo({
             placeholder={lang === "en" ? "Phone number" : "Утасны дугаар"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
-          <Select
+          {/*  */}
+          <div className="relative w-full">
+            <Listbox
+              value={clients.nationality}
+              onChange={(e) => {
+                const value = {
+                  name: clients.name,
+                  surName: clients.surName,
+                  email: clients.email,
+                  phone: clients.phone,
+                  nationality: e,
+                };
+                updateClients(value);
+                // console.log(e);
+              }}
+            >
+              <Listbox.Button
+                className={`w-full h-[42px] rounded-[8px] border-black/[.15] border text-main-text flex items-center px-[12px] justify-between`}
+              >
+                <p>{clients.nationality}</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="min-w-[16px] max-w-[16px] min-h-[16px] max-h-[16px]"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </Listbox.Button>
+              <Listbox.Options
+                className={`h-[250px] w-full absolute overflow-auto bg-white rounded-[12px] z-[500] border border-black/[.15] translate-y-[-292px]`}
+              >
+                {options.map((index) => (
+                  <Listbox.Option
+                    key={index.value}
+                    id={index.value}
+                    value={index.label}
+                    className={`h-[32px] w-full flex items-center px-[12px] ${
+                      clients.nationality === index.label
+                        ? "justify-between"
+                        : ""
+                    } text-main-online`}
+                    // disabled={person.unavailable}
+                  >
+                    <p className="text-main-text">{index.label}</p>
+                    {clients.nationality === index.label ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                        className="min-w-[18px] max-w-[18px] min-h-[18px] max-h-[18px]"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m4.5 12.75 6 6 9-13.5"
+                        />
+                      </svg>
+                    ) : null}
+                  </Listbox.Option>
+                ))}
+              </Listbox.Options>
+            </Listbox>
+          </div>
+          {/*  */}
+          {/* <Select
             isRequired
             aria-label="Nationality"
             placeholder={lang === "en" ? "Nationality" : "Иргэншил"}
@@ -203,7 +276,7 @@ export default function UserInfo({
                 {index.label}
               </SelectItem>
             ))}
-          </Select>
+          </Select> */}
           {additionalClients.length === 0 ? (
             <button
               className="flex items-center justify-end"
@@ -366,31 +439,77 @@ export default function UserInfo({
                   placeholder={lang === "en" ? "Phone number" : "Утасны дугаар"}
                   className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
                 />
-                <input
-                  type="text"
-                  id={`nationality-${i}`}
-                  name={`nationality-${i}`}
-                  pattern="[A-Za-z]+"
-                  required
-                  onChange={(e) => {
-                    if (parseInt(e.target.name.split("-")[1]) === i) {
-                      setAdditionalClients((prevClients) => {
-                        return prevClients.map((client, index) => {
-                          if (index === i) {
-                            // Update only the corresponding index's name value
-                            return {
-                              ...client,
-                              nationality: e.target.value,
-                            };
-                          }
-                          return client;
-                        });
-                      });
-                    }
-                  }}
-                  placeholder={lang === "en" ? "Nationality" : "Иргэншил"}
-                  className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
-                />
+                <div className="relative w-full">
+                  <Listbox
+                    value={clients.nationality}
+                    // onChange={(e) => {
+                    //   const value = {
+                    //     name: clients.name,
+                    //     surName: clients.surName,
+                    //     email: clients.email,
+                    //     phone: clients.phone,
+                    //     nationality: e,
+                    //   };
+                    //   updateClients(value);
+                    //   // console.log(e);
+                    // }}
+                  >
+                    <Listbox.Button
+                      className={`w-full h-[42px] rounded-[8px] border-black/[.15] border text-main-text flex items-center px-[12px] justify-between`}
+                    >
+                      <p>{clients.nationality}</p>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="min-w-[16px] max-w-[16px] min-h-[16px] max-h-[16px]"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                        />
+                      </svg>
+                    </Listbox.Button>
+                    <Listbox.Options
+                      className={`h-[250px] w-full absolute overflow-auto bg-white rounded-[12px] z-[500] border border-black/[.15] translate-y-[-292px]`}
+                    >
+                      {options.map((index) => (
+                        <Listbox.Option
+                          key={index.value}
+                          id={index.value}
+                          value={index.label}
+                          className={`h-[32px] w-full flex items-center px-[12px] ${
+                            clients.nationality === index.label
+                              ? "justify-between"
+                              : ""
+                          } text-main-online`}
+                          // disabled={person.unavailable}
+                        >
+                          <p className="text-main-text">{index.label}</p>
+                          {clients.nationality === index.label ? (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={2}
+                              stroke="currentColor"
+                              className="min-w-[18px] max-w-[18px] min-h-[18px] max-h-[18px]"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="m4.5 12.75 6 6 9-13.5"
+                              />
+                            </svg>
+                          ) : null}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Listbox>
+                </div>
                 {additionalClients.length === i + 1 ? (
                   <button
                     className="flex items-center justify-end"
@@ -503,7 +622,78 @@ export default function UserInfo({
             placeholder={lang === "en" ? "Phone number" : "Утасны дугаар"}
             className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
           />
-          <Select
+          <div className="relative w-full">
+            <Listbox
+              value={clients.nationality}
+              onChange={(e) => {
+                const value = {
+                  name: clients.name,
+                  surName: clients.surName,
+                  email: clients.email,
+                  phone: clients.phone,
+                  nationality: e,
+                };
+                updateClients(value);
+                // console.log(e);
+              }}
+            >
+              <Listbox.Button
+                className={`w-full h-[42px] rounded-[8px] border-black/[.15] border text-main-text flex items-center px-[12px] justify-between`}
+              >
+                <p>{clients.nationality}</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="min-w-[16px] max-w-[16px] min-h-[16px] max-h-[16px]"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </Listbox.Button>
+              <Listbox.Options
+                className={`h-[250px] w-full absolute overflow-auto bg-white rounded-[12px] z-[500] border border-black/[.15] translate-y-[-292px]`}
+              >
+                {options.map((index) => (
+                  <Listbox.Option
+                    key={index.value}
+                    id={index.value}
+                    value={index.label}
+                    className={`h-[32px] w-full flex items-center px-[12px] ${
+                      clients.nationality === index.label
+                        ? "justify-between"
+                        : ""
+                    } text-main-online`}
+                    // disabled={person.unavailable}
+                  >
+                    <p className="text-main-text">{index.label}</p>
+                    {clients.nationality === index.label ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                        className="min-w-[18px] max-w-[18px] min-h-[18px] max-h-[18px]"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m4.5 12.75 6 6 9-13.5"
+                        />
+                      </svg>
+                    ) : null}
+                  </Listbox.Option>
+                ))}
+              </Listbox.Options>
+            </Listbox>
+          </div>
+          {/* <Select
             isRequired
             aria-label="Nationality"
             placeholder={lang === "en" ? "Nationality" : "Иргэншил"}
@@ -538,7 +728,7 @@ export default function UserInfo({
                 {index.label}
               </SelectItem>
             ))}
-          </Select>
+          </Select> */}
           {additionalClients.length === 0 ? (
             <button
               className="flex items-center justify-end gap-[2px]"
@@ -676,25 +866,77 @@ export default function UserInfo({
                   placeholder={lang === "en" ? "Phone number" : "Утасны дугаар"}
                   className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
                 />
-                <input
-                  type="text"
-                  id={`nationality${1}`}
-                  name={`nationality${1}`}
-                  pattern="[A-Za-z]+"
-                  required
-                  onChange={(e) => {
-                    const value = {
-                      name: clients.name,
-                      surName: clients.surName,
-                      email: clients.email,
-                      phone: clients.phone,
-                      nationality: e.target.value,
-                    };
-                    updateClients(value);
-                  }}
-                  placeholder={lang === "en" ? "Nationality" : "Иргэншил"}
-                  className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
-                />
+                <div className="relative w-full">
+                  <Listbox
+                    value={clients.nationality}
+                    // onChange={(e) => {
+                    //   const value = {
+                    //     name: clients.name,
+                    //     surName: clients.surName,
+                    //     email: clients.email,
+                    //     phone: clients.phone,
+                    //     nationality: e,
+                    //   };
+                    //   updateClients(value);
+                    //   // console.log(e);
+                    // }}
+                  >
+                    <Listbox.Button
+                      className={`w-full h-[42px] rounded-[8px] border-black/[.15] border text-main-text flex items-center px-[12px] justify-between`}
+                    >
+                      <p>{clients.nationality}</p>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="min-w-[16px] max-w-[16px] min-h-[16px] max-h-[16px]"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                        />
+                      </svg>
+                    </Listbox.Button>
+                    <Listbox.Options
+                      className={`h-[250px] w-full absolute overflow-auto bg-white rounded-[12px] z-[500] border border-black/[.15] translate-y-[-292px]`}
+                    >
+                      {options.map((index) => (
+                        <Listbox.Option
+                          key={index.value}
+                          id={index.value}
+                          value={index.label}
+                          className={`h-[32px] w-full flex items-center px-[12px] ${
+                            clients.nationality === index.label
+                              ? "justify-between"
+                              : ""
+                          } text-main-online`}
+                          // disabled={person.unavailable}
+                        >
+                          <p className="text-main-text">{index.label}</p>
+                          {clients.nationality === index.label ? (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={2}
+                              stroke="currentColor"
+                              className="min-w-[18px] max-w-[18px] min-h-[18px] max-h-[18px]"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="m4.5 12.75 6 6 9-13.5"
+                              />
+                            </svg>
+                          ) : null}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Listbox>
+                </div>
                 {additionalClients.length === i + 1 ? (
                   <button
                     className="flex items-center justify-end gap-[2px]"

@@ -86,6 +86,7 @@ const ReservationPage = () => {
     setClients(value);
   };
 
+
   useEffect(() => {
     dispatch({
       type: "CHANGE_APP_STATE",
@@ -245,7 +246,6 @@ const ReservationPage = () => {
     unserializedData = unserialize(serializedData);
   }
 
-  console.log(data);
   if (!error)
     return (
       <div>

@@ -67,7 +67,7 @@ export default function ProfileInfo({
         <div className="h-[28px] w-[2px] rounded-full bg-sub-text/25"></div>
         {/* Posts */}
         <div className="flex flex-col gap-[2px] items-center justify-center">
-          <p className="text-[20px] leading-[20px] font-semibold">{`23`}</p>
+          <p className="text-[20px] leading-[20px] font-semibold">{`0`}</p>
           <p className="text-[13px] leading-[13px] opacity-80">
             {lang === "en" ? "Posts" : "Нийтлэлүүд"}
           </p>

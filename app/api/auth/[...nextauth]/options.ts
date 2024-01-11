@@ -5,6 +5,14 @@ import FaceBookProvider from 'next-auth/providers/facebook';
 // import { serialize, CookieSerializeOptions } from 'cookie';
 import { cookies } from 'next/headers';
 
+const characters = "abcdefghijklmnopqrstuvwxyz";
+let randomString = "";
+for (let i = 0; i < 8; i++) {
+  const randomIndex = Math.floor(Math.random() * characters.length);
+  randomString += characters.charAt(randomIndex);
+}
+const randomInteger = Math.floor(Math.random() * (100000 - 10001 + 1)) + 10001;
+
 export const options: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -30,6 +38,7 @@ export const options: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
+        
         const response = await fetch(`${process.env.WEB_URL}/api/login`, {
           method: 'POST',
           headers: {
@@ -57,4 +66,40 @@ export const options: NextAuthOptions = {
       },
     }),
   ],
+  callbacks :{
+    async signIn({ account, user }){
+      if (account && account.provider === "google") {
+        // checking
+        try {
+          const registerResponse = await fetch(
+            `${process.env.WEB_URL}/api/register`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+              body: JSON.stringify({
+                email: user.email,
+                password: `${randomString}A!${randomInteger}`,
+                passwordConfirmation: `${randomString}A!${randomInteger}`,
+              }),
+            },
+          );
+          const res = await registerResponse.json();
+          // console.log(res);
+        } 
+        catch (error: any) {
+          // if (error.response) {
+          //   console.error("HTTP error! Status:", error.response.status);
+          //   console.error("Response data:", error.response.data);
+          // } else {
+          //   console.error("Request error:", error.message);
+          // }
+        }
+        //
+      }
+      return true; 
+    }
+  }
 };

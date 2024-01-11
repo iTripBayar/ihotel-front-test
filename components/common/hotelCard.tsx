@@ -54,6 +54,7 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
   const handleFav = () => {
     const array = localStorage.getItem("favouriteHotels");
     let favorites: FavouriteHotels[] = array ? JSON.parse(array) : [];
+    console.log(favorites);
     const currentHotel = {
       name: data.name,
       nameEn: data.nameEn,
@@ -97,19 +98,21 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill={
-          fav.some((index) => index.id === data.id)
+          fav.length > 0 && fav.filter((index) => index.id === data.id)[0]
             ? "#3C76FE"
             : "rgb(255 255 255/50%)"
         }
         viewBox="0 0 24 24"
         strokeWidth={2}
         stroke={
-          fav.some((hotel: FavouriteHotels) => hotel.id === data.id)
+          fav.length > 0 &&
+          fav.filter((hotel: FavouriteHotels) => hotel.id === data.id)[0]
             ? "rgb(255 255 255/75%)"
             : "#3C76FE"
         }
         className={`absolute right-[16px] top-[16px] z-[100] h-[24px] w-[24px] cursor-pointer text-primary-blue ${
-          fav.some((hotel: FavouriteHotels) => hotel.id === data.id)
+          fav.length > 0 &&
+          fav.filter((hotel: FavouriteHotels) => hotel.id === data.id)[0]
             ? "scale-125 duration-500"
             : "scale-100 duration-500"
         }`}
