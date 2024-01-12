@@ -1,12 +1,12 @@
-import Image from 'next/image';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import {  CircularProgress } from '@chakra-ui/react';
-import { useRequest } from 'ahooks';
-import { qPayInquiry, qPayPayment } from '@/utils/payment/qpay';
-import { useEffect } from 'react';
-import Timer from './timer';
-import Success from './success';
-
+import Image from "next/image";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { CircularProgress } from "@chakra-ui/react";
+import { useRequest } from "ahooks";
+import { qPayInquiry, qPayPayment } from "@/utils/payment/qpay";
+import { useEffect } from "react";
+import Timer from "./timer";
+import Success from "./success";
+import Link from "next/link";
 
 interface Props {
   handleError: () => void;
@@ -14,17 +14,21 @@ interface Props {
   time: Date;
 }
 
-export default function QpayOption({ handleError, handleTimeOut, time }: Props) {
+export default function QpayOption({
+  handleError,
+  handleTimeOut,
+  time,
+}: Props) {
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang');
-  const id = searchParams.get('id');
+  const lang = searchParams.get("lang");
+  const id = searchParams.get("id");
   const pathname = usePathname();
   const router = useRouter();
   const totalPrice = searchParams.get("totalPrice");
 
   const { data, loading, error } = useRequest(
     () => {
-      return qPayPayment(id ? id : '');
+      return qPayPayment(id ? id : "");
     },
     {
       onSuccess: (res) => {
@@ -36,10 +40,7 @@ export default function QpayOption({ handleError, handleTimeOut, time }: Props) 
       },
     },
   );
-  const {
-    run,
-    data: paymentData,
-  } = useRequest(
+  const { run, data: paymentData } = useRequest(
     (e: { order_id: string; invoice_id: string }) => {
       return qPayInquiry({
         order_id: e.order_id,
@@ -57,20 +58,20 @@ export default function QpayOption({ handleError, handleTimeOut, time }: Props) 
       },
     },
   );
- const handleStop = () => {
-   handleTimeOut();
- };
+  const handleStop = () => {
+    handleTimeOut();
+  };
   useEffect(() => {
     const check = setInterval(() => {
       if (id && data) {
         run({ order_id: id, invoice_id: data.response.invoiceId });
-      } else if (pathname === '/reservation') {
+      } else if (pathname === "/reservation") {
         return () => clearInterval(check);
       }
     }, 5000);
     return () => clearInterval(check);
   }, [data]);
-  
+
   if (!error) {
     if (loading === false && data) {
       return (
@@ -110,6 +111,37 @@ export default function QpayOption({ handleError, handleTimeOut, time }: Props) 
                   />
                 </div>
               </div>
+              <div className="grid grid-cols-[repeat(3,48px)] gap-[10px] px-2 lg:hidden">
+                {data.response.urls
+                  .filter(
+                    (index) =>
+                      index.name !== "qPay wallet" &&
+                      index.name !== "State bank" &&
+                      index.name !== "State bank 3.0" &&
+                      index.name !== "Social Pay" &&
+                      index.name !== "Most money" &&
+                      index.name !== "National investment bank" &&
+                      index.name !== "Chinggis khaan bank" &&
+                      index.name !== "Bogd bank" &&
+                      index.name !== "Trans bank" &&
+                      index.name !== "Ard App" &&
+                      index.name !== "Arig bank",
+                  )
+                  .map((index) => (
+                    <Link
+                      href={index.link}
+                      target="_blank"
+                      key={index.name}
+                      className="w-[48px] h-[48px] border border-black/[.25] rounded-[8px] overflow-hidden p-[4px]"
+                    >
+                      <img
+                        src={index.logo}
+                        alt={index.description}
+                        className="w-full h-full rounded-[4px]"
+                      />
+                    </Link>
+                  ))}
+              </div>
               <div className="flex min-w-[300px] flex-col items-center justify-start gap-[20px] rounded-[8px] border border-black/50 px-[16px] py-[16px] shadow-[0px_0px_12px_2px_rgb(255,255,255,0.1)] 2xs:min-w-[340px] 2xs:px-[24px] sm:min-w-[400px] md:min-w-[450px]">
                 {/* bank info */}
                 <div className="flex w-full flex-col items-start justify-start gap-[20px] text-[16px] leading-[16px]">
@@ -136,10 +168,16 @@ export default function QpayOption({ handleError, handleTimeOut, time }: Props) 
                   </div>
                 </div>
               </div>
-              <p className="foont-bold w-[250px] text-center leading-[16px]">
+
+              <p className="foont-bold w-[250px] text-center leading-[16px] hidden lg:flex">
                 {lang === "en"
-                  ? "To proceed with the payment, please scan the QR code or use the above information."
-                  : "Та QR кодыг уншуулах эсвэл дээрх мэдээллийг ашиглан төлбөр тооцоогоо хийнэ үү."}
+                  ? "To proceed with the payment, please scan the QR code."
+                  : "Та QR кодыг уншуулан төлбөр тооцоогоо хийнэ үү."}
+              </p>
+              <p className="foont-bold w-[250px] text-center leading-[16px] lg:hidden">
+                {lang === "en"
+                  ? "To proceed with the payment, please scan the QR code or use the bank applocations."
+                  : "Та QR кодыг уншуулах эсвэл банкны апп уудаас ашиглан төлбөр тооцоогоо хийнэ үү."}
               </p>
             </div>
           ) : (
@@ -155,9 +193,9 @@ export default function QpayOption({ handleError, handleTimeOut, time }: Props) 
       );
     } else {
       return (
-          <div className='flex h-[40vh] w-full items-center justify-center pb-[100px]'>
-            <CircularProgress isIndeterminate={true} color='#3C76FE' />
-          </div>
+        <div className="flex h-[40vh] w-full items-center justify-center pb-[100px]">
+          <CircularProgress isIndeterminate={true} color="#3C76FE" />
+        </div>
       );
     }
   }

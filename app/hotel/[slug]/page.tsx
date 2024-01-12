@@ -23,14 +23,11 @@ import SignUp from "@/components/common/signIn/signUp";
 import { CircularProgress } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import ImagesDialog from "@/components/pageComponents/hotelPage/imagesDialog";
-import BottomSection from "@/components/common/bottomSection";
 import { format } from "date-fns";
 const ErrorComponent = dynamic(() => import("@/components/common/404"));
 import { Toaster, toast } from "sonner";
 import SideMenu from "@/components/common/sidemenu";
 import { useSession } from "next-auth/react";
-import LangBtn from "@/components/common/fixedButtons/langBtn";
-import ScrollTopBtn from "@/components/common/fixedButtons/scrollTopBtn";
 
 const HotelPage = () => {
   const searchParams = useSearchParams();

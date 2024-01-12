@@ -98,7 +98,7 @@ export default function HistoryCard({ data }: Props) {
           {/* stat */}
           <div
             className={`px-[12px] py-[6px] w-fit rounded-[8px] text-[12px] uppercase font-semibold ${
-              data.status === "checked-out"
+              data.status === "checked-out" || data.status === "confirmed"
                 ? "bg-main-online text-white"
                 : data.status === "pending"
                 ? "bg-main-pending"
@@ -106,6 +106,8 @@ export default function HistoryCard({ data }: Props) {
             }`}
           >
             {data.status === "check-out"
+              ? `${lang === "en" ? "Checked out" : "Гарсан"}`
+              : data.status === "confirmed"
               ? `${lang === "en" ? "Confirmed" : "Баталгаажсан"}`
               : data.status === "pending"
               ? `${lang === "en" ? "Pending" : "Хүлээгдэж байна"}`

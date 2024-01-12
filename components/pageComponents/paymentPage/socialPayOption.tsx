@@ -8,6 +8,7 @@ import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 import Success from './success';
 import { useAppCtx } from '@/contexts/app';
+import Link from 'next/link';
 
 interface Props {
   handleTimeOut: () => void;
@@ -111,7 +112,24 @@ export default function SocialPayOption({ handleTimeOut, handleError, time }: Pr
                   />
                 </div>
               </div>
-              <p className="foont-bold w-[250px] text-center leading-[16px]">
+              <Link
+                href={data.order.socialpayDeeplink}
+                target="_blank"
+                id={`${data.orderId}`}
+                className="w-[48px] h-[48px] border border-black/[.25] rounded-[8px] overflow-hidden p-[4px]"
+              >
+                <img
+                  src="/SocialPay.png"
+                  alt="/socialPay"
+                  className="w-full h-full rounded-[4px]"
+                />
+              </Link>
+              <p className="foont-bold w-[250px] text-center leading-[16px] hidden lg:flex">
+                {lang === "en"
+                  ? "To proceed with the payment, please scan the QR code."
+                  : "Та QR кодыг уншуулан төлбөр тооцоогоо хийнэ үү."}
+              </p>
+              <p className="foont-bold w-[250px] text-center leading-[16px] lg:hidden">
                 {lang === "en"
                   ? "To proceed with the payment, please scan the QR code or use the application."
                   : "Та QR кодыг уншуулах эсвэл апп ашиглан төлбөр тооцоогоо хийнэ үү."}

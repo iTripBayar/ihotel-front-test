@@ -19,7 +19,6 @@ import useWindowSize from "@/hooks/windowSize";
 import MapBtn from "@/components/common/fixedButtons/mapBtn";
 import SideMenu from "@/components/common/sidemenu";
 import { useSession } from "next-auth/react";
-import ScrollTopBtn from "@/components/common/fixedButtons/scrollTopBtn";
 const ErrorComponent = dynamic(() => import("@/components/common/404"));
 
 const SearchPage = () => {

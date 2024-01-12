@@ -1,20 +1,19 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { FormEvent } from "react";
 import { Toaster } from "sonner";
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent } from "react";
 import { CircularProgress } from "@chakra-ui/react";
 import { toast } from "sonner";
 
 export default function ResetPass() {
   const searchParams = useSearchParams();
-  const router = useRouter()
+  const router = useRouter();
   const lang = searchParams.get("lang");
   const [loading, setLoading] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordVisible1, setPasswordVisible1] = useState(false);
   const [arePasswordsValid, setArePasswordsValid] = useState("");
-  const params = new URLSearchParams(searchParams);
 
   const resetPass = searchParams.get("resetPass");
   const [message, setMessage] = useState("");
@@ -27,16 +26,13 @@ export default function ResetPass() {
     const target = e.target as HTMLElement;
     if (target.classList.contains("bg-black/[.35]")) {
       // params.delete("resetPass");/
-          router.replace(`/?${createQueryString("resetPass")}`);
-
+      router.replace(`/?${createQueryString("resetPass")}`);
     }
   };
 
-  const createQueryString = (
-    name: string,
-  ) => {
+  const createQueryString = (name: string) => {
     const params = new URLSearchParams(searchParams);
-      params.delete(name);
+    params.delete(name);
     return params.toString();
   };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -67,9 +63,7 @@ export default function ResetPass() {
         setMessage("success");
         setLoading(false);
         toast.success(
-          `${
-            lang === "en" ? "Reset successful!" : "Амжилттай шинэчлэгдлээ!"
-          }`,
+          `${lang === "en" ? "Reset successful!" : "Амжилттай шинэчлэгдлээ!"}`,
         );
         setTimeout(() => {
           router.replace(`/?${createQueryString("resetPass")}`);

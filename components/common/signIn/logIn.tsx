@@ -14,7 +14,7 @@ export default function LogIn() {
   const [error, setError] = useState<string | null>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [passResetEmail, setPassResetEmail] = useState('');
   const close = () => {
     dispatch({
       type: "CHANGE_APP_STATE",
@@ -89,6 +89,7 @@ export default function LogIn() {
         setLoading(false);
       }
       const result = await response.json();
+      setPassResetEmail('');
       toast.info(
         `${
           lang === "en"
@@ -284,6 +285,9 @@ export default function LogIn() {
               <input
                 type="email"
                 name="email"
+                id="passResetEmail"
+                value={passResetEmail}
+                onChange={(e) => setPassResetEmail(e.target.value)}
                 placeholder={lang === "en" ? "E-mail" : "И-мэйл хаяг"}
                 required
                 className="h-[34px] w-full rounded-[4px] border-black/[.15]"
