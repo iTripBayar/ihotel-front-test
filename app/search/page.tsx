@@ -140,7 +140,7 @@ const SearchPage = () => {
   if (!error)
     return (
       <main
-        className={`relative flex h-screen w-full flex-col gap-[20px] overflow-y-auto ${
+        className={`relative flex h-screen w-full flex-col gap-[20px] overflow-y-auto  ${
           appState.map === "open" ? " overflow-hidden pb-[25px]" : ""
         }`}
         id="container"
@@ -220,9 +220,14 @@ const SearchPage = () => {
             }
           ></meta>
         </>
-        <div id="fb-root"></div>
-        {/* <!-- Your Chat plugin code --> */}
-        <div id="fb-customer-chat" className="fb-customerchat"></div>
+
+        {process.env.APP_ENV === "production" ? (
+          <>
+            <div id="fb-root"></div>
+            {/* <!-- Your Chat plugin code --> */}
+            <div id="fb-customer-chat" className="fb-customerchat"></div>
+          </>
+        ) : null}
         <HeaderVariants
           ver={"search"}
           placesData={data ? data.places : []}
@@ -264,7 +269,7 @@ const SearchPage = () => {
           />
         </div>
         <div
-          className={`lg:hidden mt-[-36px] ${
+          className={`lg:hidden mt-[-16px] ${
             appState.filter === "mobile" ? "flex flex-col gap-[24px]" : ""
           }`}
           ref={divRef}
@@ -287,7 +292,7 @@ const SearchPage = () => {
           </div>
         ) : appState.filter !== "mobile" ? (
           <div
-            className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[16px] xl:grid-cols-5 2xl:grid-cols-6`}
+            className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[26px] xl:grid-cols-5 2xl:grid-cols-6`}
           >
             <SearchCards
               data={data ? data.data : []}
