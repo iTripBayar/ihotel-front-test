@@ -122,7 +122,8 @@ export default function ResetPass() {
   return (
     <div
       className="fixed z-[999] flex h-screen w-full animate-fade items-center justify-center bg-black/[.35]"
-      onClick={handleClick}
+      // onClick={handleClick}
+      onMouseDown={handleClick}
     >
       <Toaster position="top-right" richColors />
       <div className="flex h-auto w-[calc(100%-32px)] max-w-[370px] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:max-w-[400px] ">
@@ -138,7 +139,9 @@ export default function ResetPass() {
             strokeWidth={2}
             stroke="currentColor"
             className="h-[22px] w-[22px]"
-            onClick={() => router.replace(`/?${createQueryString("resetPass")}`)}
+            onClick={() =>
+              router.replace(`/?${createQueryString("resetPass")}`)
+            }
           >
             <path
               strokeLinecap="round"

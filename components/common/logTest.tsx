@@ -49,21 +49,22 @@ const LogSign = () => {
   return (
     <div
       className={`fixed z-[999] flex h-screen w-full animate-fade items-center justify-center bg-black/[.35]`}
-      onClick={handleClick}
+      // onClick={handleClick}
+      onMouseDown={handleClick}
     >
       <div className="flex h-auto w-[95%] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] 2xs:w-[85%] sm:w-[55%] md:w-[40%] lg:w-[35%] xl:w-[30%] 2xl:w-[25%]">
         {/* title */}
         <div className="flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px] text-main-text">
           <p className="font-medium">
-            {logInState === 'open'
-              ? lang === 'en'
-                ? 'Log In'
-                : 'Нэвтрэх'
+            {logInState === "open"
+              ? lang === "en"
+                ? "Log In"
+                : "Нэвтрэх"
               : null}
-            {signUpState === 'open'
-              ? lang === 'en'
-                ? 'Sign Up'
-                : 'Бүртгүүлэх'
+            {signUpState === "open"
+              ? lang === "en"
+                ? "Sign Up"
+                : "Бүртгүүлэх"
               : null}
           </p>
           <svg
@@ -89,54 +90,54 @@ const LogSign = () => {
             <div className="relative">
               <input
                 type="email"
-                placeholder={lang === 'en' ? 'E-mail' : 'И-мэйл хая'}
+                placeholder={lang === "en" ? "E-mail" : "И-мэйл хая"}
                 className="h-[34px] w-full rounded-[4px] border-black/[.15]"
                 required
                 pattern="*@.*"
                 ref={emailRef}
               />
-              {logInState != '' ||
-              (signUpState !== '' &&
+              {logInState != "" ||
+              (signUpState !== "" &&
                 emailRef?.current?.validity.patternMismatch) ? (
                 <p className=" absolute left-2 text-[11px] text-red-600 2xs:text-[12px]">
-                  {lang === 'en'
-                    ? '* Invalid email address *'
-                    : '* И-мэйл хаяг буруу байна *'}
+                  {lang === "en"
+                    ? "* Invalid email address *"
+                    : "* И-мэйл хаяг буруу байна *"}
                 </p>
               ) : null}
             </div>
             {/* password input */}
             <div className="relative">
               <input
-                type={show === false ? 'password' : 'text'}
-                placeholder={lang === 'en' ? 'Password' : 'Нууц үг'}
+                type={show === false ? "password" : "text"}
+                placeholder={lang === "en" ? "Password" : "Нууц үг"}
                 className="h-[34px] w-full rounded-[4px] border-black/[.15]"
                 onChange={(event) => setPassword(event.target.value)}
                 ref={passwordRef}
                 minLength={8}
                 required
                 pattern={
-                  signUpState === 'open'
-                    ? '^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'
+                  signUpState === "open"
+                    ? "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
                     : undefined
                 }
               />
-              {signUpState === 'open' &&
+              {signUpState === "open" &&
               passwordRef?.current?.validity.patternMismatch == true ? (
                 <p
                   className={`absolute left-2 text-[11px] text-red-600 2xs:text-[12px] ${
-                    !passwordRef?.current?.validity.patternMismatch ?? 'hidden'
+                    !passwordRef?.current?.validity.patternMismatch ?? "hidden"
                   }`}
                 >
                   {/* {state.language === 'mn'
                     ? '* Чанаргүй нууц үг *'
                     : '* Week password *'} */}
-                  {lang === 'en' ? '* Week password *' : '* Чанаргүй нууц үг *'}
+                  {lang === "en" ? "* Week password *" : "* Чанаргүй нууц үг *"}
                 </p>
               ) : (
                 <></>
               )}
-              {password !== '' ? (
+              {password !== "" ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -157,14 +158,14 @@ const LogSign = () => {
               ) : null}
             </div>
             {/* password confirmation input for signUp */}
-            {signUpState == 'open' ? (
+            {signUpState == "open" ? (
               <div className="relative">
                 <input
-                  type={showConfirm === false ? 'password' : 'text'}
+                  type={showConfirm === false ? "password" : "text"}
                   placeholder={
-                    lang === 'end'
-                      ? 'Confirm password'
-                      : 'Нууц үг дахин оруулна уу'
+                    lang === "end"
+                      ? "Confirm password"
+                      : "Нууц үг дахин оруулна уу"
                     // state.language === 'mn'
                     //   ? 'Нууц үг дахин оруулна уу'
                     //   : 'Confirm password'
@@ -175,7 +176,7 @@ const LogSign = () => {
                   minLength={8}
                   required
                 />
-                {signUpState === 'open' &&
+                {signUpState === "open" &&
                 passwordConfirmRef.current?.value.length &&
                 passwordConfirmRef.current?.value.length > 0 &&
                 passwordRef?.current?.value !==
@@ -184,12 +185,12 @@ const LogSign = () => {
                     {/* {state.language === 'mn'
                       ? '* Нууц үг буруу *'
                       : '* Incorrect password *'} */}
-                    {lang === 'en'
-                      ? '* Incorrect password *'
-                      : '* Нууц үг буруу *'}
+                    {lang === "en"
+                      ? "* Incorrect password *"
+                      : "* Нууц үг буруу *"}
                   </p>
                 ) : null}
-                {passwordConfirm !== '' ? (
+                {passwordConfirm !== "" ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -215,18 +216,18 @@ const LogSign = () => {
               {/* {state.language === 'mn'
                 ? 'Нууц үгээ мартсан?'
                 : 'Forgot password?'} */}
-              {lang === 'en' ? 'Forgot password?' : 'Нууц үгээ мартсан?'}
+              {lang === "en" ? "Forgot password?" : "Нууц үгээ мартсан?"}
             </p>
             {/* warning message */}
-            {signUpState === 'open' &&
+            {signUpState === "open" &&
             passwordRef?.current?.validity.patternMismatch ? (
               <p className="mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]">
                 {/* {state.language === 'mn'
                   ? '* Нууц үг дор хаяж 1 том үсэг, 1 тоо, 1 тусгай тэмдэгт агуулсан хамгийн багадаа 8 тэмдэгт байх хэрэгтэй *'
                   : '* Password must have: an uppercase letter, a number, a symbol, and be at least 8 characters long *'} */}
-                {lang === 'en'
-                  ? '* Password must haveL an uppercase letter, a number, a symbol, and be at least 8 characters long *'
-                  : '* Нууц үг дор хаяж 1 том үсэг, 1 тоо, 1 тусгай тэмдэгт агуулсан хамгийн багадаа 8 тэмдэгт байх хэрэгтэй *'}
+                {lang === "en"
+                  ? "* Password must haveL an uppercase letter, a number, a symbol, and be at least 8 characters long *"
+                  : "* Нууц үг дор хаяж 1 том үсэг, 1 тоо, 1 тусгай тэмдэгт агуулсан хамгийн багадаа 8 тэмдэгт байх хэрэгтэй *"}
               </p>
             ) : null}
           </div>
@@ -236,7 +237,7 @@ const LogSign = () => {
           <div className="h-[1px] w-[33%] bg-black/[.15]"></div>
           <p className="text-[16px] font-medium uppercase text-black/[.25]">
             {/* {state.language === 'mn' ? 'Эсвэл' : 'Or'} */}
-            {lang === 'en' ? 'Or' : 'Эсвэл'}
+            {lang === "en" ? "Or" : "Эсвэл"}
           </p>
           <div className="h-[1px] w-[33%] bg-black/[.15]"></div>
         </div>
@@ -276,42 +277,42 @@ const LogSign = () => {
           <div></div>
           <div
             className={`flex h-[40px] w-auto items-center justify-center justify-self-center rounded-[8px] bg-primary-blue px-[20px] uppercase text-white ${
-              lang === 'en' ? 'min-w-[100px] px-[14px]' : ''
+              lang === "en" ? "min-w-[100px] px-[14px]" : ""
             }`}
           >
-            {logInState === 'open'
-              ? lang === 'en'
-                ? 'Log In'
-                : 'Нэвтрэх'
+            {logInState === "open"
+              ? lang === "en"
+                ? "Log In"
+                : "Нэвтрэх"
               : null}
-            {signUpState === 'open'
-              ? lang === 'en'
-                ? 'Sign Up'
-                : 'Бүртгүүлэх'
+            {signUpState === "open"
+              ? lang === "en"
+                ? "Sign Up"
+                : "Бүртгүүлэх"
               : null}
           </div>
           <p
             className="justify-self-end text-[13px] text-primary-blue 2xs:text-[14px]"
             onClick={() => {
-              if (logInState === 'open') {
-                router.push(`/?${createQueryString('signUpState', 'open')}`);
-                router.push(`/?${createQueryString('logInState', null)}`);
+              if (logInState === "open") {
+                router.push(`/?${createQueryString("signUpState", "open")}`);
+                router.push(`/?${createQueryString("logInState", null)}`);
               } else {
-                router.push(`/?${createQueryString('signUpState', null)}`);
-                router.push(`/?${createQueryString('logInState', 'open')}`);
+                router.push(`/?${createQueryString("signUpState", null)}`);
+                router.push(`/?${createQueryString("logInState", "open")}`);
               }
               // logIn === 'open' ? changeVer('signUp') : changeVer('logIn');
             }}
           >
-            {logInState === 'open'
-              ? lang === 'en'
-                ? 'Sign Up'
-                : 'Бүртгүүлэх'
+            {logInState === "open"
+              ? lang === "en"
+                ? "Sign Up"
+                : "Бүртгүүлэх"
               : null}
-            {signUpState === 'open'
-              ? lang === 'en'
-                ? 'Log In'
-                : 'Нэвтрэх'
+            {signUpState === "open"
+              ? lang === "en"
+                ? "Log In"
+                : "Нэвтрэх"
               : null}
           </p>
         </div>

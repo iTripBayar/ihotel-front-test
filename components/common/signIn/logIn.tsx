@@ -106,7 +106,9 @@ export default function LogIn() {
   return (
     <div
       className="fixed z-[999] flex h-screen w-full animate-fade items-center justify-center bg-black/[.35]"
-      onClick={handleClick}
+      // onClick={handleClick}
+      onMouseDown={handleClick}
+      // onMouseUp={()=>{console.log('up')}}
     >
       <Toaster position="top-right" richColors />
       <div className="flex h-auto w-[calc(100%-32px)] max-w-[370px] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:max-w-[400px]">

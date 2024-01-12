@@ -168,7 +168,6 @@ const Home = () => {
         {appState.logOrSign === "sign" ? <SignUp /> : null}
         {resetPass && resetPass !== "" ? <ResetPass /> : null}
         {appState.menu === "open" ? <SideMenu session={session} /> : null}
-
         <BottomSection ver={headerVer} handleScrollToTopVer={() => {}} />
         {loading ? (
           <div className="flex h-[111px] w-full items-center justify-center 2xs:h-[100px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[225px] 2xl:h-[250px]">

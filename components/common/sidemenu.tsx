@@ -49,7 +49,8 @@ const SideMenu = ({ session }: Props) => {
   return (
     <div
       className={` fixed right-0 top-0 !z-[999] flex h-full w-full justify-end bg-black/50`}
-      onClick={handleClick}
+      // onClick={handleClick}
+      onMouseDown={handleClick}
     >
       <div
         className={`relative flex h-full w-[210px] animate-slide-left flex-col justify-between bg-[#181818] px-[20px] pb-[32px] pt-[48px] text-[14px] font-medium text-white duration-500 lg:w-[250px] lg:px-[24px] ${

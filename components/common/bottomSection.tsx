@@ -1,7 +1,7 @@
-import { useAppCtx } from '@/contexts/app';
-import LangBtn from './fixedButtons/langBtn';
-import ScrollTopBtn from './fixedButtons/scrollTopBtn';
-import MapBtn from './fixedButtons/mapBtn';
+import { useAppCtx } from "@/contexts/app";
+import LangBtn from "./fixedButtons/langBtn";
+import ScrollTopBtn from "./fixedButtons/scrollTopBtn";
+import MapBtn from "./fixedButtons/mapBtn";
 
 type iProps = {
   ver: string;
@@ -39,18 +39,17 @@ const BottomSection = ({ ver, handleScrollToTopVer }: iProps) => {
         }`}
       >
         {/* lang */}
-
         {/* map with arrow when closed */}
         {ver === "search" && appState.map === "" ? (
           <>
             <MapBtn ver={"arrow"} />
-            {/* <LangBtn /> */}
           </>
         ) : null}
+        {ver === "fixed" ? <LangBtn /> : null}
         {/* scrollToTop btn */}
-        {/* {appState.map !== "open" ? (
+        {ver === "fixed" && appState.map !== "open" ? (
           <ScrollTopBtn ver={ver} handleScrollToTopVer={handleScrollToTopVer} />
-        ) : null} */}
+        ) : null}
       </div>
     </div>
   );
