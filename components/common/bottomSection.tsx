@@ -39,15 +39,15 @@ const BottomSection = ({ ver, handleScrollToTopVer }: iProps) => {
         }`}
       >
         {/* lang */}
+        <LangBtn />
         {/* map with arrow when closed */}
         {ver === "search" && appState.map === "" ? (
           <>
             <MapBtn ver={"arrow"} />
           </>
         ) : null}
-        {ver === "fixed" ? <LangBtn /> : null}
         {/* scrollToTop btn */}
-        {ver === "fixed" && appState.map !== "open" ? (
+        {appState.map !== "open" ? (
           <ScrollTopBtn ver={ver} handleScrollToTopVer={handleScrollToTopVer} />
         ) : null}
       </div>

@@ -43,7 +43,7 @@ const SearchCards = ({ data, dollarRate, totalLength }: iProps) => {
     <div
       className={` flex h-auto w-full flex-col gap-[32px] overflow-x-visible lg:h-[calc(100vh-60px)] lg:overflow-y-scroll lg:px-[12px] lg:pb-[28px]  ${
         appState.map === "open"
-          ? "hidden lg:col-span-4 lg:flex xl:col-span-3 2xl:col-span-4 lg:pt-[12px]"
+          ? "hidden lg:col-span-4 lg:flex xl:col-span-3 2xl:col-span-4 "
           : "lg:col-span-6 xl:col-span-5 2xl:col-span-6"
       }`}
       ref={divRef}
