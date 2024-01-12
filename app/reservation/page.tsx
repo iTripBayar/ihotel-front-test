@@ -28,6 +28,7 @@ const ReservationPage = () => {
   const router = useRouter();
   const slug = searchParams.get("slug");
   const lang = searchParams.get("lang");
+
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
   const days = searchParams.get("days");

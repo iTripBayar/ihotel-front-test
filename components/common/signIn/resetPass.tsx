@@ -1,54 +1,51 @@
-import { useState, ChangeEvent, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { useAppCtx } from "@/contexts/app";
+import { useSearchParams, useRouter } from "next/navigation";
 import { FormEvent } from "react";
-import { FacebookSignInButton, GoogleSignInButton } from "./authButtons";
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
+import { useState, ChangeEvent, useEffect } from "react";
 import { CircularProgress } from "@chakra-ui/react";
+import { toast } from "sonner";
 
-export default function SignUp() {
+export default function ResetPass() {
   const searchParams = useSearchParams();
+  const router = useRouter()
   const lang = searchParams.get("lang");
-  const { dispatch } = useAppCtx();
+  const [loading, setLoading] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible1, setPasswordVisible1] = useState(false);
+  const [arePasswordsValid, setArePasswordsValid] = useState("");
+  const params = new URLSearchParams(searchParams);
+
+  const resetPass = searchParams.get("resetPass");
+  const [message, setMessage] = useState("");
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
     passwordConfirmation: "",
   });
-  const [isEmailValid, setIsEmailValid] = useState(true);
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [passwordVisible1, setPasswordVisible1] = useState(false);
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [arePasswordsValid, setArePasswordsValid] = useState("");
-
-  const close = () => {
-    dispatch({
-      type: "CHANGE_APP_STATE",
-      payload: { logOrSign: "" },
-    });
-  };
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target.classList.contains("bg-black/[.35]")) {
-      close();
+      // params.delete("resetPass");/
+          router.replace(`/?${createQueryString("resetPass")}`);
+
     }
   };
-  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setUserInfo({ ...userInfo, email: value });
-    // Check if the email is not empty and is valid
-    setIsEmailValid(value === "" || event.target.checkValidity());
-  };
 
+  const createQueryString = (
+    name: string,
+  ) => {
+    const params = new URLSearchParams(searchParams);
+      params.delete(name);
+    return params.toString();
+  };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     const data = new FormData(e.currentTarget);
-
     try {
       const registerResponse = await fetch(
-        `${process.env.WEB_URL}/api/register`,
+        `${process.env.WEB_URL}/api/password/reset`,
         {
           method: "POST",
           headers: {
@@ -58,7 +55,7 @@ export default function SignUp() {
           body: JSON.stringify({
             email: data.get("email")?.toString(),
             password: data.get("password")?.toString(),
-            passwordConfirmation: data.get("passwordConfirmation")?.toString(),
+            token: resetPass ? resetPass : "",
           }),
         },
       );
@@ -69,32 +66,14 @@ export default function SignUp() {
       } else {
         setMessage("success");
         setLoading(false);
-
         toast.success(
           `${
-            lang === "en" ? "Register successful!" : "Амжилттай бүртгэгдлээ!"
+            lang === "en" ? "Reset successful!" : "Амжилттай шинэчлэгдлээ!"
           }`,
         );
         setTimeout(() => {
-          toast(
-            `${
-              lang === "en"
-                ? "Proceed to Log In?"
-                : "Нэвтрэх хэсэг рүү үсрэх үү?"
-            }`,
-            {
-              action: {
-                label: `${lang === "en" ? "Yes" : "Тэгье"}`,
-                onClick: () =>
-                  dispatch({
-                    type: "CHANGE_APP_STATE",
-                    payload: { logOrSign: "log" },
-                  }),
-                  
-              },
-            },
-          );
-        }, 1000);
+          router.replace(`/?${createQueryString("resetPass")}`);
+        }, 2000);
       }
       const res = await registerResponse.json();
       console.log(res);
@@ -112,20 +91,13 @@ export default function SignUp() {
       }
     }
   };
-  useEffect(() => {
-    // submitButton;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter") {
-        document.getElementById("submitButton")?.click();
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
 
-
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setUserInfo({ ...userInfo, email: value });
+    // Check if the email is not empty and is valid
+    setIsEmailValid(value === "" || event.target.checkValidity());
+  };
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     // const { value } = event.target;
     // setUserInfo({ ...userInfo, password: value });
@@ -137,7 +109,6 @@ export default function SignUp() {
     const regex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!#@$%^&*()]).{8,}$/;
     setArePasswordsValid(regex.test(value) === true ? "patternOk" : "");
   };
-
   const handlePasswordConfirmChange = (
     event: ChangeEvent<HTMLInputElement>,
   ) => {
@@ -148,12 +119,6 @@ export default function SignUp() {
     setUserInfo({ ...userInfo, passwordConfirmation: value });
     setArePasswordsValid(userInfo.password === value ? "match" : "nomatch");
   };
-  if (message !== "") {
-    setTimeout(() => {
-      setMessage("");
-    }, 3000);
-  }
-
   return (
     <div
       className="fixed z-[999] flex h-screen w-full animate-fade items-center justify-center bg-black/[.35]"
@@ -164,7 +129,7 @@ export default function SignUp() {
         {/* title */}
         <div className="flex h-[56px] w-full items-center justify-between border-b-[1px] border-black/[.15] text-[18px] text-main-text">
           <p className="font-medium">
-            {lang === "en" ? "Sign Up" : "Бүртгүүлэх"}
+            {lang === "en" ? "Reset password" : "Нууц үг шинэчлэх"}
           </p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -173,7 +138,7 @@ export default function SignUp() {
             strokeWidth={2}
             stroke="currentColor"
             className="h-[22px] w-[22px]"
-            onClick={() => close()}
+            onClick={() => router.replace(`/?${createQueryString("resetPass")}`)}
           >
             <path
               strokeLinecap="round"
@@ -326,10 +291,10 @@ export default function SignUp() {
             </div>
           </div>
           {message === "invalid" && (
-            <p className="mt-[-10px] pl-[10px] text-[11px] text-red-600 2xs:text-[12px]">
+            <p className="mt-[-10px] pl-[6px] text-[11px] text-red-600 2xs:text-[12px]">
               {lang === "en"
-                ? "* Email is already registered *"
-                : "* И-мэйл хаяг бүртгэлтэй байна *"}
+                ? "* Could not reset password, try again! *"
+                : "* Нууц үг шинэчлэхэд алдаа гарлаа, дахин оролдоно уу! *"}
             </p>
           )}
           {arePasswordsValid === "" ? (
@@ -345,24 +310,7 @@ export default function SignUp() {
                 : "* Нууц үгнүүд хоорондоо таарахгүй байна *"}
             </p>
           ) : null}
-
-          <div className="flex w-full items-center justify-between">
-            <div className="h-[1px] w-[33%] bg-black/[.15]"></div>
-            <p className="text-[14px] font-medium uppercase text-black/[.25] sm:text-[16px]">
-              {lang === "en" ? "Or" : "Эсвэл"}
-            </p>
-            <div className="h-[1px] w-[33%] bg-black/[.15]"></div>
-          </div>
-          {/* facebook & google logIn */}
-          <div
-            className="mb-[-10px] flex w-full items-center justify-center gap-[20px] text-[16px] text-white"
-            onKeyDown={(e) => e.preventDefault()}
-          >
-            <FacebookSignInButton />
-            <GoogleSignInButton />
-          </div>
-          <div className="mt-[16px] grid w-full grid-cols-3 items-center gap-[24px] text-[12px] font-medium 2xs:text-[14px]">
-            <div></div>
+          <div className="mt-[16px] flex w-full justify-center items-center gap-[24px] text-[12px] font-medium 2xs:text-[14px]">
             <button
               type="submit"
               id="submitButton"
@@ -377,19 +325,8 @@ export default function SignUp() {
                   size="20px"
                 />
               ) : (
-                <p>{lang === "en" ? "Sign Up" : "Бүртгүүлэх"}</p>
+                <p>{lang === "en" ? "Change" : "Өөрчлөх"}</p>
               )}
-            </button>
-            <button
-              className="justify-self-end text-[13px] text-primary-blue sm:text-[14px]"
-              onClick={() => {
-                dispatch({
-                  type: "CHANGE_APP_STATE",
-                  payload: { logOrSign: "log" },
-                });
-              }}
-            >
-              {lang === "en" ? "Log in" : "Нэвтрэх"}
             </button>
           </div>
         </form>

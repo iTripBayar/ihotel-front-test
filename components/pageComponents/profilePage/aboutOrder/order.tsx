@@ -1,12 +1,17 @@
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 interface Props {
   data: User.Order;
-  handleCancelOrder: (id: number)=> void;
-  handlePayment: ()=>void
+  handleCancelOrder: (id: number) => void;
+  handlePayment: () => void;
 }
 
-export default function Order({ data, handleCancelOrder, handlePayment }: Props) {
+export default function Order({
+  data,
+  handleCancelOrder,
+  handlePayment,
+}: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
   const clientData = JSON.parse(data.userdata);
@@ -24,10 +29,60 @@ export default function Order({ data, handleCancelOrder, handlePayment }: Props)
           <button
             className="w-full rounded-full border-[2px] border-main-offline uppercase text-main-offline h-[42px] flex justify-center items-center font-medium"
             onClick={() => {
-              handleCancelOrder(data.id);
-              setTimeout(() => {
-                window.location.reload();
-              }, 1500);
+              toast.custom(
+                (t) => (
+                  <div className="w-full flex flex-col gap-[24px] bg-white border font-medium border-black/[.25] rounded-[20px] px-[16px] py-[12px] items-center">
+                    <button
+                      className="absolute right-[12px] top-[12px]"
+                      onClick={() => toast.dismiss(t)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="min-w-[20px] max-w-[20px] min-h-[20px] max-h-[20px]"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18 18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                    <p className="w-full">
+                      {lang === "en"
+                        ? "Proceed with the cancel?"
+                        : "Та энэ захиалгыг цуцлах гэж байгаадаа итгэлтэй байна уу?"}
+                    </p>
+                    <div className="flex gap-[12px]">
+                      <button
+                        onClick={() => {
+                          handleCancelOrder(data.id);
+                          setTimeout(() => {
+                            toast.dismiss(t);
+                            window.location.reload();
+                          }, 1500);
+                        }}
+                        className="px-[32px] py-[6px] flex justify-center items-center bg-primary-blue text-white rounded-full"
+                      >
+                        {lang === "en" ? "Yes" : "Тийм"}
+                      </button>
+                      <button
+                        onClick={() => toast.dismiss(t)}
+                        className="px-[32px] py-[6px] flex justify-center items-center border border-main-offline text-main-offline rounded-full"
+                      >
+                        {lang === "en" ? "No" : "Үгүй"}
+                      </button>
+                    </div>
+                  </div>
+                ),
+                {
+                  position: "top-center",
+                  duration: 1000 * 100,
+                },
+              );
             }}
           >
             {lang === "en" ? "Cancel" : "Цуцлах"}

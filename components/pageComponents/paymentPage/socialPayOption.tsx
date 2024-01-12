@@ -25,7 +25,6 @@ export default function SocialPayOption({ handleTimeOut, handleError, time }: Pr
   const [qr, setQr] = useState<string>('');
   const totalPrice = searchParams.get("totalPrice");
 
-
   const { data, loading, error } = useRequest(
     () => {
       return socialPayPayment(id ? id : '');

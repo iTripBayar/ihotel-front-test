@@ -20,10 +20,12 @@ const ErrorComponent = dynamic(() => import("@/components/common/404"));
 import { useSession } from "next-auth/react";
 import SideMenu from "@/components/common/sidemenu";
 import { useSearchParams } from "next/navigation";
+import ResetPass from "@/components/common/signIn/resetPass";
 
 const Home = () => {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
+  const resetPass = searchParams.get("resetPass");
   const [headerVer, setHeaderVer] = useState("default");
   const searchBoxRef = useRef(null);
   const { data: session } = useSession({
@@ -67,7 +69,6 @@ const Home = () => {
       }
     };
   }, []);
-
   if (!error)
     return (
       <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
@@ -164,6 +165,7 @@ const Home = () => {
           <LogIn />
         ) : null}
         {appState.logOrSign === "sign" ? <SignUp /> : null}
+        {resetPass && resetPass !== '' ? <ResetPass /> : null}
         {appState.menu === "open" ? <SideMenu session={session} /> : null}
 
         <BottomSection ver={headerVer} handleScrollToTopVer={() => {}} />

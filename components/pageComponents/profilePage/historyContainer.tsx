@@ -22,7 +22,6 @@ interface FavouriteHotels {
   address: string | null;
   addressEn: string | null;
   rating: number;
-  // for stats
   stat: string;
   displayPrice: number;
   dollarRate: string;

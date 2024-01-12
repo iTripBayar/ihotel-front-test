@@ -19,7 +19,6 @@ interface FavouriteHotels {
   address: string | null;
   addressEn: string | null;
   rating: number;
-  // for stats
   stat: string;
   displayPrice: number;
   dollarRate: string;
@@ -54,7 +53,6 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
   const handleFav = () => {
     const array = localStorage.getItem("favouriteHotels");
     let favorites: FavouriteHotels[] = array ? JSON.parse(array) : [];
-    console.log(favorites);
     const currentHotel = {
       name: data.name,
       nameEn: data.nameEn,
@@ -64,7 +62,6 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
       address: data.address,
       addressEn: data.addressEn,
       rating: data.rating,
-      // for stats
       stat: stat,
       displayPrice: defaultPrice[0],
       dollarRate: dollarRate,

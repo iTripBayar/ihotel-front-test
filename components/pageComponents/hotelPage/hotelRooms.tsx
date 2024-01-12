@@ -193,7 +193,7 @@ const HotelRooms = ({
                             className="flex h-[36px] w-[36px] items-center justify-end"
                             onClick={() => {
                               router.replace(
-                                `/hotel/?${createQueryString(
+                                `${pathname}?${createQueryString(
                                   "cart",
                                   cart.indexOf(index),
                                 )}`,

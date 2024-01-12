@@ -66,6 +66,7 @@ export default function AboutOrder({ data }: Props) {
           `${
             lang === "en" ? "Cancellation successful!" : "Амжилттай цуцлагдлаа!"
           }`,
+          { position: "top-center" },
         );
       }
       // const res = await response.json();
