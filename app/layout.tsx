@@ -36,16 +36,12 @@ export default function RootLayout({
               <meta name="copyright" content="iHotel LLC" />
               <meta property="fb:app_id" content="500186344160161" />
               <meta name="msapplication-TileColor" content="#da532c" />
-              <Script></Script>
             </head>
             <body className={`relative overscroll-y-none ${inter.className}`}>
               <ChakraProvider>{children}</ChakraProvider>
               {process.env.APP_ENV === "production" ? (
                 <>
-                  {/* <!-- Messenger Chat plugin Code --> */}
-                  <div id="fb-root"></div>
-                  {/* <!-- Your Chat plugin code --> */}
-                  <div id="fb-customer-chat" className="fb-customerchat"></div>
+                 
                   <Script
                     id="messenger-tag"
                     strategy="afterInteractive"
@@ -78,8 +74,6 @@ export default function RootLayout({
                   ></Script>
                 </>
               ) : null}
-
-              {/*  */}
             </body>
           </html>
         </CookiesProvider>
