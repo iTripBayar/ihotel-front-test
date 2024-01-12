@@ -44,7 +44,7 @@ export default function MapBtn({ ver }: Props) {
         ) : null}
         {delay == true ? (
           <div
-            className={`absolute left-[70%] top-0 flex w-[90px] animate-fade items-center justify-center rounded-full bg-primary-blue text-[11px] font-medium  ${
+            className={`absolute right-[60%] top-0 flex w-[90px] animate-fade items-center justify-center rounded-full bg-primary-blue text-[11px] font-medium  ${
               lang === 'en' ? 'max-w-[45px] duration-500' : ''
             }`}
           >

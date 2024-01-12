@@ -29,6 +29,8 @@ const ErrorComponent = dynamic(() => import("@/components/common/404"));
 import { Toaster, toast } from "sonner";
 import SideMenu from "@/components/common/sidemenu";
 import { useSession } from "next-auth/react";
+import LangBtn from "@/components/common/fixedButtons/langBtn";
+import ScrollTopBtn from "@/components/common/fixedButtons/scrollTopBtn";
 
 const HotelPage = () => {
   const searchParams = useSearchParams();
@@ -320,8 +322,13 @@ const HotelPage = () => {
         ) : null}
         {appState.logOrSign === "sign" ? <SignUp /> : null}
         {appState.menu === "open" ? <SideMenu session={session} /> : null}
-
-        <BottomSection ver={"hotel"} handleScrollToTopVer={() => {}} />
+        {/* <div className="fixed z-[899] flex bottom-[152px] right-[12px] text-white">
+          <LangBtn />
+        </div>
+        <div className="fixed z-[899] flex bottom-[102px] right-[12px] text-white">
+          <ScrollTopBtn ver="hotel" handleScrollToTopVer={() => {}} />
+        </div> */}
+        {/* <BottomSection ver={"hotel"} handleScrollToTopVer={() => {}} /> */}
         <Dialogs
           roomPrices={roomPrices}
           stat={stat}

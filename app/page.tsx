@@ -144,6 +144,7 @@ const Home = () => {
             }
           ></meta>
         </>
+
         <Header
           user={
             session
@@ -165,7 +166,7 @@ const Home = () => {
           <LogIn />
         ) : null}
         {appState.logOrSign === "sign" ? <SignUp /> : null}
-        {resetPass && resetPass !== '' ? <ResetPass /> : null}
+        {resetPass && resetPass !== "" ? <ResetPass /> : null}
         {appState.menu === "open" ? <SideMenu session={session} /> : null}
 
         <BottomSection ver={headerVer} handleScrollToTopVer={() => {}} />
@@ -211,6 +212,10 @@ const Home = () => {
             <News data={data ? data.posts : []} />
           </div>
         )}
+        {/* <!-- Messenger Chat plugin Code --> */}
+        <div id="fb-root"></div>
+        {/* <!-- Your Chat plugin code --> */}
+        <div id="fb-customer-chat" className="fb-customerchat"></div>
         <Footer />
       </main>
     );

@@ -19,6 +19,7 @@ import useWindowSize from "@/hooks/windowSize";
 import MapBtn from "@/components/common/fixedButtons/mapBtn";
 import SideMenu from "@/components/common/sidemenu";
 import { useSession } from "next-auth/react";
+import ScrollTopBtn from "@/components/common/fixedButtons/scrollTopBtn";
 const ErrorComponent = dynamic(() => import("@/components/common/404"));
 
 const SearchPage = () => {
@@ -219,7 +220,9 @@ const SearchPage = () => {
             }
           ></meta>
         </>
-
+        <div id="fb-root"></div>
+        {/* <!-- Your Chat plugin code --> */}
+        <div id="fb-customer-chat" className="fb-customerchat"></div>
         <HeaderVariants
           ver={"search"}
           placesData={data ? data.places : []}
@@ -231,9 +234,19 @@ const SearchPage = () => {
         ) : null}
         {appState.logOrSign === "sign" ? <SignUp /> : null}
         {appState.menu === "open" ? <SideMenu session={session} /> : null}
-        <div className="fixed  bottom-[24px] left-[0%] z-[899]  flex w-auto animate-fade flex-row items-stretch justify-between gap-[16px] px-[16px] text-white sm:px-[42px] sm:pl-[39px] md:px-[32px] lg:bottom-[12px]">
-          {appState.map === "" ? <MapBtn ver={"default"} /> : null}
-        </div>
+        {appState.map !== "open" ? (
+          <div className="fixed  bottom-[24px] right-[0%] z-[899]  flex w-auto animate-fade flex-row items-stretch justify-between gap-[16px] px-[16px] text-white sm:px-[42px] sm:pl-[39px] md:px-[32px] lg:bottom-[12px]">
+            {appState.map === "" ? <MapBtn ver={"default"} /> : null}
+          </div>
+        ) : null}
+        {appState.map !== "open" ? (
+          <div className="fixed bottom-[80px] right-[0%] z-[899] flex w-auto animate-fade flex-row items-center justify-center px-[16px] text-white sm:px-[42px] md:px-[32px] bg-left-bottom-[12px]">
+            <ScrollTopBtn
+              ver={"search"}
+              handleScrollToTopVer={handleScrollToTop}
+            />
+          </div>
+        ) : null}
         <BottomSection
           ver={"search"}
           handleScrollToTopVer={handleScrollToTop}
@@ -251,7 +264,7 @@ const SearchPage = () => {
           />
         </div>
         <div
-          className={`lg:hidden ${
+          className={`lg:hidden mt-[-36px] ${
             appState.filter === "mobile" ? "flex flex-col gap-[24px]" : ""
           }`}
           ref={divRef}
@@ -274,7 +287,7 @@ const SearchPage = () => {
           </div>
         ) : appState.filter !== "mobile" ? (
           <div
-            className={`relative grid h-full w-full grid-cols-1 gap-[24px]  lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[60px] xl:grid-cols-5 2xl:grid-cols-6`}
+            className={`relative grid h-full w-full grid-cols-1 gap-[24px] lg:grid-cols-6 lg:gap-[12px] lg:px-[50px] lg:pt-[16px] xl:grid-cols-5 2xl:grid-cols-6`}
           >
             <SearchCards
               data={data ? data.data : []}
@@ -292,6 +305,7 @@ const SearchPage = () => {
             ) : null}
           </div>
         ) : null}
+        {/* <!-- Messenger Chat plugin Code --> */}
       </main>
     );
   return <ErrorComponent />;

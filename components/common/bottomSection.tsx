@@ -14,27 +14,23 @@ const BottomSection = ({ ver, handleScrollToTopVer }: iProps) => {
     <div
       className={` fixed  z-[899] flex animate-fade  items-stretch gap-[16px] text-white  ${
         ver === "search"
-          ? `bottom-[24px] right-[0%] w-auto flex-row justify-between px-[16px] sm:px-[42px] sm:pl-[39px] md:px-[32px] lg:bottom-[12px] ${
+          ? `bottom-[24px] right-[0%] w-auto flex-row justify-between px-[16px] sm:px-[42px] sm:pl-[39px] md:px-[32px] lg:bottom-[24px] ${
               appState.map !== "" ? "lg:right-[50px]" : " lg:right-[24px]"
             } lg:w-auto lg:px-0`
           : ver === "fixed"
-          ? "bottom-[4%] right-[3.4%] flex-col"
+          ? "bottom-[24px] right-[3.4%] flex-col"
           : ver === "hotel"
-          ? "bottom-[4%] right-[3.4%] flex-col hidden lg:flex"
+          ? "bottom-[24px] right-[3.4%] flex-col hidden lg:flex"
           : "hidden"
       }`}
     >
-      {/* <!-- Messenger Chat plugin Code --> */}
-      <div id="fb-root"></div>
-      {/* <!-- Your Chat plugin code --> */}
-      <div id="fb-customer-chat" className="fb-customerchat"></div>
       {/* map */}
       {/* {ver === 'search' && appState.map === '' ? (
         <MapBtn ver={'default'} />
       ) : null} */}
       {/* right section*/}
       <div
-        className={`flex flex-col gap-[16px] ${
+        className={`flex flex-col gap-[16px]  ${
           ver === "search" && appState.map === ""
             ? "lg:items-end"
             : ver === "search" && appState.map === "open"
@@ -43,15 +39,18 @@ const BottomSection = ({ ver, handleScrollToTopVer }: iProps) => {
         }`}
       >
         {/* lang */}
-        <LangBtn />
+
         {/* map with arrow when closed */}
         {ver === "search" && appState.map === "" ? (
-          <MapBtn ver={"arrow"} />
+          <>
+            <MapBtn ver={"arrow"} />
+            {/* <LangBtn /> */}
+          </>
         ) : null}
         {/* scrollToTop btn */}
-        {appState.map !== "open" ? (
+        {/* {appState.map !== "open" ? (
           <ScrollTopBtn ver={ver} handleScrollToTopVer={handleScrollToTopVer} />
-        ) : null}
+        ) : null} */}
       </div>
     </div>
   );
