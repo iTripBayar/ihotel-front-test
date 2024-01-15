@@ -6,12 +6,14 @@ interface Props {
   allRooms: roomData.room[];
   handleScrollToRooms: (ver: string) => void;
   totalPrice: number;
+  inViewport: boolean | undefined;
 }
 export default function OrderDialog({
   roomPrices,
   allRooms,
   handleScrollToRooms,
   totalPrice,
+  inViewport,
 }: Props) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -52,7 +54,13 @@ export default function OrderDialog({
   }
 
   return (
-    <div className="flex w-full flex-col rounded-t-[30px] bg-white px-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px]">
+    <div
+      className={`flex w-full flex-col rounded-t-[30px] bg-white px-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px] ${
+        inViewport === true && cart.length === 0
+          ? " translate-y-[400px] duration-1000"
+          : " translate-y-0 duration-500"
+      }`}
+    >
       {cart && cart.length > 0 ? (
         <div
           className={` flex-col justify-between gap-[4px]  ${

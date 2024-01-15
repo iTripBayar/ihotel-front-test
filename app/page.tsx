@@ -22,6 +22,7 @@ import SideMenu from "@/components/common/sidemenu";
 import { useSearchParams } from "next/navigation";
 import ResetPass from "@/components/common/signIn/resetPass";
 import Script from "next/script";
+import { useInViewport } from "ahooks";
 
 const Home = () => {
   const searchParams = useSearchParams();
@@ -29,6 +30,9 @@ const Home = () => {
   const resetPass = searchParams.get("resetPass");
   const [headerVer, setHeaderVer] = useState("default");
   const searchBoxRef = useRef(null);
+  const mainContainer = useRef(null);
+  const [inViewport] = useInViewport(mainContainer);
+
   const { data: session } = useSession({
     required: false,
   });
@@ -145,7 +149,6 @@ const Home = () => {
             }
           ></meta>
         </>
-
         <Header
           user={
             session
@@ -169,7 +172,11 @@ const Home = () => {
         {appState.logOrSign === "sign" ? <SignUp /> : null}
         {resetPass && resetPass !== "" ? <ResetPass /> : null}
         {appState.menu === "open" ? <SideMenu session={session} /> : null}
-        <BottomSection ver={headerVer} handleScrollToTopVer={() => {}} />
+        <BottomSection
+          ver={"fixed"}
+          handleScrollToTopVer={() => {}}
+          inViewport={inViewport}
+        />
         {loading ? (
           <div className="flex h-[111px] w-full items-center justify-center 2xs:h-[100px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[225px] 2xl:h-[250px]">
             <CircularProgress isIndeterminate={true} color="#3C76FE" />
@@ -194,11 +201,13 @@ const Home = () => {
               data={data ? data.destCategories : []}
               destinations={data ? data.topDestinations : []}
             />
-            <CardsContainer
-              title={"cheap"}
-              data={data ? data.cheapHotels : []}
-              dollarRate={data ? data.dollarRate : "1"}
-            />
+            <div ref={mainContainer}>
+              <CardsContainer
+                title={"cheap"}
+                data={data ? data.cheapHotels : []}
+                dollarRate={data ? data.dollarRate : "1"}
+              />
+            </div>
             <CardsContainer
               title={"hotels"}
               data={data ? data.hotels : []}

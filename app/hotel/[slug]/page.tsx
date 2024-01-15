@@ -28,6 +28,8 @@ const ErrorComponent = dynamic(() => import("@/components/common/404"));
 import { Toaster, toast } from "sonner";
 import SideMenu from "@/components/common/sidemenu";
 import { useSession } from "next-auth/react";
+import { useInViewport } from "ahooks";
+import BottomSection from "@/components/common/bottomSection";
 
 const HotelPage = () => {
   const searchParams = useSearchParams();
@@ -45,6 +47,9 @@ const HotelPage = () => {
   const { appState, dispatch } = useAppCtx();
   const roomsContainer = useRef<HTMLDivElement>(null);
   const reviewsContainer = useRef<HTMLDivElement>(null);
+  const [inViewport] = useInViewport(roomsContainer);
+
+  // const [inViewPort] = useInViewport(roomsContainer);
 
   const createQueryString = (
     name: string,
@@ -199,7 +204,7 @@ const HotelPage = () => {
       };
     }
   }
-  
+
   if (!error)
     return (
       <main className="relative">
@@ -325,13 +330,18 @@ const HotelPage = () => {
         <div className="fixed z-[899] flex bottom-[102px] right-[12px] text-white">
           <ScrollTopBtn ver="hotel" handleScrollToTopVer={() => {}} />
         </div> */}
-        {/* <BottomSection ver={"hotel"} handleScrollToTopVer={() => {}} /> */}
+        <BottomSection
+          ver={"hotel"}
+          handleScrollToTopVer={() => {}}
+          inViewport={inViewport}
+        />
         <Dialogs
           roomPrices={roomPrices}
           stat={stat}
           allRooms={data?.rooms ? data?.rooms : []}
           handleScrollToRooms={(ver: string) => handleScrollTo(ver)}
           totalPrice={totalPrice}
+          inViewport={inViewport}
         />
         {appState.biggerImage.length > 0 ? <ImagesDialog /> : null}
         {loading ? (
@@ -517,14 +527,16 @@ const HotelPage = () => {
                 dollarRate={data ? data?.rate : ""}
               />
             </div>
-            <Description
-              introduction={
-                data?.hotel.introduction ? data?.hotel.introduction : ""
-              }
-              introductionEn={
-                data?.hotel.introductionEn ? data?.hotel.introductionEn : ""
-              }
-            />
+            {data?.hotel.introduction ? (
+              <Description
+                introduction={
+                  data?.hotel.introduction ? data?.hotel.introduction : ""
+                }
+                introductionEn={
+                  data?.hotel.introductionEn ? data?.hotel.introductionEn : ""
+                }
+              />
+            ) : null}
             {data?.reviews && data.reviews.length > 0 ? (
               <div ref={reviewsContainer}>
                 <Review

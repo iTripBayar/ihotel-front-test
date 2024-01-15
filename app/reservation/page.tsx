@@ -235,7 +235,7 @@ const ReservationPage = () => {
 
   const handleSubmit = () => {
     if (!session) {
-      setCookie("client", JSON.stringify(clients), { maxAge: 900 });
+      setCookie("client", JSON.stringify(clients), { maxAge: 900 }); //15min
     }
     runCreateOrder();
   };

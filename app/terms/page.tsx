@@ -19,7 +19,6 @@ export default function TermPage() {
   });
   const { appState } = useAppCtx();
 
-
   return (
     <main className="flex flex-col relative gap-[20px]">
       <>
@@ -52,7 +51,7 @@ export default function TermPage() {
       ) : null}
       {appState.logOrSign === "sign" ? <SignUp /> : null}
       {appState.menu === "open" ? <SideMenu session={session} /> : null}
-      <BottomSection ver={"fixed"} handleScrollToTopVer={() => {}} />
+      <BottomSection ver={"fixed"} handleScrollToTopVer={() => {}} inViewport />
       <div className="flex w-full flex-col items-center gap-[24px] min-h-screen px-[16px] sm:px-[50px] md:px-[72px] lg:px-[100px] md:gap-[32px] lg:gap-[36px] ">
         {/* progress */}
         <div className="w-full">

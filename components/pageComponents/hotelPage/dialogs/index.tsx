@@ -6,6 +6,7 @@ import ScrollTopBtn from "@/components/common/fixedButtons/scrollTopBtn";
 import RoomSelectionDrawer from "./roomSelectionDrawer";
 import useWindowSize from "@/hooks/windowSize";
 import LangBtn from "@/components/common/fixedButtons/langBtn";
+import React from "react";
 
 interface Props {
   roomPrices: number[];
@@ -13,6 +14,7 @@ interface Props {
   allRooms: roomData.room[];
   handleScrollToRooms: (ver: string) => void;
   totalPrice: number;
+  inViewport: boolean | undefined;
 }
 
 export default function Dialogs({
@@ -21,17 +23,26 @@ export default function Dialogs({
   allRooms,
   handleScrollToRooms,
   totalPrice,
+  inViewport,
 }: Props) {
   const searchParams = useSearchParams();
+  const cart = searchParams.getAll("cart");
   const roomSelect = searchParams.get("roomSelect");
   const { appState } = useAppCtx();
   const size = useWindowSize();
-
   return (
     <div className="fixed bottom-0 z-[888] flex w-full flex-col justify-end sm:px-[50px] md:px-[72px] lg:hidden">
       {appState.calendar === "" && !appState.selectedRoom ? (
-        <div className="flex absolute top-0 translate-y-[-100px] w-auto flex-col gap-[8px] self-end pb-[12px] pr-[14px] text-white">
-          <LangBtn/> 
+        <div
+          className={`flex absolute top-0 ${
+            cart.length > 0
+              ? "translate-y-[-100px] duration-250"
+              : "translate-y-[-24px] duration-250"
+          } w-auto flex-col gap-[8px] self-end pb-[12px] pr-[14px] text-white ${
+            inViewport ? " opacity-100 duration-300" : "opacity-0 duration-250"
+          }`}
+        >
+          <LangBtn />
           <ScrollTopBtn ver={"fixed"} handleScrollToTopVer={() => {}} />
         </div>
       ) : null}
@@ -64,6 +75,7 @@ export default function Dialogs({
             allRooms={allRooms}
             handleScrollToRooms={(ver: string) => handleScrollToRooms(ver)}
             totalPrice={totalPrice}
+            inViewport={inViewport}
           />
         ) : null
       ) : null}

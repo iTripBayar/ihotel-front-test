@@ -6,9 +6,10 @@ import MapBtn from "./fixedButtons/mapBtn";
 type iProps = {
   ver: string;
   handleScrollToTopVer: () => void;
+  inViewport: boolean | undefined;
 };
 
-const BottomSection = ({ ver, handleScrollToTopVer }: iProps) => {
+const BottomSection = ({ ver, handleScrollToTopVer, inViewport }: iProps) => {
   const { appState } = useAppCtx();
   return (
     <div
@@ -18,11 +19,11 @@ const BottomSection = ({ ver, handleScrollToTopVer }: iProps) => {
               appState.map !== "" ? "lg:right-[50px]" : " lg:right-[24px]"
             } lg:w-auto lg:px-0`
           : ver === "fixed"
-          ? "bottom-[24px] right-[3.4%] flex-col"
+          ? `bottom-[24px] right-[3.4%] flex-col `
           : ver === "hotel"
           ? "bottom-[24px] right-[3.4%] flex-col hidden lg:flex"
           : "hidden"
-      }`}
+      } ${inViewport ? "opacity-100 duration-300" : "opacity-0 duration-250"}`}
     >
       {/* map */}
       {/* {ver === 'search' && appState.map === '' ? (

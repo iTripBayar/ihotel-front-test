@@ -1,5 +1,5 @@
-import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import {
   WifiIcon,
   CarIcon,
@@ -14,7 +14,7 @@ import {
   EntertainmentIcon,
   BusinessIcon,
   ShopIcon,
-} from './icons';
+} from "./icons";
 
 interface Props {
   data: HotelData.Facilities[];
@@ -23,7 +23,7 @@ interface Props {
 const Amenity = ({ data, internet }: Props) => {
   const [open, setOpen] = useState(false);
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang');
+  const lang = searchParams.get("lang");
 
   const displayAmenities: HotelData.Facilities[] = [];
   if (internet !== 0) {
@@ -37,8 +37,8 @@ const Amenity = ({ data, internet }: Props) => {
       isFilter: 0,
       isMost: 0,
       mobileIcon: null,
-      name: 'Интернэт',
-      nameEn: 'Internet',
+      name: "Интернэт",
+      nameEn: "Internet",
       syncId: 0,
       updatedAt: null,
     });
@@ -47,29 +47,29 @@ const Amenity = ({ data, internet }: Props) => {
     displayAmenities.push(data[i]);
   }
   return (
-    <div className='flex flex-col gap-[16px] border-t-[1px] border-t-black/[.1] pt-[24px] text-[16px] text-main-text lg:gap-[24px] lg:border-none lg:pt-0'>
-      <p className=' text-[20px] font-medium leading-[20px]'>
-        {lang === 'en' ? 'Amenities' : 'Уг газарт'}
+    <div className="flex flex-col gap-[16px] border-t-[1px] border-t-black/[.1] pt-[24px] text-[16px] text-main-text lg:gap-[24px] lg:border-none lg:pt-0">
+      <p className=" text-[20px] font-medium leading-[20px]">
+        {lang === "en" ? "Amenities" : "Уг газарт"}
       </p>
       <div
         className={`flex w-full flex-wrap gap-[12px] 2xs:gap-[8px] sm:gap-[12px] lg:gap-[16px] ${
           open === false
             ? ` overflow-hidden ${
-                displayAmenities.length > 3 ? 'h-[180px]' : 'h-[84px]'
+                displayAmenities.length > 3 ? "h-[180px]" : "h-[84px]"
               } ${
-                displayAmenities.length >= 8 ? 'md:h-[184px]' : 'md:h-[86px]'
+                displayAmenities.length >= 8 ? "md:h-[184px]" : "md:h-[86px]"
               } ${
                 displayAmenities.length >= 6
-                  ? '2xs:h-[160px] sm:h-[172px] lg:h-[196px]'
-                  : '2xs:h-[76px] sm:h-[80px] lg:h-[90px]'
+                  ? "2xs:h-[160px] sm:h-[172px] lg:h-[196px]"
+                  : "2xs:h-[76px] sm:h-[80px] lg:h-[90px]"
               }`
-            : 'h-auto'
+            : "h-auto"
         }`}
       >
         {displayAmenities.map((index, i) => (
           <div
             key={i}
-            className='flex h-[84px] w-[84px] flex-col justify-between overflow-hidden rounded-[10px] border border-sub-text/[.35] bg-white p-[6px] text-main-text 2xs:h-[76px] 2xs:w-[76px] sm:h-[80px] sm:w-[80px] sm:p-[8px] md:h-[86px]  md:w-[86px] lg:h-[90px] lg:w-[90px]'
+            className="flex h-[84px] w-[84px] flex-col justify-between overflow-hidden rounded-[10px] border border-sub-text/[.35] bg-white p-[6px] text-main-text 2xs:h-[76px] 2xs:w-[76px] sm:h-[80px] sm:w-[80px] sm:p-[8px] md:h-[86px]  md:w-[86px] lg:h-[90px] lg:w-[90px]"
           >
             {index.facilityCategoryId === 0 ? (
               <WifiIcon />
@@ -94,8 +94,8 @@ const Amenity = ({ data, internet }: Props) => {
             ) : (
               <OtherIcon />
             )}
-            <p className='w-full text-[11px] leading-[12px] text-main-text lg:text-[12px] lg:leading-[13px] '>
-              {lang === 'en'
+            <p className="w-full text-[11px] leading-[12px] text-main-text lg:text-[12px] lg:leading-[13px] ">
+              {lang === "en"
                 ? index.nameEn
                   ? index.nameEn
                   : index.name
@@ -104,86 +104,38 @@ const Amenity = ({ data, internet }: Props) => {
           </div>
         ))}
       </div>
-      {/* <div className='flex w-full flex-wrap gap-[12px] 2xs:gap-[8px] sm:gap-[12px] lg:gap-[16px]'>
-        {data?.length > 3
-          ? data
-              .splice(0, open === false ? 4 : data.length)
-              .map((index, i) => <div key={i}></div>)
-          : sample
-              .slice(
-                0,
-                open === false
-                  ? size.width && size?.width < 360
-                    ? 3
-                    : size.width && size?.width < 450
-                    ? 4
-                    : size.width && size?.width < 640
-                    ? 5
-                    : size.width && size?.width < 800
-                    ? 6
-                    : size.width && size?.width < 850
-                    ? 7
-                    : size.width && size?.width < 1000
-                    ? 8
-                    : 10
-                  : sample.length,
-              )
-              .map((index, i) => (
-                <div
-                  key={i}
-                  className='md:w-[86px]lg:h-[90px] flex h-[84px] w-[84px] flex-col justify-between rounded-[10px] border border-sub-text/[.35] bg-white p-[6px] text-main-text 2xs:h-[76px] 2xs:w-[76px] sm:h-[80px] sm:w-[80px]  sm:p-[8px] md:h-[86px] lg:w-[90px]'
-                >
-                  {index.category === 'wifi' ? (
-                    // wifi
-                    <WifiIcon />
-                  ) : index.category === 'fridge' ? (
-                    // fridge
-                    <FridgeIcon />
-                  ) : index.category === 'food' ? (
-                    // food
-                    <FoodIcon />
-                  ) : index.category === 'drive' ? (
-                    // drive
-                    <DriveIcon />
-                  ) : index.category === 'daily' ? (
-                    // daily
-                   <DailyIcon />
-                  ) : index.category === 'lang' ? (
-                    // lang
-                    <LangIcon />
-                  ) : (
-                    <></>
-                  )}
-                  <p className='text-[11px] leading-[12px] text-main-text lg:text-[12px] lg:leading-[13px]'>
-                    {lang === 'en' ? index.nameEn : index.name}
-                  </p>
-                </div>
-              ))}
-      </div> */}
       <button
-        className='flex items-center gap-[8px] text-[15px] font-medium leading-[15px] text-primary-blue lg:text-[16px] lg:leading-[17px]'
+        className={` items-center gap-[8px] text-[15px] font-medium leading-[15px] text-primary-blue lg:text-[16px] lg:leading-[17px] ${
+          displayAmenities.length <= 6 ? "hidden" : "flex"
+        } 2xs:${displayAmenities.length <= 8 ? "hidden" : "flex"} sm:${
+          displayAmenities.length <= 10 ? "hidden" : "flex"
+        } md:${displayAmenities.length <= 12 ? "hidden" : "flex"} lg:${
+          displayAmenities.length <= 10 ? "hidden" : "flex"
+        } xl:${displayAmenities.length <= 12 ? "hidden" : "flex"} 2xl:${
+          displayAmenities.length <= 14 ? "hidden" : "flex"
+        }`}
         onClick={() => setOpen(!open)}
       >
         <p>
           {open === false
-            ? `${lang === 'en' ? 'More' : 'Дэлгэрэнгүй'}`
-            : `${lang === 'en' ? 'Less' : 'Хураангуй'}`}
+            ? `${lang === "en" ? "More" : "Дэлгэрэнгүй"}`
+            : `${lang === "en" ? "Less" : "Хураангуй"}`}
         </p>
         <svg
-          viewBox='0 0 15 9'
-          fill='none'
-          xmlns='http://www.w3.org/2000/svg'
+          viewBox="0 0 15 9"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
           className={`max-h-[14px] min-h-[14px] min-w-[14px] max-w-[14px] ${
-            open === true && 'rotate-180'
+            open === true && "rotate-180"
           }`}
         >
-          <path d='M1 1L7.5 8L1 1ZM7.5 8L14 1L7.5 8Z' fill='#3C76FE' />
+          <path d="M1 1L7.5 8L1 1ZM7.5 8L14 1L7.5 8Z" fill="#3C76FE" />
           <path
-            d='M1 1L7.5 8L14 1'
-            stroke='#3C76FE'
-            strokeWidth='2'
-            strokeLinecap='round'
-            strokeLinejoin='round'
+            d="M1 1L7.5 8L14 1"
+            stroke="#3C76FE"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </button>

@@ -1,6 +1,6 @@
-import ReactMapGL, { Marker } from 'react-map-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { useRef } from 'react';
+import ReactMapGL, { Marker } from "react-map-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { useRef } from "react";
 interface Props {
   lat: number;
   lng: number;
@@ -8,15 +8,15 @@ interface Props {
 
 const HotelMap = ({ lat, lng }: Props) => {
   const mapRef = useRef<any>();
-  setTimeout(() => {
-    mapRef?.current?.flyTo({
-      center: [lng, lat],
-      zoom: 13,
-      duration: 1000,
-      speed: 0.5,
-      curve: 2,
-    });
-  }, 1000);
+  // setTimeout(() => {
+  //   mapRef?.current?.flyTo({
+  //     center: [lng, lat],
+  //     zoom: 13,
+  //     duration: 1000,
+  //     speed: 0.5,
+  //     curve: 2,
+  //   });
+  // }, 1000);
   return (
     <div className="h-[225px] w-full 2xs:h-[265px] sm:h-[300px] md:h-[325px] lg:h-[225px]">
       <ReactMapGL
@@ -46,7 +46,7 @@ const HotelMap = ({ lat, lng }: Props) => {
             height: "14px",
             backgroundColor: "#3C76FE",
             borderRadius: "100%",
-            cursor: 'pointer'
+            cursor: "pointer",
           }}
           onClick={() =>
             mapRef?.current?.flyTo({

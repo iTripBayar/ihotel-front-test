@@ -246,6 +246,7 @@ const SearchPage = () => {
         <BottomSection
           ver={"search"}
           handleScrollToTopVer={handleScrollToTop}
+          inViewport
         />
         <div
           className={`${

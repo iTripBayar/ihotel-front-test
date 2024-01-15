@@ -139,7 +139,9 @@ export default function ProfilePage() {
             </title>
             <meta
               name="description"
-              content={lang === "en" ? "iHotel profile page" : "iHotel профайл хуудас"}
+              content={
+                lang === "en" ? "iHotel profile page" : "iHotel профайл хуудас"
+              }
             />
           </>
           <Header
@@ -147,7 +149,11 @@ export default function ProfilePage() {
               ?.charAt(0)
               .toUpperCase()}${session?.user?.name?.slice(1)}`}
           />
-          <BottomSection ver={"fixed"} handleScrollToTopVer={() => {}} />
+          <BottomSection
+            ver={"fixed"}
+            handleScrollToTopVer={() => {}}
+            inViewport
+          />
           {appState.menu === "open" ? <SideMenu session={session} /> : null}
           <Toaster position="top-right" richColors />
           {id && showOrder ? (
