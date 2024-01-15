@@ -3,7 +3,7 @@ import HeroCategory from "@/components/pageComponents/homePage/heroCategory";
 import CommonLocation from "@/components/pageComponents/homePage/commonLocation";
 import News from "@/components/pageComponents/homePage/news";
 import Footer from "@/components/common/footer";
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useRequest } from "ahooks";
 import HeaderVariants from "@/components/common/headerVariants";
 import { fetchData } from "@/utils";
@@ -28,10 +28,8 @@ const Home = () => {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
   const resetPass = searchParams.get("resetPass");
-  const [headerVer, setHeaderVer] = useState("default");
   const searchBoxRef = useRef(null);
-  const mainContainer = useRef(null);
-  const [inViewport] = useInViewport(mainContainer);
+  const [inViewport] = useInViewport(searchBoxRef);
 
   const { data: session } = useSession({
     required: false,
@@ -44,35 +42,10 @@ const Home = () => {
   const { appState, dispatch } = useAppCtx();
 
   useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0,
-    };
     dispatch({
       type: "CHANGE_APP_STATE",
       payload: { map: "", logOrSign: "", menu: "" },
     });
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) {
-          setHeaderVer("fixed");
-        } else {
-          setHeaderVer("default");
-        }
-      });
-    }, options);
-
-    if (searchBoxRef.current) {
-      observer.observe(searchBoxRef.current);
-    }
-
-    return () => {
-      if (searchBoxRef.current) {
-        observer.unobserve(searchBoxRef.current);
-      }
-    };
   }, []);
   if (!error)
     return (
@@ -158,9 +131,9 @@ const Home = () => {
               : ""
           }
         />
-        {headerVer === "fixed" ? (
+        {!inViewport ? (
           <HeaderVariants
-            ver={headerVer}
+            ver={"fixed"}
             placesData={data ? data.places : []}
             cityData={data ? data.cities : []}
           />
@@ -175,7 +148,7 @@ const Home = () => {
         <BottomSection
           ver={"fixed"}
           handleScrollToTopVer={() => {}}
-          inViewport={inViewport}
+          inViewport={!inViewport}
         />
         {loading ? (
           <div className="flex h-[111px] w-full items-center justify-center 2xs:h-[100px] sm:h-[130px] md:h-[160px] lg:h-[180px] xl:h-[225px] 2xl:h-[250px]">
@@ -201,7 +174,7 @@ const Home = () => {
               data={data ? data.destCategories : []}
               destinations={data ? data.topDestinations : []}
             />
-            <div ref={mainContainer}>
+            <div>
               <CardsContainer
                 title={"cheap"}
                 data={data ? data.cheapHotels : []}
