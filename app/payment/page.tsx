@@ -52,13 +52,24 @@ export default function PaymentPage() {
     return (
       <div className="flex min-h-screen w-full flex-col items-center justify-between relative">
         <>
-          <title>{lang ==='en' ? "Payment | iHotel" : 'Төлбөр төлөх | iHotel'}</title>
-          <meta name="description" content={lang === 'en' ? "iHotel payment page" : 'iHotel төлбөрийн хуудас'} />
+          <title>
+            {lang === "en" ? "Payment | iHotel" : "Төлбөр төлөх | iHotel"}
+          </title>
+          <meta
+            name="description"
+            content={
+              lang === "en" ? "iHotel payment page" : "iHotel төлбөрийн хуудас"
+            }
+          />
         </>
         <Header
-          user={`${session?.user?.name
-            ?.charAt(0)
-            .toUpperCase()}${session?.user?.name?.slice(1)}`}
+          user={
+            session
+              ? `${session.user?.name
+                  ?.charAt(0)
+                  .toUpperCase()}${session.user?.name?.slice(1)}`
+              : ""
+          }
         />
         {appState.menu === "open" ? <SideMenu session={session} /> : null}
 

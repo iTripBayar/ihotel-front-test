@@ -21,9 +21,12 @@ import { useEffect, useState } from "react";
 import SideMenu from "@/components/common/sidemenu";
 import { fetchProfileInto } from "@/utils/user";
 import { useSession } from "next-auth/react";
+import { useCookies } from "react-cookie";
 const ErrorComponent = dynamic(() => import("@/components/common/404"));
 
 const ReservationPage = () => {
+  const [cookies, setCookie] = useCookies(["client"]);
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const slug = searchParams.get("slug");
@@ -87,12 +90,14 @@ const ReservationPage = () => {
     setClients(value);
   };
 
-
   useEffect(() => {
     dispatch({
       type: "CHANGE_APP_STATE",
       payload: { logOrSign: "", menu: "", calendar: "" },
     });
+    if (!session && cookies.client) {
+      setClients(cookies.client);
+    }
   }, []);
   useEffect(() => {
     if (session?.user?.email) {
@@ -229,6 +234,9 @@ const ReservationPage = () => {
   );
 
   const handleSubmit = () => {
+    if (!session) {
+      setCookie("client", JSON.stringify(clients), { maxAge: 900 });
+    }
     runCreateOrder();
   };
 

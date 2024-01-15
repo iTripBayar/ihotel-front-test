@@ -177,7 +177,7 @@ export default function Order({
           </p>
           <div
             className={`w-full rounded-full flex justify-center items-center h-[42px] uppercase font-semibold text-[14px] leading-[15px] ${
-              data.status === "checked-out"
+              data.status === "checked-out" || data.status === "confirmed"
                 ? "bg-main-online text-white"
                 : data.status === "pending"
                 ? "bg-main-pending"
@@ -185,6 +185,8 @@ export default function Order({
             }`}
           >
             {data.status === "check-out"
+              ? `${lang === "en" ? "Confirmed" : "Баталгаажсан"}`
+              : data.status === "confirmed"
               ? `${lang === "en" ? "Confirmed" : "Баталгаажсан"}`
               : data.status === "pending"
               ? `${lang === "en" ? "Pending" : "Хүлээгдэж байна"}`

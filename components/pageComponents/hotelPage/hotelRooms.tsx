@@ -109,7 +109,6 @@ const HotelRooms = ({
                 stat={stat}
                 data={index}
                 key={i}
-                handleScrollToRooms={(ver: string) => handleScrollToRooms(ver)}
                 dollarRate={dollarRate}
               />
             ))}

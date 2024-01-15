@@ -7,6 +7,7 @@ import "swiper/css/keyboard";
 import { Pagination, Navigation, Mousewheel, Keyboard } from "swiper/modules";
 import { useAppCtx } from "@/contexts/app";
 import { useState } from "react";
+import useWindowSize from "@/hooks/windowSize";
 
 export function SlideNextButton() {
   const swiper = useSwiper();
@@ -92,26 +93,43 @@ export function SliderCloseButton() {
 export default function ImagesDialog() {
   const { appState, dispatch } = useAppCtx();
   const swiper = useSwiper();
+  const size = useWindowSize();
   const [swiperRef, setSwiper] = useState<typeof swiper | null>(null);
   if (appState.imageIndex !== 0) {
     swiperRef?.slideTo(appState.imageIndex);
   }
- const handleClick = (e: React.MouseEvent) => {
-   const target = e.target as HTMLElement;
-   if (target.classList.contains("bg-black/[.8]")) {
-     dispatch({
-       type: "CHANGE_APP_STATE",
-       payload: { biggerImage: [] },
-     });
-   }
- };
+  const handleClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    // console.log(target);
+    if (target.classList.contains("outside")) {
+      dispatch({
+        type: "CHANGE_APP_STATE",
+        payload: { biggerImage: [] },
+      });
+    }
+  };
+  // const handleTouch = (e: React.TouchEvent) => {
+  //   const target = e.target as HTMLElement;
+  //   // console.log(target);
+  //   if (target.classList.contains("outside")) {
+  //     dispatch({
+  //       type: "CHANGE_APP_STATE",
+  //       payload: { biggerImage: [] },
+  //     });
+  //   }
+  // };
 
   return (
     <div
-      className="fixed left-0 top-0 z-[999] flex h-screen w-screen items-center justify-center bg-black/[.8] backdrop-blur-[2px] pb-[100px]"
-      onClick={handleClick}
+      className="fixed left-0 top-0 z-[999] flex h-screen w-screen items-center justify-center bg-black/[.8] backdrop-blur-[2px] pb-[100px] outside"
+      onMouseDownCapture={
+        size.width && size.width < 1024 ? () => {} : handleClick
+      }
+      onClick={size.width && size.width >= 1024 ? () => {} : handleClick}
+      // onTouchEnd={handleTouch}
+      tabIndex={100}
     >
-      <div className="flex h-screen w-[calc(100%-32px)]  max-w-[500px] items-center justify-center sm:w-[calc(100%-100px)] md:w-[calc(100%-244px)] lg:max-w-[650px]">
+      <div className="flex h-screen w-[calc(100%-32px)]  max-w-[500px] items-center justify-center sm:w-[calc(100%-100px)] md:w-[calc(100%-244px)] lg:max-w-[650px] outside">
         <Swiper
           onSwiper={setSwiper}
           slidesPerView={1}
@@ -122,7 +140,7 @@ export default function ImagesDialog() {
           rewind
           pagination={{ type: "fraction" }}
           modules={[Pagination, Navigation, Mousewheel, Keyboard]}
-          className="flex items-start w-full h-[80%] text-white"
+          className="flex items-start w-full h-[80%] text-white outside"
         >
           {appState.biggerImage.map((index, i) => (
             <SwiperSlide
@@ -137,6 +155,7 @@ export default function ImagesDialog() {
                 overflow: "hidden",
                 // backgroundColor: 'rgb(0 0 0/50%)',
               }}
+              className="outside"
             >
               <img
                 // src={`${process.env.IMAGE_URL}${index}`}
@@ -146,7 +165,9 @@ export default function ImagesDialog() {
                     : `${process.env.IMAGE_URL}${index}`
                 }
                 alt="Hotel images"
-                className={`w-full h-auto ${index === '/samples/camp.png' ? 'blur-[3px]' : ''}`}
+                className={`w-full h-auto ${
+                  index === "/samples/camp.png" ? "blur-[3px]" : ""
+                }`}
                 loading="lazy"
               />
             </SwiperSlide>

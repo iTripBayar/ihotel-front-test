@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer } from "react";
 
 export type AppCtxState = {
   phone: string;
@@ -15,9 +15,7 @@ export type AppCtxState = {
   paymentMethod: string;
 };
 
-type Action =
-  | { type: 'CHANGE_APP_STATE'; payload: Partial<AppCtxState> }
-
+type Action = { type: "CHANGE_APP_STATE"; payload: Partial<AppCtxState> };
 
 export type AppCtxProps = {
   appState: AppCtxState;
@@ -26,18 +24,18 @@ export type AppCtxProps = {
 
 const defaultValue: AppCtxProps = {
   appState: {
-    phone: '77279090',
-    logOrSign: '',
-    menu: '',
-    map: '',
-    filter: '',
-    selectedRoom: '',
+    phone: "77279090",
+    logOrSign: "",
+    menu: "",
+    map: "",
+    filter: "",
+    selectedRoom: "",
     selectedAmount: [],
-    calendar: '',
+    calendar: "",
     biggerImage: [],
     imageIndex: 0,
-    userToken: '',
-    paymentMethod: '',
+    userToken: "",
+    paymentMethod: "",
   },
   dispatch: () => {
     /**/
@@ -46,7 +44,7 @@ const defaultValue: AppCtxProps = {
 
 const appReducer = (state: AppCtxState, action: Action): AppCtxState => {
   switch (action.type) {
-    case 'CHANGE_APP_STATE':
+    case "CHANGE_APP_STATE":
       return { ...state, ...action.payload };
     default:
       return state;

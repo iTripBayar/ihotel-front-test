@@ -1,6 +1,6 @@
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import Link from 'next/link';
-import format from 'date-fns/format';
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
+import format from "date-fns/format";
 interface Props {
   roomPrices: number[];
   allRooms: roomData.room[];
@@ -16,11 +16,11 @@ export default function OrderDialog({
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const lang = searchParams.get('lang');
-  const cart = searchParams.getAll('cart');
-  const checkIn = searchParams.get('checkIn');
-  const checkOut = searchParams.get('checkOut');
-  const days = searchParams.get('days');
+  const lang = searchParams.get("lang");
+  const cart = searchParams.getAll("cart");
+  const checkIn = searchParams.get("checkIn");
+  const checkOut = searchParams.get("checkOut");
+  const days = searchParams.get("days");
 
   const createQueryString = (name: string, index: number) => {
     const params = new URLSearchParams(searchParams);
@@ -178,7 +178,7 @@ export default function OrderDialog({
           <Link
             href={{
               query: {
-                slug: pathname.split('/')[2],
+                slug: pathname.split("/")[2],
                 checkIn: checkIn,
                 checkOut: checkOut,
                 days: days,

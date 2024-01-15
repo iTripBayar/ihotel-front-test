@@ -20,7 +20,7 @@ interface Props {
     email: string;
     phone: string;
     nationality: string;
-  }) => void; 
+  }) => void;
   handleSubmit: () => void;
   orderLoading: boolean;
 }
@@ -76,7 +76,10 @@ export default function UserInfo({
         <p className="text-[18px] font-medium leading-[18px] text-sub-text">
           {lang === "en" ? `Client's info` : "Захиалагчийн мэдээлэл"}
         </p>
-        <form className="flex w-full flex-col gap-[16px]">
+        <form
+          className="flex w-full flex-col gap-[16px]"
+          onSubmit={handleSubmit}
+        >
           {additionalClients.length > 0 && (
             <p className="font-medium">
               {lang === "en" ? "Client" : "Захиалагч"} 1
@@ -100,7 +103,9 @@ export default function UserInfo({
             }}
             value={clients.name}
             placeholder={lang === "en" ? "Given name" : "Нэр"}
-            className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
+            className={`rounded-[8px] ${
+              clients.name === "" ? "border-red-600/50" : "border-black/[.15]"
+            } text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0`}
           />
           <input
             type="text"
@@ -120,7 +125,11 @@ export default function UserInfo({
             }}
             value={clients.surName}
             placeholder={lang === "en" ? "Family name" : "Овог"}
-            className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
+            className={`rounded-[8px] ${
+              clients.surName === ""
+                ? "border-red-600/50"
+                : "border-black/[.15]"
+            } text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0`}
           />
           <input
             type="text"
@@ -139,7 +148,9 @@ export default function UserInfo({
             }}
             value={clients.email}
             placeholder={lang === "en" ? "Email" : "И-мэйл"}
-            className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
+            className={`rounded-[8px] ${
+              clients.email === "" ? "border-red-600/50" : "border-black/[.15]"
+            } text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0`}
           />
           <input
             type="number"
@@ -159,7 +170,9 @@ export default function UserInfo({
             }}
             value={clients.phone}
             placeholder={lang === "en" ? "Phone number" : "Утасны дугаар"}
-            className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
+            className={`rounded-[8px] ${
+              clients.phone === "" ? "border-red-600/50" : "border-black/[.15]"
+            } text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0`}
           />
           {/*  */}
           <div className="relative w-full">
@@ -537,7 +550,10 @@ export default function UserInfo({
         <p className="text-[18px] font-medium leading-[18px] text-sub-text">
           {lang === "en" ? `Client's info` : "Захиалагчийн мэдээлэл"}
         </p>
-        <form className="flex w-full flex-col gap-[16px]">
+        <form
+          className="flex w-full flex-col gap-[16px]"
+          // onSubmit={handleSubmit}
+        >
           {additionalClients.length > 0 && (
             <p className="font-medium">
               {lang === "en" ? "Client" : "Захиалагч"} 1
@@ -561,7 +577,9 @@ export default function UserInfo({
             }}
             value={clients.name}
             placeholder={lang === "en" ? "Given name" : "Нэр"}
-            className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
+            className={`rounded-[8px] ${
+              clients.name === "" ? " border-red-600/50" : "border-black/[.15]"
+            } text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0`}
           />
           <input
             type="text"
@@ -581,7 +599,11 @@ export default function UserInfo({
             }}
             value={clients.surName}
             placeholder={lang === "en" ? "Family name" : "Овог"}
-            className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
+            className={`rounded-[8px] ${
+              clients.surName === ""
+                ? "border-red-600/50"
+                : "border-black/[.15]"
+            } text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0`}
           />
           <input
             type="text"
@@ -600,7 +622,9 @@ export default function UserInfo({
             }}
             value={clients.email}
             placeholder={lang === "en" ? "Email" : "И-мэйл"}
-            className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
+            className={`rounded-[8px] ${
+              clients.email === "" ? "border-red-600/50" : "border-black/[.15]"
+            } text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0`}
           />
           <input
             type="number"
@@ -620,7 +644,9 @@ export default function UserInfo({
             }}
             value={clients.phone}
             placeholder={lang === "en" ? "Phone number" : "Утасны дугаар"}
-            className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
+            className={`rounded-[8px] ${
+              clients.phone === "" ? "border-red-600/50" : "border-black/[.15]"
+            } text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0`}
           />
           <div className="relative w-full">
             <Listbox
@@ -634,7 +660,6 @@ export default function UserInfo({
                   nationality: e,
                 };
                 updateClients(value);
-                // console.log(e);
               }}
             >
               <Listbox.Button
@@ -972,9 +997,8 @@ export default function UserInfo({
                     clients.name === "" &&
                     clients.surName === "" &&
                     clients.email === "" &&
-                    clients.phone === "" &&
-                    clients.nationality === ""
-                      ? " cursor-not-allowed"
+                    clients.phone === ""
+                      ? "cursor-not-allowed"
                       : "cursor-pointer"
                   } border-black/[.25] focus:ring-0`}
                   checked={isChecked}
@@ -983,8 +1007,7 @@ export default function UserInfo({
                     clients.name === "" &&
                     clients.surName === "" &&
                     clients.email === "" &&
-                    clients.phone === "" &&
-                    clients.nationality === ""
+                    clients.phone === ""
                   }
                 />
                 <label htmlFor="termCheck" className="cursor-pointer">
