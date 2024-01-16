@@ -14,7 +14,7 @@ export default function LogIn() {
   const [error, setError] = useState<string | null>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [passResetEmail, setPassResetEmail] = useState('');
+  const [passResetEmail, setPassResetEmail] = useState("");
   const close = () => {
     dispatch({
       type: "CHANGE_APP_STATE",
@@ -42,13 +42,11 @@ export default function LogIn() {
       toast.success(
         `${lang === "en" ? "Log in successful!" : "Амжилттай нэвтэрлээ!"}`,
       );
-      console.log(signInResponse);
       setTimeout(() => {
         setLoading(false);
         close();
       }, 2500);
     } else {
-      console.log("Error: ", signInResponse);
       toast.error(`${lang === "en" ? "Error!" : "Алдаа гарлаа!"}`);
       setLoading(false);
       setError("Your Email or Password is wrong!");
@@ -89,7 +87,7 @@ export default function LogIn() {
         setLoading(false);
       }
       const result = await response.json();
-      setPassResetEmail('');
+      setPassResetEmail("");
       toast.info(
         `${
           lang === "en"
@@ -107,9 +105,7 @@ export default function LogIn() {
   return (
     <div
       className="fixed z-[999] flex h-screen w-full animate-fade items-center justify-center bg-black/[.35]"
-      // onClick={handleClick}
       onMouseDown={handleClick}
-      // onMouseUp={()=>{console.log('up')}}
     >
       <Toaster position="top-right" richColors />
       <div className="flex h-auto w-[calc(100%-32px)] max-w-[370px] flex-col justify-between gap-[16px] rounded-[12px] bg-white px-[16px] pb-[16px] sm:max-w-[400px]">

@@ -90,14 +90,13 @@ export default function SignUp() {
                     type: "CHANGE_APP_STATE",
                     payload: { logOrSign: "log" },
                   }),
-                  
               },
             },
           );
         }, 1000);
       }
       const res = await registerResponse.json();
-      console.log(res);
+      // console.log(res);
     } catch (error: any) {
       if (error.response) {
         // The request was made and the server responded with a status code
@@ -124,7 +123,6 @@ export default function SignUp() {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
-
 
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     // const { value } = event.target;

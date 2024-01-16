@@ -1,26 +1,28 @@
-import { Collapse, useDisclosure, Button } from '@chakra-ui/react';
-import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { Collapse, useDisclosure, Button } from "@chakra-ui/react";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 interface Props {
   iconRotateDuration: number;
   data: { id: number; min: number; max: number }[];
-  value: { id: number; min: number; max: number } | null;
-  changeValue: (e: { id: number; min: number; max: number }) => void;
+  // value: { id: number; min: number; max: number } | null;
+  value: string[];
+  // changeValue: (e: { id: number; min: number; max: number }) => void;
   ver: string;
+  changeValue: (e: number[]) => void;
 }
 export default function PriceFilter({
   iconRotateDuration,
   data,
   value,
   changeValue,
-  ver,
+  ver, // changeTestPrice,
 }: Props) {
   const { isOpen, onToggle } = useDisclosure();
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang');
-  const min = searchParams.get('min');
-  const max = searchParams.get('max');
+  const lang = searchParams.get("lang");
+  const min = searchParams.get("min");
+  const max = searchParams.get("max");
 
   useEffect(() => {
     if (min && max) {
@@ -28,7 +30,7 @@ export default function PriceFilter({
     }
   }, [min && max]);
 
-  if (ver === 'web')
+  if (ver === "web")
     return (
       <div className="flex h-full w-[70%] flex-col items-center justify-center gap-[12px] filter">
         <p className="text-[18px] font-medium filter">
@@ -38,7 +40,12 @@ export default function PriceFilter({
           <div className="grid w-full grid-cols-1 gap-[12px] text-[15px] leading-[15px] text-sub-text filter">
             {data.map((index, i) => (
               <div
-                onClick={() => changeValue(index)}
+                // onClick={() => changeValue(index)}
+                onClick={() =>
+                  changeValue(
+                    index.max !== 0 ? [index.min, index.max] : [index.min],
+                  )
+                }
                 key={i}
                 className="flex w-full items-center gap-[8px] filter"
               >
@@ -46,7 +53,12 @@ export default function PriceFilter({
                   id={`price${index.id}`}
                   type="checkBox"
                   value={index.max}
-                  checked={value && index.id === value.id ? true : false}
+                  // checked={value && index.id === value.id ? true : false}
+                  checked={
+                    index.max !== 0
+                      ? value.some((i) => i === `[${index.min}, ${index.max}]`)
+                      : value.some((i) => i === `[${index.min}]`)
+                  }
                   readOnly
                   className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 filter"
                 />
@@ -112,7 +124,12 @@ export default function PriceFilter({
         {data.length > 0 ? (
           data.map((index, i) => (
             <div
-              onClick={() => changeValue(index)}
+              // onClick={() => changeValue(index)}
+              onClick={() =>
+                changeValue(
+                  index.max !== 0 ? [index.min, index.max] : [index.min],
+                )
+              }
               key={i}
               className="flex w-full items-center gap-[8px] filter"
             >
@@ -120,10 +137,15 @@ export default function PriceFilter({
                 id={`price${index.id}`}
                 type="checkBox"
                 value={index.max}
+                // checked={
+                //   value && index.min === value.min && index.max === value.max
+                //     ? true
+                //     : false
+                // }
                 checked={
-                  value && index.min === value.min && index.max === value.max
-                    ? true
-                    : false
+                  index.max !== 0
+                    ? value.some((i) => i === `[${index.min}, ${index.max}]`)
+                    : value.some((i) => i === `[${index.min}]`)
                 }
                 readOnly
                 className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 filter"

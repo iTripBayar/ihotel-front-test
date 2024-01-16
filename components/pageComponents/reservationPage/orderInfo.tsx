@@ -1,18 +1,19 @@
-import { Collapse, Button, useDisclosure } from '@chakra-ui/react';
-import { useSearchParams } from 'next/navigation';
+import { Collapse, Button, useDisclosure } from "@chakra-ui/react";
+import { useSearchParams } from "next/navigation";
 
 interface Props {
   rooms: roomData.room[];
-  dollarRate: string | null;
+  dollarRate: string;
   totalPrice: number;
 }
 
 export default function OrderInfo({ rooms, dollarRate, totalPrice }: Props) {
   const { isOpen, onToggle } = useDisclosure();
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang');
-  const days = searchParams.get('days');
-  const cart = searchParams.getAll('cart');
+  const lang = searchParams.get("lang");
+  const days = searchParams.get("days");
+  const cart = searchParams.getAll("cart");
+  const checkOut = searchParams.get("checkOut");
 
   return (
     <div className="flex h-auto w-full flex-col rounded-[20px]  px-[20px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] lg:mt-[-20px] lg:px-0 lg:shadow-none">
@@ -63,11 +64,45 @@ export default function OrderInfo({ rooms, dollarRate, totalPrice }: Props) {
                 {lang === "en" ? "Price per day for 1 room" : "Нэгж үнэ"}
               </p>
               <p className="text-[16px] text-main-text">
-                {rooms
-                  .filter(
+                {rooms.filter(
+                  (room) => room.id === parseInt(index.split("$")[0]),
+                )[0].sales.length > 0 &&
+                checkOut &&
+                new Date(
+                  rooms.filter(
                     (room) => room.id === parseInt(index.split("$")[0]),
-                  )[0]
-                  ?.priceDayUse.toLocaleString()}
+                  )[0].sales[0].enddate,
+                ) >= new Date(checkOut)
+                  ? `${
+                      lang === "en"
+                        ? (
+                            rooms.filter(
+                              (room) =>
+                                room.id === parseInt(index.split("$")[0]),
+                            )[0].sales[0].price / parseInt(dollarRate)
+                          ).toLocaleString()
+                        : rooms
+                            .filter(
+                              (room) =>
+                                room.id === parseInt(index.split("$")[0]),
+                            )[0]
+                            .sales[0].price.toLocaleString()
+                    }`
+                  : `${
+                      lang === "en"
+                        ? (
+                            rooms.filter(
+                              (room) =>
+                                room.id === parseInt(index.split("$")[0]),
+                            )[0]?.defaultPrice / parseInt(dollarRate)
+                          ).toLocaleString()
+                        : rooms
+                            .filter(
+                              (room) =>
+                                room.id === parseInt(index.split("$")[0]),
+                            )[0]
+                            ?.defaultPrice.toLocaleString()
+                    }`}
                 {lang === "en" ? "$" : "₮"}
               </p>
             </div>
@@ -169,11 +204,50 @@ export default function OrderInfo({ rooms, dollarRate, totalPrice }: Props) {
                   {lang === "en" ? "price per day for 1 room" : "Нэгж үнэ"}
                 </p>
                 <p className="text-[16px] text-main-text">
-                  {rooms
+                  {/* {rooms
                     .filter(
                       (room) => room.id === parseInt(index.split("$")[0]),
                     )[0]
-                    ?.priceDayUse.toLocaleString()}
+                    ?.priceDayUse.toLocaleString()} */}
+                  {rooms.filter(
+                    (room) => room.id === parseInt(index.split("$")[0]),
+                  )[0].sales.length > 0 &&
+                  checkOut &&
+                  new Date(
+                    rooms.filter(
+                      (room) => room.id === parseInt(index.split("$")[0]),
+                    )[0].sales[0].enddate,
+                  ) >= new Date(checkOut)
+                    ? `${
+                        lang === "en"
+                          ? (
+                              rooms.filter(
+                                (room) =>
+                                  room.id === parseInt(index.split("$")[0]),
+                              )[0].sales[0].price / parseInt(dollarRate)
+                            ).toLocaleString()
+                          : rooms
+                              .filter(
+                                (room) =>
+                                  room.id === parseInt(index.split("$")[0]),
+                              )[0]
+                              .sales[0].price.toLocaleString()
+                      }`
+                    : `${
+                        lang === "en"
+                          ? (
+                              rooms.filter(
+                                (room) =>
+                                  room.id === parseInt(index.split("$")[0]),
+                              )[0]?.defaultPrice / parseInt(dollarRate)
+                            ).toLocaleString()
+                          : rooms
+                              .filter(
+                                (room) =>
+                                  room.id === parseInt(index.split("$")[0]),
+                              )[0]
+                              ?.defaultPrice.toLocaleString()
+                      }`}
                   {lang === "en" ? "$" : "₮"}
                 </p>
               </div>

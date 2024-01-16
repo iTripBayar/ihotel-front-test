@@ -33,6 +33,7 @@ const SearchPage = () => {
   const lang = searchParams.get("lang");
   const lat = searchParams.get("lat");
   const lng = searchParams.get("lng");
+  const priceRange = searchParams.get("priceRange");
   const { appState, dispatch } = useAppCtx();
   const size = useWindowSize();
   const divRef = useRef<HTMLDivElement>(null);
@@ -98,17 +99,15 @@ const SearchPage = () => {
         // checkout: '',
         isClosed: "",
         page: page !== null ? page : "1",
-        prices:
-          min && max
-            ? encodeURIComponent(`["[${min}${max !== "0" ? `, ${max}` : ""}]"]`)
-            : "",
+        prices: priceRange ? encodeURIComponent(priceRange) : "",
         filterstar: "",
         rating1: "",
         rating2: "",
         hotelServices: services ? encodeURIComponent(`[${services}]`) : "",
         // hotelServices: services ? encodeURI(`[${services}]`) : '',
         roomServices: "",
-        categories: category ? encodeURIComponent(`["${category}"]`) : "",
+        // categories: category ? encodeURIComponent(`["${category}"]`) : "",
+        categories: category ? encodeURIComponent(`${category}`) : "",
       });
     },
     { refreshDeps: [searchParams] },

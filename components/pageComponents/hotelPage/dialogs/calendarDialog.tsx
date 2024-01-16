@@ -27,12 +27,18 @@ export default function CalendarDialog({ ver }: Props) {
   const pathname = usePathname();
   const pastMonth = new Date(
     year,
-    (!checkIn && !checkOut
-      ? month
-      : parseInt(checkIn ? checkIn?.split("|")[0].split("/")[0] : "0")) - 1,
-    !checkIn && !checkOut
-      ? date
-      : parseInt(checkIn ? checkIn?.split("|")[0].split("/")[1] : "0"),
+    checkIn && checkOut
+      ? parseInt(checkIn ? checkIn?.split("|")[0].split("/")[0] : "0") - 1
+      : month,
+    // (!checkIn && !checkOut
+    //   ? month
+    //   : parseInt(checkIn ? checkIn?.split("|")[0].split("/")[0] : "0")) - 1,
+    checkIn && checkOut
+      ? parseInt(checkIn ? checkIn?.split("|")[0].split("/")[1] : "0")
+      : date,
+    // !checkIn && !checkOut
+    //   ? date
+    //   : parseInt(checkIn ? checkIn?.split("|")[0].split("/")[1] : "0"),
   );
   const defaultSelected: DateRange = {
     from: pastMonth,

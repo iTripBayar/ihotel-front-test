@@ -132,19 +132,46 @@ const HotelPage = () => {
   const roomPrices: any[] = [];
   if (data?.rooms && data?.rooms.length) {
     for (let i = 0; i < data?.rooms.length; i++) {
-      roomPrices.push(data?.rooms[i].defaultPrice);
+      if (
+        data.rooms[i].sales.length > 0 &&
+        checkOut &&
+        new Date(data.rooms[i].sales[0].enddate) >= new Date(checkOut)
+      ) {
+        roomPrices.push(data?.rooms[i].sales[0].price);
+      } else {
+        roomPrices.push(data?.rooms[i].defaultPrice);
+      }
     }
   }
   roomPrices.sort((a, b) => a - b);
+
+  // useEffect(() => {
+  //   if (checkIn && checkOut && data) {
+  //     console.log(
+  //       new Date(data.rooms[1].sales[0].startdate) >= new Date(checkIn),
+  //       new Date(data.rooms[1].sales[0].enddate) >= new Date(checkOut),
+  //     );
+  //   }
+  // }, []);
 
   let totalPrice = 0; //total price of the rooms inside the cart
   if (cart && cart.length > 0 && data) {
     for (let i = 0; i < data.rooms.length; i++) {
       for (let j = 0; j < cart.length; j++) {
         if (data.rooms[i].id === parseInt(cart[j].split("$")[0])) {
-          totalPrice =
-            totalPrice +
-            data.rooms[i].defaultPrice * parseInt(cart[j].split("$")[1]);
+          if (
+            data.rooms[i].sales.length > 0 &&
+            checkOut &&
+            new Date(data.rooms[i].sales[0].enddate) >= new Date(checkOut)
+          ) {
+            totalPrice =
+              totalPrice +
+              data.rooms[i].sales[0].price * parseInt(cart[j].split("$")[1]);
+          } else {
+            totalPrice =
+              totalPrice +
+              data.rooms[i].defaultPrice * parseInt(cart[j].split("$")[1]);
+          }
         }
       }
     }
@@ -204,8 +231,6 @@ const HotelPage = () => {
       };
     }
   }
-
-  console.log(data);
 
   if (!error)
     return (

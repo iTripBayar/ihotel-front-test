@@ -54,7 +54,6 @@ export default function ProfilePage() {
     },
     {
       manual: true,
-      // onSuccess: (res) => console.log(res),
     },
   );
   useEffect(() => {
@@ -98,7 +97,6 @@ export default function ProfilePage() {
     {
       manual: true,
       onSuccess: () => {
-        // console.log(res);
         toast.success(
           `${
             lang === "en" ? "Changes applied!" : "Таны мэдээлэл өөрчлөгдлөө!"

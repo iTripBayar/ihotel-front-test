@@ -121,8 +121,6 @@ const SearchBox = ({
     recentSearch = localStorage.getItem("recentSearch");
   }
 
-  // console.log(value);
-
   useEffect(() => {
     if (searchValue && searchValue !== "") {
       // localStorage.removeItem("recentSearch");
@@ -162,13 +160,16 @@ const SearchBox = ({
       .getElementById("searchBoxContainer")
       ?.addEventListener("click", () => {
         setShowDefault(true);
-        document.getElementById("searchInput")?.focus();
+        inputRef.current?.focus();
+        // document.getElementById("searchInput")?.focus();
       });
     document.addEventListener("click", (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (!target.classList.contains("within")) {
         setShowDefault(false);
       } else {
+        // document.getElementById("searchInput")?.focus();
+        inputRef.current?.focus();
         setShowDefault(true);
       }
     });
@@ -374,7 +375,6 @@ const SearchBox = ({
                     const nextSearchValue = `${index.name}$${index.type}$${index.id}`;
                     setQuery(index.name);
                     changeSearchValue(nextSearchValue);
-                    // console.log(nextSearchValue);
                     setSelected(true);
                   }}
                   key={i}

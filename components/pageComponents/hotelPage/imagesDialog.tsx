@@ -100,7 +100,6 @@ export default function ImagesDialog() {
   }
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
-    // console.log(target);
     if (target.classList.contains("outside")) {
       dispatch({
         type: "CHANGE_APP_STATE",
@@ -108,16 +107,6 @@ export default function ImagesDialog() {
       });
     }
   };
-  // const handleTouch = (e: React.TouchEvent) => {
-  //   const target = e.target as HTMLElement;
-  //   // console.log(target);
-  //   if (target.classList.contains("outside")) {
-  //     dispatch({
-  //       type: "CHANGE_APP_STATE",
-  //       payload: { biggerImage: [] },
-  //     });
-  //   }
-  // };
 
   return (
     <div

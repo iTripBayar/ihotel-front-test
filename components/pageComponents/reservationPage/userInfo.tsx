@@ -82,7 +82,7 @@ export default function UserInfo({
         >
           {additionalClients.length > 0 && (
             <p className="font-medium">
-              {lang === "en" ? "Client" : "Захиалагч"} 1
+              {lang === "en" ? "Client" : "Захиалагч"}
             </p>
           )}
           <input
@@ -187,7 +187,6 @@ export default function UserInfo({
                   nationality: e,
                 };
                 updateClients(value);
-                // console.log(e);
               }}
             >
               <Listbox.Button
@@ -301,8 +300,8 @@ export default function UserInfo({
               </div>
               <p className="text-[12px] font-medium leading-[12px] text-primary-blue">
                 {lang === "en"
-                  ? `Add another client's info`
-                  : "Нэмэлт захиалагчийн мэдээлэл оруулах"}
+                  ? `Add other guests' info`
+                  : "Нэмэлт зочны мэдээлэл оруулах"}
               </p>
             </button>
           ) : null}
@@ -312,7 +311,7 @@ export default function UserInfo({
               <form className="flex w-full flex-col gap-[16px]" key={i}>
                 <div className="flex justify-between">
                   <p className="font-medium">
-                    {lang === "en" ? "Client" : "Захиалагч"} {i + 2}
+                    {lang === "en" ? "Guest" : "Зочин"} {i + 1}
                   </p>
                   {i + 1 === additionalClients.length ? (
                     <button
@@ -453,20 +452,7 @@ export default function UserInfo({
                   className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
                 />
                 <div className="relative w-full">
-                  <Listbox
-                    value={clients.nationality}
-                    // onChange={(e) => {
-                    //   const value = {
-                    //     name: clients.name,
-                    //     surName: clients.surName,
-                    //     email: clients.email,
-                    //     phone: clients.phone,
-                    //     nationality: e,
-                    //   };
-                    //   updateClients(value);
-                    //   // console.log(e);
-                    // }}
-                  >
+                  <Listbox value={clients.nationality}>
                     <Listbox.Button
                       className={`w-full h-[42px] rounded-[8px] border-black/[.15] border text-main-text flex items-center px-[12px] justify-between`}
                     >
@@ -534,8 +520,8 @@ export default function UserInfo({
                     </div>
                     <p className="text-[12px] font-medium leading-[12px] text-primary-blue">
                       {lang === "en"
-                        ? `Add another client's info`
-                        : "Нэмэлт захиалагчийн мэдээлэл оруулах"}
+                        ? `Add other guests' info`
+                        : "Нэмэлт зочны мэдээлэл оруулах"}
                     </p>
                   </button>
                 ) : null}
@@ -556,7 +542,7 @@ export default function UserInfo({
         >
           {additionalClients.length > 0 && (
             <p className="font-medium">
-              {lang === "en" ? "Client" : "Захиалагч"} 1
+              {lang === "en" ? "Client" : "Захиалагч"}
             </p>
           )}
           <input
@@ -765,8 +751,8 @@ export default function UserInfo({
               </div>
               <p className="text-[14px] font-medium leading-[14px] text-primary-blue">
                 {lang === "en"
-                  ? `Add another client's info`
-                  : "Нэмэлт захиалагчийн мэдээлэл оруулах"}
+                  ? `Add other guests' info`
+                  : "Нэмэлт зочны мэдээлэл оруулах"}
               </p>
             </button>
           ) : null}
@@ -776,7 +762,7 @@ export default function UserInfo({
               <form className="flex w-full flex-col gap-[16px]" key={i}>
                 <div className="flex justify-between">
                   <p className="font-medium">
-                    {lang === "en" ? "Client" : "Захиалагч"} {i + 2}
+                    {lang === "en" ? "Guest" : "Зочин"} {i + 1}
                   </p>
                   {i + 1 === additionalClients.length ? (
                     <button
@@ -892,20 +878,7 @@ export default function UserInfo({
                   className="rounded-[8px] border-black/[.15] text-main-text placeholder:text-[14px] placeholder:text-main-text/50 focus:outline-none focus:ring-0"
                 />
                 <div className="relative w-full">
-                  <Listbox
-                    value={clients.nationality}
-                    // onChange={(e) => {
-                    //   const value = {
-                    //     name: clients.name,
-                    //     surName: clients.surName,
-                    //     email: clients.email,
-                    //     phone: clients.phone,
-                    //     nationality: e,
-                    //   };
-                    //   updateClients(value);
-                    //   // console.log(e);
-                    // }}
-                  >
+                  <Listbox value={clients.nationality}>
                     <Listbox.Button
                       className={`w-full h-[42px] rounded-[8px] border-black/[.15] border text-main-text flex items-center px-[12px] justify-between`}
                     >
@@ -973,8 +946,8 @@ export default function UserInfo({
                     </div>
                     <p className="text-[14px] font-medium leading-[14px] text-primary-blue">
                       {lang === "en"
-                        ? `Add another client's info`
-                        : "Нэмэлт захиалагчийн мэдээлэл оруулах"}
+                        ? `Add other guests' info`
+                        : "Нэмэлт зочны мэдээлэл оруулах"}
                     </p>
                   </button>
                 ) : null}

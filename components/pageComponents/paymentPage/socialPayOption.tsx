@@ -1,42 +1,45 @@
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { CircularProgress } from '@chakra-ui/react';
-import Image from 'next/image';
-import { useRequest } from 'ahooks';
-import { socialPayInquiry, socialPayPayment } from '@/utils/payment/socialPay';
-import Timer from './timer';
-import QRCode from 'qrcode';
-import { useEffect, useState } from 'react';
-import Success from './success';
-import { useAppCtx } from '@/contexts/app';
-import Link from 'next/link';
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { CircularProgress } from "@chakra-ui/react";
+import Image from "next/image";
+import { useRequest } from "ahooks";
+import { socialPayInquiry, socialPayPayment } from "@/utils/payment/socialPay";
+import Timer from "./timer";
+import QRCode from "qrcode";
+import { useEffect, useState } from "react";
+import Success from "./success";
+import { useAppCtx } from "@/contexts/app";
+import Link from "next/link";
 
 interface Props {
   handleTimeOut: () => void;
   handleError: () => void;
-  time: Date
+  time: Date;
 }
 
-export default function SocialPayOption({ handleTimeOut, handleError, time }: Props) {
+export default function SocialPayOption({
+  handleTimeOut,
+  handleError,
+  time,
+}: Props) {
   const searchParams = useSearchParams();
   const { appState } = useAppCtx();
   const pathname = usePathname();
-  const lang = searchParams.get('lang');
-  const id = searchParams.get('id');
+  const lang = searchParams.get("lang");
+  const id = searchParams.get("id");
   const router = useRouter();
-  const [qr, setQr] = useState<string>('');
+  const [qr, setQr] = useState<string>("");
   const totalPrice = searchParams.get("totalPrice");
 
   const { data, loading, error } = useRequest(
     () => {
-      return socialPayPayment(id ? id : '');
+      return socialPayPayment(id ? id : "");
     },
     {
       onSuccess: (res) => {
         console.log(res);
         QRCode.toDataURL(res.qpay).then(setQr);
       },
-      onError: (err) => {
-        console.log(err);
+      onError: () => {
         handleError();
       },
     },
@@ -53,8 +56,7 @@ export default function SocialPayOption({ handleTimeOut, handleError, time }: Pr
       onSuccess: (res) => {
         console.log(res);
       },
-      onError: (err) => {
-        console.log(err);
+      onError: () => {
         handleError();
       },
     },
@@ -67,7 +69,7 @@ export default function SocialPayOption({ handleTimeOut, handleError, time }: Pr
     const check = setInterval(() => {
       if (id) {
         run({ order_id: id, ihotel_order_id: id });
-      } else if (pathname === '/reservation') {
+      } else if (pathname === "/reservation") {
         return () => clearInterval(check);
       }
     }, 5000);
@@ -148,9 +150,9 @@ export default function SocialPayOption({ handleTimeOut, handleError, time }: Pr
       );
     } else {
       return (
-          <div className='flex h-[40vh] w-full items-center justify-center pb-[100px]'>
-            <CircularProgress isIndeterminate={true} color='#3C76FE' />
-          </div>
+        <div className="flex h-[40vh] w-full items-center justify-center pb-[100px]">
+          <CircularProgress isIndeterminate={true} color="#3C76FE" />
+        </div>
       );
     }
   }

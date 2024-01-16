@@ -52,7 +52,6 @@ const ReservationPage = () => {
     {
       manual: true,
       onSuccess: (res) => {
-        console.log(res);
         setClients({
           name: res.user.name,
           surName: res.user.surname ? res.user.surname : "",
@@ -121,11 +120,23 @@ const ReservationPage = () => {
     if (cart[i] && days && data) {
       for (let j = 0; j < data.rooms.length; j++) {
         if (parseInt(cart[i].split("$")[0]) === data.rooms[j].id) {
-          totalPrice =
-            totalPrice +
-            data.rooms[j].defaultPrice *
-              parseInt(cart[i].split("$")[1]) *
-              parseInt(days);
+          if (
+            data.rooms[j].sales.length > 0 &&
+            checkOut &&
+            new Date(data.rooms[j].sales[0].enddate) >= new Date(checkOut)
+          ) {
+            totalPrice =
+              totalPrice +
+              data.rooms[j].sales[0].price *
+                parseInt(cart[i].split("$")[1]) *
+                parseInt(days);
+          } else {
+            totalPrice =
+              totalPrice +
+              data.rooms[j].defaultPrice *
+                parseInt(cart[i].split("$")[1]) *
+                parseInt(days);
+          }
         }
       }
     }
@@ -162,9 +173,25 @@ const ReservationPage = () => {
       room_price: data?.rooms.filter(
         (index) => index.id === parseInt(cart[i].split("$")[0]),
       )[0]
-        ? data?.rooms
-            .filter((index) => index.id === parseInt(cart[i].split("$")[0]))[0]
-            .defaultPrice.toString()
+        ? data?.rooms.filter(
+            (index) => index.id === parseInt(cart[i].split("$")[0]),
+          )[0].sales.length > 0 &&
+          checkOut &&
+          new Date(
+            data?.rooms.filter(
+              (index) => index.id === parseInt(cart[i].split("$")[0]),
+            )[0].sales[0].enddate,
+          ) >= new Date(checkOut)
+          ? data?.rooms
+              .filter(
+                (index) => index.id === parseInt(cart[i].split("$")[0]),
+              )[0]
+              .sales[0].price.toString()
+          : data?.rooms
+              .filter(
+                (index) => index.id === parseInt(cart[i].split("$")[0]),
+              )[0]
+              .defaultPrice.toString()
         : "",
       room_type: data?.rooms.filter(
         (index) => index.id === parseInt(cart[i].split("$")[0]),
@@ -224,7 +251,6 @@ const ReservationPage = () => {
       manual: true,
       onSuccess: (result) => {
         if (result.orderId && result?.token) {
-          console.log(result);
           router.push(
             `/payment?id=${result.orderId}&tkn=${result.token}&totalPrice=${totalPrice}`,
           );
@@ -317,7 +343,7 @@ const ReservationPage = () => {
               />
               <OrderInfo
                 rooms={data ? data.rooms : []}
-                dollarRate={data ? data.rate : null}
+                dollarRate={data ? data.rate : "1"}
                 totalPrice={totalPrice}
               />
               <div className="lg:hidden">

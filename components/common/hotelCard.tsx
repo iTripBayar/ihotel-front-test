@@ -31,6 +31,7 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
   );
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
+  const checkOut = searchParams.get("checkOut");
 
   let stat = "";
   if (data.isOnline == 1 && data.isOffline == 0) {
@@ -44,12 +45,28 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
   }
 
   const defaultPrice: number[] = [];
+
   for (let i = 0; i < data?.roomTypes?.length; i++) {
-    defaultPrice.push(data.roomTypes[i].defaultPrice);
+    const salesPrice = data.roomTypes[i].sales;
+    if (
+      salesPrice.length > 0 &&
+      salesPrice[0] &&
+      checkOut &&
+      new Date(salesPrice[0].enddate) >= new Date(checkOut)
+    ) {
+      defaultPrice.push(salesPrice[0].price);
+    } else {
+      const opPrice = data.roomTypes[i].priceOp;
+      if (opPrice !== null && opPrice > 0) {
+        defaultPrice.push(opPrice);
+      } else {
+        defaultPrice.push(data.roomTypes[i].defaultPrice);
+      }
+    }
   }
+
   defaultPrice.sort((a, b) => a - b);
 
-  // let array: FavouriteHotels[] = favArray ? JSON.parse(favArray) : [];
   const handleFav = () => {
     const array = localStorage.getItem("favouriteHotels");
     let favorites: FavouriteHotels[] = array ? JSON.parse(array) : [];
@@ -87,7 +104,6 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
         localStorage.setItem("favouriteHotels", JSON.stringify(favorites));
       }
     }
-    // localStorage.removeItem("favouriteHotels");
   };
 
   return (
@@ -171,6 +187,67 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
             stat === "data" ? "opacity-50" : ""
           }`}
         >
+          {/* <div className="flex w-full flex-col gap-[6px] pr-[14px]">
+            <p
+              className={`line-clamp-1 text-[16px] font-semibold leading-[18px] text-mian-text 2xs:text-[18px] 2xs:leading-[20px] sm:text-[14px] sm:leading-[16px] md:text-[16px] md:leading-[18px]`}
+            >
+              {lang === "en" ? data.nameEn : data.name}
+            </p>
+            <ul className="text-[14px] leading-[16px] text-main-text font-medium list-none flex gap-[6px]">
+              <li className="flex items-center gap-[6px]">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"
+                  />
+                </svg>
+
+                <p>{data.rating} / 10</p>
+              </li>
+              <li className="flex items-center gap-[6px]">
+                <div className="flex h-[3px] w-[3px] rounded-full bg-main-text"></div>
+                {lang === "en" ? (
+                  <p>
+                    {stat === "online"
+                      ? "Instant confirmation"
+                      : stat === "pending"
+                      ? "Confirmation delay: "
+                      : stat === "offline"
+                      ? "Booking unavailable"
+                      : ""}
+                    {stat === "pending" ? (
+                      <span className="text-[14px] font-semibold sm:text-[11px] md:text-[14px]">
+                        1-3 hours
+                      </span>
+                    ) : null}
+                  </p>
+                ) : (
+                  <p>
+                    {stat === "online"
+                      ? "Шууд баталгаажна"
+                      : stat === "pending"
+                      ? "Баталгаажих хугацаа: "
+                      : stat === "offline"
+                      ? "Онлайн захиалга боломжгүй"
+                      : ""}
+                    {stat === "pending" ? (
+                      <span className="text-[14px] font-semibold sm:text-[11px] md:text-[14px]">
+                        1-3 цаг
+                      </span>
+                    ) : null}
+                  </p>
+                )}
+              </li>
+            </ul>
+          </div> */}
           {/* name & location */}
           <div className="flex w-full flex-col gap-[12px] pr-[14px]">
             <p
@@ -184,6 +261,7 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
               {lang === "en" ? data?.addressEn : data?.address}
             </p>
           </div>
+
           {/* review & stat */}
           <div
             className={`relative flex w-full gap-[12px] pr-[8px] font-medium text-white ${
@@ -192,7 +270,6 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
                 : "justify-start"
             }`}
           >
-            {/* review */}
             <div className="flex h-[31px] min-w-[40px] items-center justify-center gap-[4px] rounded-[8px] bg-primary-blue text-[12px] 2xs:min-w-[50px] 2xs:text-[14px] sm:min-w-[38px] sm:gap-[2px] sm:text-[12px] md:min-w-[40px] md:text-[14px]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -210,7 +287,6 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
               </svg>
               <p>{data.rating}</p>
             </div>
-            {/* stat */}
             {stat !== "data" ? (
               <div
                 className={`flex h-[31px] items-center justify-center gap-[4px] rounded-[8px] text-center ${
@@ -254,7 +330,6 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
                 )}
               </div>
             ) : (
-              // price if stat === 'data'
               <div className="self-end">
                 <p className="text-[16px] font-bold text-main-text xs:text-[18px] sm:text-[15px] md:text-[20px] lg:text-[20px]">
                   {lang === "en"

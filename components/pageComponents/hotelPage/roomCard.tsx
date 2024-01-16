@@ -21,6 +21,7 @@ const RoomCard = ({ data, stat, dollarRate }: Props) => {
   const lang = searchParams.get("lang");
   const router = useRouter();
   const cart = searchParams.getAll("cart");
+  const checkOut = searchParams.get("checkOut");
   const { appState, dispatch } = useAppCtx();
   const [openDesc, setOpenDesc] = useState(false);
 
@@ -86,6 +87,9 @@ const RoomCard = ({ data, stat, dollarRate }: Props) => {
       `${e.amount} ${e.roomName} ${lang === "en" ? "added" : "нэмэгдлээ"}`,
     );
   };
+  // if (data.sales.length > 0 && checkOut) {
+  //   console.log();
+  // }
 
   return (
     <div className=" flex flex-col  rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] h-fit">
@@ -243,12 +247,45 @@ const RoomCard = ({ data, stat, dollarRate }: Props) => {
         </div>
         {stat === "online" || stat === "pending" ? (
           <div className="w-full flex items-center justify-between border-t border-t-black/[.15] pt-[12px]">
-            <div className="text-[20px] font-medium text-primary-blue">
-              {lang === "en"
-                ? (data.defaultPrice / parseInt(dollarRate)).toLocaleString()
-                : data.defaultPrice.toLocaleString()}
-              {lang === "en" ? "$" : "₮"}
-              <span className=" text-[12px] font-medium">
+            <div className="text-[20px] leading-[22px] font-medium text-primary-blue flex items-end">
+              <div
+                className={`flex ${
+                  data.sales.length > 0 ? "flex-col items-start" : ""
+                }`}
+              >
+                <p
+                  className={
+                    data.sales.length > 0 &&
+                    checkOut &&
+                    new Date(data.sales[0].enddate) >= new Date(checkOut)
+                      ? "text-sub-text/75 text-[18px] line-through"
+                      : ""
+                  }
+                >
+                  {lang === "en"
+                    ? (
+                        data.defaultPrice / parseInt(dollarRate)
+                      ).toLocaleString()
+                    : data.defaultPrice.toLocaleString()}
+                </p>
+                <p
+                  className={`${
+                    data.sales.length > 0 &&
+                    checkOut &&
+                    new Date(data.sales[0].enddate) >= new Date(checkOut)
+                      ? ""
+                      : "hidden"
+                  }`}
+                >
+                  {lang === "en"
+                    ? (
+                        data.sales[0]?.price / parseInt(dollarRate)
+                      ).toLocaleString()
+                    : data.sales[0]?.price.toLocaleString()}
+                </p>
+              </div>
+              <span>{lang === "en" ? "$" : "₮"}</span>
+              <span className=" text-[12px] font-medium leading-[14px]">
                 {" "}
                 / {lang === "en" ? "day" : "хоног"}
               </span>

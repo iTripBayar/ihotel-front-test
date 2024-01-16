@@ -10,10 +10,14 @@ import Success from "./success";
 interface Props {
   handleTimeOut: () => void;
   handleError: () => void;
-  time: Date
+  time: Date;
 }
 
-export default function PassOption({ handleTimeOut, handleError,time }: Props) {
+export default function PassOption({
+  handleTimeOut,
+  handleError,
+  time,
+}: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
   const id = searchParams.get("id");
@@ -30,15 +34,12 @@ export default function PassOption({ handleTimeOut, handleError,time }: Props) {
     },
     {
       onSuccess: (res) => {
-        console.log(res);
         setTimeout(() => {
           setRerender(!rerender);
         }, 100);
         if (canvas !== null) {
-          console.log("not null");
           QRCode.toCanvas(canvas, res.orderId, function (error) {
             if (error) console.error(error);
-            console.log("success!");
           });
         }
       },
@@ -64,8 +65,7 @@ export default function PassOption({ handleTimeOut, handleError,time }: Props) {
       onSuccess: (res) => {
         console.log(res);
       },
-      onError: (err) => {
-        console.log(err);
+      onError: () => {
         handleError();
       },
       onBefore: () => {
@@ -87,8 +87,7 @@ export default function PassOption({ handleTimeOut, handleError,time }: Props) {
       onSuccess: (res) => {
         console.log(res);
       },
-      onError: (err) => {
-        console.log(err);
+      onError: () => {
         handleError();
       },
     },

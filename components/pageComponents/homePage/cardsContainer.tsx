@@ -1,7 +1,7 @@
 // import useWindowSize from '@/hooks/windowSize';
-import HotelCard from '../../common/hotelCard';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import HotelCard from "../../common/hotelCard";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 interface iProps {
   title: string;
@@ -11,7 +11,7 @@ interface iProps {
 
 const CardsContainer = ({ title, data, dollarRate }: iProps) => {
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang');
+  const lang = searchParams.get("lang");
   // const size = useWindowSize();
   const cap = 6;
   // if (title === 'cheap') {
@@ -32,22 +32,22 @@ const CardsContainer = ({ title, data, dollarRate }: iProps) => {
       <div
         className={`flex w-full flex-col gap-[24px] border-t-[1px]  border-black/[.15] pt-[32px] lg:gap-[32px]`}
       >
-        {title !== '' ? (
-          <h3 className='text-[20px] font-bold text-main-text'>
-            {title === 'cheap'
-              ? lang === 'en'
-                ? 'Comfortable & Cheap hotels'
-                : 'Тохилог & Хямд буудлууд'
+        {title !== "" ? (
+          <h3 className="text-[20px] font-bold text-main-text">
+            {title === "cheap"
+              ? lang === "en"
+                ? "Comfortable & Cheap hotels"
+                : "Тохилог & Хямд буудлууд"
               : null}
-            {title === 'hotels'
-              ? lang === 'en'
-                ? 'Featured hotels'
-                : 'Онцлох зочид буудлууд'
+            {title === "hotels"
+              ? lang === "en"
+                ? "Featured hotels"
+                : "Онцлох зочид буудлууд"
               : null}
-            {title === 'camps'
-              ? lang === 'en'
-                ? 'Featured camps'
-                : 'Онцлох амралтын газрууд'
+            {title === "camps"
+              ? lang === "en"
+                ? "Featured camps"
+                : "Онцлох амралтын газрууд"
               : null}
           </h3>
         ) : null}
@@ -58,9 +58,9 @@ const CardsContainer = ({ title, data, dollarRate }: iProps) => {
             cap / 3
           } xl:grid-cols-3 xl:gap-[24px] 2xl:gap-[48px] `}
         >
-          {data.slice(0,cap).map((data, i: number) => (
+          {data.slice(0, cap).map((data, i: number) => (
             <HotelCard
-              ver='home'
+              ver="home"
               data={data}
               key={i}
               fromMap={false}
@@ -71,13 +71,13 @@ const CardsContainer = ({ title, data, dollarRate }: iProps) => {
         {data.length > 0 ? (
           <Link
             href={{
-              query: { category: title !== 'camps' ? 5 : 3 },
-              pathname: '/search',
+              query: { category: title !== "camps" ? `["${5}"]` : `["${2}"]` },
+              pathname: "/search",
             }}
-            className='flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white font-medium'
+            className="flex max-w-[171px] cursor-pointer items-center justify-center self-center rounded-full bg-primary-blue px-[16px] py-[8px] text-[16px] text-white font-medium"
           >
-            <p className='flex gap-[4px] font-medium'>
-              {lang === 'en' ? 'More' : 'Цааш үзэх'}
+            <p className="flex gap-[4px] font-medium">
+              {lang === "en" ? "More" : "Цааш үзэх"}
             </p>
           </Link>
         ) : null}

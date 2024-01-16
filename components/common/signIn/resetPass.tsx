@@ -70,7 +70,7 @@ export default function ResetPass() {
         }, 2000);
       }
       const res = await registerResponse.json();
-      console.log(res);
+      // console.log(res);
     } catch (error: any) {
       if (error.response) {
         // The request was made and the server responded with a status code

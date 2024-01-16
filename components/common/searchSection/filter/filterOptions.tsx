@@ -1,9 +1,9 @@
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
-import CategoryFilter from './categoryFilter';
-import PriceFilter from './priceFilter';
-import ServiceFilter from './serviceFilter';
-import { useAppCtx } from '@/contexts/app';
+import { useSearchParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import CategoryFilter from "./categoryFilter";
+import PriceFilter from "./priceFilter";
+import ServiceFilter from "./serviceFilter";
+import { useAppCtx } from "@/contexts/app";
 
 interface Props {
   categories: SearchData.Categories[];
@@ -11,21 +11,59 @@ interface Props {
 }
 
 const FilterOptions = ({ categories, services }: Props) => {
-  // searchParams
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang');
+  const lang = searchParams.get("lang");
   const router = useRouter();
   const { appState, dispatch } = useAppCtx();
-  const filterServices = searchParams.get('services');
-  const category = searchParams.get('category');
-  const min = searchParams.get('min');
-  const max = searchParams.get('max');
-
-  const [cat, setCat] = useState<SearchData.Categories | null>(
-    category
-      ? categories.filter((index) => index.id.toString() === category)[0]
-      : null,
+  const filterServices = searchParams.get("services");
+  const priceRangeParam = searchParams.get("priceRange");
+  const category = searchParams.get("category");
+  const [cat, setCat] = useState<string[]>(
+    category ? JSON.parse(category) : [],
   );
+  const [priceRange, setPriceRange] = useState<string[]>(
+    priceRangeParam ? JSON.parse(priceRangeParam) : [],
+  );
+
+  const changeCat = (e: string) => {
+    if (cat.length > 0) {
+      if (cat.some((index) => index === e)) {
+        setCat((prev) => prev.filter((index) => index !== e));
+      } else {
+        setCat((prev) => [...prev, e]);
+      }
+    } else {
+      setCat([e]);
+    }
+  };
+  const changePrice = (e: number[]) => {
+    if (e.length < 2) {
+      if (priceRange.length > 0) {
+        if (priceRange.some((index) => index === `[${e[0]}]`)) {
+          setPriceRange((prev) =>
+            prev.filter((index) => index !== `[${e[0]}]`),
+          );
+        } else {
+          setPriceRange((prev) => [...prev, `[${e[0]}]`]);
+        }
+      } else {
+        setPriceRange([`[${e[0]}]`]);
+      }
+    } else {
+      if (priceRange.length > 0) {
+        if (priceRange.some((index) => index === `[${e[0]}, ${e[1]}]`)) {
+          setPriceRange((prev) =>
+            prev.filter((index) => index !== `[${e[0]}, ${e[1]}]`),
+          );
+        } else {
+          setPriceRange((prev) => [...prev, `[${e[0]}, ${e[1]}]`]);
+        }
+      } else {
+        setPriceRange([`[${e[0]}, ${e[1]}]`]);
+      }
+    }
+  };
+
   const samplePrice = [
     { id: 7, min: 0, max: 50000 },
     { id: 8, min: 50000, max: 100000 },
@@ -33,22 +71,10 @@ const FilterOptions = ({ categories, services }: Props) => {
     { id: 10, min: 150000, max: 200000 },
     { id: 11, min: 200000, max: 0 },
   ];
-  const [minMax, setMinMax] = useState<{
-    id: number;
-    min: number;
-    max: number;
-  } | null>(
-    min && max
-      ? samplePrice.filter(
-          (i) => i.min.toString() === min && i.max.toString() === max,
-        )[0]
-      : null,
-  );
-  const [serv, setServices] = useState<string>(
-    filterServices ? filterServices : '',
-  );
 
-  
+  const [serv, setServices] = useState<string>(
+    filterServices ? filterServices : "",
+  );
 
   const createAdditionalQueryString = (
     name: string,
@@ -57,8 +83,6 @@ const FilterOptions = ({ categories, services }: Props) => {
     value1: string | null,
     name2: string,
     value2: string | null,
-    name3: string,
-    value3: string | null,
   ) => {
     const params = new URLSearchParams(searchParams);
     if (value !== null) {
@@ -76,34 +100,23 @@ const FilterOptions = ({ categories, services }: Props) => {
     } else {
       params.delete(name2);
     }
-    if (value3 !== null) {
-      params.set(name3, value3);
-    } else {
-      params.delete(name3);
-    }
     return params.toString();
   };
-  const changeCat = (e: SearchData.Categories) => {
-    if (cat === e) {
-      setCat(null);
-    } else {
-      setCat(e);
-    }
-  };
-  const changeMinMax = (e: { id: number; min: number; max: number }) => {
-    if (minMax !== null && minMax.id === e.id) {
-      setMinMax(null);
-    } else {
-      setMinMax(e);
-    }
-  };
+  // const changeCat = (e: SearchData.Categories) => {
+  //   if (cat === e) {
+  //     setCat(null);
+  //   } else {
+  //     setCat(e);
+  //   }
+  // };
+
   const changeServ = (e: string) => {
-    if (serv === '') {
+    if (serv === "") {
       setServices(`${e}`);
     } else {
-      if (serv.split(',').includes(e)) {
-        const indexValue = serv.split(',').indexOf(e);
-        setServices(serv.split(',').toSpliced(indexValue, 1).join());
+      if (serv.split(",").includes(e)) {
+        const indexValue = serv.split(",").indexOf(e);
+        setServices(serv.split(",").toSpliced(indexValue, 1).join());
       } else {
         setServices(`${serv},${e}`);
       }
@@ -112,7 +125,7 @@ const FilterOptions = ({ categories, services }: Props) => {
 
   const iconRotateDuration = 700;
 
-  if (appState.filter === 'webFilter')
+  if (appState.filter === "webFilter")
     return (
       <div
         className="flex max-h-[300px] w-[85vw] animate-fade500 items-end filter"
@@ -125,18 +138,20 @@ const FilterOptions = ({ categories, services }: Props) => {
               iconRotateDuration={iconRotateDuration}
               data={categories}
               value={cat}
-              changeValue={(e: SearchData.Categories) => changeCat(e)}
+              // changeValue={(e: SearchData.Categories) => changeCat(e)}
+              changeValue={(e: string) => changeCat(e)}
               ver="web"
+              // testChangeCat={(e: string) => testChangeCat(e)}
             />
             {/* Price */}
             <PriceFilter
               iconRotateDuration={iconRotateDuration}
               data={samplePrice}
-              value={minMax}
-              changeValue={(e: { id: number; min: number; max: number }) =>
-                changeMinMax(e)
-              }
+              // value={minMax}
+              value={priceRange}
+              changeValue={changePrice}
               ver="web"
+              // changeTestPrice={changePrice}
             />
             {/* services */}
             <ServiceFilter
@@ -156,11 +171,10 @@ const FilterOptions = ({ categories, services }: Props) => {
                     "services",
                     serv ? serv : null,
                     "category",
-                    cat ? `${cat?.id}` : null,
-                    "min",
-                    minMax ? `${minMax.min}` : null,
-                    "max",
-                    minMax ? `${minMax.max}` : null,
+                    // cat ? `${cat?.id}` : null,
+                    cat.length > 0 ? JSON.stringify(cat) : null,
+                    "priceRange",
+                    priceRange.length > 0 ? JSON.stringify(priceRange) : null,
                   )}`,
                   { scroll: false },
                 );
@@ -181,15 +195,15 @@ const FilterOptions = ({ categories, services }: Props) => {
                     null,
                     "category",
                     null,
-                    "min",
-                    null,
-                    "max",
+                    "priceRange",
                     null,
                   )}`,
                   { scroll: false },
                 );
-                setCat(null);
-                setMinMax(null);
+                // setCat(null);
+                setCat([]);
+                setPriceRange([]);
+                // setMinMax(null);
                 setServices("");
                 dispatch({
                   type: "CHANGE_APP_STATE",
@@ -215,18 +229,23 @@ const FilterOptions = ({ categories, services }: Props) => {
           iconRotateDuration={iconRotateDuration}
           data={categories}
           value={cat}
-          changeValue={(e: SearchData.Categories) => changeCat(e)}
+          // changeValue={(e: SearchData.Categories) => changeCat(e)}
+          changeValue={(e: string) => changeCat(e)}
           ver="mobile"
+          // testChangeCat={(e: string) => testChangeCat(e)}
         />
         {/* Price */}
         <PriceFilter
           iconRotateDuration={iconRotateDuration}
           data={samplePrice}
-          value={minMax}
-          changeValue={(e: { id: number; min: number; max: number }) =>
-            changeMinMax(e)
-          }
+          // value={minMax}
+          value={priceRange}
+          changeValue={changePrice}
+          // changeValue={(e: { id: number; min: number; max: number }) =>
+          //   changeMinMax(e)
+          // }
           ver="mobile"
+          // changeTestPrice={changePrice}
         />
         {/* services */}
         <ServiceFilter
@@ -244,11 +263,10 @@ const FilterOptions = ({ categories, services }: Props) => {
                   "services",
                   serv ? `${serv}` : null,
                   "category",
-                  cat ? `${cat?.id}` : null,
-                  "min",
-                  minMax ? `${minMax.min}` : null,
-                  "max",
-                  minMax ? `${minMax.max}` : null,
+                  // cat ? `${cat?.id}` : null,
+                  cat.length > 0 ? JSON.stringify(cat) : null,
+                  "priceRange",
+                  priceRange.length > 0 ? JSON.stringify(priceRange) : null,
                 )}`,
                 { scroll: false },
               );
@@ -269,15 +287,15 @@ const FilterOptions = ({ categories, services }: Props) => {
                   null,
                   "category",
                   null,
-                  "min",
-                  null,
-                  "max",
+                  "priceRange",
                   null,
                 )}`,
                 { scroll: false },
               );
-              setCat(null);
-              setMinMax(null);
+              // setCat(null);
+              setCat([]);
+              setPriceRange([]);
+              // setMinMax(null);
               setServices("");
               dispatch({
                 type: "CHANGE_APP_STATE",

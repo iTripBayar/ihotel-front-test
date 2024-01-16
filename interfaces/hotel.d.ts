@@ -186,7 +186,17 @@ declare namespace HotelData {
     priceTime: number;
     priceTimeCount: number;
     saleQuantity: number | null;
-    sales: [];
+    sales: {
+      createdAt: string;
+      enddate: string;
+      id: number;
+      percent: number;
+      price: number;
+      priceOp: number | null;
+      roomId: number;
+      startdate: string;
+      updatedAt: string;
+    }[];
     shortName: string;
     size: number;
     startDate: string | null;

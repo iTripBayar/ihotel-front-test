@@ -18,7 +18,7 @@ const HeroCategory = ({ data }: iProps) => {
         >
           <Link
             href={{
-              query: { category: index.id },
+              query: { category: `["${index.id}"]` },
               pathname: "/search",
             }}
             className="relative h-[50px] w-[50px] overflow-hidden rounded-full  shadow-[0px_0px_15px_2px_rgb(0,0,0,0.12)] xs:h-[65px] xs:w-[65px] sm:h-[100px] sm:w-[100px] md:h-[120px] md:w-[120px] lg:h-[140px] lg:w-[140px] xl:h-[180px] xl:w-[180px] 2xl:h-[200px] 2xl:w-[200px]"

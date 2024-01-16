@@ -34,8 +34,7 @@ export default function QpayOption({
       onSuccess: (res) => {
         console.log(res);
       },
-      onError: (err) => {
-        console.log(err);
+      onError: () => {
         handleError();
       },
     },
@@ -52,8 +51,7 @@ export default function QpayOption({
       onSuccess: (res) => {
         console.log(res);
       },
-      onError: (err) => {
-        console.log(err);
+      onError: () => {
         handleError();
       },
     },

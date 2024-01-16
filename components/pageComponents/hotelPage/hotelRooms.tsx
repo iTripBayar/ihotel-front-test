@@ -229,12 +229,53 @@ const HotelRooms = ({
                               {lang === "en" ? "people" : "хүн"}
                             </p>
                             <p>
-                              {data
-                                .filter(
+                              {data.filter(
+                                (room) =>
+                                  room.id === parseInt(index.split("$")[0]),
+                              )[0].sales.length > 0 &&
+                              checkOut &&
+                              new Date(
+                                data.filter(
                                   (room) =>
                                     room.id === parseInt(index.split("$")[0]),
-                                )[0]
-                                .defaultPrice.toLocaleString()}{" "}
+                                )[0].sales[0].enddate,
+                              ) >= new Date(checkOut)
+                                ? `${
+                                    lang === "en"
+                                      ? (
+                                          data.filter(
+                                            (room) =>
+                                              room.id ===
+                                              parseInt(index.split("$")[0]),
+                                          )[0].sales[0].price /
+                                          parseInt(dollarRate)
+                                        ).toLocaleString()
+                                      : data
+                                          .filter(
+                                            (room) =>
+                                              room.id ===
+                                              parseInt(index.split("$")[0]),
+                                          )[0]
+                                          .sales[0].price.toLocaleString()
+                                  }`
+                                : `${
+                                    lang === "en"
+                                      ? (
+                                          data.filter(
+                                            (room) =>
+                                              room.id ===
+                                              parseInt(index.split("$")[0]),
+                                          )[0].defaultPrice /
+                                          parseInt(dollarRate)
+                                        ).toLocaleString()
+                                      : data
+                                          .filter(
+                                            (room) =>
+                                              room.id ===
+                                              parseInt(index.split("$")[0]),
+                                          )[0]
+                                          .defaultPrice.toLocaleString()
+                                  }`}{" "}
                               {lang === "en" ? "$" : "₮"}
                               <span> x{index.split("$")[1]}</span>
                             </p>

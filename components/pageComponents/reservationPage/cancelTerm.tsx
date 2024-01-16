@@ -1,21 +1,16 @@
-import { useSearchParams } from 'next/navigation';
-import { Collapse, Button, useDisclosure } from '@chakra-ui/react';
-import format from 'date-fns/format';
+import { useSearchParams } from "next/navigation";
+import { Collapse, Button, useDisclosure } from "@chakra-ui/react";
+import format from "date-fns/format";
 import subDays from "date-fns/subDays";
 
 interface Props {
   data: { day: string; fee: string }[] | undefined;
   dollarRate: string | null;
   totalPrice: number;
-
 }
-export default function CancelTerm({
-  data,
-  dollarRate,
-  totalPrice,
-}: Props) {
+export default function CancelTerm({ data, dollarRate, totalPrice }: Props) {
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang');
+  const lang = searchParams.get("lang");
   const checkIn = searchParams.get("checkIn");
   const { isOpen, onToggle } = useDisclosure();
 
@@ -25,65 +20,74 @@ export default function CancelTerm({
         <p className="text-[18px] font-medium leading-[18px] text-sub-text">
           {lang === "en" ? "Term of cancellation" : "Цуцлалтын нөхцөл"}
         </p>
-        {checkIn ? <div className="flex w-full">
-          <div className="relative w-full overflow-hidden rounded-[20px] border border-black/[.15] px-[8px] text-center">
-            <div className="absolute left-0 top-0 h-[60px] w-full bg-black/5"></div>
-            <table className="w-full px-[12px] text-[10px] leading-[12px] text-sub-text/75  2xs:text-[12px] lg:text-[14px] lg:leading-[16px]">
-              <thead className="text-main-text ">
-                <tr className="h-[60px] w-full">
-                  <th className="font-medium">
-                    {lang === "en"
-                      ? "Allowed dates for cancellation"
-                      : "Цуцлах боломжит хугацаа"}
-                  </th>
-                  <th className="font-medium">
-                    {lang === "en" ? "% of total amount" : "Нийт үнийн дүнгийн"}
-                  </th>
-                  <th className="font-medium">
-                    {lang === "en" ? "Cancellation fee" : "Торгууль"}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data
-                  ? data.map((index, i) => (
-                      <tr className="h-[60px]" key={i}>
-                        <td>
-                          {lang === "en"
-                            ? `Until ${format(
-                                subDays(new Date(checkIn), parseInt(index.day)),
-                                `${
-                                  lang === "en" ? "MMM dd yyyy" : "yyyy-MM-dd"
-                                }`,
-                              )}`
-                            : `${format(
-                                subDays(new Date(checkIn), parseInt(index.day)),
-                                `${
-                                  lang === "en" ? "MMM dd yyyy" : "yyyy-MM-dd"
-                                }`,
-                              )} хүртэл`}
-                        </td>
-                        <td>{index.fee}%</td>
-                        <td>
-                          {lang === "en" && dollarRate
-                            ? `${(
-                                totalPrice /
-                                parseInt(dollarRate) /
-                                100
-                              ).toLocaleString()} $`
-                            : `${(
-                                (totalPrice / 100) *
-                                parseInt(index.fee)
-                              ).toLocaleString()} ₮`}
-                        </td>
-                      </tr>
-                    ))
-                  : null}
-              </tbody>
-            </table>
+        {checkIn ? (
+          <div className="flex w-full">
+            <div className="relative w-full overflow-hidden rounded-[20px] border border-black/[.15] px-[8px] text-center">
+              <div className="absolute left-0 top-0 h-[60px] w-full bg-black/5"></div>
+              <table className="w-full px-[12px] text-[10px] leading-[12px] text-sub-text/75  2xs:text-[12px] lg:text-[14px] lg:leading-[16px]">
+                <thead className="text-main-text ">
+                  <tr className="h-[60px] w-full">
+                    <th className="font-medium">
+                      {lang === "en"
+                        ? "Allowed dates for cancellation"
+                        : "Цуцлах боломжит хугацаа"}
+                    </th>
+                    <th className="font-medium">
+                      {lang === "en"
+                        ? "% of total amount"
+                        : "Нийт үнийн дүнгийн"}
+                    </th>
+                    <th className="font-medium">
+                      {lang === "en" ? "Cancellation fee" : "Торгууль"}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data
+                    ? data.map((index, i) => (
+                        <tr className="h-[60px]" key={i}>
+                          <td>
+                            {lang === "en"
+                              ? `Until ${format(
+                                  subDays(
+                                    new Date(checkIn),
+                                    parseInt(index.day),
+                                  ),
+                                  `${
+                                    lang === "en" ? "MMM dd yyyy" : "yyyy-MM-dd"
+                                  }`,
+                                )}`
+                              : `${format(
+                                  subDays(
+                                    new Date(checkIn),
+                                    parseInt(index.day),
+                                  ),
+                                  `${
+                                    lang === "en" ? "MMM dd yyyy" : "yyyy-MM-dd"
+                                  }`,
+                                )} хүртэл`}
+                          </td>
+                          <td>{index.fee}%</td>
+                          <td>
+                            {lang === "en" && dollarRate
+                              ? `${(
+                                  totalPrice /
+                                  parseInt(dollarRate) /
+                                  100
+                                ).toLocaleString()} $`
+                              : `${(
+                                  (totalPrice / 100) *
+                                  parseInt(index.fee)
+                                ).toLocaleString()} ₮`}
+                          </td>
+                        </tr>
+                      ))
+                    : null}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div> : null}
-        
+        ) : null}
       </div>
       <div className="flex flex-col lg:hidden">
         {/* title */}
@@ -144,33 +148,50 @@ export default function CancelTerm({
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                <tr className="h-[47px]">
-                  <td>
-                    {lang === "en" ? "Until ### ## 2023" : "2023-##-## хүртэл"}
-                  </td>
-                  <td>0%</td>
-                  <td>{lang === "en" ? "No fees" : "Торгуульгүй"}</td>
-                </tr>
-                <tr className="h-[47px]">
-                  <td>
-                    {lang === "en"
-                      ? "Between Nov 10 2023 & Nov 20 2023"
-                      : "2023-10-28 - 2023-10-31 хооронд"}
-                  </td>
-                  <td>10%</td>
-                  <td>10,000₮</td>
-                </tr>
-                <tr className="h-[47px]">
-                  <td>
-                    {lang === "en"
-                      ? "Between Nov 20 2023 & Nov 30 2023"
-                      : "2023-11-02 - 2023-11-50 хооронд"}
-                  </td>
-                  <td>20%</td>
-                  <td>20,000₮</td>
-                </tr>
-              </tbody>
+              {checkIn ? (
+                <tbody>
+                  {data
+                    ? data.map((index, i) => (
+                        <tr className="h-[60px]" key={i}>
+                          <td>
+                            {lang === "en"
+                              ? `Until ${format(
+                                  subDays(
+                                    new Date(checkIn),
+                                    parseInt(index.day),
+                                  ),
+                                  `${
+                                    lang === "en" ? "MMM dd yyyy" : "yyyy-MM-dd"
+                                  }`,
+                                )}`
+                              : `${format(
+                                  subDays(
+                                    new Date(checkIn),
+                                    parseInt(index.day),
+                                  ),
+                                  `${
+                                    lang === "en" ? "MMM dd yyyy" : "yyyy-MM-dd"
+                                  }`,
+                                )} хүртэл`}
+                          </td>
+                          <td>{index.fee}%</td>
+                          <td>
+                            {lang === "en" && dollarRate
+                              ? `${(
+                                  totalPrice /
+                                  parseInt(dollarRate) /
+                                  100
+                                ).toLocaleString()} $`
+                              : `${(
+                                  (totalPrice / 100) *
+                                  parseInt(index.fee)
+                                ).toLocaleString()} ₮`}
+                          </td>
+                        </tr>
+                      ))
+                    : null}
+                </tbody>
+              ) : null}
             </table>
           </div>
         </Collapse>

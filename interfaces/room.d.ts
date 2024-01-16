@@ -40,6 +40,17 @@ declare namespace roomData {
     priceTime: number;
     priceTimeCount: number;
     saleQuantity: null;
+    sales: {
+      createdAt: string;
+      enddate: string;
+      id: number;
+      percent: number;
+      price: number;
+      priceOp: number | null;
+      roomId: number;
+      startdate: string;
+      updatedAt: string;
+    }[];
     shortName: string;
     size: number;
     startDate: string | null;
