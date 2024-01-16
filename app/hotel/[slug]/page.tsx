@@ -135,7 +135,7 @@ const HotelPage = () => {
       roomPrices.push(data?.rooms[i].defaultPrice);
     }
   }
-  roomPrices.sort((a, b) => b - a);
+  roomPrices.sort((a, b) => a - b);
 
   let totalPrice = 0; //total price of the rooms inside the cart
   if (cart && cart.length > 0 && data) {
@@ -204,6 +204,8 @@ const HotelPage = () => {
       };
     }
   }
+
+  console.log(data);
 
   if (!error)
     return (

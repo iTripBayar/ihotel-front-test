@@ -1,6 +1,8 @@
 import ReactMapGL, { Marker } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useRef } from "react";
+import { useState } from "react";
+
 interface Props {
   lat: number;
   lng: number;
@@ -8,6 +10,11 @@ interface Props {
 
 const HotelMap = ({ lat, lng }: Props) => {
   const mapRef = useRef<any>();
+  const [viewPort, setViewPort] = useState({
+    lng: lng,
+    lat: lat,
+    zoom: 13,
+  });
   // setTimeout(() => {
   //   mapRef?.current?.flyTo({
   //     center: [lng, lat],
@@ -21,11 +28,11 @@ const HotelMap = ({ lat, lng }: Props) => {
     <div className="h-[225px] w-full 2xs:h-[265px] sm:h-[300px] md:h-[325px] lg:h-[225px]">
       <ReactMapGL
         ref={mapRef}
-        mapboxAccessToken="pk.eyJ1IjoiaWhvdGVsLWRldiIsImEiOiJjbG53eG4xM2cwOGdqMnFwZWZodmxyYWgwIn0.NKP_FGb_Ad26fu4wSqnJ7Q"
+        mapboxAccessToken={process.env.MAPBOX_ACCESS_TOKEN}
         initialViewState={{
-          longitude: lng,
-          latitude: lat,
-          zoom: 13,
+          longitude: viewPort.lng,
+          latitude: viewPort.lat,
+          zoom: viewPort.zoom,
         }}
         style={{
           width: "100%",

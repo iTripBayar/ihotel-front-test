@@ -121,6 +121,8 @@ const SearchBox = ({
     recentSearch = localStorage.getItem("recentSearch");
   }
 
+  // console.log(value);
+
   useEffect(() => {
     if (searchValue && searchValue !== "") {
       // localStorage.removeItem("recentSearch");
@@ -184,7 +186,7 @@ const SearchBox = ({
             "filter",
             filter,
             "searchValue",
-            query,
+            value,
           )}`,
         );
       }
@@ -372,6 +374,7 @@ const SearchBox = ({
                     const nextSearchValue = `${index.name}$${index.type}$${index.id}`;
                     setQuery(index.name);
                     changeSearchValue(nextSearchValue);
+                    // console.log(nextSearchValue);
                     setSelected(true);
                   }}
                   key={i}

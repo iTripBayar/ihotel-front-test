@@ -154,7 +154,7 @@ const MapContainer = ({ data, lat, lng, zoom, dollarRate }: iProps) => {
       </div>
       {data ? (
         <ReactMapGL
-          mapboxAccessToken="pk.eyJ1IjoiaWhvdGVsLWRldiIsImEiOiJjbG53eG4xM2cwOGdqMnFwZWZodmxyYWgwIn0.NKP_FGb_Ad26fu4wSqnJ7Q"
+          mapboxAccessToken={process.env.MAPBOX_ACCESS_TOKEN}
           initialViewState={{
             longitude: viewPort.lng,
             latitude: viewPort.lat,
