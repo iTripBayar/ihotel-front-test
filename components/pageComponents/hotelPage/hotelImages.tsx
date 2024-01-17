@@ -1,13 +1,7 @@
 import Image from "next/image";
 import { useAppCtx } from "@/contexts/app";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
-import {
-  FreeMode,
-  Thumbs,
-  Mousewheel,
-  Pagination,
-  Keyboard,
-} from "swiper/modules";
+import { FreeMode, Thumbs, Pagination, Keyboard } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
@@ -105,7 +99,7 @@ const HotelImages = ({ images, image }: Props) => {
       </Swiper>
       <Swiper
         onSwiper={setThumbsSwiper}
-        loop={true}
+        // loop={true}
         // rewind={true}
         spaceBetween={4}
         slidesPerView={5}
@@ -128,8 +122,7 @@ const HotelImages = ({ images, image }: Props) => {
         }}
         freeMode={true}
         watchSlidesProgress={true}
-        mousewheel={true}
-        modules={[FreeMode, Thumbs, Mousewheel]}
+        modules={[FreeMode, Thumbs]}
         className="w-full h-[60px] 2xs:h-[75px] md:h-[100px]"
       >
         {allImages.map((index, i) => (

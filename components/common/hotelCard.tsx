@@ -2,6 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import addDays from "date-fns/addDays";
 
 type iProps = {
   data: HotelData.Hotel;
@@ -51,8 +52,8 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
     if (
       salesPrice.length > 0 &&
       salesPrice[0] &&
-      checkOut &&
-      new Date(salesPrice[0].enddate) >= new Date(checkOut)
+      // checkOut &&
+      new Date(salesPrice[0].enddate) >= addDays(new Date(Date.now()), 1)
     ) {
       defaultPrice.push(salesPrice[0].price);
     } else {

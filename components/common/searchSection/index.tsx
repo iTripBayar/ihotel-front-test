@@ -1,8 +1,8 @@
-import SearchBox from './searchBox';
-import OnlineToggle from './onlineToggle';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
-import { useAppCtx } from '@/contexts/app';
+import SearchBox from "./searchBox";
+import OnlineToggle from "./onlineToggle";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useCallback, useState } from "react";
+import { useAppCtx } from "@/contexts/app";
 
 interface iProps {
   ver: string;
@@ -10,17 +10,15 @@ interface iProps {
   cityData: SearchData.Cities[];
 }
 
-const SearchSection = ({
-  ver,
-  placesData,
-  cityData,
-}: iProps) => {
+const SearchSection = ({ ver, placesData, cityData }: iProps) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
   const filter = searchParams.get("filter");
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
   const router = useRouter();
+  const pathname = usePathname();
+  // console.log(pathname);
   const { appState, dispatch } = useAppCtx();
 
   const [toggle, setToggle] = useState(false);
@@ -107,7 +105,7 @@ const SearchSection = ({
           />
           <OnlineToggle ver={ver} changeToggle={changeToggle} value={toggle} />
           {appState.filter !== "mobile" ? (
-            <div
+            <button
               onClick={() => {
                 router.push(
                   `/search/?${multipleCreateQueryString(
@@ -135,7 +133,7 @@ const SearchSection = ({
               }`}
             >
               <p>{lang === "en" ? "search" : "хайх"}</p>
-            </div>
+            </button>
           ) : null}
         </div>
       ) : null}
@@ -150,40 +148,43 @@ const SearchSection = ({
               value={searchValue}
             />
           </div>
-          <button
-            className="flex h-[36px] items-center justify-center gap-[12px] rounded-full bg-white px-[8px] text-[15px] font-medium leading-[1px] text-primary-blue 2xs:px-[16px] xl:min-w-[250px]"
-            onClick={() => {
-              dispatch({
-                type: "CHANGE_APP_STATE",
-                payload: {
-                  menu: "",
-                  filter: "",
-                  logOrSign: "",
-                  calendar: "open",
-                },
-              });
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px]"
+          {pathname !== "/reservation/" ? (
+            <button
+              className="flex h-[36px] items-center justify-center gap-[12px] rounded-full bg-white px-[8px] text-[15px] font-medium leading-[1px] text-primary-blue 2xs:px-[16px] xl:min-w-[250px]"
+              onClick={() => {
+                dispatch({
+                  type: "CHANGE_APP_STATE",
+                  payload: {
+                    menu: "",
+                    filter: "",
+                    logOrSign: "",
+                    calendar: "open",
+                  },
+                });
+              }}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="max-h-[22px] min-h-[22px] min-w-[22px] max-w-[22px]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25
                  2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0
                   2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
-              />
-            </svg>
-            <p>{`${checkIn} - ${checkOut}`}</p>
-          </button>
+                />
+              </svg>
+              <p>{`${checkIn} - ${checkOut}`}</p>
+            </button>
+          ) : null}
+
           {appState.filter !== "mobile" ? (
-            <div
+            <button
               onClick={() => {
                 router.push(
                   `/search/?${multipleCreateQueryString(
@@ -212,7 +213,7 @@ const SearchSection = ({
               // }`}
             >
               <p>{lang === "en" ? "search" : "хайх"}</p>
-            </div>
+            </button>
           ) : null}
         </div>
       ) : null}

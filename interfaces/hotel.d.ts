@@ -77,6 +77,21 @@ declare namespace HotelData {
     createdAt: string;
     defaultLocale: string | null;
     description: string | null;
+    district: {
+      code: number | null;
+      countryId: number | null;
+      createdAt: string;
+      id: number;
+      image: string | null;
+      international: string;
+      isActive: boolean;
+      isRecommended: number;
+      location: { lat: number; lng: number };
+      name: string;
+      orderNo: number;
+      provinceId: number;
+      updatedAt: string;
+    };
     districtId: number;
     email: string;
     emailBook: string | null;
@@ -128,6 +143,22 @@ declare namespace HotelData {
     phone: string;
     phoneBook: string | null;
     priority: number;
+    province: {
+      code: number | null;
+      countryId: number;
+      createdAt: string;
+      id: number;
+      image: string | null;
+      international: string;
+      isActive: boolean;
+      isRecommended: number;
+      isSearch: number;
+      location: { lat: number; lng: number };
+      name: string;
+      nameEn: string;
+      orderNo: number;
+      updatedAt: string;
+    };
     provinceId: number;
     published: number;
     rating: number;

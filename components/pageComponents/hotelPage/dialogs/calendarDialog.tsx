@@ -79,11 +79,12 @@ export default function CalendarDialog({ ver }: Props) {
     }
     return params.toString();
   };
+  // h-[84vh]
 
   if (ver === "mobile")
     return (
       <div
-        className={`relative flex h-[84vh] w-full flex-col  items-center justify-start rounded-t-[30px] bg-white pt-[24px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px]`}
+        className={`relative flex  h-[calc(100vh-72px)] w-full flex-col  items-center justify-start rounded-t-[30px] bg-white pt-[32px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px]`}
       >
         <div
           className="absolute right-[16px] top-[16px] text-primary-blue"
@@ -113,13 +114,27 @@ export default function CalendarDialog({ ver }: Props) {
         </div>
 
         <DayPicker
-          id="test"
           mode="range"
-          defaultMonth={pastMonth}
+          defaultMonth={range ? range.from : pastMonth}
           selected={range}
-          onSelect={setRange}
+          onDayClick={(e) => {
+            if (range?.to) {
+              setRange({ from: e, to: undefined });
+            } else {
+              if (range?.from && e < range?.from) {
+                setRange((prev) => ({ from: e, to: prev?.from }));
+              } else {
+                setRange((prev) => ({ from: prev?.from, to: e }));
+              }
+
+              // setRange((prev) => ({ from: prev?.from, to: e }));
+            }
+            // console.log(e);
+          }}
           numberOfMonths={2}
           showOutsideDays
+          ISOWeek
+          disabled={(date) => date < new Date(Date.now())}
           style={{
             width: "76%",
             maxHeight: "100%",
@@ -161,7 +176,7 @@ export default function CalendarDialog({ ver }: Props) {
             }
           }}
         >
-          {lang === "en" ? "Allow" : "Зөвшөөрөх"}
+          {lang === "en" ? "Select" : "Сонгох"}
         </div>
       </div>
     );
@@ -197,13 +212,27 @@ export default function CalendarDialog({ ver }: Props) {
       </div>
 
       <DayPicker
-        id="test"
         mode="range"
         defaultMonth={range ? range.from : pastMonth}
         selected={range}
-        onSelect={setRange}
+        onDayClick={(e) => {
+          if (range?.to) {
+            setRange({ from: e, to: undefined });
+          } else {
+            if (range?.from && e < range?.from) {
+              setRange((prev) => ({ from: e, to: prev?.from }));
+            } else {
+              setRange((prev) => ({ from: prev?.from, to: e }));
+            }
+
+            // setRange((prev) => ({ from: prev?.from, to: e }));
+          }
+          // console.log(e);
+        }}
         numberOfMonths={2}
         showOutsideDays
+        ISOWeek
+        disabled={(date) => date < new Date(Date.now())}
         style={{
           width: "100%",
           maxHeight: "100%",
@@ -246,7 +275,7 @@ export default function CalendarDialog({ ver }: Props) {
           }
         }}
       >
-        {lang === "en" ? "Allow" : "Зөвшөөрөх"}
+        {lang === "en" ? "Select" : "Сонгох"}
       </div>
     </div>
   );

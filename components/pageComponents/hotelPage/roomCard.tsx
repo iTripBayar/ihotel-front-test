@@ -90,7 +90,6 @@ const RoomCard = ({ data, stat, dollarRate }: Props) => {
   // if (data.sales.length > 0 && checkOut) {
   //   console.log();
   // }
-
   return (
     <div className=" flex flex-col  rounded-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] h-fit">
       <Swiper
@@ -290,8 +289,13 @@ const RoomCard = ({ data, stat, dollarRate }: Props) => {
                 / {lang === "en" ? "day" : "хоног"}
               </span>
             </div>
-            <div
-              className={`overflow-hidden rounded-[8px] border-[2px] lg:hidden border-primary-blue/50 px-[10px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px]`}
+            <button
+              disabled={roomAmount.length === 1}
+              className={` ${
+                roomAmount.length === 1
+                  ? "opacity-50 border-primary-blue/25"
+                  : "border-primary-blue/50"
+              } overflow-hidden rounded-[8px] border-[2px] lg:hidden border-primary-blue/50 px-[10px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px]`}
               onClick={() => {
                 dispatch({
                   type: "CHANGE_APP_STATE",
@@ -329,10 +333,11 @@ const RoomCard = ({ data, stat, dollarRate }: Props) => {
                   />
                 </svg>
               </div>
-            </div>
+            </button>
             <div className="hidden lg:flex relative w-[100px]">
               <Listbox
                 value={0}
+                disabled={roomAmount.length === 1}
                 onChange={(e) => {
                   // const value = {
                   //   name: clients.name,
@@ -366,7 +371,11 @@ const RoomCard = ({ data, stat, dollarRate }: Props) => {
                 }}
               >
                 <Listbox.Button
-                  className={`w-full h-[42px] text-[16px] rounded-[8px] border-primary-blue border text-primary-blue font-medium flex items-center px-[10px] justify-between`}
+                  className={`w-full h-[42px] text-[16px] rounded-[8px] border-primary-blue border text-primary-blue font-medium flex items-center px-[10px] justify-between  ${
+                    roomAmount.length === 1
+                      ? "opacity-50 border-primary-blue/50"
+                      : " border-primary-blue"
+                  }`}
                 >
                   <p>
                     {cart.filter(
