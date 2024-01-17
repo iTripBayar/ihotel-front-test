@@ -18,7 +18,6 @@ const SearchSection = ({ ver, placesData, cityData }: iProps) => {
   const checkOut = searchParams.get("checkOut");
   const router = useRouter();
   const pathname = usePathname();
-  // console.log(pathname);
   const { appState, dispatch } = useAppCtx();
 
   const [toggle, setToggle] = useState(false);

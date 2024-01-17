@@ -1,21 +1,31 @@
-"use client";
-
 import { Drawer } from "vaul";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useAppCtx } from "@/contexts/app";
 import { toast } from "sonner";
 
+interface CartItem {
+  id: number;
+  name: string;
+  nameEn: string;
+  amount: number;
+  occupancy: number;
+  price: number;
+  method: string;
+}
 interface Props {
   roomData: roomData.room;
+  currentCart: CartItem[];
+  changeCart: (e: CartItem) => void;
 }
 
-export default function RoomSelectionDrawer({ roomData }: Props) {
+export default function RoomSelectionDrawer({
+  roomData,
+  currentCart,
+  changeCart,
+}: Props) {
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
   const lang = searchParams.get("lang");
   const { appState, dispatch } = useAppCtx();
-  const cart = searchParams.getAll("cart");
 
   const roomAmount = [{ id: roomData?.id, amount: 0 }];
 
@@ -27,50 +37,6 @@ export default function RoomSelectionDrawer({ roomData }: Props) {
     toast.success(
       `${e.amount} ${e.roomName} ${lang === "en" ? "added" : "нэмэгдлээ"}`,
     );
-  };
-
-  const multipleCreateQueryString = (
-    name: string,
-    value: string | null,
-    name1: string,
-    value1: string | null,
-    name2: string,
-    value2: string | null,
-  ) => {
-    const params = new URLSearchParams(searchParams);
-
-    if (value !== null && !params.get(name)) {
-      params.set(name, value);
-    } else if (value !== null && params.get(name)) {
-      if (value.split("$")[1] !== "0") {
-        for (let i = 0; i < cart.length; i++) {
-          if (cart[i].split("$")[0] === appState.selectedRoom) {
-            params.delete(name, cart[i]);
-          }
-        }
-        params.append(name, value);
-      } else {
-        for (let i = 0; i < cart.length; i++) {
-          if (cart[i].split("$")[0] === appState.selectedRoom) {
-            params.delete(name, cart[i]);
-          }
-        }
-      }
-    } else {
-      params.delete(name);
-    }
-    if (value1 !== null) {
-      params.set(name1, value1);
-    } else {
-      params.delete(name1);
-    }
-    if (value2 !== null) {
-      params.set(name2, value2);
-    } else {
-      params.delete(name2);
-    }
-
-    return params.toString();
   };
 
   return (
@@ -106,62 +72,18 @@ export default function RoomSelectionDrawer({ roomData }: Props) {
               <div
                 key={i}
                 onClick={() => {
-                  // dispatch({
-                  //   type: "CHANGE_APP_STATE",
-                  //   payload: {
-                  //     selectedRoom: "",
-                  //     selectedAmount: (() => {
-                  //       const newValue = `${appState.selectedRoom}$${roomAmount
-                  //         .indexOf(index)
-                  //         .toString()}`;
-                  //       const indexOfId = appState.selectedAmount.findIndex(
-                  //         (existingValue) => {
-                  //           const [existingId] = existingValue.split("$");
-                  //           return existingId === `${appState.selectedRoom}`;
-                  //         },
-                  //       );
-                  //       // Check if the value already exists in the array
-                  //       const updatedAmount = appState.selectedAmount.map(
-                  //         (existingValue) => {
-                  //           const [existingId] = existingValue.split("$");
-                  //           if (existingId === `${appState.selectedRoom}`) {
-                  //             // If the ID matches, update the existing value
-                  //             return newValue;
-                  //           }
-                  //           return existingValue;
-                  //         },
-                  //       );
-
-                  //       // If the ID doesn't exist, add the new value to the array
-                  //       if (
-                  //         indexOfId === -1 &&
-                  //         !updatedAmount.includes(newValue)
-                  //       ) {
-                  //         updatedAmount.push(newValue);
-                  //       } else if (
-                  //         indexOfId !== -1 &&
-                  //         roomAmount.indexOf(index) === 0
-                  //       ) {
-                  //         // If the ID exists and sampleRooms.indexOf(index) is 0, remove the value
-                  //         updatedAmount.splice(indexOfId, 1);
-                  //       }
-
-                  //       return updatedAmount;
-                  //     })(),
-                  //   },
-                  // });
-                  // if (updatedAmount > 2) {
-                  router.replace(
-                    `${pathname}?${multipleCreateQueryString(
-                      "cart",
-                      `${appState.selectedRoom}$${i}`,
-                      "roomSelect",
-                      null,
-                      "room",
-                      null,
-                    )}`,
-                    { scroll: false },
-                  );
+                  changeCart({
+                    id: roomData.id,
+                    name: roomData.name,
+                    nameEn: roomData.nameEn ? roomData.nameEn : "",
+                    amount: i,
+                    occupancy: roomData.occupancy,
+                    price:
+                      roomData.sales.length > 0
+                        ? roomData.sales[0].price
+                        : roomData.defaultPrice,
+                    method: i !== 0 ? "add" : "remove",
+                  });
                   dispatch({
                     type: "CHANGE_APP_STATE",
                     payload: { selectedRoom: "" },
@@ -172,41 +94,18 @@ export default function RoomSelectionDrawer({ roomData }: Props) {
                       amount: i.toString(),
                     });
                   }
-                  // showToast({
-                  //   roomName: data.name,
-                  //   amount: updatedAmount.split("$")[1],
-                  // });
-                  // }
-
-                  // if (updatedAmount.length > 2) {
-                  //   router.replace(
-                  //     `${pathname}?${multipleCreateQueryString(
-                  //       "cart",
-                  //       updatedAmount,
-                  //       "roomSelect",
-                  //       null,
-                  //       "room",
-                  //       null,
-                  //     )}`,
-                  //     { scroll: false },
-                  //   );
-                  //   showToast({
-                  //     roomName: data.name,
-                  //     amount: updatedAmount.split("$")[1],
-                  //   });
-                  // }
                 }}
                 className="leading relative flex min-h-[50px] w-full items-center  justify-center border-b border-b-black/[.15] text-[20px] font-medium text-main-text"
               >
                 {roomAmount.indexOf(index)} {lang === "en" ? "rooms" : "өрөө"}
-                {cart.some(
+                {currentCart.some(
                   (index) =>
-                    index.split("$")[0] === appState.selectedRoom &&
-                    parseInt(index.split("$")[1]) === i,
+                    index.id === parseInt(appState.selectedRoom) &&
+                    index.amount === i,
                 ) ||
                 (i === 0 &&
-                  !cart.some(
-                    (index) => index.split("$")[0] === appState.selectedRoom,
+                  !currentCart.some(
+                    (index) => index.id === parseInt(appState.selectedRoom),
                   )) ? (
                   <svg
                     viewBox="0 0 19 14"
@@ -223,22 +122,6 @@ export default function RoomSelectionDrawer({ roomData }: Props) {
                     />
                   </svg>
                 ) : null}
-                {/* {roomAmount.indexOf(index) === updatedAmount ? (
-                  <svg
-                    viewBox="0 0 19 14"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="absolute right-0 top-[50%] max-h-[14px] min-h-[14px] min-w-[20px] max-w-[20px] translate-y-[-50%] text-primary-blue"
-                  >
-                    <path
-                      d="M17 2L7 12L2 7"
-                      stroke="#3C76FE"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                ) : null} */}
               </div>
             ))}
           </div>

@@ -17,7 +17,7 @@ import Dialogs from "@/components/pageComponents/hotelPage/dialogs";
 import CalendarDialog from "@/components/pageComponents/hotelPage/dialogs/calendarDialog";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useAppCtx } from "@/contexts/app";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import LogIn from "@/components/common/signIn/logIn";
 import SignUp from "@/components/common/signIn/signUp";
 import { CircularProgress } from "@chakra-ui/react";
@@ -31,15 +31,45 @@ import { useSession } from "next-auth/react";
 import { useInViewport } from "ahooks";
 import BottomSection from "@/components/common/bottomSection";
 
+interface CartItem {
+  id: number;
+  name: string;
+  nameEn: string;
+  amount: number;
+  occupancy: number;
+  price: number;
+  method: string;
+}
+
 const HotelPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  // const slug = searchParams.get("slug");
   const lang = searchParams.get("lang");
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
-  const cart = searchParams.getAll("cart");
+  const days = searchParams.get("days");
+
+  const [currentCart, setCurrentCart] = useState<CartItem[]>([]);
+
+  const handleCartChange = (e: CartItem) => {
+    if (e.method === "add") {
+      if (currentCart.length > 0) {
+        if (currentCart.some((index) => index.id === e.id)) {
+          setCurrentCart((prev) => [
+            ...prev.filter((index) => index.id !== e.id),
+            e,
+          ]);
+        } else {
+          setCurrentCart((prev) => [...prev, e]);
+        }
+      } else {
+        setCurrentCart([e]);
+      }
+    } else if (e.method === "remove") {
+      setCurrentCart((prev) => prev.filter((index) => index.id !== e.id));
+    }
+  };
 
   const { data: session } = useSession({
     required: false,
@@ -48,8 +78,6 @@ const HotelPage = () => {
   const roomsContainer = useRef<HTMLDivElement>(null);
   const reviewsContainer = useRef<HTMLDivElement>(null);
   const [inViewport] = useInViewport(roomsContainer);
-
-  // const [inViewPort] = useInViewport(roomsContainer);
 
   const createQueryString = (
     name: string,
@@ -145,35 +173,12 @@ const HotelPage = () => {
   }
   roomPrices.sort((a, b) => a - b);
 
-  // useEffect(() => {
-  //   if (checkIn && checkOut && data) {
-  //     console.log(
-  //       new Date(data.rooms[1].sales[0].startdate) >= new Date(checkIn),
-  //       new Date(data.rooms[1].sales[0].enddate) >= new Date(checkOut),
-  //     );
-  //   }
-  // }, []);
-
   let totalPrice = 0; //total price of the rooms inside the cart
-  if (cart && cart.length > 0 && data) {
-    for (let i = 0; i < data.rooms.length; i++) {
-      for (let j = 0; j < cart.length; j++) {
-        if (data.rooms[i].id === parseInt(cart[j].split("$")[0])) {
-          if (
-            data.rooms[i].sales.length > 0 &&
-            checkOut &&
-            new Date(data.rooms[i].sales[0].enddate) >= new Date(checkOut)
-          ) {
-            totalPrice =
-              totalPrice +
-              data.rooms[i].sales[0].price * parseInt(cart[j].split("$")[1]);
-          } else {
-            totalPrice =
-              totalPrice +
-              data.rooms[i].defaultPrice * parseInt(cart[j].split("$")[1]);
-          }
-        }
-      }
+  if (days) {
+    for (let i = 0; i < currentCart.length; i++) {
+      totalPrice =
+        totalPrice +
+        currentCart[i].price * currentCart[i].amount * parseInt(days);
     }
   }
 
@@ -351,12 +356,6 @@ const HotelPage = () => {
         ) : null}
         {appState.logOrSign === "sign" ? <SignUp /> : null}
         {appState.menu === "open" ? <SideMenu session={session} /> : null}
-        {/* <div className="fixed z-[899] flex bottom-[152px] right-[12px] text-white">
-          <LangBtn />
-        </div>
-        <div className="fixed z-[899] flex bottom-[102px] right-[12px] text-white">
-          <ScrollTopBtn ver="hotel" handleScrollToTopVer={() => {}} />
-        </div> */}
         <BottomSection
           ver={"hotel"}
           handleScrollToTopVer={() => {}}
@@ -369,6 +368,9 @@ const HotelPage = () => {
           handleScrollToRooms={(ver: string) => handleScrollTo(ver)}
           totalPrice={totalPrice}
           inViewport={inViewport}
+          currentCart={currentCart}
+          changeCart={(e: CartItem) => handleCartChange(e)}
+          dollarRate={"1"}
         />
         {appState.biggerImage.length > 0 ? <ImagesDialog /> : null}
         {loading ? (
@@ -552,6 +554,8 @@ const HotelPage = () => {
                 totalPrice={totalPrice}
                 stat={stat}
                 dollarRate={data ? data?.rate : ""}
+                currentCart={currentCart}
+                changeCart={(e: CartItem) => handleCartChange(e)}
               />
             </div>
             {data?.hotel.introduction ? (

@@ -7500,6 +7500,7 @@ __metadata:
     tailwindcss: ^3
     tailwindcss-debug-screens: ^2.2.1
     typescript: ^5
+    use-detect-keyboard-open: ^0.4.0
     use-supercluster: ^1.1.0
     vaul: ^0.8.0
   languageName: unknown
@@ -10808,6 +10809,13 @@ __metadata:
   peerDependencies:
     react: ">=16.13"
   checksum: 2b9b6291df3f772f44d259b352e5d998963ccee0db2efeb76bb05525d928064aeeb69bb0dee5a5e428fea7cf3db67c097a770ebd30caa080662b565f6ef02b2e
+  languageName: node
+  linkType: hard
+
+"use-detect-keyboard-open@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "use-detect-keyboard-open@npm:0.4.0"
+  checksum: d50e54624fac781b467493b7f70d72ca8cfcf9d24d0249e4d039934db78f07723bd73a2963e7093a0817d60699fd0b1c733c6d6c67fbb0264fd6745f5649f309
   languageName: node
   linkType: hard
 

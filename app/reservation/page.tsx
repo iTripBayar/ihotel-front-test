@@ -35,7 +35,7 @@ const ReservationPage = () => {
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
   const days = searchParams.get("days");
-  const cart = searchParams.getAll("cart");
+  const cartArray = searchParams.get("cart");
   const { appState, dispatch } = useAppCtx();
 
   const { data: session } = useSession({
@@ -116,31 +116,15 @@ const ReservationPage = () => {
   });
 
   let totalPrice = 0;
-  for (let i = 0; i < cart.length; i++) {
-    if (cart[i] && days && data) {
-      for (let j = 0; j < data.rooms.length; j++) {
-        if (parseInt(cart[i].split("$")[0]) === data.rooms[j].id) {
-          if (
-            data.rooms[j].sales.length > 0 &&
-            checkOut &&
-            new Date(data.rooms[j].sales[0].enddate) >= new Date(checkOut)
-          ) {
-            totalPrice =
-              totalPrice +
-              data.rooms[j].sales[0].price *
-                parseInt(cart[i].split("$")[1]) *
-                parseInt(days);
-          } else {
-            totalPrice =
-              totalPrice +
-              data.rooms[j].defaultPrice *
-                parseInt(cart[i].split("$")[1]) *
-                parseInt(days);
-          }
-        }
-      }
+  if (days && cartArray) {
+    const currentCart = JSON.parse(cartArray);
+    for (let i = 0; i < currentCart.length; i++) {
+      totalPrice =
+        totalPrice +
+        currentCart[i].price * currentCart[i].amount * parseInt(days);
     }
   }
+
   const orderingRooms: {
     startdate: string;
     enddate: string;
@@ -154,72 +138,39 @@ const ReservationPage = () => {
     total_price: string;
     by_person: string;
   }[] = [];
-  for (let i = 0; i < cart.length; i++) {
-    orderingRooms.push({
-      startdate: checkIn
-        ? `${checkIn?.split("|")[0].split("/")[2]}-${checkIn
-            ?.split("|")[0]
-            .split("/")[0]}-${checkIn?.split("|")[0].split("/")[1]}`
-        : "",
-      enddate: checkOut
-        ? `${checkOut?.split("|")[0].split("/")[2]}-${checkOut
-            ?.split("|")[0]
-            .split("/")[0]}-${checkOut?.split("|")[0].split("/")[1]}`
-        : "",
-      hotel_id: data?.hotel.id ? `${data?.hotel.id}` : "",
-      room_id: cart[i].split("$")[0],
-      room_number: cart[i].split("$")[1],
-      person_number: "1", //Зарим өрөөнүүд хүнээр захиалга үүсгэдэг. Энэ үед room_number 0 person_person хүний тоо байна
-      room_price: data?.rooms.filter(
-        (index) => index.id === parseInt(cart[i].split("$")[0]),
-      )[0]
-        ? data?.rooms.filter(
-            (index) => index.id === parseInt(cart[i].split("$")[0]),
-          )[0].sales.length > 0 &&
-          checkOut &&
-          new Date(
-            data?.rooms.filter(
-              (index) => index.id === parseInt(cart[i].split("$")[0]),
-            )[0].sales[0].enddate,
-          ) >= new Date(checkOut)
+  if (cartArray && days) {
+    const currentCart = JSON.parse(cartArray);
+    for (let i = 0; i < currentCart.length; i++) {
+      orderingRooms.push({
+        startdate: checkIn
+          ? `${checkIn?.split("|")[0].split("/")[2]}-${checkIn
+              ?.split("|")[0]
+              .split("/")[0]}-${checkIn?.split("|")[0].split("/")[1]}`
+          : "",
+        enddate: checkOut
+          ? `${checkOut?.split("|")[0].split("/")[2]}-${checkOut
+              ?.split("|")[0]
+              .split("/")[0]}-${checkOut?.split("|")[0].split("/")[1]}`
+          : "",
+        hotel_id: data?.hotel.id ? `${data?.hotel.id}` : "",
+        room_id: `${currentCart[i].id}`,
+        room_number: `${currentCart[i].amount}`,
+        person_number: "1", //Зарим өрөөнүүд хүнээр захиалга үүсгэдэг. Энэ үед room_number 0 person_person хүний тоо байна
+        room_price: `${currentCart[i].price}`,
+        room_type: data?.rooms.filter(
+          (index) => index.id === parseInt(currentCart[i].id),
+        )[0].bedTypeId
           ? data?.rooms
-              .filter(
-                (index) => index.id === parseInt(cart[i].split("$")[0]),
-              )[0]
-              .sales[0].price.toString()
-          : data?.rooms
-              .filter(
-                (index) => index.id === parseInt(cart[i].split("$")[0]),
-              )[0]
-              .defaultPrice.toString()
-        : "",
-      room_type: data?.rooms.filter(
-        (index) => index.id === parseInt(cart[i].split("$")[0]),
-      )[0].bedTypeId
-        ? data?.rooms
-            .filter((index) => index.id === parseInt(cart[i].split("$")[0]))[0]
-            .bedTypeId.toString()
-        : "", // Нээх хамаагүй
-      room_name: data?.rooms.filter(
-        (index) => index.id === parseInt(cart[i].split("$")[0]),
-      )[0].name
-        ? data?.rooms.filter(
-            (index) => index.id === parseInt(cart[i].split("$")[0]),
-          )[0].name
-        : "",
-      total_price: `${
-        data?.rooms.filter(
-          (index) => index.id === parseInt(cart[i].split("$")[0]),
-        )[0] && days
-          ? data?.rooms.filter(
-              (index) => index.id === parseInt(cart[i].split("$")[0]),
-            )[0].defaultPrice *
-            parseInt(cart[i].split("$")[1]) *
-            parseInt(days)
-          : ""
-      }`,
-      by_person: "",
-    });
+              .filter((index) => index.id === parseInt(currentCart[i].id))[0]
+              .bedTypeId.toString()
+          : "", // Нээх хамаагүй
+        room_name: currentCart[i].name,
+        total_price: `${
+          currentCart[i].price * parseInt(days) * currentCart[i].amount
+        }`,
+        by_person: "",
+      });
+    }
   }
 
   const { loading: orderLoading, run: runCreateOrder } = useRequest(
@@ -342,7 +293,6 @@ const ReservationPage = () => {
                 email={data ? data.hotel.email : null}
               />
               <OrderInfo
-                rooms={data ? data.rooms : []}
                 dollarRate={data ? data.rate : "1"}
                 totalPrice={totalPrice}
               />

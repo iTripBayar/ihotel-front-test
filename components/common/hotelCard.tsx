@@ -32,7 +32,6 @@ const HotelCard = ({ data, fromMap, ver, dollarRate }: iProps) => {
   );
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
-  const checkOut = searchParams.get("checkOut");
 
   let stat = "";
   if (data.isOnline == 1 && data.isOffline == 0) {

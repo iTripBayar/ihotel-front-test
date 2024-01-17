@@ -8,6 +8,16 @@ import useWindowSize from "@/hooks/windowSize";
 import LangBtn from "@/components/common/fixedButtons/langBtn";
 import React from "react";
 
+interface CartItem {
+  id: number;
+  name: string;
+  nameEn: string;
+  amount: number;
+  occupancy: number;
+  price: number;
+  method: string;
+}
+
 interface Props {
   roomPrices: number[];
   stat: string;
@@ -15,6 +25,9 @@ interface Props {
   handleScrollToRooms: (ver: string) => void;
   totalPrice: number;
   inViewport: boolean | undefined;
+  currentCart: CartItem[];
+  changeCart: (e: CartItem) => void;
+  dollarRate: string;
 }
 
 export default function Dialogs({
@@ -24,9 +37,11 @@ export default function Dialogs({
   handleScrollToRooms,
   totalPrice,
   inViewport,
+  currentCart,
+  changeCart,
+  dollarRate,
 }: Props) {
   const searchParams = useSearchParams();
-  const cart = searchParams.getAll("cart");
   const roomSelect = searchParams.get("roomSelect");
   const { appState } = useAppCtx();
   const size = useWindowSize();
@@ -35,7 +50,7 @@ export default function Dialogs({
       {appState.calendar === "" && !appState.selectedRoom ? (
         <div
           className={`flex absolute top-0 ${
-            cart.length > 0
+            currentCart.length > 0
               ? "translate-y-[-100px] duration-250"
               : "translate-y-[-24px] duration-250"
           } w-auto flex-col gap-[8px] self-end pb-[12px] pr-[14px] text-white ${
@@ -53,17 +68,10 @@ export default function Dialogs({
               (index) => index.id.toString() === appState.selectedRoom,
             )[0]
           }
+          currentCart={currentCart}
+          changeCart={(e: CartItem) => changeCart(e)}
         />
       ) : null}
-      {/* {appState.selectedRoom ? (
-        <RoomSelection
-          roomData={
-            allRooms.filter(
-              (index) => index.id.toString() === appState.selectedRoom,
-            )[0]
-          }
-        />
-      ) : null} */}
       {appState.calendar === "open" && !roomSelect ? (
         <CalendarDialog ver={"mobile"} />
       ) : null}
@@ -72,10 +80,12 @@ export default function Dialogs({
         appState.selectedRoom === "" && appState.calendar === "" ? (
           <OrderDialog
             roomPrices={roomPrices}
-            allRooms={allRooms}
             handleScrollToRooms={(ver: string) => handleScrollToRooms(ver)}
             totalPrice={totalPrice}
             inViewport={inViewport}
+            currentCart={currentCart}
+            changeCart={(e: CartItem) => changeCart(e)}
+            dollarRate={dollarRate}
           />
         ) : null
       ) : null}

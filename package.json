@@ -42,6 +42,7 @@
     "supercluster": "^8.0.1",
     "swiper": "^11.0.5",
     "tailwindcss-debug-screens": "^2.2.1",
+    "use-detect-keyboard-open": "^0.4.0",
     "use-supercluster": "^1.1.0",
     "vaul": "^0.8.0"
   },

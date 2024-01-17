@@ -194,12 +194,13 @@ const Home = () => {
             <News data={data ? data.posts : []} />
           </div>
         )}
-        {/* <!-- Messenger Chat plugin Code --> */}
-        <div id="fb-root"></div>
-        {/* <!-- Your Chat plugin code --> */}
-        <div id="fb-customer-chat" className="fb-customerchat"></div>
         {process.env.APP_ENV === "production" ? (
           <>
+            {/* <!-- Messenger Chat plugin Code --> */}
+            <div id="fb-root"></div>
+            {/* <!-- Your Chat plugin code --> */}
+            <div id="fb-customer-chat" className="fb-customerchat"></div>
+
             <Script
               id="messenger-tag"
               strategy="afterInteractive"

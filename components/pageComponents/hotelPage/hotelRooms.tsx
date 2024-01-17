@@ -1,8 +1,19 @@
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
+"use client";
+import { useSearchParams, usePathname } from "next/navigation";
 import RoomCard from "./roomCard";
 import { useAppCtx } from "@/contexts/app";
 import Link from "next/link";
 import format from "date-fns/format";
+
+interface CartItem {
+  id: number;
+  name: string;
+  nameEn: string;
+  amount: number;
+  occupancy: number;
+  price: number;
+  method: string;
+}
 
 interface Props {
   data: roomData.room[] | undefined;
@@ -10,6 +21,8 @@ interface Props {
   totalPrice: number;
   stat: string;
   dollarRate: string;
+  currentCart: CartItem[];
+  changeCart: (e: CartItem) => void;
 }
 
 const HotelRooms = ({
@@ -18,22 +31,16 @@ const HotelRooms = ({
   totalPrice,
   stat,
   dollarRate,
+  currentCart,
+  changeCart,
 }: Props) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const lang = searchParams.get("lang");
-  const cart = searchParams.getAll("cart");
-  const router = useRouter();
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
   const days = searchParams.get("days");
   const { dispatch } = useAppCtx();
-
-  const createQueryString = (name: string, index: number) => {
-    const params = new URLSearchParams(searchParams);
-    params.delete(name, cart[index]);
-    return params.toString();
-  };
 
   const mnDate =
     checkIn?.split("/")[0] === checkOut?.split("/")[0]
@@ -110,6 +117,8 @@ const HotelRooms = ({
                 data={index}
                 key={i}
                 dollarRate={dollarRate}
+                currentCart={currentCart}
+                changeCart={(e: CartItem) => changeCart(e)}
               />
             ))}
         </div>
@@ -149,7 +158,7 @@ const HotelRooms = ({
           </div>
           {/* inside cart */}
           <div className="flex w-full flex-col items-start justify-center rounded-[12px] border border-black/[.15] px-[12px] py-[10px]">
-            {cart && cart.length > 0 ? (
+            {currentCart.length > 0 ? (
               <div className="flex w-full flex-col-reverse justify-between gap-[24px]">
                 <div className="mb-[12px] flex h-[50px] flex-col items-center gap-[8px]">
                   <p className="text-[12px] font-medium leading-[13px] text-sub-text/75 2xs:text-[14px] 2xs:leading-[15px] 2xs:tracking-wide">
@@ -161,134 +170,77 @@ const HotelRooms = ({
                     <p>{lang === "en" ? "Total price:" : "Нийт үнэ:"}</p>
                     <h3 className="text-[20px] font-medium leading-[20px] text-main-text 2xs:text-[24px] 2xs:leading-[24px] 2xs:tracking-wide">
                       {lang === "en"
-                        ? (
-                            (totalPrice * parseInt(`${days ? days : 1}`)) /
-                            parseInt(dollarRate)
-                          ).toLocaleString()
-                        : (
-                            totalPrice * parseInt(`${days ? days : 1}`)
-                          ).toLocaleString()}
+                        ? (totalPrice / parseInt(dollarRate)).toLocaleString()
+                        : totalPrice.toLocaleString()}
                       {lang === "en" ? "$" : "₮"}
                     </h3>
                   </div>
                 </div>
-                {cart &&
-                  cart.map((index, i) => (
-                    <div
-                      key={i}
-                      className={`flex min-h-[45px] w-full items-center  justify-between gap-[10px] border-b border-b-black/[.15] pb-[8px] pt-[6px] text-primary-blue `}
-                    >
-                      <div className="flex w-full flex-col justify-between gap-[8px] font-medium">
-                        <div className="flex w-full items-center justify-between">
-                          <h3 className="text-[20px] leading-[20px] text-main-text">
-                            {cart && index && data
-                              ? data.filter(
-                                  (room) =>
-                                    room.id === parseInt(index.split("$")[0]),
-                                )[0].name
-                              : null}
-                          </h3>
-                          <div
-                            className="flex h-[36px] w-[36px] items-center justify-end"
-                            onClick={() => {
-                              router.replace(
-                                `${pathname}?${createQueryString(
-                                  "cart",
-                                  cart.indexOf(index),
-                                )}`,
-                                { scroll: false },
-                              );
-                            }}
+                {currentCart.map((index, i) => (
+                  <div
+                    key={i}
+                    className={`flex min-h-[45px] w-full items-center  justify-between gap-[10px] border-b border-b-black/[.15] pb-[8px] pt-[6px] text-primary-blue `}
+                  >
+                    <div className="flex w-full flex-col justify-between gap-[8px] font-medium">
+                      <div className="flex w-full items-center justify-between">
+                        <h3 className="text-[20px] leading-[20px] text-main-text">
+                          {lang === "en" ? index.nameEn : index.name}
+                        </h3>
+                        <div
+                          className="flex h-[36px] w-[36px] items-center justify-end"
+                          onClick={() => {
+                            changeCart({
+                              id: index.id,
+                              name: index.name,
+                              nameEn: index.nameEn,
+                              amount: index.amount,
+                              occupancy: index.occupancy,
+                              price: index.price,
+                              method: "remove",
+                            });
+                          }}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                            stroke="currentColor"
+                            className="max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px]"
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={2}
-                              stroke="currentColor"
-                              className="max-h-[24px] min-h-[24px] min-w-[24px] max-w-[24px]"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M6 18L18 6M6 6l12 12"
-                              />
-                            </svg>
-                          </div>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
                         </div>
-
-                        {data ? (
-                          <div className="flex w-full items-end justify-between text-[16px] leading-[16px] text-sub-text/75">
-                            <p>
-                              {
-                                data.filter(
-                                  (room) =>
-                                    room.id === parseInt(index.split("$")[0]),
-                                )[0].occupancy
-                              }{" "}
-                              {lang === "en" ? "people" : "хүн"}
-                            </p>
-                            <p>
-                              {data.filter(
-                                (room) =>
-                                  room.id === parseInt(index.split("$")[0]),
-                              )[0].sales.length > 0 &&
-                              checkOut &&
-                              new Date(
-                                data.filter(
-                                  (room) =>
-                                    room.id === parseInt(index.split("$")[0]),
-                                )[0].sales[0].enddate,
-                              ) >= new Date(checkOut)
-                                ? `${
-                                    lang === "en"
-                                      ? (
-                                          data.filter(
-                                            (room) =>
-                                              room.id ===
-                                              parseInt(index.split("$")[0]),
-                                          )[0].sales[0].price /
-                                          parseInt(dollarRate)
-                                        ).toLocaleString()
-                                      : data
-                                          .filter(
-                                            (room) =>
-                                              room.id ===
-                                              parseInt(index.split("$")[0]),
-                                          )[0]
-                                          .sales[0].price.toLocaleString()
-                                  }`
-                                : `${
-                                    lang === "en"
-                                      ? (
-                                          data.filter(
-                                            (room) =>
-                                              room.id ===
-                                              parseInt(index.split("$")[0]),
-                                          )[0].defaultPrice /
-                                          parseInt(dollarRate)
-                                        ).toLocaleString()
-                                      : data
-                                          .filter(
-                                            (room) =>
-                                              room.id ===
-                                              parseInt(index.split("$")[0]),
-                                          )[0]
-                                          .defaultPrice.toLocaleString()
-                                  }`}{" "}
-                              {lang === "en" ? "$" : "₮"}
-                              <span> x{index.split("$")[1]}</span>
-                            </p>
-                          </div>
-                        ) : null}
                       </div>
+
+                      {data ? (
+                        <div className="flex w-full items-end justify-between text-[16px] leading-[16px] text-sub-text/75">
+                          <p>
+                            {index.occupancy} {lang === "en" ? "people" : "хүн"}
+                          </p>
+                          <p>
+                            {lang === "en"
+                              ? (
+                                  index.price / parseInt(dollarRate)
+                                ).toLocaleString()
+                              : index.price.toLocaleString()}{" "}
+                            {lang === "en" ? "$" : "₮"}
+                            <span> x{index.amount}</span>
+                          </p>
+                        </div>
+                      ) : null}
                     </div>
-                  ))}
+                  </div>
+                ))}
               </div>
             ) : null}
             {stat === "online" || stat === "pending" ? (
               <>
-                {cart.length < 1 ? (
+                {currentCart.length < 1 ? (
                   <div
                     onClick={() => handleScrollToRooms("rooms")}
                     className="flex h-[45px] w-full items-center justify-center rounded-[8px] bg-main-online text-[22px] font-medium text-white"
@@ -303,7 +255,7 @@ const HotelRooms = ({
                         checkIn: checkIn,
                         checkOut: checkOut,
                         days: days,
-                        cart: cart,
+                        cart: JSON.stringify(currentCart),
                       },
                       pathname: "/reservation",
                     }}

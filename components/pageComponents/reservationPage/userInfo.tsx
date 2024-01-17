@@ -101,6 +101,10 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
+            onFocus={(e) => {
+              e.target.scrollIntoView({ behavior: "smooth", block: "end" });
+              e.preventDefault();
+            }}
             value={clients.name}
             placeholder={lang === "en" ? "Given name" : "Нэр"}
             className={`rounded-[8px] ${
@@ -122,6 +126,14 @@ export default function UserInfo({
                 nationality: clients.nationality,
               };
               updateClients(value);
+            }}
+            onFocus={(e) => {
+              e.target.scrollIntoView({ behavior: "smooth", block: "end" });
+              // window.scrollTo({
+              //   top: e.target.clientTop + 150,
+              //   behavior: "smooth",
+              // });
+              e.preventDefault();
             }}
             value={clients.surName}
             placeholder={lang === "en" ? "Family name" : "Овог"}
@@ -146,6 +158,14 @@ export default function UserInfo({
               };
               updateClients(value);
             }}
+            onFocus={(e) => {
+              e.target.scrollIntoView({ behavior: "smooth", block: "end" });
+              // window.scrollTo({
+              //   top: e.target.clientTop + 150,
+              //   behavior: "smooth",
+              // });
+              e.preventDefault();
+            }}
             value={clients.email}
             placeholder={lang === "en" ? "Email" : "И-мэйл"}
             className={`rounded-[8px] ${
@@ -167,6 +187,14 @@ export default function UserInfo({
                 nationality: clients.nationality,
               };
               updateClients(value);
+            }}
+            onFocus={(e) => {
+              e.target.scrollIntoView({ behavior: "smooth", block: "end" });
+              // window.scrollTo({
+              //   top: e.target.clientTop + 150,
+              //   behavior: "smooth",
+              // });
+              // e.preventDefault();
             }}
             value={clients.phone}
             placeholder={lang === "en" ? "Phone number" : "Утасны дугаар"}
@@ -290,7 +318,7 @@ export default function UserInfo({
             ))}
           </Select> */}
           {additionalClients.length === 0 ? (
-            <button
+            <div
               className="flex items-center justify-end"
               onClick={() => handleAdditionalClients("add")}
             >
@@ -303,7 +331,7 @@ export default function UserInfo({
                   ? `Add other guests' info`
                   : "Нэмэлт зочны мэдээлэл оруулах"}
               </p>
-            </button>
+            </div>
           ) : null}
         </form>
         {handleAdditionalClients.length > 0
@@ -510,7 +538,7 @@ export default function UserInfo({
                   </Listbox>
                 </div>
                 {additionalClients.length === i + 1 ? (
-                  <button
+                  <div
                     className="flex items-center justify-end"
                     onClick={() => handleAdditionalClients("add")}
                   >
@@ -523,7 +551,7 @@ export default function UserInfo({
                         ? `Add other guests' info`
                         : "Нэмэлт зочны мэдээлэл оруулах"}
                     </p>
-                  </button>
+                  </div>
                 ) : null}
               </form>
             ))
@@ -741,7 +769,7 @@ export default function UserInfo({
             ))}
           </Select> */}
           {additionalClients.length === 0 ? (
-            <button
+            <div
               className="flex items-center justify-end gap-[2px]"
               onClick={() => handleAdditionalClients("add")}
             >
@@ -754,7 +782,7 @@ export default function UserInfo({
                   ? `Add other guests' info`
                   : "Нэмэлт зочны мэдээлэл оруулах"}
               </p>
-            </button>
+            </div>
           ) : null}
         </form>
         {handleAdditionalClients.length > 0
@@ -936,7 +964,7 @@ export default function UserInfo({
                   </Listbox>
                 </div>
                 {additionalClients.length === i + 1 ? (
-                  <button
+                  <div
                     className="flex items-center justify-end gap-[2px]"
                     onClick={() => handleAdditionalClients("add")}
                   >
@@ -949,7 +977,7 @@ export default function UserInfo({
                         ? `Add other guests' info`
                         : "Нэмэлт зочны мэдээлэл оруулах"}
                     </p>
-                  </button>
+                  </div>
                 ) : null}
               </form>
             ))

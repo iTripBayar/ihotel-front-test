@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { useAppCtx } from "@/contexts/app";
 import { useRequest } from "ahooks";
 import { fetchSearchQuery } from "@/utils";
+import useDetectKeyboardOpen from "use-detect-keyboard-open";
 
 interface iProps {
   placesData: SearchData.Places[];
@@ -35,6 +36,14 @@ const SearchBox = ({
   const filter = searchParams.get("filter");
   const searchValue = searchParams.get("searchValue");
   const { appState, dispatch } = useAppCtx();
+
+  const isKeyboardOpen = useDetectKeyboardOpen();
+
+  useEffect(() => {
+    if (isKeyboardOpen === false) {
+      setShowDefault(false);
+    }
+  }, [isKeyboardOpen]);
 
   const { data: queryData, run } = useRequest(
     (queryValue: string) => {
@@ -251,6 +260,10 @@ const SearchBox = ({
             placeholder={
               lang === "en" ? "Search destinations" : `Хайх газар оруулах`
             }
+            // onBlur={(e) => {
+            //   console.log(e);
+            //   setShowDefault(false);
+            // }}
             autoComplete="off"
             onChange={(event) => {
               setQuery(event.target.value);
