@@ -295,6 +295,7 @@ const ReservationPage = () => {
               <OrderInfo
                 dollarRate={data ? data.rate : "1"}
                 totalPrice={totalPrice}
+                data={data ? data?.hotel : null}
               />
               <div className="lg:hidden">
                 <UserInfo
