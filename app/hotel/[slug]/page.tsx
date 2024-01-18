@@ -244,6 +244,8 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
     }
   }
 
+  console.log(data);
+
   if (!error)
     return (
       <main className="relative">

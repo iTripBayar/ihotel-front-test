@@ -152,7 +152,11 @@ export default function OrderDialog({
               ? `${enDate} (${days ? days : 1} days)`
               : `${mnDate} (${days ? days : 1} хоног)`}
           </p>
-          <h3 className="text-[20px] font-medium leading-[20px] text-main-text 2xs:text-[24px] 2xs:leading-[24px] 2xs:tracking-wide">
+          <h3
+            className={`text-[20px] font-medium leading-[20px] text-main-text 2xs:text-[24px] 2xs:leading-[24px] 2xs:tracking-wide ${
+              currentCart.length > 0 ? "opacity-100" : " opacity-40"
+            }`}
+          >
             {currentCart.length > 0
               ? totalPrice.toLocaleString()
               : (
@@ -165,7 +169,7 @@ export default function OrderDialog({
         {currentCart.length < 1 ? (
           <div
             onClick={() => handleScrollToRooms("rooms")}
-            className="rounded-full bg-main-online px-[18px] opacity-60 py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]"
+            className="rounded-full bg-main-online px-[18px] opacity-40 py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]"
           >
             {lang === "en" ? "Order" : "Захиалах"}
           </div>

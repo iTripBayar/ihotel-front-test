@@ -35,7 +35,7 @@ export default function Success({ id }: Props) {
         </Link>
         <Link
           href={{
-            pathname: "/profile",
+            pathname: `/order/${id}`,
             // query: {
             //   id: id,
             // },

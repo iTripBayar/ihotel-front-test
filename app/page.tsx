@@ -200,7 +200,7 @@ const Home = () => {
             <div id="fb-root"></div>
             {/* <!-- Your Chat plugin code --> */}
             <div id="fb-customer-chat" className="fb-customerchat"></div>
-            <Script strategy="lazyOnload">
+            <Script strategy="lazyOnload" id="messenger-tag">
               {`
                 var chatbox = document.getElementById('fb-customer-chat');
                 chatbox.setAttribute("page_id", "609268625884753");

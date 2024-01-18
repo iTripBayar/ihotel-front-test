@@ -2,6 +2,7 @@ import ReactMapGL, { Marker } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useRef } from "react";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 interface Props {
   lat: number;
@@ -10,10 +11,12 @@ interface Props {
 
 const HotelMap = ({ lat, lng }: Props) => {
   const mapRef = useRef<any>();
-  const [viewPort, setViewPort] = useState({
+  const searchParams = useSearchParams();
+  const lang = searchParams.get("lang");
+  const [viewPort] = useState({
     lng: lng,
     lat: lat,
-    zoom: 13,
+    zoom: 11,
   });
   // setTimeout(() => {
   //   mapRef?.current?.flyTo({
@@ -25,7 +28,10 @@ const HotelMap = ({ lat, lng }: Props) => {
   //   });
   // }, 1000);
   return (
-    <div className="h-[225px] w-full 2xs:h-[265px] sm:h-[300px] md:h-[325px] lg:h-[225px]">
+    <div className="h-[225px] w-full 2xs:h-[265px] sm:h-[300px] md:h-[325px] lg:h-[225px] relative rounded-[12px] overflow-hidden">
+      <div className="top-0 left-0 bg-primary-blue/90 px-[18px] py-[6px] absolute text-white w-fit z-[100] font-semibold text-[12px] rounded-br-[16px]">
+        {lang === "en" ? "" : "Хот/аймаг, Сум/дүүрэг"}
+      </div>
       <ReactMapGL
         ref={mapRef}
         mapboxAccessToken={process.env.MAPBOX_ACCESS_TOKEN}
@@ -40,6 +46,9 @@ const HotelMap = ({ lat, lng }: Props) => {
           borderRadius: 12,
           border: "solid 1px rgb(0,0,0,0.15)",
           overflow: "hidden",
+        }}
+        onMove={(e) => {
+          console.log(e.viewState.zoom);
         }}
         id="mapBox"
         mapStyle="mapbox://styles/ihotel-dev/clnwysb8a005b01qx38a9hgh0"
