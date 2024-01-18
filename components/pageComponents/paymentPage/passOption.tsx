@@ -193,7 +193,7 @@ export default function PassOption({
               </button>
             </div>
           ) : (
-            <Success />
+            <Success id={id ? id : ""} />
           )}
           <button
             className="font-medium leading-[16px] text-pass-green"

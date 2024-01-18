@@ -1,6 +1,6 @@
-import { Collapse, useDisclosure, Button } from '@chakra-ui/react';
-import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { Collapse, useDisclosure, Button } from "@chakra-ui/react";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 interface Props {
   iconRotateDuration: number;
@@ -18,8 +18,8 @@ export default function ServiceFilter({
 }: Props) {
   const { isOpen, onToggle } = useDisclosure();
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang');
-  const services = searchParams.get('services');
+  const lang = searchParams.get("lang");
+  const services = searchParams.get("services");
 
   useEffect(() => {
     if (services) {
@@ -27,14 +27,14 @@ export default function ServiceFilter({
     }
   }, [services]);
 
-  if (ver === 'web')
+  if (ver === "web")
     return (
       <div className="flex h-full w-full flex-col items-center justify-start gap-[12px] filter">
         <p className="text-[18px] font-medium filter">
           {lang === "en" ? "Additional" : "Нэмэлтээр"}
         </p>
         {data.length > 0 ? (
-          <div className="grid w-full grid-cols-2 gap-[12px] text-[15px] leading-[15px] text-sub-text filter">
+          <div className="grid w-full grid-cols-2 gap-[12px] text-[15px] leading-[15px] text-sub-text filter h-full overflow-auto">
             {data.map((index, i) => (
               <div
                 onClick={() => changeValue(`"${index.id}"`)}

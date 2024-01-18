@@ -165,7 +165,7 @@ export default function OrderDialog({
         {currentCart.length < 1 ? (
           <div
             onClick={() => handleScrollToRooms("rooms")}
-            className="rounded-full bg-main-online px-[18px] py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]"
+            className="rounded-full bg-main-online px-[18px] opacity-60 py-[12px] text-[18px] font-medium uppercase leading-[18px] text-white 2xs:px-[20px] 2xs:py-[14px] 2xs:text-[20px] 2xs:leading-[20px]"
           >
             {lang === "en" ? "Order" : "Захиалах"}
           </div>

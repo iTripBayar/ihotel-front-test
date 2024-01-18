@@ -32,7 +32,7 @@ export default function PriceFilter({
 
   if (ver === "web")
     return (
-      <div className="flex h-full w-[70%] flex-col items-center justify-center gap-[12px] filter">
+      <div className="flex h-full w-[70%] flex-col items-center justify-start gap-[12px] filter">
         <p className="text-[18px] font-medium filter">
           {lang === "en" ? "Price" : "Үнэ"}
         </p>

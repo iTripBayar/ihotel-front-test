@@ -138,7 +138,7 @@ export default function SocialPayOption({
               </p>
             </div>
           ) : (
-            <Success />
+            <Success id={id ? id : ""} />
           )}
           <button
             className="font-medium leading-[16px] text-primary-blue"

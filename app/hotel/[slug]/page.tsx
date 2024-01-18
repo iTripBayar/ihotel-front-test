@@ -5,7 +5,7 @@ import { useRequest } from "ahooks";
 import { fetchDataHotel } from "@/utils";
 import HotelInfo from "@/components/pageComponents/hotelPage/hotelInfo";
 import Amenity from "@/components/pageComponents/hotelPage/amenity";
-import Review from "@/components/pageComponents/hotelPage/review";
+import Review from "@/components/pageComponents/hotelPage/reviews";
 import HotelMap from "@/components/pageComponents/hotelPage/hotelMap";
 import OrderCount from "@/components/pageComponents/hotelPage/orderCount";
 import Services from "@/components/pageComponents/hotelPage/services";
@@ -30,6 +30,7 @@ import SideMenu from "@/components/common/sidemenu";
 import { useSession } from "next-auth/react";
 import { useInViewport } from "ahooks";
 import BottomSection from "@/components/common/bottomSection";
+import { useCookies } from "react-cookie";
 
 interface CartItem {
   id: number;
@@ -41,7 +42,7 @@ interface CartItem {
   method: string;
 }
 
-const HotelPage = () => {
+const HotelPage = ({ params }: { params: { slug: string } }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -51,6 +52,7 @@ const HotelPage = () => {
   const days = searchParams.get("days");
 
   const [currentCart, setCurrentCart] = useState<CartItem[]>([]);
+  const [cookies] = useCookies(["cartArray"]);
 
   const handleCartChange = (e: CartItem) => {
     if (e.method === "add") {
@@ -110,13 +112,18 @@ const HotelPage = () => {
       type: "CHANGE_APP_STATE",
       payload: { logOrSign: "", menu: "", calendar: "" },
     });
+    if (cookies.cartArray) {
+      if (cookies.cartArray.slug && cookies.cartArray.slug === params.slug) {
+        setCurrentCart(JSON.parse(cookies.cartArray.array));
+      }
+    }
   }, []);
 
   const { data, loading, error } = useRequest(
     () => {
-      if (pathname)
+      if (params.slug)
         return fetchDataHotel({
-          slug: pathname.split("/")[2],
+          slug: params.slug,
           checkIn: checkIn ? checkIn.split("|")[0] : "",
           checkOut: checkOut ? checkOut.split("|")[0] : "",
         });
@@ -275,7 +282,7 @@ const HotelPage = () => {
           {/* Facebook Metadata */}
           <meta
             property="og:url"
-            content={`${process.env.CURRENT_URL}/${pathname}`}
+            content={`${process.env.CURRENT_URL}/${params.slug}`}
           />
           <meta
             property="og:image"

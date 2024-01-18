@@ -206,7 +206,7 @@ const Home = () => {
               strategy="afterInteractive"
               dangerouslySetInnerHTML={{
                 __html: `{ var chatbox = document.getElementById('fb-customer-chat');
-      chatbox.setAttribute("page_id", "102637418520330");
+      chatbox.setAttribute("page_id", "609268625884753");
       chatbox.setAttribute("attribution", "biz_inbox");}`,
               }}
             ></Script>

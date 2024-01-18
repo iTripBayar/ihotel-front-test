@@ -22,10 +22,11 @@ import SideMenu from "@/components/common/sidemenu";
 import { fetchProfileInto } from "@/utils/user";
 import { useSession } from "next-auth/react";
 import { useCookies } from "react-cookie";
+import Link from "next/link";
 const ErrorComponent = dynamic(() => import("@/components/common/404"));
 
 const ReservationPage = () => {
-  const [cookies, setCookie] = useCookies(["client"]);
+  const [cookies, setCookie] = useCookies(["client", "cartArray"]);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -96,6 +97,15 @@ const ReservationPage = () => {
     });
     if (!session && cookies.client) {
       setClients(cookies.client);
+    }
+    if (cookies.cartArray) {
+      if (cookies.cartArray.slug && cookies.cartArray.slug !== slug) {
+        const value = { slug: slug, array: cartArray };
+        setCookie("cartArray", value, { maxAge: 300 });
+      }
+    } else {
+      const value = { slug: slug, array: cartArray };
+      setCookie("cartArray", value, { maxAge: 300 });
     }
   }, []);
   useEffect(() => {
@@ -326,7 +336,13 @@ const ReservationPage = () => {
                     : "Бид захиалах хүсэлт хүлээн авсны дараа таны захиалгыг шалгаад эргээд тантай холбогдох болно."}
                 </div>
               ) : null}
-              <button className="flex w-full items-center justify-start gap-[8px] text-[12px] font-medium text-primary-blue/[.75] 2xs:text-[14px]">
+              <Link
+                href={{
+                  pathname: `/hotel/${slug}`,
+                }}
+                className="flex w-fit items-center justify-start gap-[8px] text-[12px] font-medium text-primary-blue/[.75] 2xs:text-[14px]"
+                // onClick={() => window.close()}
+              >
                 <svg
                   viewBox="0 0 24 21"
                   fill="none"
@@ -339,7 +355,7 @@ const ReservationPage = () => {
                   />
                 </svg>
                 <>{lang === "en" ? "Go back" : "Өмнөх хуудас руу буцах"}</>
-              </button>
+              </Link>
             </div>
             <div className="relative hidden h-full w-full lg:col-span-2 lg:flex">
               <div className="sticky top-[72px] h-fit">

@@ -128,11 +128,11 @@ const FilterOptions = ({ categories, services }: Props) => {
   if (appState.filter === "webFilter")
     return (
       <div
-        className="flex max-h-[300px] w-[85vw] animate-fade500 items-end filter"
+        className="flex h-[300px] w-[85vw] animate-fade500 items-end filter overflow-hidden"
         id="container"
       >
-        <div className="flex h-[95%] w-full flex-col items-center gap-[8px] rounded-[20px] border border-black/20 bg-white px-[24px] py-[12px] filter">
-          <div className="flex h-full w-full items-start justify-between gap-[24px] filter">
+        <div className="flex h-full w-full flex-col items-center gap-[8px] rounded-[20px] border border-black/20 bg-white px-[24px] py-[12px] filter">
+          <div className="flex h-[calc(100%-30px)] w-full items-start justify-between gap-[24px] filter">
             {/* Categories */}
             <CategoryFilter
               iconRotateDuration={iconRotateDuration}

@@ -6,7 +6,7 @@ import BottomSection from "@/components/common/bottomSection";
 import SearchSection from "@/components/common/searchSection";
 import SearchCards from "@/components/pageComponents/searchPage/searchCards";
 import MapContainer from "@/components/pageComponents/searchPage/map/map";
-import FilterOptions from "@/components/common/searchSection/filter/filterOptions";
+import FilterOptions from "@/components/common/searchSection/filter";
 import { useAppCtx } from "@/contexts/app";
 import { CircularProgress } from "@chakra-ui/react";
 import LogIn from "@/components/common/signIn/logIn";
