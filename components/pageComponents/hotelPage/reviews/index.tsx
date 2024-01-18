@@ -110,7 +110,7 @@ const Review = ({ ver, data, handleScrollTo }: Props) => {
               size.width && size.width >= 768 && size.width < 1024 ? 2 : 1,
             )
             .map((index, i) => (
-              <ReviewCard data={index} ver={ver} />
+              <ReviewCard data={index} ver={ver} key={i} />
               // <div
               //   key={i}
               //   className="relative z-10 flex flex-col justify-between gap-[8px] rounded-[10px] p-[12px] text-[14px] shadow-[0px_4px_12px_4px_rgb(0,0,0,0.15)] 2xs:gap-[12px] sm:min-h-[200px] sm:px-[16px] "
@@ -171,7 +171,7 @@ const Review = ({ ver, data, handleScrollTo }: Props) => {
             ))}
         {ver === "full" &&
           data.map((index, i) => (
-            <ReviewCard data={index} ver={ver} />
+            <ReviewCard data={index} ver={ver} key={i} />
             // <div
             //   key={i}
             //   className="relative z-10 flex h-full flex-col gap-[8px] rounded-[10px] p-[12px] text-[14px] shadow-[0px_4px_12px_4px_rgb(0,0,0,0.15)] 2xs:gap-[12px] sm:px-[16px] "
