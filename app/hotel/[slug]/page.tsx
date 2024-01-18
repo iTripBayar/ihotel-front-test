@@ -78,8 +78,10 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
   });
   const { appState, dispatch } = useAppCtx();
   const roomsContainer = useRef<HTMLDivElement>(null);
+  const footerContainer = useRef<HTMLDivElement>(null);
   const reviewsContainer = useRef<HTMLDivElement>(null);
   const [inViewport] = useInViewport(roomsContainer);
+  const [inViewport1] = useInViewport(footerContainer);
 
   const createQueryString = (
     name: string,
@@ -244,8 +246,6 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
     }
   }
 
-  console.log(data);
-
   if (!error)
     return (
       <main className="relative">
@@ -377,6 +377,7 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
           handleScrollToRooms={(ver: string) => handleScrollTo(ver)}
           totalPrice={totalPrice}
           inViewport={inViewport}
+          inViewport1={inViewport1}
           currentCart={currentCart}
           changeCart={(e: CartItem) => handleCartChange(e)}
           dollarRate={"1"}
@@ -608,7 +609,9 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
             ) : null}
           </div>
         )}
-        <Footer />
+        <div ref={footerContainer}>
+          <Footer />
+        </div>
       </main>
     );
   return <ErrorComponent />;

@@ -25,6 +25,7 @@ interface Props {
   handleScrollToRooms: (ver: string) => void;
   totalPrice: number;
   inViewport: boolean | undefined;
+  inViewport1: boolean | undefined;
   currentCart: CartItem[];
   changeCart: (e: CartItem) => void;
   dollarRate: string;
@@ -37,6 +38,7 @@ export default function Dialogs({
   handleScrollToRooms,
   totalPrice,
   inViewport,
+  inViewport1,
   currentCart,
   changeCart,
   dollarRate,
@@ -83,6 +85,7 @@ export default function Dialogs({
             handleScrollToRooms={(ver: string) => handleScrollToRooms(ver)}
             totalPrice={totalPrice}
             inViewport={inViewport}
+            inViewport1={inViewport1}
             currentCart={currentCart}
             changeCart={(e: CartItem) => changeCart(e)}
             dollarRate={dollarRate}

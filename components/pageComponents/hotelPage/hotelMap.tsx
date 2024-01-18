@@ -47,9 +47,6 @@ const HotelMap = ({ lat, lng }: Props) => {
           border: "solid 1px rgb(0,0,0,0.15)",
           overflow: "hidden",
         }}
-        onMove={(e) => {
-          console.log(e.viewState.zoom);
-        }}
         id="mapBox"
         mapStyle="mapbox://styles/ihotel-dev/clnwysb8a005b01qx38a9hgh0"
       >

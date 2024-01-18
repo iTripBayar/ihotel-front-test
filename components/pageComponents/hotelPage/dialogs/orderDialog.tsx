@@ -17,6 +17,7 @@ interface Props {
   handleScrollToRooms: (ver: string) => void;
   totalPrice: number;
   inViewport: boolean | undefined;
+  inViewport1: boolean | undefined;
   currentCart: CartItem[];
   changeCart: (e: CartItem) => void;
   dollarRate: string;
@@ -26,6 +27,7 @@ export default function OrderDialog({
   handleScrollToRooms,
   totalPrice,
   inViewport,
+  inViewport1,
   currentCart,
   changeCart,
   dollarRate,
@@ -63,7 +65,8 @@ export default function OrderDialog({
   return (
     <div
       className={`flex w-full flex-col rounded-t-[30px] bg-white px-[16px] shadow-[0px_0px_12px_2px_rgb(0,0,0,0.25)] sm:px-[32px] ${
-        inViewport === true && currentCart.length === 0
+        (inViewport === true && currentCart.length === 0) ||
+        (inViewport1 === true && currentCart.length === 0)
           ? " translate-y-[400px] duration-1000"
           : " translate-y-0 duration-500"
       }`}
