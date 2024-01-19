@@ -91,7 +91,7 @@ const RoomCard = ({
                 // src={index ? `${process.env.IMAGE_URL}${index}` : '/samples/camp.png'}
                 alt="/hotel"
                 fill={true}
-                quality={75}
+                quality={stat === "online" || stat === "pending" ? 75 : 50}
                 loading="lazy"
                 sizes="50vw"
                 placeholder="blur"
@@ -100,7 +100,9 @@ const RoomCard = ({
                     ? `"_next/image/?url=${data.images[0]}"`
                     : "/samples/camp.png"
                 }
-                className="absolute h-auto w-auto select-none object-cover duration-700 "
+                className={`absolute h-auto w-auto select-none object-cover duration-700 ${
+                  stat === "offline" || stat === "data" ? "blur-[0.75px]" : ""
+                }`}
                 draggable={false}
               />
             </SwiperSlide>
@@ -123,7 +125,7 @@ const RoomCard = ({
               // src={index ? `${process.env.IMAGE_URL}${index}` : '/samples/camp.png'}
               alt="/hotel"
               fill={true}
-              quality={75}
+              quality={50}
               loading="lazy"
               sizes="50vw"
               placeholder="blur"

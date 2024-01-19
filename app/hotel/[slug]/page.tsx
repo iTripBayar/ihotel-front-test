@@ -31,6 +31,7 @@ import { useSession } from "next-auth/react";
 import { useInViewport } from "ahooks";
 import BottomSection from "@/components/common/bottomSection";
 import { useCookies } from "react-cookie";
+import ContactInfo from "@/components/pageComponents/hotelPage/contactInfo";
 
 interface CartItem {
   id: number;
@@ -246,6 +247,8 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
     }
   }
 
+  stat = "online";
+
   if (!error)
     return (
       <main className="relative">
@@ -395,6 +398,7 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
                   <HotelImages
                     images={data?.hotel?.images ? data?.hotel.images : []}
                     image={data?.hotel?.image ? data?.hotel.image : ""}
+                    stat={stat}
                   />
                   <HotelInfo
                     name={data?.hotel.name}
@@ -417,8 +421,7 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
               </div>
               <div className="flex flex-col gap-[24px] lg:col-span-2">
                 {/* contanct */}
-                <div className=" hidden w-full gap-[14px] text-[14px] tracking-wide lg:flex lg:text-[12px] lg:tracking-wide xl:text-[14px] xl:tracking-wider">
-                  {/* phone */}
+                {/* <div className=" hidden w-full gap-[14px] text-[14px] tracking-wide lg:flex lg:text-[12px] lg:tracking-wide xl:text-[14px] xl:tracking-wider">
                   <div className="flex items-center gap-[6px] text-sub-text xl:gap-[10px]">
                     <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-primary-blue text-white">
                       <svg
@@ -443,7 +446,6 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
                         : "empty"}
                     </p>
                   </div>
-                  {/* mail */}
                   <div className="flex items-center gap-[6px] text-sub-text xl:gap-[10px]">
                     <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-primary-blue text-white">
                       <svg
@@ -458,6 +460,15 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
                     </div>
                     <p>{data?.hotel.email}</p>
                   </div>
+                </div> */}
+                <div className="hidden lg:block">
+                  <ContactInfo
+                    phone={data?.hotel.phone ? data.hotel.phone : ""}
+                    email={data?.hotel.email ? data.hotel.email : ""}
+                    stat={stat}
+                    nameEn={data?.hotel.nameEn ? data.hotel.nameEn : ""}
+                    name={data?.hotel.name ? data.hotel.name : ""}
+                  />
                 </div>
                 {data?.reviews && data?.reviews.length > 0 ? (
                   <Review
@@ -468,70 +479,72 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
                 ) : null}
                 {/* stat & price */}
                 <div className="hidden flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] lg:flex">
-                  {stat !== "data" ? (
-                    <div
-                      className={`flex h-[36px] items-center justify-center gap-[4px] rounded-[8px] text-center font-medium ${
-                        stat === "online"
-                          ? "bg-main-online px-[20px] text-white 2xs:px-[24px]"
+                  <div
+                    className={`flex h-[36px] items-center justify-center gap-[4px] rounded-[8px] text-center font-medium ${
+                      stat === "online"
+                        ? "bg-main-online text-white font-semibold"
+                        : stat === "pending"
+                        ? "bg-main-pending text-sub-text font-medium"
+                        : stat === "offline"
+                        ? "bg-main-offline text-white font-semibold"
+                        : "bg-main-data text-sub-text font-medium"
+                    }`}
+                  >
+                    {lang === "en" ? (
+                      <p>
+                        {stat === "online"
+                          ? "Шууд баталгаажна"
                           : stat === "pending"
-                          ? "bg-main-pending px-[16px]  text-main-text "
-                          : "bg-main-offline px-[16px]"
-                      }`}
-                    >
-                      {lang === "en" ? (
-                        <p>
-                          {stat === "online"
-                            ? "Instant confirmation"
-                            : stat === "pending"
-                            ? "Confirmation delay: "
-                            : stat === "offline"
-                            ? "Booking unavailable"
-                            : ""}
-                          {stat === "pending" ? (
-                            <span className="font-semibold ">1-3 hours</span>
-                          ) : null}
-                        </p>
-                      ) : (
-                        <p>
-                          {stat === "online"
-                            ? "Шууд баталгаажна"
-                            : stat === "pending"
-                            ? "Баталгаажих хугацаа: "
-                            : stat === "offline"
-                            ? "Онлайн захиалга боломжгүй"
-                            : ""}
-                          {stat === "pending" ? (
-                            <span className="font-semibold ">1-3 цаг</span>
-                          ) : null}
-                        </p>
-                      )}
+                          ? "Баталгаажих хугацаа: "
+                          : "Онлайн захиалга боломжгүй"}
+                        {stat === "pending" ? (
+                          <span className="text-[14px] font-semibold sm:text-[11px] md:text-[14px]">
+                            1-3 цаг
+                          </span>
+                        ) : null}
+                      </p>
+                    ) : (
+                      <p>
+                        {stat === "online"
+                          ? "Шууд баталгаажна"
+                          : stat === "pending"
+                          ? "Баталгаажих хугацаа: "
+                          : "Онлайн захиалга боломжгүй"}
+                        {stat === "pending" ? (
+                          <span className="text-[14px] font-semibold sm:text-[11px] md:text-[14px]">
+                            1-3 цаг
+                          </span>
+                        ) : null}
+                      </p>
+                    )}
+                  </div>
+                  {stat === "online" || stat === "offline" ? (
+                    <div className="text-main-textflex flex items-center justify-between rounded-[16px] bg-black/[.07] px-[20px] py-[10px] text-[20px]">
+                      <p>
+                        {roomPrices && roomPrices[0]
+                          ? `${
+                              lang === "en"
+                                ? `${(
+                                    roomPrices[0] /
+                                    parseInt(data?.rate ? data.rate : "1")
+                                  ).toLocaleString()}`
+                                : `${roomPrices[0].toLocaleString()}`
+                            }`
+                          : `200,000`}{" "}
+                        {lang === "en" ? "$" : "₮"}{" "}
+                        <span className="text-[14px]">
+                          {" "}
+                          / {lang === "en" ? "days" : "хоног"}
+                        </span>
+                      </p>
+                      <div
+                        onClick={() => handleScrollTo("rooms")}
+                        className="flex items-center justify-center rounded-[16px] bg-main-online px-[16px] py-[6px] font-medium text-white"
+                      >
+                        {lang === "en" ? "Order" : "Захиалах"}
+                      </div>
                     </div>
                   ) : null}
-                  <div className="text-main-textflex flex items-center justify-between rounded-[16px] bg-black/[.07] px-[20px] py-[10px] text-[20px]">
-                    <p>
-                      {roomPrices && roomPrices[0]
-                        ? `${
-                            lang === "en"
-                              ? `${(
-                                  roomPrices[0] /
-                                  parseInt(data?.rate ? data.rate : "1")
-                                ).toLocaleString()}`
-                              : `${roomPrices[0].toLocaleString()}`
-                          }`
-                        : `200,000`}{" "}
-                      {lang === "en" ? "$" : "₮"}{" "}
-                      <span className="text-[14px]">
-                        {" "}
-                        / {lang === "en" ? "days" : "хоног"}
-                      </span>
-                    </p>
-                    <div
-                      onClick={() => handleScrollTo("rooms")}
-                      className="flex items-center justify-center rounded-[16px] bg-main-online px-[16px] py-[6px] font-medium text-white"
-                    >
-                      {lang === "en" ? "Order" : "Захиалах"}
-                    </div>
-                  </div>
                 </div>
                 {/* map & orderCount */}
                 <div className="flex flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] lg:border-none lg:pt-0">
@@ -545,9 +558,11 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
                       }
                     />
                   ) : null}
-                  <OrderCount
-                    count={data?.orderCount ? data.orderCount : 783}
-                  />
+                  {stat !== "data" && (
+                    <OrderCount
+                      count={data?.orderCount ? data.orderCount : 783}
+                    />
+                  )}
                 </div>
               </div>
             </div>

@@ -14,9 +14,10 @@ import { useState } from "react";
 interface Props {
   images: string[];
   image: string;
+  stat: string;
 }
 
-const HotelImages = ({ images, image }: Props) => {
+const HotelImages = ({ images, image, stat }: Props) => {
   const { dispatch } = useAppCtx();
   const swiper = useSwiper();
 
@@ -80,7 +81,7 @@ const HotelImages = ({ images, image }: Props) => {
               }
               alt="/hotel"
               fill={true}
-              quality={90}
+              quality={stat === "online" || stat === "pending" ? 90 : 50}
               loading="lazy"
               sizes="50vw"
               placeholder="blur"
@@ -91,6 +92,8 @@ const HotelImages = ({ images, image }: Props) => {
               }
               className={`absolute h-auto w-auto select-none object-cover ${
                 index === "/samples/camp.png" ? " blur-[3px]" : ""
+              } ${
+                stat === "offline" || stat === "data" ? "blur-[0.75px]" : ""
               }`}
               draggable={false}
             />
@@ -143,6 +146,7 @@ const HotelImages = ({ images, image }: Props) => {
               }
               alt="/hotel"
               fill={true}
+              quality={stat === "online" || stat === "pending" ? 75 : 50}
               loading="lazy"
               sizes="50vw"
               placeholder="blur"
@@ -153,6 +157,8 @@ const HotelImages = ({ images, image }: Props) => {
               }
               className={`absolute h-auto w-auto select-none object-fill ${
                 index === "/samples/camp.png" ? "blur-[2px]" : ""
+              } ${
+                stat === "offline" || stat === "data" ? "blur-[0.75px]" : ""
               }`}
               draggable={false}
             />

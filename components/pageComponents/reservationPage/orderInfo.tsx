@@ -240,51 +240,6 @@ export default function OrderInfo({ dollarRate, totalPrice, data }: Props) {
               {lang === "en" ? "Order info" : "Захиалгын мэдээлэл"}
             </p>
           </div>
-          {/* <button
-            className="self-center text-[16px] leading-[18px] text-primary-blue font-medium flex flex-col items-center"
-            onClick={onToggle}
-          >
-            {lang === "en" ? "" : "Дэлгэнэргүй харах"}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-5 h-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m19.5 8.25-7.5 7.5-7.5-7.5"
-              />
-            </svg>
-          </button> */}
-
-          {/* <Button
-          onClick={onToggle}
-          className="!m-0 flex h-[41px] w-full items-center !justify-between sm:h-[46px] !bg-transparent !px-0"
-        >
-          <p className="text-[18px] font-medium leading-[18px] text-sub-text">
-            {lang === "en" ? "Order Information" : "Захиалгын мэдээлэл"}
-          </p>
-          <div className="relative h-[20px] w-[20px] rounded-full bg-primary-blue/25">
-            <div
-              className={`absolute left-[50%] top-[50%] h-[3px] w-[14px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
-                isOpen === true
-                  ? "rotate-[180deg] duration-500"
-                  : "rotate-0 duration-500"
-              }`}
-            ></div>
-            <div
-              className={`absolute left-[50%] top-[50%] h-[14px] w-[3px] translate-x-[-50%] translate-y-[-50%] rounded-full bg-primary-blue ${
-                isOpen === true
-                  ? "rotate-[270deg] duration-500"
-                  : "rotate-0 duration-500"
-              }`}
-            ></div>
-          </div>
-        </Button> */}
           {/* info */}
           <Collapse
             in={isOpen}

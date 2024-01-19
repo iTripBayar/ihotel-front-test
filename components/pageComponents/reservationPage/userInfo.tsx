@@ -1017,7 +1017,8 @@ export default function UserInfo({
                       Accept{" "}
                       <span className="underline ">
                         <Link href={`${process.env.TEMPORARY_URL}/terms`}>
-                          Terms and Conditions
+                          {/* Terms and Conditions */}
+                          Service and Cancelation term
                         </Link>
                       </span>
                     </>
@@ -1025,7 +1026,7 @@ export default function UserInfo({
                     <>
                       <span className="underline ">
                         <Link href={`${process.env.TEMPORARY_URL}/terms`}>
-                          Үйлчилгээний нөхцөл
+                          Үйлчилгээний болон Цуцлалтын нөхцөл
                         </Link>
                       </span>{" "}
                       зөвшөөрөх

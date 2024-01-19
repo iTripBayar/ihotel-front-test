@@ -325,7 +325,7 @@ const ReservationPage = () => {
               </div>
               <CancelTerm
                 data={unserializedData}
-                dollarRate={data ? data.rate : null}
+                dollarRate={data ? data.rate : "1"}
                 totalPrice={totalPrice}
               />
               <AdditionalRequest />
