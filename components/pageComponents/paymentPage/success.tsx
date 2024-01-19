@@ -9,7 +9,7 @@ export default function Success({ id }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
   return (
-    <div className="flex w-full items-center justify-center text-main-online">
+    <div className="flex flex-col gap-[24px] w-full items-center justify-center text-main-online">
       <div className="flex items-center justify-center rounded-full border-[6px] border-main-online p-[16px]">
         <svg
           viewBox="0 0 24 24"
@@ -26,21 +26,18 @@ export default function Success({ id }: Props) {
           />
         </svg>
       </div>
-      <div className="flex gap-[10px] flex-wrap">
+      <div className="flex gap-[16px] flex-wrap items-center justify-center px-[32px] font-medium text-[14px] leading-[14px] text-white">
         <Link
           href={{ pathname: "/" }}
-          className="px-[16px] py-[8px] text-primary-blue border border-primary-blue/50 uppercase rounded-[8px] text-[16px] leading-[18px]"
+          className="px-[16px] w-full text-center py-[10px] text-primary-blue bg-white border-[2px] border-primary-blue/50 uppercase rounded-[8px] "
         >
           {lang === "en" ? "Back to Home page" : "Нүүр хуудас руу бацах"}
         </Link>
         <Link
           href={{
             pathname: `/order/${id}`,
-            // query: {
-            //   id: id,
-            // },
           }}
-          className="px-[16px] py-[8px] text-primary-blue border border-primary-blue/50 uppercase rounded-[8px] text-[16px] leading-[18px]"
+          className="px-[16px] w-full text-center py-[10px] bg-primary-blue border-[2px] border-primary-blue/50 uppercase rounded-[8px]"
         >
           {lang === "en" ? "Go to order page" : "Захиалгын хуудас руу очих"}
         </Link>

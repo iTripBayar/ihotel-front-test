@@ -14,11 +14,11 @@ export default function Order({
 }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
-  const clientData = JSON.parse(data.userdata);
+  const clientData = JSON.parse(data?.userdata);
 
   return (
     <div className="flex flex-col gap-[12px] w-full md:flex-col-reverse md:items-center">
-      {data.status === "pending" ? (
+      {data?.status === "pending" ? (
         <div className="flex flex-col gap-[12px] w-full pt-[16px] text-[16px] md:pt-0 md:hidden md:max-w-[450px] justify-center leading-[15px] ">
           <button
             className="w-full rounded-full bg-main-online flex justify-center items-center text-white font-semibold uppercase h-[42px]"
@@ -59,7 +59,7 @@ export default function Order({
                     <div className="flex gap-[12px]">
                       <button
                         onClick={() => {
-                          handleCancelOrder(data.id);
+                          handleCancelOrder(data?.id);
                           setTimeout(() => {
                             toast.dismiss(t);
                             window.location.reload();
@@ -96,7 +96,7 @@ export default function Order({
             {lang === "en" ? "Order ID" : "Захиалгын дугаар"}
           </p>
           <p className="text-[18px] text-main-text font-semibold leading-[20px] md:text-[20px] md:leading-[22px]">
-            {data.number}
+            {data?.number}
           </p>
         </div>
 
@@ -115,8 +115,8 @@ export default function Order({
             </p>
             <p className="text-main-text">
               {lang === "en"
-                ? `${data.day} ${data.day > 1 ? "day" : "days"}`
-                : `${data.day} хоног`}
+                ? `${data?.day} ${data.day > 1 ? "day" : "days"}`
+                : `${data?.day} хоног`}
             </p>
           </div>
           {/* number of clients */}
@@ -126,10 +126,10 @@ export default function Order({
             </p>
             <p className="text-main-text">
               {lang === "en"
-                ? `${data.numberOfGuests} ${
-                    data.numberOfGuests > 1 ? "people" : "person"
+                ? `${data?.numberOfGuests} ${
+                    data?.numberOfGuests > 1 ? "people" : "person"
                   }`
-                : `${data.numberOfGuests} хүн`}
+                : `${data?.numberOfGuests} хүн`}
             </p>
           </div>
         </div>
@@ -141,7 +141,7 @@ export default function Order({
               {lang === "en" ? "Check in" : "Орох өдөр"}
             </p>
             <p className="text-[18px] leading-[18px] font-medium">
-              {data.checkIn.split(" ")[0]}
+              {data?.checkIn.split(" ")[0]}
             </p>
           </div>
           <svg
@@ -164,7 +164,7 @@ export default function Order({
               {lang === "en" ? "Check out" : "Гарах өдөр"}
             </p>
             <p className="text-[18px] leading-[18px] font-medium">
-              {data.checkOut.split(" ")[0]}
+              {data?.checkOut.split(" ")[0]}
             </p>
           </div>
         </div>
@@ -177,18 +177,18 @@ export default function Order({
           </p>
           <div
             className={`w-full rounded-full flex justify-center items-center h-[42px] uppercase font-semibold text-[14px] leading-[15px] ${
-              data.status === "checked-out" || data.status === "confirmed"
+              data?.status === "checked-out" || data?.status === "confirmed"
                 ? "bg-main-online text-white"
-                : data.status === "pending"
+                : data?.status === "pending"
                 ? "bg-main-pending"
                 : "bg-main-offline text-white"
             }`}
           >
-            {data.status === "check-out"
+            {data?.status === "check-out"
               ? `${lang === "en" ? "Confirmed" : "Баталгаажсан"}`
-              : data.status === "confirmed"
+              : data?.status === "confirmed"
               ? `${lang === "en" ? "Confirmed" : "Баталгаажсан"}`
-              : data.status === "pending"
+              : data?.status === "pending"
               ? `${lang === "en" ? "Pending" : "Хүлээгдэж байна"}`
               : `${lang === "en" ? "Canceled" : "Цуцлагдсан"}`}
           </div>

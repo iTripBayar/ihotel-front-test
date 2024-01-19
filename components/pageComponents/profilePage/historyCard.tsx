@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 
 interface Props {
@@ -142,16 +143,17 @@ export default function HistoryCard({ data }: Props) {
                   </svg>
                 </button>
               ) : null}
-              <button
-                onClick={() => {
-                  router.push(
-                    `/profile/?${createAdditionalQueryString(
-                      "id",
-                      data.id ? `${data.id}` : null,
-                    )}`,
-                    { scroll: true },
-                  );
-                }}
+              <Link
+                href={{ pathname: `/order/${data.id}` }}
+                // onClick={() => {
+                //   router.push(
+                //     `/profile/?${createAdditionalQueryString(
+                //       "id",
+                //       data.id ? `${data.id}` : null,
+                //     )}`,
+                //     { scroll: true },
+                //   );
+                // }}
                 className="px-[16px] py-[8px] bg-primary-blue gap-[2px] rounded-tl-[16px] font-semibold text-white text-[12px] uppercase flex justify-center items-center"
               >
                 {lang === "en" ? "More" : "Дэлгэрэнгүй"}
@@ -169,7 +171,7 @@ export default function HistoryCard({ data }: Props) {
                     d="m8.25 4.5 7.5 7.5-7.5 7.5"
                   />
                 </svg>
-              </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -14,8 +14,8 @@ export default function General({ data }: Props) {
       <div className="w-full h-[200px] 2xs:h-[225px] sm:h-[275px] md:h-[325px] rounded-t-[20px] lg:h-[300px] xl:h-[325px] 2xl:h-[350px] relative overflow-hidden  lg:rounded-[12px]">
         <Image
           src={
-            data.image
-              ? `${process.env.IMAGE_URL}${data.image}`
+            data?.image
+              ? `${process.env.IMAGE_URL}${data?.image}`
               : "/samples/camp.png"
           }
           alt="/hotel"
@@ -25,8 +25,8 @@ export default function General({ data }: Props) {
           sizes="50vw"
           placeholder="blur"
           blurDataURL={
-            data.image !== null
-              ? `"_next/image/?url=${data.image}"`
+            data?.image !== null
+              ? `"_next/image/?url=${data?.image}"`
               : "/samples/camp.png"
           }
           className="absolute h-auto w-auto select-none object-cover"
@@ -37,10 +37,10 @@ export default function General({ data }: Props) {
         {/* name & address */}
         <div className=" w-full flex flex-col gap-[6px] ">
           <p className="text-[16px] font-medium leading-[17px] line-clamp-2 w-full text-main-text md:text-[18px] md:leading-[20px]">
-            {lang === "en" ? data.nameEn : data.name}
+            {lang === "en" ? data?.nameEn : data?.name}
           </p>
           <p className="text-[14px] leading-[15px] line-clamp-2 text-sub-text/75 md:text-[16px] md:leading-[17px]">
-            {lang === "en" ? data.addressEn : data.address}
+            {lang === "en" ? data?.addressEn : data?.address}
           </p>
         </div>
         {/* help */}
@@ -63,7 +63,7 @@ export default function General({ data }: Props) {
                     <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
                   </svg>
                 </div>
-                <p className="text-main-text text-[14px]">{data.email}</p>
+                <p className="text-main-text text-[14px]">{data?.email}</p>
               </div>
               {/* phone */}
               <div className="flex w-full gap-[6px] items-center text-primary-blue">
@@ -81,7 +81,7 @@ export default function General({ data }: Props) {
                     />
                   </svg>
                 </div>
-                <p className="text-main-text text-[14px]">{data.phone}</p>
+                <p className="text-main-text text-[14px]">{data?.phone}</p>
               </div>
             </div>
           </div>

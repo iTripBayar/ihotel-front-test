@@ -19,7 +19,9 @@ export async function fetchDataSearch(): Promise<SearchData.Data> {
 }
 // ihotel/dest/search?query=ibis
 
-export async function fetchSearchQuery(query: string): Promise<SearchQuery.Result> {
+export async function fetchSearchQuery(
+  query: string,
+): Promise<SearchQuery.Result> {
   const response = await fetch(
     `${process.env.WEB_URL}/ihotel/dest/search?query=${query}`,
     // { cache: 'force-cache' },
@@ -61,8 +63,8 @@ export async function fetchDataHotel(e: {
 }): Promise<HotelData.full> {
   const response = await fetch(
     `${process.env.WEB_URL}/ihotel/hotel/${e.slug}${
-      e.checkIn !== '' ? `?checkin=${encodeURIComponent(e.checkIn)}` : ``
-    }${e.checkOut !== '' ? `&checkout=${encodeURIComponent(e.checkOut)}` : ``}`,
+      e.checkIn !== "" ? `?checkin=${encodeURIComponent(e.checkIn)}` : ``
+    }${e.checkOut !== "" ? `&checkout=${encodeURIComponent(e.checkOut)}` : ``}`,
     // { cache: 'force-cache' },
   );
   const result: HotelData.full = await response.json();
@@ -76,9 +78,9 @@ export async function fetchUserData(e: {
 }) {
   try {
     const response = await fetch(`${process.env.WEB_URL}/api/login`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ email: e.email, password: e.password }),
     });
@@ -90,10 +92,10 @@ export async function fetchUserData(e: {
     const result = await response.json();
     return result;
   } catch (error: any) {
-    if (error instanceof TypeError && error.message === 'Failed to fetch') {
-      console.error('Network error while fetching user data:', error.message);
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      console.error("Network error while fetching user data:", error.message);
     } else {
-      console.error('Error fetching user data:', error.message);
+      console.error("Error fetching user data:", error.message);
     }
     throw error;
   }
@@ -133,9 +135,9 @@ export async function fetchCreateOrder(e: {
     const response = await fetch(
       `${process.env.WEB_URL}/ihotel/order/card/create`,
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: e.name,
@@ -161,15 +163,25 @@ export async function fetchCreateOrder(e: {
     const result = await response.json();
     return result;
   } catch (error: any) {
-    if (error instanceof TypeError && error.message === 'Failed to fetch') {
-      console.error('Network error while fetching user data:', error.message);
+    if (error instanceof TypeError && error.message === "Failed to fetch") {
+      console.error("Network error while fetching user data:", error.message);
     } else {
-      console.error('Error fetching data:', error.message);
+      console.error("Error fetching data:", error.message);
     }
     throw error;
   }
 }
 
+interface SingleOrder {
+  success: boolean;
+  order: User.Order;
+}
 
-
-
+export async function fetchSingleOrder(id: number): Promise<SingleOrder> {
+  const response = await fetch(
+    `${process.env.WEB_URL}/ihotel/order/${id}`,
+    // { cache: 'force-cache' },
+  );
+  const result: SingleOrder = await response.json();
+  return result;
+}

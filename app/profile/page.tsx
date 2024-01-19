@@ -154,43 +154,39 @@ export default function ProfilePage() {
           />
           {appState.menu === "open" ? <SideMenu session={session} /> : null}
           <Toaster position="top-right" richColors />
-          {id && showOrder ? (
-            <AboutOrder data={showOrder} />
-          ) : (
-            <div className="flex w-full flex-col items-center gap-[24px] min-h-screen px-[16px] sm:px-[50px] md:px-[72px] lg:px-[100px] md:gap-[32px] lg:gap-[36px] ">
-              <ProfileInfo
-                userData={profileData?.user}
+          <div className="flex w-full flex-col items-center gap-[24px] min-h-screen px-[16px] sm:px-[50px] md:px-[72px] lg:px-[100px] md:gap-[32px] lg:gap-[36px] ">
+            <ProfileInfo
+              userData={profileData?.user}
+              totalOrders={profileData?.totalOrders}
+              totalReviews={profileData?.totalReviews}
+              handleSignOut={handleSignOut}
+              handleAction={(e: string) => setAction(e)}
+              action={action}
+            />
+            {action === "" || action === "saved" ? (
+              <HistoryContainer
+                orderData={profileData?.orders ? profileData.orders : []}
+                couponData={profileData?.coupons ? profileData.coupons : []}
                 totalOrders={profileData?.totalOrders}
-                totalReviews={profileData?.totalReviews}
-                handleSignOut={handleSignOut}
-                handleAction={(e: string) => setAction(e)}
-                action={action}
+                totalCoupon={profileData?.totalCoupons}
               />
-              {action === "" || action === "saved" ? (
-                <HistoryContainer
-                  orderData={profileData?.orders ? profileData.orders : []}
-                  couponData={profileData?.coupons ? profileData.coupons : []}
-                  totalOrders={profileData?.totalOrders}
-                  totalCoupon={profileData?.totalCoupons}
-                />
-              ) : (
-                <EdtiSection
-                  action={action}
-                  handleAction={(e: string) => setAction(e)}
-                  userData={profileData?.user}
-                  updatedData={updatedData}
-                  run={runUpdate}
-                  loading={loadingUpdate}
-                />
-              )}
-              <button
-                onClick={() => router.back()}
-                className="text-primary-blue font-medium py-[12px]"
-              >
-                {lang === "en" ? "Back" : "Буцах"}
-              </button>
-            </div>
-          )}
+            ) : (
+              <EdtiSection
+                action={action}
+                handleAction={(e: string) => setAction(e)}
+                userData={profileData?.user}
+                updatedData={updatedData}
+                run={runUpdate}
+                loading={loadingUpdate}
+              />
+            )}
+            <button
+              onClick={() => router.back()}
+              className="text-primary-blue font-medium py-[12px]"
+            >
+              {lang === "en" ? "Back" : "Буцах"}
+            </button>
+          </div>
           <Footer />
         </main>
       );
