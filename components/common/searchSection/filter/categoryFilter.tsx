@@ -109,10 +109,14 @@ export default function CategoryFilter({
           isOpen === true ? "!mt-[8px] !pb-[16px] sm:pb-[20px]" : "h-0"
         }`}
       >
-        {/* {data.length > 0 ? (
+        {data.length > 0 ? (
           data.map((index, i) => (
             <div
-              onClick={() => changeValue(index)}
+              // onClick={() => changeValue(index)}
+              onClick={() => {
+                changeValue(`${index.id}`);
+                // testChangeCat(`${index.id}`);
+              }}
               key={i}
               className="flex w-full items-center gap-[8px] filter"
             >
@@ -120,8 +124,10 @@ export default function CategoryFilter({
                 id={`cat${index.id}`}
                 type="checkbox"
                 readOnly
-                value={index.name}
-                checked={value && index.id === value.id ? true : false}
+                // value={index.name}
+                value={index.id}
+                // checked={value && index.id === value.id ? true : false}
+                checked={value.some((i) => i === `${index.id}`)}
                 className="h-[20px] w-[20px] rounded-[4px] border border-black/50 ring-0 focus:shadow-none focus:ring-0 filter"
               />
               <label
@@ -138,7 +144,7 @@ export default function CategoryFilter({
           <div className="filter">
             {lang === "en" ? "Empty" : "Хоосон байна"}
           </div>
-        )} */}
+        )}
       </Collapse>
     </div>
   );

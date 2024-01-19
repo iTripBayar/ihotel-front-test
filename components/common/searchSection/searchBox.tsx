@@ -15,6 +15,8 @@ interface iProps {
   ver: string;
   changeSearchValue: (e: string) => void;
   value: string;
+  setSelected: (e: boolean) => void;
+  selected: boolean;
 }
 
 const SearchBox = ({
@@ -23,9 +25,11 @@ const SearchBox = ({
   ver,
   changeSearchValue,
   value,
+  setSelected,
+  selected,
 }: iProps) => {
   const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState(false);
+  // const [selected, setSelected] = useState(false);
   const [showDefault, setShowDefault] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -179,8 +183,12 @@ const SearchBox = ({
       } else {
         // document.getElementById("searchInput")?.focus();
         inputRef.current?.focus();
+
         setShowDefault(true);
       }
+    });
+    document.getElementById("searchInput")?.addEventListener("focus", (e) => {
+      e.preventDefault();
     });
   }, []);
 
@@ -221,7 +229,8 @@ const SearchBox = ({
       <div
         className={`flex w-full within items-center bg-white px-[12px] ${
           ver === "normal"
-            ? "h-[46px] justify-start rounded-[8px] border border-black/[.25]  2xs:gap-[4px] lg:min-w-[280px] xl:min-w-[306px] "
+            ? // ? "h-[46px] justify-start rounded-[8px] border border-black/[.25]  2xs:gap-[4px] lg:min-w-[280px] xl:min-w-[306px] "
+              "h-[46px] rounded-full justify-start shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] 2xs:gap-[4px] lg:min-w-[280px] xl:min-w-[306px] "
             : ver === "fixed"
             ? "h-[36px] justify-start rounded-full"
             : ver === "headerSearch"
@@ -280,6 +289,9 @@ const SearchBox = ({
             }}
             value={query}
             ref={inputRef}
+            onFocusCapture={(e) => {
+              e.preventDefault();
+            }}
             onFocus={(e) => {
               e.preventDefault();
             }}

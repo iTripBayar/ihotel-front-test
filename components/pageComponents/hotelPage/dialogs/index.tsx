@@ -5,7 +5,7 @@ import { useAppCtx } from "@/contexts/app";
 import ScrollTopBtn from "@/components/common/fixedButtons/scrollTopBtn";
 import RoomSelectionDrawer from "./roomSelectionDrawer";
 import useWindowSize from "@/hooks/windowSize";
-import LangBtn from "@/components/common/fixedButtons/langBtn";
+// import LangBtn from "@/components/common/fixedButtons/langBtn";
 import React from "react";
 
 interface CartItem {
@@ -51,15 +51,15 @@ export default function Dialogs({
     <div className="fixed bottom-0 z-[888] flex w-full flex-col justify-end sm:px-[50px] md:px-[72px] lg:hidden">
       {appState.calendar === "" && !appState.selectedRoom ? (
         <div
-          className={`flex absolute top-0 ${
+          className={`flex absolute  ${
             currentCart.length > 0
-              ? "translate-y-[-100px] duration-250"
+              ? "translate-y-[-50px] duration-250"
               : "translate-y-[-24px] duration-250"
           } w-auto flex-col gap-[8px] self-end pb-[12px] pr-[14px] text-white ${
             inViewport ? " opacity-100 duration-300" : "opacity-0 duration-250"
           }`}
         >
-          <LangBtn />
+          {/* <LangBtn /> */}
           <ScrollTopBtn ver={"fixed"} handleScrollToTopVer={() => {}} />
         </div>
       ) : null}

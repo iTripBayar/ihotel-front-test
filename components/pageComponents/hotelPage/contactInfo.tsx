@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Link from "next/link";
+// import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 interface Props {
@@ -44,7 +44,7 @@ ${name}-д захиалга үүсгэх хүсэлтэй байна.`,
       {stat === "online" ? (
         <button
           className={`flex items-center gap-[6px] rounded-full bg-primary-blue text-white font-medium px-[10px] py-[6px]`}
-          // href={`tel:${phone}`}
+          // href={`tel:+976 ${phone}`}
           disabled={true}
         >
           <svg
@@ -95,7 +95,7 @@ ${name}-д захиалга үүсгэх хүсэлтэй байна.`,
           className={`flex items-center gap-[6px] lg:gap-[4px] rounded-full bg-primary-blue text-white font-medium px-[10px] py-[6px] ${
             stat !== "pending" ? "opacity-50" : "opacity-100"
           }`}
-          // href={`tel:${phone}`}
+          // href={`tel:+976 ${phone}`}
           disabled={true}
         >
           <svg

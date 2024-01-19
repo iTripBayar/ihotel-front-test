@@ -1,5 +1,4 @@
 "use client";
-import HeroCategory from "@/components/pageComponents/homePage/heroCategory";
 import CommonLocation from "@/components/pageComponents/homePage/commonLocation";
 import News from "@/components/pageComponents/homePage/news";
 import Footer from "@/components/common/footer";
@@ -23,6 +22,7 @@ import { useSearchParams } from "next/navigation";
 import ResetPass from "@/components/common/signIn/resetPass";
 import Script from "next/script";
 import { useInViewport } from "ahooks";
+import HomeCategoryOptions from "@/components/pageComponents/homePage/homeCategoryOptions";
 
 const Home = () => {
   const searchParams = useSearchParams();
@@ -47,6 +47,7 @@ const Home = () => {
       payload: { map: "", logOrSign: "", menu: "" },
     });
   }, []);
+
   if (!error)
     return (
       <main className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px]">
@@ -155,7 +156,7 @@ const Home = () => {
             <CircularProgress isIndeterminate={true} color="#3C76FE" />
           </div>
         ) : (
-          <HeroCategory data={data ? data.propertyTypes : []} />
+          <HomeCategoryOptions data={data ? data.propertyTypes : []} />
         )}
         <div ref={searchBoxRef}>
           <SearchSection
@@ -164,12 +165,14 @@ const Home = () => {
             cityData={data ? data.cities : []}
           />
         </div>
+
         {loading ? (
-          <div className="flex h-[500px] w-full items-center justify-center">
+          <div className="flex h-[650px] w-full items-center justify-center">
             <CircularProgress isIndeterminate={true} color="#3C76FE" />
           </div>
         ) : (
           <div className="relative flex flex-col gap-[24px] overflow-hidden md:gap-[32px] lg:gap-[48px] xl:gap-[64px] ">
+            {/* <HomeCategoryOptions data={data ? data.propertyTypes : []} /> */}
             <CommonLocation
               data={data ? data.destCategories : []}
               destinations={data ? data.topDestinations : []}

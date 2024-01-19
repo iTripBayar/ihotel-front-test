@@ -1,6 +1,5 @@
 import { useSearchParams } from "next/navigation";
 import useWindowSize from "@/hooks/windowSize";
-import { useState } from "react";
 import ReviewCard from "./reviewCard";
 
 interface Props {
@@ -13,7 +12,6 @@ const Review = ({ ver, data, handleScrollTo }: Props) => {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
   const size = useWindowSize();
-  const [page, setPage] = useState(1);
 
   const dateStrings: string[] = [];
   let totalEmployees = 0;
@@ -108,125 +106,9 @@ const Review = ({ ver, data, handleScrollTo }: Props) => {
               0,
               size.width && size.width >= 768 && size.width < 1024 ? 2 : 1,
             )
-            .map((index, i) => (
-              <ReviewCard data={index} ver={ver} key={i} />
-              // <div
-              //   key={i}
-              //   className="relative z-10 flex flex-col justify-between gap-[8px] rounded-[10px] p-[12px] text-[14px] shadow-[0px_4px_12px_4px_rgb(0,0,0,0.15)] 2xs:gap-[12px] sm:min-h-[200px] sm:px-[16px] "
-              // >
-              //   {/* review number */}
-              //   <div className="absolute right-[12px] top-[10px] z-10 flex h-[30px] w-[40px] items-center justify-center rounded-[6px] bg-primary-blue font-medium text-white 2xs:w-[50px] sm:right-[16px]  ">
-              //     {index.average}
-              //   </div>
-              //   {/* user info */}
-              //   <div className="flex items-center gap-[8px]">
-              //     <div className="flex h-[28px] w-[28px] items-center justify-center rounded-full bg-primary-blue/[.45] text-primary-blue">
-              //       <svg
-              //         xmlns="http://www.w3.org/2000/svg"
-              //         viewBox="0 0 24 24"
-              //         fill="currentColor"
-              //         className="max-h-[18px] min-h-[18px] min-w-[18px] max-w-[18px]"
-              //       >
-              //         <path
-              //           fillRule="evenodd"
-              //           d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
-              //           clipRule="evenodd"
-              //         />
-              //       </svg>
-              //     </div>
-              //     <p className="font-medium">{"Anonymous"}</p>
-              //     <div className="relative h-[10px] w-[20px] overflow-hidden">
-              //       {" "}
-              //       <Image
-              //         src="/images/mongolian-flag.png"
-              //         alt="/lang"
-              //         width={28}
-              //         height={28}
-              //         sizes="20vw"
-              //         className="absolute left-0 top-0 translate-y-[-30%] scale-[110%] cursor-pointer object-fill"
-              //       />
-              //     </div>
-              //   </div>
-              //   {/* title */}
-              //   <p className="text-[15px] font-medium">
-              //     {/* {'Great place to stay. Thank you so much'} */}
-              //     {index.title
-              //       ? index.title
-              //       : "Lorem ipsum dolor sit amet consectetur."}
-              //   </p>
-              //   {/* review */}
-              //   <p
-              //     className={` relative line-clamp-3 text-justify text-sub-text`}
-              //   >
-              //     {index.comment}
-              //   </p>
-
-              //   {/* date */}
-              //   <div className="flex w-full items-center border-t-[1px] border-t-black/[.15] pt-[8px]">
-              //     {/* {Date(index.updatedAt)} */}
-              //     {dateStrings[i]}
-              //   </div>
-              // </div>
-            ))}
+            .map((index, i) => <ReviewCard data={index} ver={ver} key={i} />)}
         {ver === "full" &&
-          data.map((index, i) => (
-            <ReviewCard data={index} ver={ver} key={i} />
-            // <div
-            //   key={i}
-            //   className="relative z-10 flex h-full flex-col gap-[8px] rounded-[10px] p-[12px] text-[14px] shadow-[0px_4px_12px_4px_rgb(0,0,0,0.15)] 2xs:gap-[12px] sm:px-[16px] "
-            // >
-            //   {/* review number */}
-            //   <div className="absolute right-[12px] top-[10px] z-10 flex h-[30px] w-[40px] items-center justify-center rounded-[6px] bg-primary-blue font-medium text-white 2xs:w-[50px] sm:right-[16px]  ">
-            //     {index.average}
-            //   </div>
-            //   {/* user info */}
-            //   <div className="flex items-center gap-[8px]">
-            //     <div className="flex h-[28px] w-[28px] items-center justify-center rounded-full bg-primary-blue/[.45] text-primary-blue">
-            //       <svg
-            //         xmlns="http://www.w3.org/2000/svg"
-            //         viewBox="0 0 24 24"
-            //         fill="currentColor"
-            //         className="max-h-[18px] min-h-[18px] min-w-[18px] max-w-[18px]"
-            //       >
-            //         <path
-            //           fillRule="evenodd"
-            //           d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
-            //           clipRule="evenodd"
-            //         />
-            //       </svg>
-            //     </div>
-            //     <p className="font-medium">{"Anonymous"}</p>
-            //     <div className="relative h-[10px] w-[20px] overflow-hidden">
-            //       {" "}
-            //       <Image
-            //         src="/images/mongolian-flag.png"
-            //         alt="/lang"
-            //         width={28}
-            //         height={28}
-            //         sizes="20vw"
-            //         className="absolute left-0 top-0 translate-y-[-30%] scale-[110%] cursor-pointer object-fill"
-            //       />
-            //     </div>
-            //   </div>
-            //   {/* title */}
-            //   <p className="text-[15px] font-medium">
-            //     {index.title
-            //       ? index.title
-            //       : "Lorem ipsum dolor sit amet consectetur."}
-            //   </p>
-            //   {/* review */}
-            //   <p
-            //     className={` relative line-clamp-3 text-justify text-sub-text`}
-            //   >
-            //     {index.comment}
-            //   </p>
-
-            //   {/* date */}
-            //   <div className="flex w-full items-center border-t-[1px] border-t-black/[.15] pt-[8px]">
-            //     {dateStrings[i]}
-            //   </div>
-            // </div>
-          ))}
+          data.map((index, i) => <ReviewCard data={index} ver={ver} key={i} />)}
       </div>
       {ver !== "full" ? (
         <button
@@ -237,21 +119,7 @@ const Review = ({ ver, data, handleScrollTo }: Props) => {
         >
           {lang === "en" ? "More" : "Цааш үзэх"}
         </button>
-      ) : (
-        <>
-          {data.length - 4 * page > 0 ? (
-            <button
-              className="self-center rounded-full bg-primary-blue px-[16px] py-[8px] font-medium text-white"
-              onClick={() => {
-                setPage(page + 1);
-              }}
-            >
-              {lang === "en" ? "More" : "Цааш үзэх"}{" "}
-              {ver === "full" ? `(${data.length - 4 * page}+)` : null}
-            </button>
-          ) : null}
-        </>
-      )}
+      ) : null}
     </div>
   );
 };

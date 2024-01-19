@@ -40,14 +40,6 @@ const RoomCard = ({
   const { dispatch } = useAppCtx();
   const [openDesc, setOpenDesc] = useState(false);
 
-  // let updatedAmount = "";
-  // if (appState.selectedAmount.length > 0) {
-  //   for (let i = 0; i < appState.selectedAmount.length; i++) {
-  //     if (appState.selectedAmount[i].split("$")[0] === data.id.toString()) {
-  //       updatedAmount = appState.selectedAmount[i];
-  //     }
-  //   }
-  // }
   const roomAmount = [{ id: data?.id, amount: 0 }];
   for (let i = 0; i < data.number; i++) {
     roomAmount.push({ id: data?.id, amount: i + 1 });
@@ -396,81 +388,6 @@ const RoomCard = ({
                 </Listbox.Options>
               </Listbox>
             </div>
-            {/* {appState.selectedRoom === data.id.toString() ? (
-              <div className=" scrollHidden absolute left-0 z-50 hidden max-h-[166px] min-w-[90px] flex-col overflow-y-auto rounded-[8px] border-[2px] border-primary-blue/50 bg-white px-[12px] text-[14px] font-medium leading-[16px] text-primary-blue 2xs:text-[16px] md:px-[8px] md:text-[14px] lg:flex">
-                {roomAmount.map((index, i) => (
-                  <div
-                    key={i}
-                    className=" flex min-h-[34px] cursor-pointer items-center justify-center border-b border-b-primary-blue/50"
-                    onClick={() => {
-                      dispatch({
-                        type: "CHANGE_APP_STATE",
-                        payload: {
-                          selectedRoom: "",
-                          selectedAmount: (() => {
-                            const newValue = `${data.id}$${roomAmount
-                              .indexOf(index)
-                              .toString()}`;
-                            const indexOfId = appState.selectedAmount.findIndex(
-                              (existingValue) => {
-                                const [existingId] = existingValue.split("$");
-                                return existingId === `${data.id}`;
-                              },
-                            );
-
-                            // Check if the value already exists in the array
-                            const updatedAmount = appState.selectedAmount.map(
-                              (existingValue) => {
-                                const [existingId] = existingValue.split("$");
-                                if (existingId === `${data.id}`) {
-                                  // If the ID matches, update the existing value
-                                  return newValue;
-                                }
-                                return existingValue;
-                              },
-                            );
-
-                            // If the ID doesn't exist, add the new value to the array
-                            if (
-                              indexOfId === -1 &&
-                              !updatedAmount.includes(newValue)
-                            ) {
-                              updatedAmount.push(newValue);
-                            } else if (
-                              indexOfId !== -1 &&
-                              roomAmount.indexOf(index) === 0
-                            ) {
-                              // If the ID exists and sampleRooms.indexOf(index) is 0, remove the value
-                              updatedAmount.splice(indexOfId, 1);
-                            }
-
-                            return updatedAmount;
-                          })(),
-                        },
-                      });
-                    }}
-                  >
-                    {index.amount} {lang === "en" ? "rooms" : "өрөө"}{" "}
-                    {roomAmount.indexOf(index) === parseInt(updatedAmount) ? (
-                      <svg
-                        viewBox="0 0 19 14"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="absolute right-0 top-[50%] max-h-[14px] min-h-[14px] min-w-[20px] max-w-[20px] translate-y-[-50%] text-primary-blue"
-                      >
-                        <path
-                          d="M17 2L7 12L2 7"
-                          stroke="#3C76FE"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    ) : null}
-                  </div>
-                ))}
-              </div>
-            ) : null} */}
           </div>
         ) : null}
       </div>

@@ -22,6 +22,7 @@ interface Props {
     nationality: string;
   }) => void;
   handleSubmit: () => void;
+  handleSubmitPending: () => void;
   orderLoading: boolean;
 }
 export default function UserInfo({
@@ -30,6 +31,7 @@ export default function UserInfo({
   clients,
   updateClients,
   handleSubmit,
+  handleSubmitPending,
   orderLoading,
 }: Props) {
   const searchParams = useSearchParams();
@@ -987,7 +989,7 @@ export default function UserInfo({
             ? "We will contact you shortly after confirming your order request."
             : "Бид захиалах хүсэлт хүлээн авсны дараа таны захиалгыг шалгаад эргээд тантай холбогдох болно."}
         </div>
-        {stat === "online" ? (
+        {stat === "online" || stat === "pending" ? (
           <div className="flex flex-col gap-[24px]">
             <div className="flex flex-col items-center justify-center gap-[24px]">
               <div className="flex items-center justify-center gap-[8px] text-[12px] text-sub-text/75 2xs:text-[14px]">
@@ -1042,25 +1044,22 @@ export default function UserInfo({
                     ? "cursor-not-allowed opacity-50"
                     : ""
                 }`}
-                onClick={handleSubmit}
+                onClick={stat === "online" ? handleSubmit : handleSubmitPending}
                 disabled={orderLoading === true || isChecked === false}
               >
                 {orderLoading === true
                   ? `${lang === "en" ? "Loading..." : "Уншиж байна..."}`
-                  : `${lang === "en" ? "Proceed to payment" : "Төлбөр төлөх"}`}
+                  : stat === "online"
+                  ? `${lang === "en" ? "Proceed to payment" : "Төлбөр төлөх"}`
+                  : `${
+                      lang === "en"
+                        ? "Send order request"
+                        : "Захиалгын хүсэлт илгээх"
+                    }`}
               </button>
             </div>
           </div>
-        ) : (
-          <button
-            className={`flex w-full max-w-[375px] items-center justify-center rounded-full bg-main-online py-[8px] font-medium text-white sm:text-[18px] ${
-              isChecked ? "cursor-not-allowed opacity-50" : ""
-            }`}
-            disabled={isChecked === false}
-          >
-            {lang === "en" ? "Send order request" : "Захиалах хүсэлт илгээх"}
-          </button>
-        )}
+        ) : null}
       </div>
     );
   }

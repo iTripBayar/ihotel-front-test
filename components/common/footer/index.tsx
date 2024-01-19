@@ -1,10 +1,13 @@
-import Image from 'next/image';
-import AboutCollapse from './aboutCollapse';
-import InfoCollapse from './infoCollapse';
-import ServiceCollapse from './serviceCollapse';
-import Link from 'next/link';
+import Image from "next/image";
+import AboutCollapse from "./aboutCollapse";
+import InfoCollapse from "./infoCollapse";
+import ServiceCollapse from "./serviceCollapse";
+import Link from "next/link";
 
 const Footer = () => {
+  const resMail = "reservations@ihotel.mn";
+  const infoMail = "info@ihotel.mn";
+
   return (
     <div className="relative z-[500] flex w-full flex-col bg-footer px-[32px] pt-[32px] text-[14px] text-white sm:px-[42px] md:px-[50px] lg:px-[125px] xl:px-[150px] 2xl:px-[200px]">
       <div className=" md:flex md:flex-row-reverse md:justify-between md:gap-[32px]">
@@ -26,9 +29,25 @@ const Footer = () => {
             />
           </div>
           <div className="flex flex-col justify-start gap-[16px] text-[13px] md:justify-self-start lg:justify-self-end lg:pl-[28px] lg:text-[14px] xl:text-[16px]">
-            <p>(+976)-7727 9090</p>
-            <p>reservations@ihotel.mn</p>
-            <p>info@ihotel.mn</p>
+            <Link href={`tel:+976 77279090`}>(+976)-7727 9090</Link>
+            <button
+              onClick={() => {
+                const mailToLink = `mailto:${resMail}`;
+                window.open(mailToLink, "_blank");
+              }}
+              className="text-start"
+            >
+              reservations@ihotel.mn
+            </button>
+            <button
+              onClick={() => {
+                const mailToLink = `mailto:${infoMail}`;
+                window.open(mailToLink, "_blank");
+              }}
+              className="text-start"
+            >
+              info@ihotel.mn
+            </button>
             <div className="flex w-full justify-between gap-[8px]">
               {/* facebook */}
               <Link

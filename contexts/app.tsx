@@ -7,11 +7,9 @@ export type AppCtxState = {
   map: string;
   filter: string;
   selectedRoom: string;
-  selectedAmount: string[];
   calendar: string;
   biggerImage: string[];
   imageIndex: number;
-  userToken: string;
   paymentMethod: string;
 };
 
@@ -30,11 +28,9 @@ const defaultValue: AppCtxProps = {
     map: "",
     filter: "",
     selectedRoom: "",
-    selectedAmount: [],
     calendar: "",
     biggerImage: [],
     imageIndex: 0,
-    userToken: "",
     paymentMethod: "",
   },
   dispatch: () => {

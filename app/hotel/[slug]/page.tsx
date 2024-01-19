@@ -247,8 +247,6 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
     }
   }
 
-  stat = "online";
-
   if (!error)
     return (
       <main className="relative">
@@ -420,47 +418,6 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
                 ) : null}
               </div>
               <div className="flex flex-col gap-[24px] lg:col-span-2">
-                {/* contanct */}
-                {/* <div className=" hidden w-full gap-[14px] text-[14px] tracking-wide lg:flex lg:text-[12px] lg:tracking-wide xl:text-[14px] xl:tracking-wider">
-                  <div className="flex items-center gap-[6px] text-sub-text xl:gap-[10px]">
-                    <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-primary-blue text-white">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="max-h-[17px] min-h-[17px] min-w-[17px] max-w-[17px]"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <p>
-                      {data?.hotel.phone
-                        ? `${`${data?.hotel?.phone.slice(
-                            0,
-                            4,
-                          )}-${data?.hotel?.phone.slice(4)}`}`
-                        : "empty"}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-[6px] text-sub-text xl:gap-[10px]">
-                    <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-primary-blue text-white">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="max-h-[18px] min-h-[18px] min-w-[18px] max-w-[18px]"
-                      >
-                        <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
-                        <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
-                      </svg>
-                    </div>
-                    <p>{data?.hotel.email}</p>
-                  </div>
-                </div> */}
                 <div className="hidden lg:block">
                   <ContactInfo
                     phone={data?.hotel.phone ? data.hotel.phone : ""}
@@ -470,7 +427,9 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
                     name={data?.hotel.name ? data.hotel.name : ""}
                   />
                 </div>
-                {data?.reviews && data?.reviews.length > 0 ? (
+                {data?.reviews &&
+                data?.reviews.length > 0 &&
+                stat !== "data" ? (
                   <Review
                     ver=""
                     data={data?.reviews ? data?.reviews : []}
@@ -478,7 +437,13 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
                   />
                 ) : null}
                 {/* stat & price */}
-                <div className="hidden flex-col gap-[24px] border-t-[1px] border-t-black/[.15] pt-[24px] lg:flex">
+                <div
+                  className={`hidden flex-col gap-[24px] ${
+                    stat === "online" || stat === "pending"
+                      ? "border-t-[1px] border-t-black/[.15] pt-[24px]"
+                      : ""
+                  }  lg:flex`}
+                >
                   <div
                     className={`flex h-[36px] items-center justify-center gap-[4px] rounded-[8px] text-center font-medium ${
                       stat === "online"
@@ -518,7 +483,7 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
                       </p>
                     )}
                   </div>
-                  {stat === "online" || stat === "offline" ? (
+                  {stat === "online" || stat === "pending" ? (
                     <div className="text-main-textflex flex items-center justify-between rounded-[16px] bg-black/[.07] px-[20px] py-[10px] text-[20px]">
                       <p>
                         {roomPrices && roomPrices[0]
@@ -593,7 +558,7 @@ const HotelPage = ({ params }: { params: { slug: string } }) => {
                 }
               />
             ) : null}
-            {data?.reviews && data.reviews.length > 0 ? (
+            {data?.reviews && data.reviews.length > 0 && stat !== "data" ? (
               <div ref={reviewsContainer}>
                 <Review
                   ver="full"

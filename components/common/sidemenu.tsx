@@ -150,7 +150,7 @@ const SideMenu = ({ session }: Props) => {
         <div className="flex w-full flex-col justify-end gap-[24px]">
           {/* phone */}
           <Link
-            href={`tel:${appState.phone}`}
+            href={`tel:+976 ${appState.phone}`}
             className="flex h-[43px] w-full items-center justify-end gap-[8px]  border-b-[1px] border-white/[.15]"
           >
             <svg

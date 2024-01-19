@@ -8,9 +8,9 @@ import SideMenu from "@/components/common/sidemenu";
 import { Toaster } from "sonner";
 import LogIn from "@/components/common/signIn/logIn";
 import SignUp from "@/components/common/signIn/signUp";
-import AboutOrder from "@/components/pageComponents/profilePage/aboutOrder";
+// import AboutOrder from "@/components/pageComponents/profilePage/aboutOrder";
 import { Footer } from "react-day-picker";
-import ErrorComponent from "@/components/common/404";
+// import ErrorComponent from "@/components/common/404";
 
 export default function OrderPage() {
   const searchParams = useSearchParams();

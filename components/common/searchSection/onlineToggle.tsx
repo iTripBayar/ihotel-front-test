@@ -1,35 +1,36 @@
-import React, { useRef } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React, { useRef } from "react";
+import { useSearchParams } from "next/navigation";
 
-import { Switch } from '@headlessui/react';
+import { Switch } from "@headlessui/react";
 type iProps = {
   ver: string;
-  changeToggle: ()=>void;
+  changeToggle: () => void;
   value: boolean;
 };
 
 const OnlineToggle = ({ ver, changeToggle, value }: iProps) => {
   const searchParams = useSearchParams();
-  const lang = searchParams.get('lang');
+  const lang = searchParams.get("lang");
 
   const containerRef = useRef<HTMLDivElement>(null);
   return (
     <div
       className={`relative flex w-full items-center justify-center overflow-hidden bg-white text-[12px] leading-[12px]
        text-main-text 2xs:text-[13px] 2xs:leading-[13px] sm:text-[14px] sm:leading-[14px] lg:text-[12px] lg:leading-[12px]  xl:text-[14px] xl:leading-[14px] ${
-        ver === 'normal'
-          ? 'h-[46px] rounded-[8px] border border-black/[.25] lg:max-w-[280px] lg:min-w-[260px] xl:max-w-[320px]'
-          : ver === 'fixed'
-          ? 'h-[36px] rounded-full lg:max-w-[280px] lg:min-w-[260px] xl:max-w-[320px]'
-          : ver === 'headerSearch'
-          ? 'h-[46px] rounded-full shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)]'
-          : ver === 'search'
-          ? 'h-[36px] rounded-full shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] lg:max-w-[280px] xl:max-w-[320px]'
-          : ''
-      }`}
+         ver === "normal"
+           ? // ? 'h-[46px] rounded-[8px] border border-black/[.25] lg:max-w-[280px] lg:min-w-[260px] xl:max-w-[320px]'
+             "h-[46px] rounded-full shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] lg:max-w-[280px] lg:min-w-[260px] xl:max-w-[320px]"
+           : ver === "fixed"
+           ? "h-[36px] rounded-full lg:max-w-[280px] lg:min-w-[260px] xl:max-w-[320px]"
+           : ver === "headerSearch"
+           ? "h-[46px] rounded-full shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)]"
+           : ver === "search"
+           ? "h-[36px] rounded-full shadow-[0px_0px_12px_2px_rgb(0,0,0,0.15)] lg:max-w-[280px] xl:max-w-[320px]"
+           : ""
+       }`}
       ref={containerRef}
     >
-      {ver === 'headerSearch' ? (
+      {ver === "headerSearch" || ver === "normal" ? (
         <div className="grid w-full h-full grid-cols-2 grid-rows-2 overflow-visible animate-brotate">
           <div className="h-full w-full rounded-r-full bg-gradient-to-t from-main-online/90 from-50% via-white/90 to-transparent "></div>
           <div className="w-full h-full bg-white"></div>
@@ -39,24 +40,25 @@ const OnlineToggle = ({ ver, changeToggle, value }: iProps) => {
       ) : null}
       <div
         className={`absolute flex  items-center justify-between ${
-          ver === 'normal'
-            ? ' h-full w-full px-[12px] lg:px-[8px] xl:px-[12px] pr-[8px]'
-            : ver === 'fixed' || ver === 'search'
-            ? 'h-full w-full px-[10px] lg:px-[8px] xl:px-[12px]'
-            : ver === 'headerSearch'
-            ? 'h-[41px] w-[calc(100%-5px)] rounded-full bg-white px-[12px] pr-[8px]'
-            : ''
+          ver === "normal"
+            ? // ? " h-full w-full px-[12px] lg:px-[8px] xl:px-[12px] pr-[8px]"
+              "h-[41px] w-[calc(100%-5px)] rounded-full bg-white px-[12px] pr-[8px]"
+            : ver === "fixed" || ver === "search"
+            ? "h-full w-full px-[10px] lg:px-[8px] xl:px-[12px]"
+            : ver === "headerSearch"
+            ? "h-[41px] w-[calc(100%-5px)] rounded-full bg-white px-[12px] pr-[8px]"
+            : ""
         }`}
       >
         <div
           className={`flex items-center ${
-            ver === 'normal'
-              ? 'gap-[6px] lg:gap-[4px] xl:gap-[10px]'
-              : ver === 'fixed' || ver === 'search'
-              ? ' gap-[6px] lg:gap-[4px] xl:gap-[8px]'
-              : ver === 'headerSearch'
-              ? 'gap-[6px]'
-              : ''
+            ver === "normal"
+              ? "gap-[6px] lg:gap-[4px] xl:gap-[10px]"
+              : ver === "fixed" || ver === "search"
+              ? " gap-[6px] lg:gap-[4px] xl:gap-[8px]"
+              : ver === "headerSearch"
+              ? "gap-[6px]"
+              : ""
           }`}
         >
           <svg
@@ -79,35 +81,35 @@ const OnlineToggle = ({ ver, changeToggle, value }: iProps) => {
             />
           </svg>
           <p>
-            {lang === 'en'
-              ? 'Online order confirmation'
-              : 'Шууд баталгаажих газрууд'}
+            {lang === "en"
+              ? "Online order confirmation"
+              : "Шууд баталгаажих газрууд"}
           </p>
         </div>
         {/* switch */}
         <Switch
           id="onlineToggle"
           checked={value}
-          aria-label='toggleSwitch'
+          aria-label="toggleSwitch"
           onChange={() => {
             changeToggle();
           }}
           className={`${
-            value === true ? 'bg-main-online' : ' bg-black/[.03]'
+            value === true ? "bg-main-online" : " bg-black/[.03]"
           } relative  inline-flex h-[24px] w-[40px] items-center rounded-full border border-black/10 2xs:w-[44px] lg:w-[40px] xl:w-[44px]`}
         >
           <div
             className={`${
               value === true
-                ? 'absolute left-[4px] h-[8px] w-[8px] rounded-full border border-white bg-white/[0.1] shadow-[inset_0_-2px_2px_rgba(0,0,0,0.15)] 2xs:left-[6px] 2xs:h-[10px] 2xs:w-[10px] lg:left-[4px] xl:left-[6px]'
-                : 'absolute right-[4px] h-[4px] w-[10px] rounded-full bg-white shadow-[inset_0_-2px_2px_rgba(0,0,0,0.15)] 2xs:right-[6px] lg:right-[4px] xl:right-[6px]'
+                ? "absolute left-[4px] h-[8px] w-[8px] rounded-full border border-white bg-white/[0.1] shadow-[inset_0_-2px_2px_rgba(0,0,0,0.15)] 2xs:left-[6px] 2xs:h-[10px] 2xs:w-[10px] lg:left-[4px] xl:left-[6px]"
+                : "absolute right-[4px] h-[4px] w-[10px] rounded-full bg-white shadow-[inset_0_-2px_2px_rgba(0,0,0,0.15)] 2xs:right-[6px] lg:right-[4px] xl:right-[6px]"
             }`}
           ></div>
           <span
             className={`${
               value === true
-                ? 'translate-x-[18px] rotate-[-90deg] 2xs:translate-x-[22px] lg:translate-x-[18px] xl:translate-x-[22px]'
-                : 'translate-x-[2px] rotate-90 2xs:translate-x-1 lg:translate-x-[3px] xl:translate-x-1'
+                ? "translate-x-[18px] rotate-[-90deg] 2xs:translate-x-[22px] lg:translate-x-[18px] xl:translate-x-[22px]"
+                : "translate-x-[2px] rotate-90 2xs:translate-x-1 lg:translate-x-[3px] xl:translate-x-1"
             } relative inline-block h-[18px] w-[18px] transform rounded-full bg-white shadow-[inset_0_-2px_6px_rgba(0,0,0,0.25)] transition`}
           />
         </Switch>

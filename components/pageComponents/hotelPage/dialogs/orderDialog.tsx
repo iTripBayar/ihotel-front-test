@@ -84,15 +84,18 @@ export default function OrderDialog({
             >
               <div className="flex w-full flex-col justify-between gap-[8px] font-medium">
                 <div className="flex w-full items-end justify-between">
-                  <h3 className="text-[20px] leading-[20px] text-main-text">
+                  <h3 className="text-[18px] sm:text-[20px] leading-[20px] text-main-text line-clamp-1">
                     {lang === "en" ? index.nameEn : index.name}
                   </h3>
-                  <p className="flex gap-[4px] text-[16px] leading-[16px] text-sub-text/75">
-                    {lang === "en"
-                      ? `${(
-                          index.price / parseInt(dollarRate)
-                        ).toLocaleString()} $`
-                      : `${index.price.toLocaleString()} ₮`}
+                  <p className="flex gap-[4px] text-[14px] sm:text-[16px] leading-[16px] text-sub-text/75">
+                    {currentCart.length > 1 &&
+                      `${
+                        lang === "en"
+                          ? `${(
+                              index.price / parseInt(dollarRate)
+                            ).toLocaleString()} $`
+                          : `${index.price.toLocaleString()} ₮`
+                      }`}
                     <span>x{index.amount}</span>
                   </p>
                 </div>

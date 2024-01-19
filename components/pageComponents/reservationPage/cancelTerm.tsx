@@ -1,7 +1,5 @@
 import { useSearchParams } from "next/navigation";
-import { Collapse, Button, useDisclosure } from "@chakra-ui/react";
-import format from "date-fns/format";
-import subDays from "date-fns/subDays";
+import { Collapse, useDisclosure } from "@chakra-ui/react";
 
 interface Props {
   data: { day: string; fee: string }[] | undefined;
@@ -11,7 +9,6 @@ interface Props {
 export default function CancelTerm({ data, dollarRate, totalPrice }: Props) {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang");
-  const checkIn = searchParams.get("checkIn");
   const { isOpen, onToggle } = useDisclosure();
 
   return (

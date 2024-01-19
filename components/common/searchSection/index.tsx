@@ -22,6 +22,7 @@ const SearchSection = ({ ver, placesData, cityData }: iProps) => {
 
   const [toggle, setToggle] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [selected, setSelected] = useState(false);
 
   const changeToggle = useCallback(() => {
     setToggle(!toggle);
@@ -71,7 +72,8 @@ const SearchSection = ({ ver, placesData, cityData }: iProps) => {
     <div
       className={`flex w-full items-center ${
         ver === "normal"
-          ? "px-[16px] 2xs:px-[24px] sm:px-[50px] md:px-[55px] lg:px-[150px] xl:px-[200px]"
+          ? // ? "px-[16px] 2xs:px-[24px] sm:px-[50px] md:px-[55px] lg:px-[150px] xl:px-[200px]"
+            "2xs-[24px] flex-col px-[16px] sm:px-[50px] md:px-[150px]"
           : ver === "headerSearch"
           ? "2xs-[24px] flex-col px-[16px] sm:px-[50px] md:px-[72px]"
           : ver === "search"
@@ -85,7 +87,8 @@ const SearchSection = ({ ver, placesData, cityData }: iProps) => {
         <div
           className={`flex w-full ${
             ver === "normal"
-              ? "flex-col justify-between gap-[12px] rounded-[8px] bg-black/[.05] p-[10px] text-[12px] lg:flex-row lg:text-[14px]"
+              ? // ? "flex-col justify-between gap-[12px] rounded-[8px] bg-black/[.05] p-[10px] text-[12px] lg:flex-row lg:text-[14px]"
+                "flex-col items-center gap-[16px] bg-white lg:flex-row "
               : ver === "fixed"
               ? "flex-row gap-[12px] xl:gap-[24px]"
               : ver === "headerSearch"
@@ -101,9 +104,11 @@ const SearchSection = ({ ver, placesData, cityData }: iProps) => {
             ver={ver}
             changeSearchValue={changeSearchValue}
             value={searchValue}
+            setSelected={(e: boolean) => setSelected(e)}
+            selected={selected}
           />
           <OnlineToggle ver={ver} changeToggle={changeToggle} value={toggle} />
-          {appState.filter !== "mobile" ? (
+          {appState.filter !== "mobile" && selected === true ? (
             <button
               onClick={() => {
                 router.push(
@@ -121,7 +126,8 @@ const SearchSection = ({ ver, placesData, cityData }: iProps) => {
               }}
               className={`flex cursor-pointer items-center justify-center pt-[2px] font-medium  uppercase lg:max-w-[130px] ${
                 ver === "normal"
-                  ? "h-[46px] w-full rounded-[8px] bg-primary-blue text-[16px] leading-[16px] text-white"
+                  ? // ? "h-[46px] w-full rounded-[8px] bg-primary-blue text-[16px] leading-[16px] text-white"
+                    "h-[36px] min-w-[100px] max-w-[130px] rounded-full bg-primary-blue text-[15px] text-white leading-[16px] lg:h-[46px] lg:max-w-[120px] lg:min-w-[110px]"
                   : ver === "fixed"
                   ? "h-[36px] rounded-full bg-white text-primary-blue lg:min-w-[80px] lg:text-[14px]"
                   : ver === "headerSearch"
@@ -145,6 +151,8 @@ const SearchSection = ({ ver, placesData, cityData }: iProps) => {
               ver={ver}
               changeSearchValue={changeSearchValue}
               value={searchValue}
+              setSelected={(e: boolean) => setSelected(e)}
+              selected={selected}
             />
           </div>
           {pathname !== "/reservation/" ? (
