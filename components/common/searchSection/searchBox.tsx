@@ -59,39 +59,39 @@ const SearchBox = ({
     },
   );
 
-  const multipleCreateQueryString = (
-    name: string,
-    value: string | null,
-    name1: string,
-    value1: string | null,
-    name2: string,
-    value2: string | null,
-    name3: string,
-    value3: string | null,
-  ) => {
-    const params = new URLSearchParams(searchParams);
-    if (value !== null) {
-      params.set(name, value);
-    } else {
-      params.delete(name);
-    }
-    if (value1 !== null) {
-      params.set(name1, value1);
-    } else {
-      params.delete(name1);
-    }
-    if (value2 !== null) {
-      params.set(name2, value2);
-    } else {
-      params.delete(name2);
-    }
-    if (value3 !== null) {
-      params.set(name3, value3);
-    } else {
-      params.delete(name3);
-    }
-    return params.toString();
-  };
+  // const multipleCreateQueryString = (
+  //   name: string,
+  //   value: string | null,
+  //   name1: string,
+  //   value1: string | null,
+  //   name2: string,
+  //   value2: string | null,
+  //   name3: string,
+  //   value3: string | null,
+  // ) => {
+  //   const params = new URLSearchParams(searchParams);
+  //   if (value !== null) {
+  //     params.set(name, value);
+  //   } else {
+  //     params.delete(name);
+  //   }
+  //   if (value1 !== null) {
+  //     params.set(name1, value1);
+  //   } else {
+  //     params.delete(name1);
+  //   }
+  //   if (value2 !== null) {
+  //     params.set(name2, value2);
+  //   } else {
+  //     params.delete(name2);
+  //   }
+  //   if (value3 !== null) {
+  //     params.set(name3, value3);
+  //   } else {
+  //     params.delete(name3);
+  //   }
+  //   return params.toString();
+  // };
 
   const data: any[] = [];
   const suggestion = [
@@ -192,38 +192,36 @@ const SearchBox = ({
     });
   }, []);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter") {
-        router.push(
-          `/search/?${multipleCreateQueryString(
-            "lang",
-            lang,
-            "toggle",
-            toggle,
-            "filter",
-            filter,
-            "searchValue",
-            value,
-          )}`,
-        );
-      }
-    };
-    if (value !== "") {
-      document.addEventListener("keydown", handleKeyDown);
-    } else {
-      document.removeEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [value]);
+  // useEffect(() => {
+  //   const handleKeyDown = (e: KeyboardEvent) => {
+  //     if (e.key === "Enter") {
+  //       router.push(
+  //         `/search/?${multipleCreateQueryString(
+  //           "lang",
+  //           lang,
+  //           "toggle",
+  //           toggle,
+  //           "filter",
+  //           filter,
+  //           "searchValue",
+  //           value,
+  //         )}`,
+  //       );
+  //     }
+  //   };
+  //   if (value !== "") {
+  //     document.addEventListener("keydown", handleKeyDown);
+  //   } else {
+  //     document.removeEventListener("keydown", handleKeyDown);
+  //   }
+  //   return () => {
+  //     document.removeEventListener("keydown", handleKeyDown);
+  //   };
+  // }, [value]);
 
   return (
     <div
-      className={`relative flex w-full  flex-col gap-[10px] within cursor-text ${
-        ver === "normal" ? "lg:max-w-[500px] xl:max-w-none" : "lg:max-w-[500px]"
-      }`}
+      className={`relative flex w-full  flex-col gap-[10px] within cursor-text lg:max-w-[500px] `}
       id="searchBoxContainer"
     >
       <div

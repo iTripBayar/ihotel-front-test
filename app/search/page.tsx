@@ -27,8 +27,6 @@ const SearchPage = () => {
   const searchValue = searchParams.get("searchValue");
   const category = searchParams.get("category");
   const page = searchParams.get("page");
-  const min = searchParams.get("min");
-  const max = searchParams.get("max");
   const services = searchParams.get("services");
   const lang = searchParams.get("lang");
   const lat = searchParams.get("lat");
@@ -81,11 +79,11 @@ const SearchPage = () => {
     }
     return params.toString();
   };
-  useEffect(() => {
-    router.replace(`/search?${createQueryString("page", `1`)}`, {
-      scroll: false,
-    });
-  }, [min, max, services, category]);
+  // useEffect(() => {
+  //   router.replace(`/search?${createQueryString("page", `1`)}`, {
+  //     scroll: false,
+  //   });
+  // }, [services, category]);
 
   const { data, loading, error } = useRequest(
     () => {

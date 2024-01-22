@@ -1,7 +1,7 @@
 import SearchBox from "./searchBox";
 import OnlineToggle from "./onlineToggle";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAppCtx } from "@/contexts/app";
 
 interface iProps {
@@ -33,6 +33,25 @@ const SearchSection = ({ ver, placesData, cityData }: iProps) => {
     },
     [searchValue],
   );
+
+  // useEffect(() => {
+  //   if (selected === true) {
+  //     // console.log(searchValue);
+  //     const value = searchValue !== "" ? searchValue : null;
+  //     router.push(
+  //       `/search/?${multipleCreateQueryString(
+  //         "lang",
+  //         lang,
+  //         "toggle",
+  //         toggle === true ? "true" : null,
+  //         "filter",
+  //         filter,
+  //         "searchValue",
+  //         value,
+  //       )}`,
+  //     );
+  //   }
+  // }, [selected]);
 
   const multipleCreateQueryString = (
     name: string,
@@ -73,7 +92,7 @@ const SearchSection = ({ ver, placesData, cityData }: iProps) => {
       className={`flex w-full items-center ${
         ver === "normal"
           ? // ? "px-[16px] 2xs:px-[24px] sm:px-[50px] md:px-[55px] lg:px-[150px] xl:px-[200px]"
-            "2xs-[24px] flex-col px-[16px] sm:px-[50px] md:px-[150px]"
+            "2xs:px-[24px] flex-col px-[16px] sm:px-[75px] md:px-[150px] lg:px-[200px] xl:px-[250px] 2xl:px-[300px]"
           : ver === "headerSearch"
           ? "2xs-[24px] flex-col px-[16px] sm:px-[50px] md:px-[72px]"
           : ver === "search"
@@ -88,7 +107,7 @@ const SearchSection = ({ ver, placesData, cityData }: iProps) => {
           className={`flex w-full ${
             ver === "normal"
               ? // ? "flex-col justify-between gap-[12px] rounded-[8px] bg-black/[.05] p-[10px] text-[12px] lg:flex-row lg:text-[14px]"
-                "flex-col items-center gap-[16px] bg-white lg:flex-row "
+                "flex-col items-center gap-[16px] bg-white lg:flex-row justify-center max-w-[500px] lg:max-w-[700px] xl:max-w-[800px]"
               : ver === "fixed"
               ? "flex-row gap-[12px] xl:gap-[24px]"
               : ver === "headerSearch"
@@ -108,7 +127,7 @@ const SearchSection = ({ ver, placesData, cityData }: iProps) => {
             selected={selected}
           />
           <OnlineToggle ver={ver} changeToggle={changeToggle} value={toggle} />
-          {appState.filter !== "mobile" && selected === true ? (
+          {/* {appState.filter !== "mobile" && selected === true ? (
             <button
               onClick={() => {
                 router.push(
@@ -139,7 +158,7 @@ const SearchSection = ({ ver, placesData, cityData }: iProps) => {
             >
               <p>{lang === "en" ? "search" : "хайх"}</p>
             </button>
-          ) : null}
+          ) : null} */}
         </div>
       ) : null}
       {ver === "hotel" && checkIn && checkOut ? (

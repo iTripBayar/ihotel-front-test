@@ -7,6 +7,7 @@ import { Drawer } from "vaul";
 //   roomData: roomData.room;
 // }
 export function MyDrawer() {
+  const test = "";
   useEffect(() => {}, []);
   return (
     <Drawer.Root open={true}>
